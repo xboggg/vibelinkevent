@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Style Comparison</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple-deep: #1A0A2E;
+            --purple-dark: #2D1B4E;
+            --gold: #C9A227;
+            --gold-dark: #A8871E;
+            --cream: #FAF6EE;
+            --white: #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--cream);
+            padding: 2rem 1rem;
+        }
+
+        .page-title {
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--purple-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 3rem;
+        }
+
+        .option-section {
+            max-width: 700px;
+            margin: 0 auto 3.5rem;
+            background: var(--cream);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .option-label {
+            text-align: center;
+            padding: 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--white);
+            background: var(--purple-deep);
+        }
+
+        .option-preview {
+            padding: 2.5rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--cream);
+            border: 2px solid rgba(201, 162, 39, 0.2);
+            border-top: none;
+            border-radius: 0 0 16px 16px;
+        }
+
+        /* ============================================
+           OPTION A — Compact Pill Buttons
+        ============================================ */
+        .opt-a-wrap {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .opt-a-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .opt-a-btn i {
+            font-size: 0.85rem;
+            transition: transform 0.3s ease;
+        }
+
+        .opt-a-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .opt-a-btn:hover::after {
+            left: 100%;
+        }
+
+        .opt-a-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .opt-a-btn:hover i {
+            transform: scale(1.1);
+        }
+
+        .opt-a-btn:active {
+            transform: translateY(0) scale(0.97);
+        }
+
+        .opt-a-btn.download {
+            background: var(--purple-deep);
+            color: var(--gold);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+
+        .opt-a-btn.share {
+            background: linear-gradient(135deg, #1a8f4e, #14713d);
+            color: #fff;
+            border: 1px solid rgba(37, 211, 102, 0.2);
+        }
+
+        /* ============================================
+           OPTION B — Icon-Top Stacked Cards
+        ============================================ */
+        .opt-b-wrap {
+            display: flex;
+            gap: 1rem;
+            align-items: stretch;
+        }
+
+        .opt-b-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 1.1rem 1.8rem;
+            border-radius: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .opt-b-card .b-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .opt-b-card .b-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .opt-b-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .opt-b-card:hover::after {
+            left: 100%;
+        }
+
+        .opt-b-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .opt-b-card:hover .b-icon {
+            transform: scale(1.1);
+        }
+
+        .opt-b-card:active {
+            transform: translateY(0) scale(0.97);
+        }
+
+        .opt-b-card.download {
+            background: var(--purple-deep);
+            color: var(--gold);
+            border: 1px solid rgba(201, 162, 39, 0.25);
+        }
+
+        .opt-b-card.download .b-icon {
+            background: rgba(201, 162, 39, 0.15);
+            color: var(--gold);
+        }
+
+        .opt-b-card.share {
+            background: linear-gradient(135deg, #1a8f4e, #14713d);
+            color: #fff;
+            border: 1px solid rgba(37, 211, 102, 0.15);
+        }
+
+        .opt-b-card.share .b-icon {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        /* ============================================
+           OPTION C — Inline Text Links
+        ============================================ */
+        .opt-c-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: rgba(26, 10, 46, 0.04);
+            border-radius: 50px;
+            border: 1px solid rgba(201, 162, 39, 0.15);
+            overflow: hidden;
+        }
+
+        .opt-c-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 0.7rem 1.4rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            background: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .opt-c-link i {
+            font-size: 0.9rem;
+            transition: transform 0.3s ease;
+        }
+
+        .opt-c-link:hover i {
+            transform: scale(1.15);
+        }
+
+        .opt-c-link.download {
+            color: var(--purple-deep);
+        }
+
+        .opt-c-link.download:hover {
+            color: var(--gold-dark);
+            background: rgba(201, 162, 39, 0.08);
+        }
+
+        .opt-c-divider {
+            width: 1px;
+            height: 24px;
+            background: rgba(201, 162, 39, 0.25);
+        }
+
+        .opt-c-link.share {
+            color: #1a8f4e;
+        }
+
+        .opt-c-link.share:hover {
+            color: #14713d;
+            background: rgba(37, 211, 102, 0.08);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .option-preview {
+                padding: 2rem 1.2rem;
+            }
+
+            .opt-a-wrap {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .opt-a-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .opt-b-wrap {
+                width: 100%;
+            }
+
+            .opt-b-card {
+                flex: 1;
+            }
+
+            .opt-c-wrap {
+                flex-direction: column;
+                border-radius: 14px;
+                width: 100%;
+            }
+
+            .opt-c-link {
+                width: 100%;
+                justify-content: center;
+                padding: 0.8rem;
+            }
+
+            .opt-c-divider {
+                width: 80%;
+                height: 1px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">Button Style Comparison</h1>
+    <p class="page-subtitle">Choose the style you prefer for the announcement action buttons</p>
+
+    <!-- Option A -->
+    <div class="option-section">
+        <div class="option-label">Option A — Compact Pill Buttons</div>
+        <div class="option-preview">
+            <div class="opt-a-wrap">
+                <a href="#" class="opt-a-btn download">
+                    <i class="fas fa-download"></i> Download Announcement
+                </a>
+                <a href="#" class="opt-a-btn share">
+                    <i class="fab fa-whatsapp"></i> Share on WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option B -->
+    <div class="option-section">
+        <div class="option-label">Option B — Icon-Top Stacked Cards</div>
+        <div class="option-preview">
+            <div class="opt-b-wrap">
+                <a href="#" class="opt-b-card download">
+                    <span class="b-icon"><i class="fas fa-download"></i></span>
+                    <span class="b-label">Download Announcement</span>
+                </a>
+                <a href="#" class="opt-b-card share">
+                    <span class="b-icon"><i class="fab fa-whatsapp"></i></span>
+                    <span class="b-label">Share on WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Option C -->
+    <div class="option-section">
+        <div class="option-label">Option C — Inline Text Links</div>
+        <div class="option-preview">
+            <div class="opt-c-wrap">
+                <a href="#" class="opt-c-link download">
+                    <i class="fas fa-download"></i> Download
+                </a>
+                <span class="opt-c-divider"></span>
+                <a href="#" class="opt-c-link share">
+                    <i class="fab fa-whatsapp"></i> Share on WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

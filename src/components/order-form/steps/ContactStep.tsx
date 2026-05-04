@@ -16,7 +16,7 @@ import { contactSchema } from "@/lib/validationSchemas";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-const RECAPTCHA_SITE_KEY = "6LfOTjYsAAAAACANVkJ4fGSmE8jZvi1om-r_S-PI";
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LfOTjYsAAAAACANVkJ4fGSmE8jZvi1om-r_S-PI";
 
 declare global {
   interface Window {

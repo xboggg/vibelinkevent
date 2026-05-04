@@ -1,0 +1,28 @@
+# ──────────────────────────────────────────────────────────────────────
+# Baby Nortey Naming Ceremony - API Access Control
+# ──────────────────────────────────────────────────────────────────────
+
+# Enable rewrite engine
+RewriteEngine On
+
+# Block direct access to config.php
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Block direct access to setup.php (run once then restrict)
+<Files "setup.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Prevent directory listing
+Options -Indexes
+
+# Additional security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>

@@ -297,6 +297,7 @@ export function HeroSection() {
             src={slides[previousSlide].image}
             alt={slides[previousSlide].alt}
             className="w-full h-full object-cover"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-purple-dark/70" />
           <div className="absolute inset-0 bg-pattern-dots opacity-20" />
@@ -312,6 +313,8 @@ export function HeroSection() {
             src={slides[currentSlide].image}
             alt={slides[currentSlide].alt}
             className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
             onLoad={() => handleImageLoad(currentSlide)}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-purple-dark/70" />

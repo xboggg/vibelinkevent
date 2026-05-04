@@ -14,6 +14,28 @@ export interface PortfolioItem {
 export const portfolioItems: PortfolioItem[] = [
   {
     id: 1,
+    title: "Baby Boy Coleman — Christening & Dedication",
+    type: "Naming",
+    description: "A beautiful christening and dedication invitation for the Coleman family, featuring animated splash screen, baby photo, wishes wall, and RSVP — all in a soft sky-blue theme.",
+    image: "/coleman-portfolio.jpg",
+    demoUrl: "https://coleman.vibelinkevent.com/",
+    slug: "baby-boy-coleman-christening",
+    features: ["Animated splash screen", "Wishes wall", "Countdown timer", "RSVP", "Music player", "Parents showcase"],
+    imagePosition: "top",
+  },
+  {
+    id: 2,
+    title: "Atta Panin Memorial",
+    type: "Funerals",
+    description: "A dignified digital tribute celebrating the life and legacy of Atta Panin with rich cultural heritage and family memories.",
+    image: "/attapanyin-portfolio.png",
+    demoUrl: "https://attapanin.vibelinkevent.com/",
+    slug: "atta-panyin-memorial",
+    features: ["Memorial biography", "Photo gallery", "Tribute wall", "Funeral program", "MoMo donations"],
+    imagePosition: "top",
+  },
+  {
+    id: 3,
     title: "A Soldier's Final Salute - Ex-WO1 Deku",
     type: "Funerals",
     description: "A dignified military tribute honoring Ex-WO1 Raphael Yaovi Deku (1944-2025), a dedicated soldier of the Ghana Armed Forces.",
@@ -25,7 +47,17 @@ export const portfolioItems: PortfolioItem[] = [
     imagePosition: "top",
   },
   {
-    id: 2,
+    id: 4,
+    title: "Baby Nortey's Naming Ceremony",
+    type: "Naming",
+    description: "A dreamy, animation-rich naming ceremony invitation with floating petals, butterflies, and watercolor elegance for the Nortey family.",
+    image: "/nortey-portfolio.webp",
+    demoUrl: "https://nortey.vibelinkevent.com/",
+    slug: "baby-nortey-naming",
+    features: ["Animated hero", "Countdown timer", "Interactive name reveal", "Wishes wall", "RSVP tracking", "Gift registry"],
+  },
+  {
+    id: 5,
     title: "Evans & Mina's Anniversary",
     type: "Anniversaries",
     description: "A beautiful 25th anniversary celebration with elegant gold accents.",
@@ -36,7 +68,7 @@ export const portfolioItems: PortfolioItem[] = [
     imagePosition: "top",
   },
   {
-    id: 3,
+    id: 6,
     title: "PRESEC-OSU 70th Anniversary",
     type: "Anniversaries",
     description: "Celebrating 70 years of academic excellence and brotherhood at Presbyterian Secondary School, Osu.",
@@ -46,7 +78,7 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Event countdown", "Photo gallery", "Alumni registration", "Donation portal"],
   },
   {
-    id: 4,
+    id: 7,
     title: "In Loving Memory of Nana Yaw",
     type: "Funerals",
     description: "A dignified digital tribute celebrating a life well-lived with grace.",
@@ -58,7 +90,7 @@ export const portfolioItems: PortfolioItem[] = [
     imagePosition: "top",
   },
   {
-    id: 5,
+    id: 8,
     title: "Baby Adjoa's Naming",
     type: "Naming",
     description: "Celebrating the arrival of a beautiful baby girl with joy and tradition.",
@@ -69,7 +101,7 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Baby gallery", "Gift wishes", "Family tree"],
   },
   {
-    id: 6,
+    id: 9,
     title: "Sarah & John's White Wedding",
     type: "Weddings",
     description: "An elegant church wedding with diaspora guest features and live streaming.",
@@ -80,7 +112,7 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Live stream link", "Multi-language", "RSVP"],
   },
   {
-    id: 7,
+    id: 10,
     title: "Dr. Mensah Graduation",
     type: "Graduations",
     description: "Celebrating a PhD achievement with family and friends worldwide.",
@@ -91,7 +123,7 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Achievement showcase", "Event schedule", "Photo gallery"],
   },
   {
-    id: 8,
+    id: 11,
     title: "Kweku & Efua's Engagement",
     type: "Weddings",
     description: "A stunning traditional engagement ceremony with rich Akan cultural elements.",
@@ -102,7 +134,7 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Ceremony program", "Family introductions", "Photo gallery"],
   },
   {
-    id: 9,
+    id: 12,
     title: "Celebration of Life - Mama Akosua",
     type: "Funerals",
     description: "A touching tribute honoring a beloved grandmother and community pillar.",
@@ -113,7 +145,7 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Obituary", "Service schedule", "MoMo contributions"],
   },
   {
-    id: 10,
+    id: 13,
     title: "Baby Kwame's Outdooring",
     type: "Naming",
     description: "A joyful celebration welcoming baby Kwame to the world.",
@@ -124,7 +156,7 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Countdown", "Photo gallery", "RSVP"],
   },
   {
-    id: 11,
+    id: 14,
     title: "Nana's 60th Birthday",
     type: "Other",
     description: "A lavish surprise birthday celebration for a beloved community elder.",
@@ -135,7 +167,7 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Guest messages", "Photo slideshow", "Event schedule"],
   },
   {
-    id: 12,
+    id: 15,
     title: "NovaStream CyberSecure Conference",
     type: "Other",
     description: "Ghana's premier cybersecurity conference bringing together industry leaders and professionals.",
@@ -145,11 +177,11 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Speaker lineup", "Agenda schedule", "Registration portal"],
   },
   {
-    id: 13,
+    id: 16,
     title: "Pastor Mensah's Retirement",
     type: "Other",
     description: "Celebrating 40 years of dedicated service to the church community.",
-    image: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=800&q=80",
+    image: "/pastormensah-portfolio.jpg",
     demoUrl: "https://pastormensah.vibelinkevent.com/",
     slug: "pastor-mensah-retirement",
     features: ["Tribute messages", "Career timeline", "Event program"],

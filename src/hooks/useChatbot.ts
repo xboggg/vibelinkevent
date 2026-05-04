@@ -205,7 +205,7 @@ export function useChatbot() {
     setMessages([]);
     setSuggestions([]);
     // Generate new session ID
-    const newSessionId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const newSessionId = crypto.randomUUID();
     sessionStorage.setItem("chat_session_id", newSessionId);
     sessionIdRef.current = newSessionId;
   }, []);

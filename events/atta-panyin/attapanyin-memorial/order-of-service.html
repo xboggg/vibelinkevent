@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order of Service — One-Week Observation | Mr. Wilson Atta Krofah</title>
+    <meta name="description" content="Order of Service for the One-Week Observation of Mr. Wilson Atta Krofah (Atta Panin). Saturday, March 28, 2026 at The Ghana Police Church, Accra.">
+    <meta property="og:title" content="Order of Service — One-Week Observation | Atta Panin">
+    <meta property="og:description" content="One-Week Observation of Mr. Wilson Atta Krofah. March 28, 2026, The Ghana Police Church, Accra.">
+    <meta property="og:image" content="https://attapanin.vibelinkevent.com/og-image.jpg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --gold: #C9A227;
+            --gold-light: #E8D48A;
+            --gold-dark: #8B7014;
+            --purple-deep: #1A0A2E;
+            --purple-dark: #2D1B4E;
+            --purple-medium: #4A3268;
+            --cream: #F5F0E6;
+            --white: #FFFFFF;
+            --text-dark: #2C2C2C;
+            --text-muted: #6B6B6B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--purple-deep) 0%, var(--purple-dark) 30%, #1E1030 100%);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 3rem 1.5rem 1.5rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header-cross {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+        }
+
+        .header-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .header-label::before,
+        .header-label::after {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--gold);
+            opacity: 0.5;
+        }
+
+        .header-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 300;
+            color: var(--white);
+            margin-bottom: 0.3rem;
+        }
+
+        .header-subtitle {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .header-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.4rem, 4vw, 1.9rem);
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.2rem;
+        }
+
+        .header-alias {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.3rem;
+            color: var(--gold-light);
+            margin-bottom: 1.2rem;
+        }
+
+        .header-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .header-meta i {
+            color: var(--gold);
+            width: 18px;
+            text-align: center;
+            margin-right: 0.4rem;
+        }
+
+        .divider {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 1.5rem auto;
+        }
+
+        /* Program Card */
+        .program-card {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(201,162,39,0.15);
+            border-radius: 24px;
+            margin: 0 1rem 2rem;
+            padding: 2rem 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .program-church {
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(201,162,39,0.15);
+        }
+
+        /* Program Rows */
+        .p-row {
+            display: flex;
+            align-items: center;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            animation: fadeSlideIn 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .p-row:last-child {
+            border-bottom: none;
+        }
+
+        .p-row.highlight {
+            background: rgba(201,162,39,0.06);
+            margin: 0.3rem -0.8rem;
+            padding: 0.7rem 0.8rem;
+            border-radius: 10px;
+            border-bottom: none;
+        }
+
+        .p-num {
+            flex-shrink: 0;
+            width: 26px;
+            height: 26px;
+            background: rgba(201,162,39,0.12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-right: 0.8rem;
+        }
+
+        .p-icon {
+            flex-shrink: 0;
+            width: 30px;
+            color: var(--gold);
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .p-label {
+            flex: 1;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .p-detail {
+            font-size: 0.78rem;
+            color: var(--gold-light);
+            font-style: italic;
+            text-align: right;
+            max-width: 45%;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1rem 1.5rem 3rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .footer-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.6rem 1.5rem;
+            border: 1px solid rgba(201,162,39,0.3);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-back:hover {
+            background: rgba(201,162,39,0.1);
+            border-color: var(--gold);
+        }
+
+        .footer-credit {
+            margin-top: 1.5rem;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.25);
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 480px) {
+            .header { padding: 2rem 1rem 1rem; }
+            .program-card { padding: 1.2rem 0.8rem; margin: 0 0.5rem 1.5rem; }
+
+            .p-row {
+                flex-wrap: wrap;
+                padding: 0.55rem 0;
+            }
+
+            .p-num { display: none; }
+
+            .p-icon {
+                width: 24px;
+                font-size: 0.8rem;
+            }
+
+            .p-label {
+                font-size: 0.82rem;
+                font-weight: 600;
+            }
+
+            .p-detail {
+                width: 100%;
+                max-width: 100%;
+                text-align: left;
+                padding-left: 24px;
+                font-size: 0.72rem;
+                margin-top: 0.1rem;
+            }
+
+            .p-row.highlight {
+                margin: 0.15rem -0.5rem;
+                padding: 0.55rem 0.5rem;
+            }
+        }
+
+        @media print {
+            body { background: white; color: black; }
+            .program-card { border: 2px solid #ccc; }
+            .p-row { border-bottom-color: #eee; }
+            .p-label { color: #222; }
+            .p-detail { color: #555; }
+            .footer-back { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-cross"><i class="fas fa-cross"></i></div>
+        <div class="header-label"><span>One-Week Observation Service</span></div>
+        <h1 class="header-title">Order of Service</h1>
+        <p class="header-subtitle">In Loving Memory</p>
+        <div class="divider"></div>
+        <p class="header-name">Mr. Wilson Atta Krofah (Atta Panin)</p>
+        <p class="header-alias">Bretuo Abusuapanin</p>
+        <div class="header-meta">
+            <span><i class="fas fa-calendar-alt"></i> Saturday, March 28, 2026</span>
+            <span><i class="fas fa-clock"></i> 9:00 AM - 11:00 AM</span>
+            <span><i class="fas fa-church"></i> The Ghana Police Church, Liberation Rd, Accra</span>
+            <span><i class="fas fa-info-circle"></i> Opposite 37 Max Mart</span>
+        </div>
+    </div>
+
+    <div class="program-card">
+        <div class="program-church">The Ghana Police Church &bull; Accra</div>
+
+        <div class="p-row" style="animation-delay: 0.05s;">
+            <div class="p-num">1</div>
+            <span class="p-icon"><i class="fas fa-pray"></i></span>
+            <span class="p-label">Call to Worship</span>
+            <span class="p-detail">Rev. William Owusu Akuamoa</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.1s;">
+            <div class="p-num">2</div>
+            <span class="p-icon"><i class="fas fa-hands"></i></span>
+            <span class="p-label">Opening Prayer</span>
+            <span class="p-detail">Rev. William Owusu Akuamoa</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.15s;">
+            <div class="p-num">3</div>
+            <span class="p-icon"><i class="fas fa-music"></i></span>
+            <span class="p-label">Hymn</span>
+            <span class="p-detail">MHB 427</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.2s;">
+            <div class="p-num">4</div>
+            <span class="p-icon"><i class="fas fa-microphone-alt"></i></span>
+            <span class="p-label">Purpose of Gathering</span>
+            <span class="p-detail">Rev. William Owusu Akuamoa</span>
+        </div>
+
+        <div class="p-row highlight" style="animation-delay: 0.25s;">
+            <div class="p-num">5</div>
+            <span class="p-icon"><i class="fas fa-guitar"></i></span>
+            <span class="p-label">Praises &amp; Adoration</span>
+            <span class="p-detail">The GPC Mass Choir</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.3s;">
+            <div class="p-num">6</div>
+            <span class="p-icon"><i class="fas fa-book-open"></i></span>
+            <span class="p-label">Brief Biography</span>
+            <span class="p-detail"></span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.35s;">
+            <div class="p-num">7</div>
+            <span class="p-icon"><i class="fas fa-music"></i></span>
+            <span class="p-label">Hymn</span>
+            <span class="p-detail">PHB 555</span>
+        </div>
+
+        <div class="p-row highlight" style="animation-delay: 0.4s;">
+            <div class="p-num">8</div>
+            <span class="p-icon"><i class="fas fa-bible"></i></span>
+            <span class="p-label">Exhortation</span>
+            <span class="p-detail">Rev. Supt/Mrs. Emelia Quist</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.45s;">
+            <div class="p-num">9</div>
+            <span class="p-icon"><i class="fas fa-music"></i></span>
+            <span class="p-label">Hymn</span>
+            <span class="p-detail">PHB 557</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.5s;">
+            <div class="p-num">10</div>
+            <span class="p-icon"><i class="fas fa-pray"></i></span>
+            <span class="p-label">Prayer for the Family</span>
+            <span class="p-detail">Rev. Supt/Mrs. Emelia Quist</span>
+        </div>
+
+        <div class="p-row highlight" style="animation-delay: 0.55s;">
+            <div class="p-num">11</div>
+            <span class="p-icon"><i class="fas fa-hand-holding-heart"></i></span>
+            <span class="p-label">Offering</span>
+            <span class="p-detail">The Singing Band</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.6s;">
+            <div class="p-num">12</div>
+            <span class="p-icon"><i class="fas fa-pray"></i></span>
+            <span class="p-label">Offertory Prayer</span>
+            <span class="p-detail">Rev. Richard Bradley Foli</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.65s;">
+            <div class="p-num">13</div>
+            <span class="p-icon"><i class="fas fa-bullhorn"></i></span>
+            <span class="p-label">Announcements</span>
+            <span class="p-detail">Family / Church</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.7s;">
+            <div class="p-num">14</div>
+            <span class="p-icon"><i class="fas fa-music"></i></span>
+            <span class="p-label">Closing Hymn</span>
+            <span class="p-detail">MHB 4</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.75s;">
+            <div class="p-num">15</div>
+            <span class="p-icon"><i class="fas fa-music"></i></span>
+            <span class="p-label">Closing Hymn</span>
+            <span class="p-detail">PHB 562</span>
+        </div>
+
+        <div class="p-row" style="animation-delay: 0.8s;">
+            <div class="p-num">16</div>
+            <span class="p-icon"><i class="fas fa-cross"></i></span>
+            <span class="p-label">Closing Prayer &amp; Benediction</span>
+            <span class="p-detail">Rev. Supt/Mrs. Emelia Quist</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="https://attapanin.vibelinkevent.com" class="footer-back">
+            <i class="fas fa-arrow-left"></i> Back to Memorial
+        </a>
+        <p class="footer-credit">attapanin.vibelinkevent.com</p>
+    </div>
+
+</body>
+</html>

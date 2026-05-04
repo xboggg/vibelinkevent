@@ -152,6 +152,21 @@ export default function TrackOrder() {
       if (error) throw error;
 
       if (data.success && data.authorization_url) {
+        // Validate redirect URL - only allow Paystack domains
+        const allowedDomains = ['paystack.com', 'checkout.paystack.com', 'api.paystack.co'];
+        try {
+          const redirectUrl = new URL(data.authorization_url);
+          const isAllowed = allowedDomains.some(domain =>
+            redirectUrl.hostname === domain || redirectUrl.hostname.endsWith('.' + domain)
+          );
+          if (!isAllowed) {
+            toast.error("Invalid payment redirect. Please contact support.");
+            return;
+          }
+        } catch {
+          toast.error("Invalid payment URL. Please contact support.");
+          return;
+        }
         window.location.href = data.authorization_url;
       } else {
         toast.error(data.error || "Failed to initialize payment");

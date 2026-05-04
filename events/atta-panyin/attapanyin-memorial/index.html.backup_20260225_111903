@@ -1,0 +1,4414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In Loving Memory of Mr. Wilson Atta Krofah (Atta Panyin) | 1939 - 2026</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Celebrating the life of Mr. Wilson Atta Krofah (Atta Panyin), Begoro Bretuo Abusuapanyin. 1939-2026. One-week observation: March 28, 2026.">
+    <meta name="keywords" content="Wilson Atta Krofah, Atta Panyin, Begoro, Bretuo, Abusuapanyin, funeral, memorial">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="In Loving Memory of Mr. Wilson Atta Krofah (Atta Panyin)">
+    <meta property="og:description" content="Celebrating the life of Begoro Bretuo Abusuapanyin. 1939-2026. Join us for the one-week observation on March 28, 2026.">
+    <meta property="og:image" content="og-image.jpg">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <!-- Icons - Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --gold: #C9A227;
+            --gold-light: #E8D48A;
+            --gold-dark: #8B7014;
+            --purple-deep: #1A0A2E;
+            --purple-dark: #2D1B4E;
+            --purple-medium: #4A3268;
+            --purple-light: #6B4D8A;
+            --white: #FFFFFF;
+            --cream: #F5F0E6;
+            --gray-light: #E8E4DC;
+            --text-dark: #2C2C2C;
+            --text-muted: #6B6B6B;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--purple-deep);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 4px;
+        }
+
+        /* Elegant Typography */
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .font-script {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* ============================================
+           PRELOADER - Candle Animation
+        ============================================ */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple-dark) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .candle-container {
+            position: relative;
+            width: 60px;
+            height: 180px;
+        }
+
+        .candle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 120px;
+            background: linear-gradient(to right, #F5E6C8 0%, #FFF8E7 50%, #F5E6C8 100%);
+            border-radius: 5px 5px 0 0;
+            box-shadow: inset -5px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .candle::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 15px;
+            background: #2C2C2C;
+            border-radius: 2px;
+        }
+
+        .flame {
+            position: absolute;
+            bottom: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 40px;
+        }
+
+        .flame-inner {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 35px;
+            background: linear-gradient(to top, #FF6B35 0%, #FFD93D 50%, #FFF 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 0.5s infinite alternate;
+            box-shadow: 0 0 30px #FF6B35, 0 0 60px #FFD93D, 0 0 90px rgba(255,107,53,0.5);
+        }
+
+        .flame-outer {
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 45px;
+            background: radial-gradient(ellipse at bottom, rgba(255,107,53,0.8) 0%, transparent 70%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: flicker 0.3s infinite alternate-reverse;
+        }
+
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+            100% { transform: translateX(-50%) scale(1.05) rotate(2deg); }
+        }
+
+        .preloader-text {
+            color: var(--gold);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-top: 40px;
+            letter-spacing: 4px;
+            animation: fadeInOut 2s infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* ============================================
+           FLOATING PARTICLES - Ethereal Effect
+        ============================================ */
+        .particles-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatUp 15s infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1);
+            }
+        }
+
+        /* ============================================
+           NAVIGATION
+        ============================================ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            transition: all 0.4s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(26, 10, 46, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            height: 45px;
+            width: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            object-fit: cover;
+        }
+
+        .nav-logo span {
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .nav-toggle span {
+            width: 25px;
+            height: 2px;
+            background: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        /* ============================================
+           HERO SECTION - Cinematic Entry
+        ============================================ */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: var(--purple-deep);
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(201, 162, 39, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(107, 77, 138, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, var(--purple-deep) 0%, var(--purple-dark) 50%, var(--purple-medium) 100%);
+        }
+
+        .hero-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A227' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Kente-inspired decorative borders */
+        .kente-border-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--gold) 0px,
+                var(--gold) 20px,
+                #1B5E20 20px,
+                #1B5E20 40px,
+                #C62828 40px,
+                #C62828 60px,
+                var(--gold) 60px,
+                var(--gold) 80px,
+                #000 80px,
+                #000 100px
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 900px;
+        }
+
+        .hero-subtitle-top {
+            color: var(--gold);
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeSlideDown 1s ease 0.5s forwards;
+        }
+
+        @keyframes fadeSlideDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                transform: translateY(-20px);
+            }
+        }
+
+        .hero-image-container {
+            position: relative;
+            width: clamp(200px, 40vw, 320px);
+            height: clamp(200px, 40vw, 320px);
+            margin: 0 auto 2rem;
+            opacity: 0;
+            animation: scaleIn 1.2s ease 0.8s forwards;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .hero-image-frame {
+            position: absolute;
+            inset: -15px;
+            border: 3px solid var(--gold);
+            border-radius: 50%;
+            animation: rotateFrame 30s linear infinite;
+        }
+
+        .hero-image-frame::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            border-radius: 50%;
+        }
+
+        .hero-image-frame::after {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 1px solid rgba(201, 162, 39, 0.5);
+            border-radius: 50%;
+        }
+
+        @keyframes rotateFrame {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Decorative corner elements on frame */
+        .frame-decoration {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gold);
+        }
+
+        .frame-decoration.top-left {
+            top: 10%;
+            left: 10%;
+            border-right: none;
+            border-bottom: none;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .frame-decoration.top-right {
+            top: 10%;
+            right: 10%;
+            border-left: none;
+            border-bottom: none;
+            animation: sparkle 2s ease-in-out infinite 0.5s;
+        }
+
+        .frame-decoration.bottom-left {
+            bottom: 10%;
+            left: 10%;
+            border-right: none;
+            border-top: none;
+            animation: sparkle 2s ease-in-out infinite 1s;
+        }
+
+        .frame-decoration.bottom-right {
+            bottom: 10%;
+            right: 10%;
+            border-left: none;
+            border-top: none;
+            animation: sparkle 2s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            filter: grayscale(20%);
+            transition: filter 0.5s ease;
+        }
+
+        .hero-image-container:hover .hero-image {
+            filter: grayscale(0%);
+        }
+
+        /* Glowing effect behind image */
+        .hero-image-glow {
+            position: absolute;
+            inset: -30px;
+            background: radial-gradient(circle, rgba(201, 162, 39, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .hero-name {
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 600;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            animation: fadeSlideUp 1s ease 1.2s forwards;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-alias {
+            color: var(--gold);
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease 1.4s forwards;
+        }
+
+        .hero-title {
+            color: var(--gold-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease 1.6s forwards;
+        }
+
+        .hero-dates {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease 1.8s forwards;
+        }
+
+        .hero-date {
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 300;
+        }
+
+        .hero-date-separator {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            position: relative;
+        }
+
+        .hero-date-separator::before {
+            content: '\f66f';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--gold);
+            font-size: 1rem;
+            background: var(--purple-deep);
+            padding: 0 10px;
+        }
+
+        .hero-scripture {
+            color: rgba(255,255,255,0.8);
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeSlideUp 1s ease 2s forwards;
+        }
+
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeIn 1s ease 2.5s forwards;
+            z-index: 20;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .hero-scroll-indicator span {
+            color: var(--gold);
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: none;
+        }
+
+        .scroll-mouse {
+            width: 26px;
+            height: 40px;
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .scroll-mouse::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: scrollDown 1.5s ease-in-out infinite;
+        }
+
+        @keyframes scrollDown {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(15px); }
+        }
+
+        /* ============================================
+           ANNOUNCEMENT SECTION
+        ============================================ */
+        .announcement {
+            padding: 6rem 2rem;
+            background: var(--white);
+            position: relative;
+        }
+
+        .announcement::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to bottom, var(--purple-deep), transparent);
+            pointer-events: none;
+        }
+
+        .announcement-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--purple-dark);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            text-shadow: none;
+        }
+
+        .section-label::before,
+        .section-label::after {
+            content: '';
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+        }
+
+        .announcement-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            line-height: 2;
+            color: var(--text-dark);
+        }
+
+        .announcement-text .highlight {
+            color: var(--purple-dark);
+            font-weight: 700;
+        }
+
+        .announcement-text .gold {
+            color: #8B6914;
+            font-weight: 700;
+        }
+
+        /* ============================================
+           EVENTS TIMELINE
+        ============================================ */
+        .events {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .events-bg-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='%23C9A227'/%3E%3C/svg%3E");
+            background-size: 50px 50px;
+        }
+
+        .events-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .events-title {
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .events-subtitle {
+            color: var(--gold);
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.5rem;
+        }
+
+        .timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--gold), var(--gold), transparent);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            text-align: right;
+            padding-right: 4rem;
+            padding-left: 0;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            padding-left: 4rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--gold);
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
+        }
+
+        .timeline-dot::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .timeline-content {
+            width: 50%;
+        }
+
+        .event-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .event-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--purple-deep);
+        }
+
+        .timeline-item:nth-child(odd) .event-icon {
+            margin-left: auto;
+        }
+
+        .event-label {
+            color: var(--gold);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-name {
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .event-details {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-details i {
+            color: var(--gold);
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .timeline-item:nth-child(odd) .event-actions {
+            justify-content: flex-end;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--purple-deep);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(201, 162, 39, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-outline:hover {
+            background: var(--gold);
+            color: var(--purple-deep);
+        }
+
+        /* Coming Soon Event Card */
+        .event-card.coming-soon {
+            opacity: 0.7;
+            border-style: dashed;
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            background: rgba(201, 162, 39, 0.2);
+            color: var(--gold);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+        }
+
+        /* ============================================
+           COUNTDOWN TIMER
+        ============================================ */
+        .countdown-section {
+            padding: 4rem 2rem;
+            background: var(--purple-deep);
+            text-align: center;
+        }
+
+        .countdown-label {
+            color: var(--gold);
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .countdown-event {
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            min-width: 100px;
+            transition: all 0.3s ease;
+        }
+
+        .countdown-item:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+        }
+
+        .countdown-number {
+            color: var(--gold);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .countdown-unit {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        /* ============================================
+           PHOTO GALLERY - Expandable Animation
+        ============================================ */
+        .gallery-section {
+            padding: 6rem 2rem;
+            background: var(--white);
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--purple-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .expandable-gallery {
+            display: flex;
+            gap: 8px;
+            height: 450px;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .expandable-gallery::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-item {
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 16px;
+            transition: flex 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            scroll-snap-align: center;
+        }
+
+        .gallery-item:hover {
+            flex: 2.5;
+        }
+
+        .expandable-gallery:hover .gallery-item:not(:hover) {
+            flex: 0.5;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, filter 0.3s ease;
+            filter: grayscale(30%);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(26, 10, 46, 0.9) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            color: var(--white);
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+        }
+
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        /* Gallery swipe indicator */
+        .gallery-swipe-hint {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .gallery-swipe-hint i {
+            margin-right: 8px;
+            animation: swipeHint 1.5s ease-in-out infinite;
+        }
+
+        @keyframes swipeHint {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        .gallery-caption h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .gallery-caption p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .gallery-caption .view-icon {
+            position: absolute;
+            top: 50%;
+            right: 1.5rem;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--purple-deep);
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .view-icon {
+            opacity: 1;
+        }
+
+        /* Gallery Modal/Lightbox */
+        .gallery-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--gold);
+            transform: rotate(90deg);
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(201, 162, 39, 0.3);
+            color: var(--white);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-nav:hover {
+            background: var(--gold);
+            color: var(--purple-deep);
+            border-color: var(--gold);
+        }
+
+        .modal-nav.prev {
+            left: -80px;
+        }
+
+        .modal-nav.next {
+            right: -80px;
+        }
+
+        .modal-counter {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+
+        .modal-caption {
+            position: absolute;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: var(--white);
+        }
+
+        .modal-caption h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            .expandable-gallery {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .gallery-item {
+                height: 180px;
+                flex: none !important;
+            }
+
+            .gallery-item:hover {
+                height: 280px;
+            }
+
+            .modal-nav.prev {
+                left: 10px;
+            }
+
+            .modal-nav.next {
+                right: 10px;
+            }
+
+            .modal-nav {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ============================================
+           RSVP SECTION
+        ============================================ */
+        .rsvp-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--purple-deep) 0%, var(--purple-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rsvp-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9A227' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .rsvp-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .rsvp-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .rsvp-title {
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .rsvp-subtitle {
+            color: var(--gold);
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.5rem;
+        }
+
+        .rsvp-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            border-radius: 30px;
+            padding: 3rem;
+            transition: all 0.4s ease;
+        }
+
+        .rsvp-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .rsvp-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .rsvp-form .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .rsvp-form .form-label {
+            color: var(--gold-light);
+        }
+
+        .rsvp-form .form-input,
+        .rsvp-form .form-select {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(201, 162, 39, 0.3);
+            color: var(--white);
+        }
+
+        .rsvp-form .form-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .rsvp-form .form-input:focus,
+        .rsvp-form .form-select:focus {
+            border-color: var(--gold);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23C9A227' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2rem;
+        }
+
+        .form-select option {
+            background: var(--purple-dark);
+            color: var(--white);
+        }
+
+        .rsvp-submit {
+            grid-column: 1 / -1;
+            padding: 1.25rem 2rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
+            color: var(--purple-deep);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .rsvp-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(201, 162, 39, 0.4);
+        }
+
+        .rsvp-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(201, 162, 39, 0.2);
+        }
+
+        .rsvp-stat {
+            text-align: center;
+        }
+
+        .rsvp-stat-number {
+            color: var(--gold);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        .rsvp-stat-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ============================================
+           MOMO CONTRIBUTION SECTION
+        ============================================ */
+        .contribution-section {
+            padding: 6rem 2rem;
+            background: var(--cream);
+            position: relative;
+        }
+
+        .contribution-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .contribution-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .contribution-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--purple-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .contribution-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .contribution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .momo-card {
+            background: linear-gradient(145deg, var(--white) 0%, #f8f6f3 100%);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .momo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .momo-card:nth-child(1)::before {
+            background: linear-gradient(90deg, #FFCC00, #FFA500);
+        }
+
+        .momo-card:nth-child(2)::before {
+            background: linear-gradient(90deg, #E60000, #CC0000);
+        }
+
+        .momo-card:nth-child(3)::before {
+            background: linear-gradient(90deg, #E4002B, #FF6B6B);
+        }
+
+        .momo-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(201, 162, 39, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .momo-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.15);
+            border-color: var(--gold);
+        }
+
+        .momo-card:hover::after {
+            opacity: 1;
+        }
+
+        .momo-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1.2rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--white);
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .momo-icon.mtn {
+            background: linear-gradient(145deg, #FFCC00, #E6B800);
+        }
+
+        .momo-icon.vodafone {
+            background: linear-gradient(145deg, #E60000, #B30000);
+        }
+
+        .momo-icon.airteltigo {
+            background: linear-gradient(145deg, #E4002B, #B30022);
+        }
+
+        .momo-provider {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--purple-dark);
+            margin-bottom: 0.3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .momo-name {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .momo-number {
+            background: linear-gradient(135deg, var(--purple-deep), var(--purple-dark));
+            color: var(--white);
+            padding: 0.9rem 1.2rem;
+            border-radius: 14px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .copy-number {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--purple-deep);
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(201, 162, 39, 0.3);
+        }
+
+        .copy-number:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 162, 39, 0.4);
+        }
+
+        .copy-number.copied {
+            background: linear-gradient(135deg, #4CAF50, #388E3C);
+            color: white;
+        }
+
+        .contribution-note {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(201, 162, 39, 0.1);
+            border-radius: 20px;
+            border: 1px dashed var(--gold);
+        }
+
+        .contribution-note p {
+            color: var(--text-dark);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+
+        .contribution-note strong {
+            color: var(--purple-dark);
+        }
+
+        /* ============================================
+           CONDOLENCE BOOK - ENHANCED
+        ============================================ */
+        .condolence {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--white) 0%, var(--cream) 100%);
+            position: relative;
+        }
+
+        .condolence-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .condolence-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--purple-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .condolence-subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 500px;
+            margin: 0 auto 1rem;
+        }
+
+        .condolence-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--purple-dark), var(--purple-medium));
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+
+        .condolence-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .condolence-form-container {
+            background: var(--white);
+            border-radius: 30px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--gray-light);
+        }
+
+        .form-header-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--purple-deep);
+            font-size: 1.3rem;
+        }
+
+        .form-header-text h3 {
+            color: var(--purple-dark);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+        }
+
+        .form-header-text p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--cream);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple-medium) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(45, 27, 78, 0.3);
+        }
+
+        .form-submit:active {
+            transform: scale(0.98);
+        }
+
+        /* Messages Container - Enhanced */
+        .condolence-messages-wrapper {
+            position: relative;
+        }
+
+        .messages-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .messages-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--purple-dark);
+        }
+
+        .messages-filter {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-light);
+            background: var(--white);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--purple-dark);
+            color: var(--white);
+            border-color: var(--purple-dark);
+        }
+
+        .condolence-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 700px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+            scroll-behavior: smooth;
+        }
+
+        .condolence-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .condolence-messages::-webkit-scrollbar-track {
+            background: var(--gray-light);
+            border-radius: 3px;
+        }
+
+        .condolence-messages::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 3px;
+        }
+
+        /* Auto-scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to top, var(--cream), transparent);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .condolence-messages-wrapper.has-scroll .scroll-indicator {
+            opacity: 1;
+        }
+
+        .message-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.06);
+            border: 1px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .message-card:hover {
+            transform: translateX(8px);
+            border-color: rgba(201, 162, 39, 0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .message-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .message-card.new-message {
+            animation: slideInMessage 0.5s ease;
+        }
+
+        @keyframes slideInMessage {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .message-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--purple-dark), var(--purple-medium));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .message-avatar::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .message-card:hover .message-avatar::after {
+            opacity: 1;
+        }
+
+        .message-info {
+            flex: 1;
+        }
+
+        .message-info h4 {
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .message-info span {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .message-info span::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+        }
+
+        .message-text {
+            color: var(--text-dark);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            font-style: italic;
+            padding-left: 1rem;
+            border-left: 2px solid var(--gray-light);
+            margin: 1rem 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .message-text.expanded {
+            -webkit-line-clamp: unset;
+            display: block;
+        }
+
+        .read-more-btn {
+            background: none;
+            border: none;
+            color: var(--gold-dark);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .read-more-btn:hover {
+            color: var(--purple-dark);
+        }
+
+        /* Message Popup Modal */
+        .message-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 10, 46, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .message-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .message-modal-content {
+            background: var(--white);
+            border-radius: 24px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2.5rem;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .message-modal.active .message-modal-content {
+            transform: scale(1);
+        }
+
+        .message-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--purple-light);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .message-modal-close:hover {
+            background: var(--purple-dark);
+            transform: rotate(90deg);
+        }
+
+        .message-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .message-modal-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--purple-dark), var(--purple-medium));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.5rem;
+            border: 3px solid var(--gold);
+        }
+
+        .message-modal-info h3 {
+            color: var(--text-dark);
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .message-modal-info span {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .message-modal-text {
+            color: var(--text-dark);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            line-height: 1.9;
+            font-style: italic;
+        }
+
+        /* Messages Pagination */
+        .messages-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .pagination-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--gold);
+            color: var(--purple-deep);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            border-color: var(--gray-light);
+            color: var(--text-muted);
+        }
+
+        .pagination-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .pagination-info span {
+            color: var(--purple-dark);
+            font-weight: 600;
+        }
+
+        .message-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding-top: 1rem;
+        }
+
+        .like-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .like-btn:hover {
+            background: rgba(233, 30, 99, 0.1);
+            color: #E91E63;
+        }
+
+        .like-btn.liked {
+            color: #E91E63;
+        }
+
+        .like-btn.liked i {
+            animation: heartBeat 0.5s ease;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+
+        .like-btn i {
+            font-size: 1.1rem;
+        }
+
+        .share-message-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .share-message-btn:hover {
+            background: rgba(201, 162, 39, 0.1);
+            color: var(--gold-dark);
+        }
+
+        /* Empty state */
+        .no-messages {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .no-messages i {
+            font-size: 3rem;
+            color: var(--gray-light);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .condolence-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .condolence-form-container {
+                position: relative;
+                top: 0;
+            }
+
+            .condolence-messages {
+                max-height: 500px;
+            }
+
+            .rsvp-form {
+                grid-template-columns: 1fr;
+            }
+
+            .rsvp-stats {
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .momo-card {
+                padding: 2rem;
+            }
+
+            .rsvp-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .messages-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        /* ============================================
+           SHARE SECTION
+        ============================================ */
+        .share {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple-deep) 100%);
+            text-align: center;
+        }
+
+        .share-title {
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .share-subtitle {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 2rem;
+        }
+
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .share-btn.whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .share-btn.facebook {
+            background: #1877F2;
+            color: white;
+        }
+
+        .share-btn.twitter {
+            background: #1DA1F2;
+            color: white;
+        }
+
+        .share-btn.copy {
+            background: var(--gold);
+            color: var(--purple-deep);
+        }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* ============================================
+           FOOTER
+        ============================================ */
+        .footer {
+            padding: 4rem 2rem 2rem;
+            background: var(--purple-deep);
+            text-align: center;
+        }
+
+        .footer-quote {
+            color: var(--gold);
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-family {
+            color: var(--white);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-signature {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 0 auto 2rem;
+        }
+
+        .footer-powered {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+        }
+
+        .footer-powered a {
+            color: var(--gold);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-powered a:hover {
+            color: var(--gold-light);
+        }
+
+        .kente-border-bottom {
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--gold) 0px,
+                var(--gold) 20px,
+                #1B5E20 20px,
+                #1B5E20 40px,
+                #C62828 40px,
+                #C62828 60px,
+                var(--gold) 60px,
+                var(--gold) 80px,
+                #000 80px,
+                #000 100px
+            );
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN - COMPREHENSIVE MOBILE FIX
+        ============================================ */
+
+        /* Prevent horizontal overflow on all devices */
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+
+        /* Tablet styles */
+        @media (max-width: 1024px) {
+            .condolence-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .condolence-form-container {
+                position: relative;
+                top: 0;
+            }
+
+            .condolence-messages {
+                max-height: 450px;
+            }
+
+            .rsvp-form {
+                grid-template-columns: 1fr;
+            }
+
+            .contribution-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            /* === PRELOADER FIX === */
+            .preloader {
+                padding: 20px;
+            }
+
+            .candle-container {
+                width: 50px;
+                height: 150px;
+                margin: 0 auto;
+            }
+
+            .candle {
+                width: 32px;
+                height: 100px;
+            }
+
+            .flame {
+                bottom: 110px;
+            }
+
+            .flame-inner {
+                width: 14px;
+                height: 30px;
+            }
+
+            .flame-outer {
+                width: 20px;
+                height: 38px;
+            }
+
+            .preloader-text {
+                font-size: 1.2rem;
+                margin-top: 30px;
+                letter-spacing: 2px;
+                text-align: center;
+            }
+
+            /* === NAVIGATION === */
+            .nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .nav-logo img {
+                width: 38px;
+                height: 38px;
+            }
+
+            .nav-logo span {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(26, 10, 46, 0.98);
+                flex-direction: column;
+                padding: 1.5rem;
+                gap: 0.75rem;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                font-size: 0.9rem;
+                padding: 0.75rem 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            /* === HERO SECTION === */
+            .hero {
+                min-height: 100vh;
+                min-height: 100dvh;
+                padding-top: 80px;
+            }
+
+            .hero-content {
+                padding: 1rem;
+                width: 100%;
+            }
+
+            .hero-subtitle-top {
+                font-size: 1.3rem;
+            }
+
+            .hero-image-container {
+                width: 180px;
+                height: 180px;
+                margin: 0 auto 1.5rem;
+            }
+
+            .hero-image-frame {
+                inset: -10px;
+            }
+
+            .hero-name {
+                font-size: 1.6rem;
+                letter-spacing: 1px;
+            }
+
+            .hero-alias {
+                font-size: 1.3rem;
+            }
+
+            .hero-title {
+                font-size: 0.75rem;
+                letter-spacing: 2px;
+            }
+
+            .hero-dates {
+                flex-direction: row;
+                gap: 1rem;
+            }
+
+            .hero-date {
+                font-size: 1.3rem;
+            }
+
+            .hero-date-separator {
+                width: 40px;
+            }
+
+            .hero-scripture {
+                font-size: 0.95rem;
+                padding: 0 0.5rem;
+            }
+
+            .hero-scroll-indicator {
+                bottom: 20px;
+            }
+
+            /* === ANNOUNCEMENT === */
+            .announcement {
+                padding: 4rem 1rem;
+            }
+
+            .announcement-text {
+                font-size: 1.1rem;
+                line-height: 1.8;
+            }
+
+            .section-label {
+                font-size: 0.7rem;
+            }
+
+            .section-label::before,
+            .section-label::after {
+                width: 25px;
+            }
+
+            /* === EVENTS TIMELINE === */
+            .events {
+                padding: 4rem 1rem;
+            }
+
+            .events-title {
+                font-size: 1.8rem;
+            }
+
+            .timeline::before {
+                left: 15px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(odd) {
+                flex-direction: column;
+                padding-left: 40px;
+                margin-bottom: 2rem;
+            }
+
+            .timeline-item .timeline-content,
+            .timeline-item:nth-child(odd) .timeline-content {
+                width: 100%;
+                padding: 0;
+                text-align: left;
+            }
+
+            .timeline-item:nth-child(odd) .event-icon,
+            .timeline-item:nth-child(odd) .event-actions {
+                margin-left: 0;
+                justify-content: flex-start;
+            }
+
+            .timeline-dot {
+                left: 15px;
+                width: 16px;
+                height: 16px;
+            }
+
+            .event-card {
+                padding: 1.5rem;
+                border-radius: 16px;
+            }
+
+            .event-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .event-name {
+                font-size: 1.4rem;
+            }
+
+            .event-details {
+                font-size: 0.85rem;
+            }
+
+            .event-actions {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* === COUNTDOWN === */
+            .countdown-section {
+                padding: 3rem 1rem;
+            }
+
+            .countdown {
+                gap: 0.5rem;
+            }
+
+            .countdown-item {
+                min-width: 70px;
+                padding: 0.75rem 0.5rem;
+                border-radius: 12px;
+            }
+
+            .countdown-number {
+                font-size: 1.8rem;
+            }
+
+            .countdown-unit {
+                font-size: 0.65rem;
+            }
+
+            /* === GALLERY - MOBILE SWIPE FRIENDLY === */
+            .gallery-section {
+                padding: 4rem 0;
+            }
+
+            .gallery-header {
+                padding: 0 1rem;
+            }
+
+            .gallery-title {
+                font-size: 1.8rem;
+            }
+
+            .expandable-gallery {
+                flex-direction: row;
+                height: 280px;
+                gap: 15px;
+                padding: 0 1rem;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .gallery-item {
+                flex: none !important;
+                min-width: 85vw;
+                height: 100%;
+                border-radius: 16px;
+                scroll-snap-align: center;
+            }
+
+            .gallery-item:active {
+                transform: scale(0.98);
+            }
+
+            .gallery-item img {
+                filter: grayscale(0%);
+            }
+
+            .gallery-caption {
+                padding: 1.2rem;
+                transform: translateY(0);
+                opacity: 1;
+                background: linear-gradient(to top, rgba(26, 10, 46, 0.95) 0%, transparent 100%);
+            }
+
+            .gallery-caption h4 {
+                font-size: 1.2rem;
+            }
+
+            .gallery-caption p {
+                font-size: 0.85rem;
+            }
+
+            .gallery-overlay {
+                opacity: 0;
+            }
+
+            .gallery-caption .view-icon {
+                opacity: 1;
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+
+            .gallery-swipe-hint {
+                display: block;
+                padding: 0 1rem;
+            }
+
+            /* Gallery Modal Mobile */
+            .gallery-modal {
+                padding: 0;
+            }
+
+            .modal-content {
+                max-width: 100vw;
+                max-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .modal-content img {
+                max-height: 70vh;
+                border-radius: 0;
+            }
+
+            .modal-close {
+                position: fixed;
+                top: 15px;
+                right: 15px;
+                font-size: 2rem;
+                z-index: 10;
+            }
+
+            .modal-nav {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+
+            .modal-nav.prev {
+                left: 10px;
+            }
+
+            .modal-nav.next {
+                right: 10px;
+            }
+
+            .modal-counter {
+                bottom: 20px;
+                font-size: 0.9rem;
+            }
+
+            /* === RSVP SECTION === */
+            .rsvp-section {
+                padding: 4rem 1rem;
+            }
+
+            .rsvp-title {
+                font-size: 1.8rem;
+            }
+
+            .rsvp-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .rsvp-card {
+                padding: 1.5rem;
+                border-radius: 20px;
+            }
+
+            .rsvp-form {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .rsvp-form .form-group.full-width {
+                grid-column: 1;
+            }
+
+            .form-input,
+            .form-select,
+            .form-textarea {
+                padding: 0.875rem 1rem;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .rsvp-submit {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .rsvp-stats {
+                flex-direction: row;
+                gap: 2rem;
+                margin-top: 1.5rem;
+                padding-top: 1.5rem;
+            }
+
+            .rsvp-stat-number {
+                font-size: 2rem;
+            }
+
+            /* === MOMO CONTRIBUTION === */
+            .contribution-section {
+                padding: 4rem 1rem;
+            }
+
+            .contribution-title {
+                font-size: 1.8rem;
+            }
+
+            .contribution-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .momo-card {
+                padding: 2rem 1.5rem;
+                border-radius: 20px;
+            }
+
+            .momo-icon {
+                width: 65px;
+                height: 65px;
+                font-size: 1.6rem;
+            }
+
+            .momo-provider {
+                font-size: 1.3rem;
+            }
+
+            .momo-number {
+                font-size: 1.1rem;
+                padding: 0.875rem 1rem;
+                letter-spacing: 1px;
+            }
+
+            .copy-number {
+                padding: 0.5rem 1.25rem;
+            }
+
+            .contribution-note {
+                padding: 1.5rem;
+                margin-top: 2rem;
+            }
+
+            .contribution-note p {
+                font-size: 1rem;
+            }
+
+            /* === CONDOLENCE SECTION === */
+            .condolence {
+                padding: 4rem 1rem;
+            }
+
+            .condolence-title {
+                font-size: 1.8rem;
+            }
+
+            .condolence-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .condolence-form-container {
+                padding: 1.5rem;
+                border-radius: 20px;
+                position: relative;
+                top: 0;
+            }
+
+            .form-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.75rem;
+            }
+
+            .form-header-icon {
+                width: 45px;
+                height: 45px;
+            }
+
+            .form-header-text h3 {
+                font-size: 1.3rem;
+            }
+
+            .form-submit {
+                padding: 1rem;
+            }
+
+            .condolence-messages-wrapper {
+                order: -1;
+            }
+
+            .messages-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .messages-title {
+                font-size: 1.3rem;
+            }
+
+            .condolence-messages {
+                max-height: 400px;
+                padding-right: 0.25rem;
+            }
+
+            .message-card {
+                padding: 1.25rem;
+                border-radius: 16px;
+            }
+
+            .message-avatar {
+                width: 42px;
+                height: 42px;
+                font-size: 1rem;
+            }
+
+            .message-info h4 {
+                font-size: 0.95rem;
+            }
+
+            .message-info span {
+                font-size: 0.75rem;
+            }
+
+            .message-text {
+                font-size: 1rem;
+                padding-left: 0.75rem;
+            }
+
+            .message-actions {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+
+            .like-btn,
+            .share-message-btn {
+                font-size: 0.85rem;
+                padding: 0.4rem 0.75rem;
+            }
+
+            /* === SHARE SECTION === */
+            .share {
+                padding: 3rem 1rem;
+            }
+
+            .share-title {
+                font-size: 1.6rem;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .share-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.875rem 1.5rem;
+            }
+
+            /* === FOOTER === */
+            .footer {
+                padding: 3rem 1rem 1.5rem;
+            }
+
+            .footer-quote {
+                font-size: 1.5rem;
+            }
+
+            .footer-family {
+                font-size: 1rem;
+            }
+
+            .footer-signature {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Small mobile styles */
+        @media (max-width: 480px) {
+            .hero-image-container {
+                width: 160px;
+                height: 160px;
+            }
+
+            .hero-name {
+                font-size: 1.4rem;
+            }
+
+            .hero-dates {
+                gap: 0.75rem;
+            }
+
+            .hero-date {
+                font-size: 1.2rem;
+            }
+
+            .hero-date-separator {
+                width: 30px;
+            }
+
+            .countdown-item {
+                min-width: 60px;
+                padding: 0.6rem 0.4rem;
+            }
+
+            .countdown-number {
+                font-size: 1.5rem;
+            }
+
+            .countdown-unit {
+                font-size: 0.6rem;
+            }
+
+            .gallery-item {
+                height: 180px;
+            }
+
+            .rsvp-stats {
+                gap: 1.5rem;
+            }
+
+            .rsvp-stat-number {
+                font-size: 1.8rem;
+            }
+
+            .momo-number {
+                font-size: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .momo-number span {
+                letter-spacing: 0;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 360px) {
+            .hero-name {
+                font-size: 1.2rem;
+            }
+
+            .countdown {
+                gap: 0.4rem;
+            }
+
+            .countdown-item {
+                min-width: 55px;
+            }
+
+            .countdown-number {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Fix for iOS Safari 100vh issue */
+        @supports (-webkit-touch-callout: none) {
+            .hero {
+                min-height: -webkit-fill-available;
+            }
+        }
+
+        /* Touch-friendly tap targets */
+        @media (pointer: coarse) {
+            .btn,
+            .share-btn,
+            .copy-number,
+            .like-btn,
+            .filter-btn,
+            .nav-links a {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        /* ============================================
+           PRINT STYLES
+        ============================================ */
+        @media print {
+            .nav,
+            .preloader,
+            .particles-container,
+            .hero-scroll-indicator,
+            .share,
+            .condolence-form-container,
+            .event-actions,
+            .btn {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+                color: black;
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 2rem;
+                background: white !important;
+            }
+
+            .hero-name,
+            .hero-alias,
+            .hero-title,
+            .hero-dates,
+            .hero-date {
+                color: black !important;
+            }
+
+            .events {
+                background: white !important;
+            }
+
+            .event-card {
+                background: white;
+                border: 1px solid #ccc;
+            }
+
+            .event-name,
+            .event-details {
+                color: black !important;
+            }
+        }
+
+        /* ============================================
+           FLOATING BUTTONS - Music, WhatsApp, Brochure
+        ============================================ */
+
+        /* Music Toggle Button */
+        .music-toggle {
+            position: fixed;
+            right: 20px;
+            bottom: 90px;
+            padding: 12px 16px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(201, 162, 39, 0.5);
+            color: var(--purple-deep);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            box-shadow: 0 8px 25px rgba(26, 10, 46, 0.25);
+            z-index: 1000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .music-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(26, 10, 46, 0.35);
+        }
+
+        .music-toggle i {
+            font-size: 16px;
+            color: var(--gold);
+            transition: transform 0.3s ease;
+        }
+
+        .music-toggle.is-playing {
+            background: linear-gradient(135deg, rgba(201, 162, 39, 0.15), rgba(26, 10, 46, 0.15));
+            border-color: var(--gold);
+        }
+
+        .music-toggle.is-playing i {
+            animation: musicPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes musicPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            animation: floatBounce 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-float:hover {
+            background: #20ba5a;
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+        }
+
+        @keyframes floatBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Floating button tooltips */
+        .whatsapp-float::before {
+            content: attr(data-tooltip);
+            position: absolute;
+            right: 70px;
+            background: var(--purple-deep);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .whatsapp-float:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Mobile adjustments for floating buttons */
+        @media (max-width: 480px) {
+            .music-toggle {
+                right: 15px;
+                bottom: 85px;
+                padding: 10px 14px;
+                font-size: 11px;
+            }
+
+            .whatsapp-float {
+                width: 55px;
+                height: 55px;
+                right: 15px;
+                bottom: 15px;
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="candle-container">
+            <div class="flame">
+                <div class="flame-outer"></div>
+                <div class="flame-inner"></div>
+            </div>
+            <div class="candle"></div>
+        </div>
+        <p class="preloader-text">In Loving Memory</p>
+    </div>
+
+    <!-- Floating Particles -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-content">
+            <a href="#" class="nav-logo">
+                <img src="photo.jpg" alt="Mr. Wilson Atta Krofah">
+                <span>Atta Panyin</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#events">Events</a></li>
+                <li><a href="#rsvp">RSVP</a></li>
+                <li><a href="#contribute">Contribute</a></li>
+                <li><a href="#condolence">Condolences</a></li>
+                <li><a href="#share">Share</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-pattern"></div>
+        <div class="kente-border-top"></div>
+
+        <div class="hero-content">
+            <p class="hero-subtitle-top">In Loving Memory of</p>
+
+            <div class="hero-image-container">
+                <div class="hero-image-glow"></div>
+                <div class="hero-image-frame">
+                    <div class="frame-decoration top-left"></div>
+                    <div class="frame-decoration top-right"></div>
+                    <div class="frame-decoration bottom-left"></div>
+                    <div class="frame-decoration bottom-right"></div>
+                </div>
+                <img src="photo.jpg" alt="Mr. Wilson Atta Krofah" class="hero-image">
+            </div>
+
+            <h1 class="hero-name">Mr. Wilson Atta Krofah</h1>
+            <p class="hero-alias">"Atta Panyin"</p>
+            <p class="hero-title">Begoro Bretuo Abusuapanyin</p>
+
+            <div class="hero-dates">
+                <span class="hero-date">1939</span>
+                <div class="hero-date-separator"></div>
+                <span class="hero-date">2026</span>
+            </div>
+
+            <p class="hero-scripture">
+                "Blessed are those who mourn, for they shall be comforted."
+                <br>— Matthew 5:4
+            </p>
+        </div>
+
+        <div class="hero-scroll-indicator">
+            <span>Scroll Down</span>
+            <div class="scroll-mouse"></div>
+        </div>
+    </section>
+
+    <!-- Announcement Section -->
+    <section class="announcement" id="announcement">
+        <div class="announcement-content" data-aos="fade-up">
+            <div class="section-label">Official Announcement</div>
+            <p class="announcement-text">
+                It is with deep sorrow but humble acceptance of God's will that the
+                <span class="gold">Akua Amankwaa Bretuo Family of Begoro</span>
+                in the Eastern Region announce the passing of their beloved Abusuapanyin,
+                <span class="highlight">Mr. Wilson Atta Krofah (Atta Panyin)</span>.
+                <br><br>
+                Mr. Krofah passed away on <span class="highlight">Thursday, February 19, 2026</span>
+                at The Bank Hospital, Accra, Ghana after a short illness.
+                He was <span class="gold">86 years old</span>.
+            </p>
+        </div>
+    </section>
+
+    <!-- Events Timeline -->
+    <section class="events" id="events">
+        <div class="events-bg-pattern"></div>
+
+        <div class="events-header" data-aos="fade-up">
+            <h2 class="events-title">Funeral Programme</h2>
+            <p class="events-subtitle">Celebrating a Life Well Lived</p>
+        </div>
+
+        <div class="timeline">
+            <!-- Book of Condolence -->
+            <div class="timeline-item" data-aos="fade-right">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="event-card">
+                        <div class="event-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <span class="event-label">Now Open</span>
+                        <h3 class="event-name">Book of Condolence</h3>
+                        <div class="event-details">
+                            <p><i class="fas fa-map-marker-alt"></i> House No. 84, Kofi Annan Avenue, North Legon, Accra</p>
+                            <p><i class="fas fa-clock"></i> 2:00 PM - 5:00 PM</p>
+                            <p><i class="fas fa-calendar-alt"></i> Wednesdays & Saturdays</p>
+                        </div>
+                        <div class="event-actions">
+                            <a href="https://maps.google.com/?q=Kofi+Annan+Avenue+North+Legon+Accra" target="_blank" class="btn btn-gold">
+                                <i class="fas fa-directions"></i> Get Directions
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- One-Week Observation -->
+            <div class="timeline-item" data-aos="fade-left">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="event-card">
+                        <div class="event-icon">
+                            <i class="fas fa-church"></i>
+                        </div>
+                        <span class="event-label">March 28, 2026</span>
+                        <h3 class="event-name">One-Week Observation</h3>
+                        <div class="event-details">
+                            <p><i class="fas fa-map-marker-alt"></i> Ghana Police Church, Nii Amane St, Liberation Rd, Accra</p>
+                            <p><i class="fas fa-info-circle"></i> Opposite 37 Max Mart</p>
+                            <p><i class="fas fa-clock"></i> Time to be announced</p>
+                        </div>
+                        <div class="event-actions">
+                            <a href="https://maps.google.com/?q=Ghana+Police+Church+Liberation+Road+Accra" target="_blank" class="btn btn-gold">
+                                <i class="fas fa-directions"></i> Get Directions
+                            </a>
+                            <button class="btn btn-outline" onclick="addToCalendar()">
+                                <i class="fas fa-calendar-plus"></i> Add to Calendar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Funeral Rites -->
+            <div class="timeline-item" data-aos="fade-right">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="event-card coming-soon">
+                        <div class="event-icon">
+                            <i class="fas fa-cross"></i>
+                        </div>
+                        <span class="coming-soon-badge">Coming Soon</span>
+                        <h3 class="event-name">Final Funeral Rites</h3>
+                        <div class="event-details">
+                            <p><i class="fas fa-info-circle"></i> Details to be communicated by the family in due course</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Burial -->
+            <div class="timeline-item" data-aos="fade-left">
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="event-card coming-soon">
+                        <div class="event-icon">
+                            <i class="fas fa-dove"></i>
+                        </div>
+                        <span class="coming-soon-badge">Coming Soon</span>
+                        <h3 class="event-name">Burial & Thanksgiving</h3>
+                        <div class="event-details">
+                            <p><i class="fas fa-info-circle"></i> Details forthcoming</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown Section -->
+    <section class="countdown-section">
+        <p class="countdown-label">Countdown to One-Week Observation</p>
+        <p class="countdown-event">Saturday, March 28, 2026</p>
+        <div class="countdown" id="countdown">
+            <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-unit">Days</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-unit">Hours</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-unit">Minutes</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-unit">Seconds</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <section class="gallery-section" id="gallery">
+        <div class="gallery-header" data-aos="fade-up">
+            <h2 class="gallery-title">Cherished Memories</h2>
+            <p class="gallery-subtitle">Hover to expand • Click to view</p>
+        </div>
+
+        <div class="expandable-gallery" data-aos="fade-up" data-aos-delay="200">
+            <div class="gallery-item" onclick="openGallery(0)">
+                <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=800&auto=format&fit=crop" alt="Family gathering" data-caption="Family Gathering" data-desc="Precious moments with loved ones">
+                <div class="gallery-overlay"></div>
+                <div class="gallery-caption">
+                    <h4>Family Gathering</h4>
+                    <p>Precious moments with loved ones</p>
+                    <div class="view-icon"><i class="fas fa-expand"></i></div>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openGallery(1)">
+                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&auto=format&fit=crop" alt="Community celebration" data-caption="Community Leader" data-desc="A life of service and dedication">
+                <div class="gallery-overlay"></div>
+                <div class="gallery-caption">
+                    <h4>Community Leader</h4>
+                    <p>A life of service and dedication</p>
+                    <div class="view-icon"><i class="fas fa-expand"></i></div>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openGallery(2)">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop" alt="Legacy portrait" data-caption="A Distinguished Leader" data-desc="Abusuapanyin of Begoro Bretuo">
+                <div class="gallery-overlay"></div>
+                <div class="gallery-caption">
+                    <h4>A Distinguished Leader</h4>
+                    <p>Abusuapanyin of Begoro Bretuo</p>
+                    <div class="view-icon"><i class="fas fa-expand"></i></div>
+                </div>
+            </div>
+            <div class="gallery-item" onclick="openGallery(3)">
+                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&auto=format&fit=crop" alt="Golden years" data-caption="Golden Years" data-desc="A lifetime of wisdom and grace">
+                <div class="gallery-overlay"></div>
+                <div class="gallery-caption">
+                    <h4>Golden Years</h4>
+                    <p>A lifetime of wisdom and grace</p>
+                    <div class="view-icon"><i class="fas fa-expand"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="gallery-swipe-hint">
+            <i class="fas fa-hand-pointer"></i> Swipe to see more photos
+        </div>
+    </section>
+
+    <!-- Gallery Modal -->
+    <div class="gallery-modal" id="galleryModal" onclick="closeGallery(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeGallery()">&times;</button>
+            <button class="modal-nav prev" onclick="prevImage()"><i class="fas fa-chevron-left"></i></button>
+            <img src="" alt="Gallery image" id="modalImage">
+            <button class="modal-nav next" onclick="nextImage()"><i class="fas fa-chevron-right"></i></button>
+            <div class="modal-counter"><span id="currentIndex">1</span> / <span id="totalImages">4</span></div>
+        </div>
+    </div>
+
+    <!-- RSVP Section -->
+    <section class="rsvp-section" id="rsvp">
+        <div class="rsvp-container">
+            <div class="rsvp-header" data-aos="fade-up">
+                <h2 class="rsvp-title">Confirm Your Attendance</h2>
+                <p class="rsvp-subtitle">One-Week Observation - March 28, 2026</p>
+            </div>
+
+            <div class="rsvp-card" data-aos="fade-up" data-aos-delay="200">
+                <form class="rsvp-form" id="rsvpForm">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-input" id="rsvpName" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number *</label>
+                        <input type="tel" class="form-input" id="rsvpPhone" required placeholder="e.g., 024 XXX XXXX">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Number of Guests</label>
+                        <select class="form-select" id="rsvpGuests">
+                            <option value="1">1 Person (Just me)</option>
+                            <option value="2">2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4 People</option>
+                            <option value="5">5+ People</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Attending Event</label>
+                        <select class="form-select" id="rsvpEvent">
+                            <option value="one-week">One-Week Observation (March 28)</option>
+                            <option value="burial">Burial Service (TBA)</option>
+                            <option value="both">Both Events</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Special Requirements (Optional)</label>
+                        <input type="text" class="form-input" id="rsvpRequirements" placeholder="e.g., Dietary restrictions, accessibility needs">
+                    </div>
+                    <button type="submit" class="rsvp-submit">
+                        <i class="fas fa-calendar-check"></i> Confirm Attendance
+                    </button>
+                </form>
+
+                <div class="rsvp-stats">
+                    <div class="rsvp-stat">
+                        <div class="rsvp-stat-number" id="rsvpCount">47</div>
+                        <div class="rsvp-stat-label">Confirmed</div>
+                    </div>
+                    <div class="rsvp-stat">
+                        <div class="rsvp-stat-number" id="guestCount">112</div>
+                        <div class="rsvp-stat-label">Total Guests</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MoMo Contribution Section -->
+    <section class="contribution-section" id="contribute">
+        <div class="contribution-container">
+            <div class="contribution-header" data-aos="fade-up">
+                <h2 class="contribution-title">Support the Family</h2>
+                <p class="contribution-subtitle">Your contributions help honour the memory of Atta Panyin</p>
+            </div>
+
+            <div class="contribution-grid" data-aos="fade-up" data-aos-delay="200">
+                <div class="momo-card">
+                    <div class="momo-icon mtn">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="momo-provider">MTN MoMo</h3>
+                    <p class="momo-name">Wilson Atta Krofah (Family)</p>
+                    <div class="momo-number">
+                        <span id="mtnNumber">024 XXX XXXX</span>
+                    </div>
+                    <button class="copy-number" onclick="copyNumber('024 XXX XXXX', this)">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+
+                <div class="momo-card">
+                    <div class="momo-icon vodafone">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="momo-provider">Vodafone Cash</h3>
+                    <p class="momo-name">Wilson Atta Krofah (Family)</p>
+                    <div class="momo-number">
+                        <span id="vodaNumber">020 XXX XXXX</span>
+                    </div>
+                    <button class="copy-number" onclick="copyNumber('020 XXX XXXX', this)">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+
+                <div class="momo-card">
+                    <div class="momo-icon airteltigo">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="momo-provider">AirtelTigo Money</h3>
+                    <p class="momo-name">Wilson Atta Krofah (Family)</p>
+                    <div class="momo-number">
+                        <span id="atNumber">027 XXX XXXX</span>
+                    </div>
+                    <button class="copy-number" onclick="copyNumber('027 XXX XXXX', this)">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                </div>
+            </div>
+
+            <div class="contribution-note" data-aos="fade-up" data-aos-delay="400">
+                <p><i class="fas fa-praying-hands" style="color: var(--gold); margin-right: 10px;"></i>
+                <strong>"Blessed are those who mourn, for they shall be comforted."</strong> — Matthew 5:4<br>
+                Your kindness honours his memory. The family deeply appreciates your generosity and support.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Condolence Section - Enhanced -->
+    <section class="condolence" id="condolence">
+        <div class="condolence-header" data-aos="fade-up">
+            <h2 class="condolence-title">Book of Condolences</h2>
+            <p class="condolence-subtitle">Share your memories and words of comfort with the family</p>
+            <div class="condolence-count">
+                <i class="fas fa-comments"></i>
+                <span id="messageCount">3</span> Messages
+            </div>
+        </div>
+
+        <div class="condolence-grid">
+            <div class="condolence-form-container" data-aos="fade-right">
+                <div class="form-header">
+                    <div class="form-header-icon">
+                        <i class="fas fa-feather-alt"></i>
+                    </div>
+                    <div class="form-header-text">
+                        <h3>Write a Message</h3>
+                        <p>Your words mean a lot to the family</p>
+                    </div>
+                </div>
+                <form id="condolenceForm">
+                    <div class="form-group">
+                        <label class="form-label">Your Name *</label>
+                        <input type="text" class="form-input" id="condolenceName" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Relationship to Deceased</label>
+                        <input type="text" class="form-input" id="condolenceRelation" placeholder="e.g., Friend, Colleague, Family">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Your Message *</label>
+                        <textarea class="form-textarea" id="condolenceMessage" required placeholder="Share your condolences, memories, or words of comfort..."></textarea>
+                    </div>
+                    <button type="submit" class="form-submit">
+                        <i class="fas fa-paper-plane"></i> Send Condolence
+                    </button>
+                </form>
+            </div>
+
+            <div class="condolence-messages-wrapper" data-aos="fade-left">
+                <div class="messages-header">
+                    <h3 class="messages-title">Recent Messages</h3>
+                    <div class="messages-filter">
+                        <button class="filter-btn active" onclick="filterMessages('all')">All</button>
+                        <button class="filter-btn" onclick="filterMessages('recent')">Recent</button>
+                    </div>
+                </div>
+                <div class="condolence-messages" id="messagesContainer">
+                    <!-- Messages will be dynamically inserted here -->
+                </div>
+                <div class="messages-pagination">
+                    <button class="pagination-btn prev" onclick="prevPage()" id="prevBtn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="pagination-info">
+                        Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                    </span>
+                    <button class="pagination-btn next" onclick="nextPage()" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Share Section -->
+    <section class="share" id="share">
+        <h2 class="share-title" data-aos="fade-up">Share This Memorial</h2>
+        <p class="share-subtitle" data-aos="fade-up" data-aos-delay="100">Help spread the word to friends and family</p>
+
+        <div class="share-buttons" data-aos="fade-up" data-aos-delay="200">
+            <a href="#" class="share-btn whatsapp" id="shareWhatsApp">
+                <i class="fab fa-whatsapp"></i> Share on WhatsApp
+            </a>
+            <a href="#" class="share-btn facebook" id="shareFacebook">
+                <i class="fab fa-facebook-f"></i> Share on Facebook
+            </a>
+            <a href="#" class="share-btn twitter" id="shareTwitter">
+                <i class="fab fa-twitter"></i> Share on Twitter
+            </a>
+            <button class="share-btn copy" id="copyLink">
+                <i class="fas fa-link"></i> Copy Link
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-quote" data-aos="fade-up">May His Soul Rest in Perfect Peace</p>
+        <p class="footer-family" data-aos="fade-up" data-aos-delay="100">Akua Amankwaa Bretuo Family of Begoro</p>
+        <p class="footer-signature" data-aos="fade-up" data-aos-delay="200">
+            Signed: Mr. Wilson Atta Krofah (Atta Kakra) — On behalf of the Family
+        </p>
+        <div class="footer-divider"></div>
+        <p class="footer-powered">
+            Powered by <a href="https://vibelinkevent.com" target="_blank">VibeLink Event</a> &copy; 2026
+        </p>
+    </footer>
+    <div class="kente-border-bottom"></div>
+
+    <!-- Background Audio Element - MUST be before script -->
+    <audio id="bgMusic" preload="auto" loop>
+        <source src="/music/memorial-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 50
+        });
+
+        // Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 2000);
+        });
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile navigation toggle
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Countdown Timer
+        function updateCountdown() {
+            const targetDate = new Date('March 28, 2026 09:00:00').getTime();
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Condolence Messages
+        const defaultMessages = [
+            {
+                name: "Kwame Asante",
+                relation: "Family Friend",
+                message: "Atta Panyin was a true pillar of our community. His wisdom and kindness touched many lives. May his soul rest in perfect peace.",
+                date: "Feb 24, 2026",
+                likes: 12
+            },
+            {
+                name: "Akosua Mensah",
+                relation: "Neighbor",
+                message: "We will forever cherish the memories of Atta Panyin. He was always there to offer guidance and support. The Bretuo family has lost a great leader.",
+                date: "Feb 23, 2026",
+                likes: 8
+            },
+            {
+                name: "Kofi Adjei",
+                relation: "Church Member",
+                message: "A man of great faith and integrity. His legacy will live on through the many lives he touched. Condolences to the entire family.",
+                date: "Feb 22, 2026",
+                likes: 15
+            },
+            {
+                name: "Abena Osei",
+                relation: "Grandchild",
+                message: "Grandpa, your stories and laughter will forever echo in our hearts. You taught us the meaning of family, honour, and perseverance. Rest well, Atta Panyin.",
+                date: "Feb 21, 2026",
+                likes: 23
+            },
+            {
+                name: "Dr. Emmanuel Boateng",
+                relation: "Colleague",
+                message: "Working alongside Atta Panyin for over two decades was a privilege. His dedication to community service and his unwavering integrity inspired us all. Ghana has lost a great leader.",
+                date: "Feb 20, 2026",
+                likes: 18
+            }
+        ];
+
+        function loadMessages() {
+            const stored = localStorage.getItem('condolenceMessages');
+            return stored ? JSON.parse(stored) : defaultMessages;
+        }
+
+        function saveMessages(messages) {
+            localStorage.setItem('condolenceMessages', JSON.stringify(messages));
+        }
+
+        function updateMessageCount() {
+            const messages = loadMessages();
+            document.getElementById('messageCount').textContent = messages.length;
+        }
+
+        // Pagination variables
+        let currentPage = 1;
+        let currentFilter = 'all';
+        const messagesPerPage = 2;
+
+        function renderMessages(filter = 'all', page = 1) {
+            currentFilter = filter;
+            currentPage = page;
+            const container = document.getElementById('messagesContainer');
+            let messages = loadMessages();
+
+            if (filter === 'recent') {
+                messages = messages.slice(0, 3);
+            }
+
+            // Calculate pagination
+            const totalMessages = messages.length;
+            const totalPages = Math.ceil(totalMessages / messagesPerPage);
+            const startIndex = (page - 1) * messagesPerPage;
+            const endIndex = startIndex + messagesPerPage;
+            const paginatedMessages = messages.slice(startIndex, endIndex);
+
+            container.innerHTML = paginatedMessages.map((msg, localIndex) => {
+                const globalIndex = startIndex + localIndex;
+                return `
+                <div class="message-card" onclick="openMessageModal('${msg.name.replace(/'/g, "\\'")}', '${(msg.relation || 'Well-wisher').replace(/'/g, "\\'")}', '${msg.date}', '${msg.message.replace(/'/g, "\\'")}', '${msg.name.split(' ').map(n => n[0]).join('').substring(0, 2)}')">
+                    <div class="message-header">
+                        <div class="message-avatar">${msg.name.split(' ').map(n => n[0]).join('').substring(0, 2)}</div>
+                        <div class="message-info">
+                            <h4>${msg.name}</h4>
+                            <span>${msg.relation || 'Well-wisher'} • ${msg.date}</span>
+                        </div>
+                    </div>
+                    <p class="message-text">"${msg.message}"</p>
+                    <div class="message-actions">
+                        <button class="like-btn ${msg.liked ? 'liked' : ''}" onclick="event.stopPropagation(); toggleLike(${globalIndex})">
+                            <i class="${msg.liked ? 'fas' : 'far'} fa-heart"></i>
+                            <span>${msg.likes}</span>
+                        </button>
+                        <button class="share-message-btn" onclick="event.stopPropagation(); shareMessage('${msg.name}', '${msg.message.substring(0, 50)}...')">
+                            <i class="fas fa-share-alt"></i> Share
+                        </button>
+                    </div>
+                </div>
+            `}).join('');
+
+            // Update pagination controls
+            document.getElementById('currentPage').textContent = page;
+            document.getElementById('totalPages').textContent = totalPages;
+            document.getElementById('prevBtn').disabled = page <= 1;
+            document.getElementById('nextBtn').disabled = page >= totalPages;
+
+            updateMessageCount();
+        }
+
+        function nextPage() {
+            const messages = loadMessages();
+            const filtered = currentFilter === 'recent' ? messages.slice(0, 3) : messages;
+            const totalPages = Math.ceil(filtered.length / messagesPerPage);
+            if (currentPage < totalPages) {
+                renderMessages(currentFilter, currentPage + 1);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                renderMessages(currentFilter, currentPage - 1);
+            }
+        }
+
+        function filterMessages(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderMessages(filter, 1);
+        }
+
+        function toggleLike(index) {
+            const messages = loadMessages();
+            messages[index].liked = !messages[index].liked;
+            messages[index].likes += messages[index].liked ? 1 : -1;
+            saveMessages(messages);
+            renderMessages(currentFilter, currentPage);
+        }
+
+        function shareMessage(name, excerpt) {
+            const text = `Condolence from ${name}: "${excerpt}" - In memory of Mr. Wilson Atta Krofah (Atta Panyin)`;
+            if (navigator.share) {
+                navigator.share({ text, url: window.location.href });
+            } else {
+                navigator.clipboard.writeText(text + ' ' + window.location.href);
+                alert('Message copied to clipboard!');
+            }
+        }
+
+        // Condolence Form
+        document.getElementById('condolenceForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('condolenceName').value;
+            const relation = document.getElementById('condolenceRelation').value;
+            const message = document.getElementById('condolenceMessage').value;
+
+            const messages = loadMessages();
+            messages.unshift({
+                name,
+                relation,
+                message,
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                likes: 0,
+                liked: false
+            });
+
+            saveMessages(messages);
+            renderMessages();
+
+            // Reset form
+            e.target.reset();
+
+            // Scroll to new message
+            document.getElementById('messagesContainer').scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Show success notification
+            showNotification('Thank you! Your condolence message has been added.');
+        });
+
+        // Custom notification
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, var(--purple-dark), var(--purple-medium));
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 50px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+                z-index: 9999;
+                animation: slideUp 0.5s ease;
+            `;
+            notification.innerHTML = `<i class="fas fa-check-circle" style="margin-right: 10px;"></i>${message}`;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.5s ease forwards';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // RSVP Form
+        document.getElementById('rsvpForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const rsvps = JSON.parse(localStorage.getItem('rsvpList') || '[]');
+            rsvps.push({
+                name: document.getElementById('rsvpName').value,
+                phone: document.getElementById('rsvpPhone').value,
+                guests: document.getElementById('rsvpGuests').value,
+                event: document.getElementById('rsvpEvent').value,
+                requirements: document.getElementById('rsvpRequirements').value,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('rsvpList', JSON.stringify(rsvps));
+
+            // Update stats
+            updateRSVPStats();
+
+            e.target.reset();
+            showNotification('Thank you! Your attendance has been confirmed.');
+        });
+
+        function updateRSVPStats() {
+            const rsvps = JSON.parse(localStorage.getItem('rsvpList') || '[]');
+            const baseCount = 47;
+            const baseGuests = 112;
+
+            document.getElementById('rsvpCount').textContent = baseCount + rsvps.length;
+            const totalGuests = rsvps.reduce((sum, r) => sum + parseInt(r.guests || 1), 0);
+            document.getElementById('guestCount').textContent = baseGuests + totalGuests;
+        }
+
+        // Copy MoMo number
+        function copyNumber(number, btn) {
+            navigator.clipboard.writeText(number).then(() => {
+                btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Initialize
+        renderMessages();
+        updateRSVPStats();
+
+        // Share functionality
+        const shareText = "Join us to celebrate the life of Mr. Wilson Atta Krofah (Atta Panyin), Begoro Bretuo Abusuapanyin (1939-2026). One-week observation: March 28, 2026 at Ghana Police Church, Accra.";
+        const shareUrl = window.location.href;
+
+        document.getElementById('shareWhatsApp').href = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`;
+        document.getElementById('shareFacebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+        document.getElementById('shareTwitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+
+        document.getElementById('copyLink').addEventListener('click', () => {
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert('Link copied to clipboard!');
+            });
+        });
+
+        // Add to Calendar
+        function addToCalendar() {
+            const event = {
+                title: 'One-Week Observation - Mr. Wilson Atta Krofah',
+                location: 'Ghana Police Church, Nii Amane St, Liberation Rd, Accra',
+                description: 'One-week observation ceremony for Mr. Wilson Atta Krofah (Atta Panyin)',
+                start: '2026-03-28T09:00:00',
+                end: '2026-03-28T14:00:00'
+            };
+
+            const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=20260328T090000/20260328T140000&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
+
+            window.open(googleUrl, '_blank');
+        }
+
+        // Gallery functionality
+        const galleryImages = document.querySelectorAll('.gallery-item img');
+        const galleryModal = document.getElementById('galleryModal');
+        const modalImage = document.getElementById('modalImage');
+        const currentIndexEl = document.getElementById('currentIndex');
+        const totalImagesEl = document.getElementById('totalImages');
+        let currentGalleryIndex = 0;
+
+        totalImagesEl.textContent = galleryImages.length;
+
+        function openGallery(index) {
+            currentGalleryIndex = index;
+            updateModalImage();
+            galleryModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGallery(e) {
+            if (e && e.target !== galleryModal) return;
+            galleryModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function updateModalImage() {
+            const img = galleryImages[currentGalleryIndex];
+            modalImage.src = img.src;
+            currentIndexEl.textContent = currentGalleryIndex + 1;
+        }
+
+        function nextImage() {
+            currentGalleryIndex = (currentGalleryIndex + 1) % galleryImages.length;
+            updateModalImage();
+        }
+
+        function prevImage() {
+            currentGalleryIndex = (currentGalleryIndex - 1 + galleryImages.length) % galleryImages.length;
+            updateModalImage();
+        }
+
+        // Keyboard navigation for gallery
+        document.addEventListener('keydown', (e) => {
+            if (!galleryModal.classList.contains('active')) return;
+            if (e.key === 'Escape') closeGallery();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') prevImage();
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    navLinks.classList.remove('active');
+                }
+            });
+        });
+
+        // ============================================
+        // BACKGROUND MUSIC CONTROL
+        // ============================================
+        let musicPlaying = false;
+        const bgAudio = document.getElementById('bgMusic');
+
+        if (bgAudio) {
+            bgAudio.load();
+        }
+
+        function toggleMusic() {
+            const icon = document.getElementById('musicIcon');
+            const text = document.getElementById('musicText');
+            const btn = document.getElementById('musicToggle');
+
+            if (!bgAudio) return;
+
+            if (musicPlaying) {
+                bgAudio.pause();
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-music');
+                text.textContent = 'Play music';
+                btn.classList.remove('is-playing');
+                musicPlaying = false;
+            } else {
+                bgAudio.play().then(() => {
+                    icon.classList.remove('fa-music');
+                    icon.classList.add('fa-pause');
+                    text.textContent = 'Pause';
+                    btn.classList.add('is-playing');
+                    musicPlaying = true;
+                }).catch(err => {
+                    console.log('Audio play requires user interaction:', err);
+                });
+            }
+        }
+
+        // Set audio volume
+        if (bgAudio) {
+            bgAudio.volume = 0.5;
+        }
+
+        // Message Modal Functions
+        function openMessageModal(name, relation, date, message, initials) {
+            const modal = document.getElementById('messageModal');
+            document.getElementById('modalAvatar').textContent = initials;
+            document.getElementById('modalName').textContent = name;
+            document.getElementById('modalMeta').textContent = relation + ' • ' + date;
+            document.getElementById('modalText').textContent = '"' + message + '"';
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMessageModal() {
+            const modal = document.getElementById('messageModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on background click
+        document.getElementById('messageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeMessageModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMessageModal();
+            }
+        });
+
+        // Make message cards clickable
+        document.querySelectorAll('.message-card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function() {
+                const name = this.querySelector('.message-info h4').textContent;
+                const metaText = this.querySelector('.message-info span').textContent;
+                const message = this.querySelector('.message-text').textContent.replace(/^"|"$/g, '');
+                const avatar = this.querySelector('.message-avatar').textContent;
+                openMessageModal(name, metaText.split('•')[0].trim(), metaText.split('•')[1]?.trim() || '', message, avatar);
+            });
+        });
+    </script>
+
+    <!-- Message Popup Modal -->
+    <div class="message-modal" id="messageModal">
+        <div class="message-modal-content">
+            <button class="message-modal-close" onclick="closeMessageModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="message-modal-header">
+                <div class="message-modal-avatar" id="modalAvatar">KA</div>
+                <div class="message-modal-info">
+                    <h3 id="modalName">Name</h3>
+                    <span id="modalMeta">Relation • Date</span>
+                </div>
+            </div>
+            <div class="message-modal-text" id="modalText"></div>
+        </div>
+    </div>
+
+    <!-- Music Toggle Button -->
+    <button id="musicToggle" class="music-toggle" onclick="toggleMusic()">
+        <i id="musicIcon" class="fas fa-music"></i>
+        <span id="musicText">Play music</span>
+    </button>
+
+    <!-- WhatsApp Floating Button - UPDATE 233XXXXXXXXX with actual family WhatsApp number -->
+    <a href="https://wa.me/233XXXXXXXXX" class="whatsapp-float" data-tooltip="Chat on WhatsApp" title="Contact via WhatsApp" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+</body>
+</html>

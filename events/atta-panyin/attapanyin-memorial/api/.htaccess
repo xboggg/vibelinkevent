@@ -1,0 +1,10 @@
+# Protect config files
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "setup.php">
+    Order Allow,Deny
+    Deny from all
+</Files>

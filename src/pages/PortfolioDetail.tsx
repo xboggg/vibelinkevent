@@ -16,6 +16,17 @@ const portfolioData: Record<string, {
   package: string;
   highlights: string[];
 }> = {
+  "baby-boy-coleman-christening": {
+    title: "Baby Boy Coleman — Christening & Dedication",
+    type: "Naming",
+    description: "A beautiful, animated christening and dedication invitation for the Coleman family, designed in soft sky-blue tones with a warm, celebratory feel.",
+    image: "/coleman-detail.jpg",
+    demoUrl: "https://coleman.vibelinkevent.com/",
+    features: ["Animated splash screen with orbiting emojis", "Sonar heartbeat rings animation", "Baby photo with 3D pulse effect", "Wishes wall with PHP backend", "Countdown timer", "RSVP with WhatsApp confirmation", "Parents showcase with real photos", "Scripture carousel", "Background music player", "Mobile responsive"],
+    story: "The Coleman family wanted a digital invitation that felt as joyful and precious as the occasion itself — the christening and dedication of their baby boy. We designed an immersive experience starting with an animated splash screen featuring a glowing baby bottle, orbiting emojis, shooting stars, and a sonar heartbeat effect. The hero section showcases the baby's photo with a soft pulsing animation, framed with a spinning gradient ring. Guests can leave wishes through a live wall powered by a PHP backend, ensuring all messages are visible to everyone in real time. The parents section features actual photos of Mr. and Mrs. Coleman, and the RSVP connects directly to WhatsApp for easy confirmation.",
+    package: "Prestige Vibe",
+    highlights: ["Custom animated splash screen", "Live wishes wall (PHP backend)", "Real parent photos integrated"],
+  },
   "wo1-deku-memorial": {
     title: "A Soldier's Final Salute - Ex-WO1 Raphael Yaovi Deku",
     type: "Funeral",
@@ -163,7 +174,7 @@ const portfolioData: Record<string, {
     title: "Pastor Mensah's Retirement",
     type: "Church Event",
     description: "Celebrating 40 years of faithful service to the church community.",
-    image: "https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1200&q=80",
+    image: "/pastormensah-portfolio.jpg",
     demoUrl: null,
     features: ["Ministry timeline", "Tribute messages", "Event program", "Photo gallery", "Venue directions", "RSVP tracking", "Appreciation fund collection"],
     story: "After 40 years of dedicated ministry, Pastor Mensah's congregation wanted to honor him properly. We created a tribute page that showcased his journey and allowed church members to leave appreciation messages. The appreciation fund feature helped coordinate the love gift from the congregation.",
@@ -180,6 +191,28 @@ const portfolioData: Record<string, {
     story: "NovaStream Digital needed a professional landing page for their annual cybersecurity conference. We created a sleek, tech-themed invitation that showcased their impressive speaker lineup and made registration seamless. The agenda schedule helped attendees plan their day across multiple tracks.",
     package: "Prestige Vibe",
     highlights: ["200+ registrations", "15 industry speakers", "Multiple session tracks"],
+  },
+  "baby-nortey-naming": {
+    title: "Baby Nortey's Naming Ceremony",
+    type: "Naming",
+    description: "A dreamy, animation-rich naming ceremony invitation with floating petals, butterflies, and watercolor elegance for Michael and Sarah Nortey's baby girl.",
+    image: "/nortey-portfolio.webp",
+    demoUrl: "https://nortey.vibelinkevent.com/",
+    features: ["Animated floating petals & butterflies", "Watercolor gradient backgrounds", "Interactive envelope name reveal", "Live countdown timer", "Guest wishes & blessings wall", "RSVP with attendance tracking", "Gift registry with MoMo", "Background music player", "Google Maps integration", "WhatsApp sharing", "OG image for social sharing"],
+    story: "Michael and Sarah Nortey wanted something truly special to invite loved ones to the naming ceremony of their baby girl. We crafted a breathtaking, animation-rich experience featuring floating flower petals, fluttering butterflies, and soft watercolor gradients in peach and blush tones. The interactive envelope animation builds anticipation for the baby's name reveal, while the countdown timer keeps excitement alive. Guests can leave heartfelt wishes, RSVP with ease, and even contribute gifts via MoMo. The site includes a custom background lullaby and a beautifully generated OG image for WhatsApp sharing. Every detail was designed to feel as warm and joyful as the celebration itself.",
+    package: "Prestige Vibe",
+    highlights: ["15+ CSS animations", "Interactive name reveal", "Live wishes & RSVP backend"],
+  },
+  "atta-panyin-memorial": {
+    title: "Atta Panin Memorial",
+    type: "Funeral",
+    description: "A dignified digital tribute celebrating the life and legacy of Atta Panin with rich Ghanaian cultural heritage.",
+    image: "/attapanyin-detail.jpg",
+    demoUrl: "https://attapanin.vibelinkevent.com/",
+    features: ["Memorial biography", "Photo gallery", "Tribute messages wall", "Funeral program schedule", "MoMo donation tracking", "Venue directions", "Family tribute section", "WhatsApp sharing", "Background music"],
+    story: "The family of Atta Panin needed a fitting digital tribute to honor their beloved patriarch. We created a dignified memorial page rich with Ghanaian cultural elements, featuring kente-inspired design accents and warm earth tones. The tribute wall became a heartfelt collection of memories from family, friends, and community members. The MoMo donation feature helped the family manage contributions transparently, while the detailed funeral program kept attendees informed of all ceremonies and events.",
+    package: "Prestige Vibe",
+    highlights: ["Cultural heritage design", "Community tribute wall", "Multi-event coordination"],
   },
 };
 
