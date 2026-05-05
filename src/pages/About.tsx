@@ -76,11 +76,12 @@ const stats = [
 
 const carouselImages = [
   { src: "/assets/carousel/wedding.png", label: "Weddings" },
-  { src: "/assets/carousel/naming.png", label: "Naming Ceremonies" },
-  { src: "/assets/carousel/graduation.png", label: "Graduations" },
+  { src: "/assets/carousel/memorial.png", label: "Funerals" },
   { src: "/assets/carousel/church.png", label: "Church Events" },
+  { src: "/assets/carousel/naming.png", label: "Naming Ceremonies" },
+  { src: "/assets/carousel/birthday.png", label: "Birthdays" },
+  { src: "/assets/carousel/graduation.png", label: "Graduations" },
   { src: "/assets/carousel/corporate.png", label: "Corporate Events" },
-  { src: "/assets/carousel/memorial.png", label: "Memorials" },
 ];
 
 const paperProblems = [
@@ -779,7 +780,7 @@ const About = () => {
                 invitation for every occasion.
               </p>
               <ul className="space-y-3">
-                {["Weddings & Engagements", "Naming Ceremonies", "Graduations", "Church Events", "Corporate Gatherings", "Memorials & Funerals"].map((item, i) => (
+                {["Weddings & Engagements", "Funerals & Memorials", "Church Events", "Naming Ceremonies", "Birthday Celebrations", "Anniversaries", "Graduations", "Corporate Events"].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-foreground">
                     <CheckCircle2 className="h-5 w-5 text-green-500 flex-shrink-0" />
                     <span>{item}</span>
@@ -1160,12 +1161,12 @@ const About = () => {
               Ready to Create Something Beautiful?
             </h2>
             <p className="text-white/80 text-lg mb-8">
-              Let us help you celebrate your next milestone with a stunning digital invitation.
+              Let us help you celebrate, honour, and remember the moments that matter most.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold px-8">
                 <Link to="/get-started">
-                  Get Started
+                  Start Your Invitation
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>

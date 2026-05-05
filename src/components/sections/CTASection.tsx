@@ -108,7 +108,7 @@ const ConfettiBurst = ({ trigger }: { trigger: boolean }) => {
   );
 };
 
-export function CTASection() {
+export function CTASection({ hideViewWork = false }: { hideViewWork?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [showConfetti, setShowConfetti] = useState(false);
@@ -193,7 +193,7 @@ export function CTASection() {
             delay={0.3}
             className="text-white/80 text-lg mb-8 max-w-2xl mx-auto"
           >
-            Let us help you celebrate your next milestone with a stunning digital invitation.
+            Let us help you celebrate, honour, and remember the moments that matter most.
           </AnimatedHeading>
 
           {/* CTAs */}
@@ -202,13 +202,13 @@ export function CTASection() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Button 
-                asChild 
+              <Button
+                asChild
                 size="lg"
                 className="bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold px-8"
               >
                 <Link to="/get-started">
-                  Get Started
+                  Start Your Invitation
                   <motion.span
                     className="ml-2"
                     animate={{ x: [0, 4, 0] }}
@@ -219,21 +219,21 @@ export function CTASection() {
                 </Link>
               </Button>
             </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button 
-                asChild 
-                variant="outline"
-                size="lg"
-                className="border-white/30 text-white hover:bg-white/10 px-8"
+            {!hideViewWork && (
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Link to="/portfolio">
-                  View Our Work
-                </Link>
-              </Button>
-            </motion.div>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="border-white/30 text-white hover:bg-white/10 px-8"
+                >
+                  <Link to="/portfolio">View Our Work</Link>
+                </Button>
+              </motion.div>
+            )}
           </div>
         </div>
       </div>

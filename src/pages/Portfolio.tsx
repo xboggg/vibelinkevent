@@ -8,6 +8,19 @@ import { ExternalLink } from "lucide-react";
 import SEO from "@/components/SEO";
 import { portfolioItems, categories, slugToCategoryMap } from "@/data/portfolioItems";
 
+const categoryStyles: Record<string, { active: string; inactive: string; dot: string }> = {
+  All:           { active: "bg-[#6B46C1] text-white",         inactive: "bg-purple-50 text-purple-700 hover:bg-purple-100",    dot: "bg-purple-400" },
+  Weddings:      { active: "bg-rose-500 text-white",           inactive: "bg-rose-50 text-rose-600 hover:bg-rose-100",          dot: "bg-rose-400" },
+  Funerals:      { active: "bg-slate-700 text-white",          inactive: "bg-slate-100 text-slate-600 hover:bg-slate-200",      dot: "bg-slate-400" },
+  Naming:        { active: "bg-sky-500 text-white",            inactive: "bg-sky-50 text-sky-600 hover:bg-sky-100",             dot: "bg-sky-400" },
+  Anniversaries: { active: "bg-amber-500 text-white",          inactive: "bg-amber-50 text-amber-600 hover:bg-amber-100",       dot: "bg-amber-400" },
+  Graduations:   { active: "bg-emerald-600 text-white",        inactive: "bg-emerald-50 text-emerald-600 hover:bg-emerald-100", dot: "bg-emerald-400" },
+  Church:        { active: "bg-violet-600 text-white",          inactive: "bg-violet-50 text-violet-700 hover:bg-violet-100",    dot: "bg-violet-400" },
+  Birthdays:     { active: "bg-pink-500 text-white",           inactive: "bg-pink-50 text-pink-600 hover:bg-pink-100",          dot: "bg-pink-400" },
+  Corporate:     { active: "bg-blue-700 text-white",           inactive: "bg-blue-50 text-blue-700 hover:bg-blue-100",          dot: "bg-blue-500" },
+  Other:         { active: "bg-gray-600 text-white",           inactive: "bg-gray-100 text-gray-600 hover:bg-gray-200",         dot: "bg-gray-400" },
+};
+
 const Portfolio = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const typeParam = searchParams.get("type");
@@ -67,8 +80,7 @@ const Portfolio = () => {
               Our Portfolio
             </h1>
             <p className="text-primary-foreground/80 text-lg lg:text-xl">
-              See our digital invitations in action. Real projects for real
-              Ghanaian families.
+              See why families across the world choose VibeLink for their biggest moments.
             </p>
           </motion.div>
         </div>
@@ -78,19 +90,27 @@ const Portfolio = () => {
       <section className="py-8 bg-background border-b border-border">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="flex flex-wrap justify-center gap-2">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => handleCategoryChange(category)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                  activeCategory === category
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+            {categories.map((category, index) => {
+              const style = categoryStyles[category] || categoryStyles.Other;
+              const isActive = activeCategory === category;
+              return (
+                <motion.button
+                  key={category}
+                  onClick={() => handleCategoryChange(category)}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  whileHover={{ scale: 1.07, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 shadow-sm ${
+                    isActive ? style.active : style.inactive
+                  }`}
+                >
+                  <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-white/70" : style.dot}`} />
+                  {category}
+                </motion.button>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -149,8 +169,8 @@ const Portfolio = () => {
                         rel="noopener noreferrer"
                         className="flex-1"
                       >
-                        <Button variant="gold" size="sm" className="w-full">
-                          View Live Demo
+                        <Button variant={item.demoLabel ? "default" : "gold"} size="sm" className="w-full">
+                          {item.demoLabel || "View Live Demo"}
                           <ExternalLink className="ml-2 h-3 w-3" />
                         </Button>
                       </a>
@@ -170,7 +190,7 @@ const Portfolio = () => {
         </div>
       </section>
 
-      <CTASection />
+      <CTASection hideViewWork />
     </Layout>
   );
 };

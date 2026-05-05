@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
-import { MessageCircle as MessageCircleIcon, Send, Mail, MapPin, Phone, Clock, HelpCircle } from "lucide-react";
+import { MessageCircle as MessageCircleIcon, Mail, MapPin, Phone, Clock, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,23 +18,23 @@ import {
 const faqs = [
   {
     question: "How long does it take to create my digital invitation?",
-    answer: "Most invitations are ready within 24-48 hours after you provide all the necessary details. For urgent requests, we offer expedited service that can deliver within 12 hours.",
+    answer: "Delivery across all packages is 5-10 business days from when you provide all required details. Need it faster? We offer a 48-hour express delivery option available at an additional fee.",
   },
   {
     question: "Can I make changes after my invitation is created?",
-    answer: "Yes! We offer unlimited revisions during the design phase. Once your invitation is live, you can request up to 3 minor changes at no extra cost.",
+    answer: "Yes, revisions are included in every package. The Starter plan includes 1 revision round, Classic includes 2, Prestige includes 5, and Royal includes unlimited revisions. Additional revision rounds beyond your plan can be purchased as an add-on.",
   },
   {
     question: "How do guests access my digital invitation?",
     answer: "Your invitation comes with a unique link that you can share via WhatsApp, SMS, email, or social media. Guests simply click the link to view all event details on any device.",
   },
   {
-    question: "Do you offer invitations for diaspora families?",
-    answer: "Absolutely! Our invitations are designed with diaspora families in mind. They include timezone conversions, international sharing options, and work perfectly on any device worldwide.",
+    question: "Do you serve clients outside Ghana?",
+    answer: "Absolutely! We serve clients across Africa, Europe, and beyond. With offices in Ghana and Germany, we understand diaspora needs well — our invitations include international sharing options and work perfectly on any device worldwide.",
   },
   {
     question: "What payment methods do you accept?",
-    answer: "We accept Mobile Money (MTN, Vodafone, AirtelTigo), bank transfers, and international payments via card for our diaspora clients.",
+    answer: "We accept MTN Mobile Money, bank transfers, and international card or bank transfer payments for clients outside Ghana.",
   },
   {
     question: "Can I collect contributions through the invitation?",
@@ -75,30 +75,22 @@ const Contact = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleWhatsAppSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
+  const handleWhatsAppSubmit = () => {
     if (!validateForm()) {
+      const firstError = document.querySelector('[class*="border-destructive"]') as HTMLElement;
+      if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
       toast({
-        title: "Please fix the errors",
-        description: "Check the form fields and try again.",
+        title: "Almost there!",
+        description: "Please fill in your name and message before sending.",
         variant: "destructive",
       });
       return;
     }
 
-    const message = `Hi VibeLink! 👋
+    const message = `Hi VibeLink! 👋\n\n*Name:* ${formData.name.trim()}${formData.email ? `\n*Email:* ${formData.email.trim()}` : ""}${formData.eventType ? `\n*Event Type:* ${formData.eventType}` : ""}\n\n*Message:*\n${formData.message.trim()}`;
 
-*Name:* ${formData.name.trim()}
-${formData.email ? `*Email:* ${formData.email.trim()}` : ""}
-${formData.eventType ? `*Event Type:* ${formData.eventType.trim()}` : ""}
+    window.open(`https://wa.me/4915757178561?text=${encodeURIComponent(message)}`, "_blank");
 
-*Message:*
-${formData.message.trim()}`;
-
-    const whatsappUrl = `https://wa.me/4915757178561?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-    
     toast({
       title: "Opening WhatsApp",
       description: "Complete your message in WhatsApp to reach us!",
@@ -110,9 +102,11 @@ ${formData.message.trim()}`;
 
   const handleEmailSubmit = () => {
     if (!validateForm()) {
+      const firstError = document.querySelector('[class*="border-destructive"]') as HTMLElement;
+      if (firstError) firstError.scrollIntoView({ behavior: "smooth", block: "center" });
       toast({
-        title: "Please fix the errors",
-        description: "Check the form fields and try again.",
+        title: "Almost there!",
+        description: "Please fill in your name and message before sending.",
         variant: "destructive",
       });
       return;
@@ -173,48 +167,32 @@ ${formData.message.trim()}`;
       {/* Contact Info Cards */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="text-center p-6 rounded-2xl bg-card border border-border"
-            >
-              <div className="w-14 h-14 mx-auto rounded-xl bg-secondary/20 flex items-center justify-center mb-4">
-                <MapPin className="h-7 w-7 text-secondary" />
-              </div>
-              <h3 className="text-lg font-bold text-foreground mb-2">Location</h3>
-              <p className="text-muted-foreground text-sm">Accra, Ghana</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-center p-6 rounded-2xl bg-card border border-border"
-            >
-              <div className="w-14 h-14 mx-auto rounded-xl bg-secondary/20 flex items-center justify-center mb-4">
-                <Phone className="h-7 w-7 text-secondary" />
-              </div>
-              <h3 className="text-lg font-bold text-foreground mb-2">Phone / WhatsApp</h3>
-              <p className="text-muted-foreground text-sm">+233 24 581 7973</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-center p-6 rounded-2xl bg-card border border-border"
-            >
-              <div className="w-14 h-14 mx-auto rounded-xl bg-secondary/20 flex items-center justify-center mb-4">
-                <Clock className="h-7 w-7 text-secondary" />
-              </div>
-              <h3 className="text-lg font-bold text-foreground mb-2">Response Time</h3>
-              <p className="text-muted-foreground text-sm">Within 24 hours</p>
-            </motion.div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            {[
+              { icon: MapPin, title: "Ghana Office", detail: "Accra, Ghana", flag: "🇬🇭", delay: 0 },
+              { icon: MapPin, title: "Germany Office", detail: "Berlin, Germany", flag: "🇩🇪", delay: 0.1 },
+              { icon: Phone, title: "Phone / WhatsApp", detail: "+49 157 571 78561", flag: null, delay: 0.2 },
+              { icon: Clock, title: "Response Time", detail: "Within 24 hours", flag: null, delay: 0.3 },
+            ].map((card, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: card.delay }}
+                className="text-center p-6 rounded-2xl bg-card border border-border hover:shadow-md transition-shadow"
+              >
+                <div className="w-14 h-14 mx-auto rounded-xl bg-secondary/20 flex items-center justify-center mb-4">
+                  {card.flag ? (
+                    <span className="text-2xl">{card.flag}</span>
+                  ) : (
+                    <card.icon className="h-7 w-7 text-secondary" />
+                  )}
+                </div>
+                <h3 className="text-lg font-bold text-foreground mb-2">{card.title}</h3>
+                <p className="text-muted-foreground text-sm">{card.detail}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -294,15 +272,23 @@ ${formData.message.trim()}`;
                 <Label htmlFor="eventType" className="text-foreground">
                   Event Type (optional)
                 </Label>
-                <Input
+                <select
                   id="eventType"
-                  placeholder="e.g. Wedding, Funeral, Birthday"
                   value={formData.eventType}
-                  onChange={(e) =>
-                    setFormData({ ...formData, eventType: e.target.value })
-                  }
-                  maxLength={100}
-                />
+                  onChange={(e) => setFormData({ ...formData, eventType: e.target.value })}
+                  className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="" disabled>Select event type...</option>
+                  <option value="Wedding">Wedding</option>
+                  <option value="Funeral / Memorial">Funeral / Memorial</option>
+                  <option value="Church Event">Church Event</option>
+                  <option value="Naming Ceremony">Naming Ceremony</option>
+                  <option value="Birthday">Birthday</option>
+                  <option value="Anniversary">Anniversary</option>
+                  <option value="Graduation">Graduation</option>
+                  <option value="Corporate Event">Corporate Event</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
 
               <div className="space-y-2">
@@ -329,13 +315,13 @@ ${formData.message.trim()}`;
 
               {/* Dual Send Buttons */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   onClick={handleWhatsAppSubmit}
-                  size="lg" 
-                  className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                  size="lg"
+                  className="w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold"
                 >
-                  <Send className="h-5 w-5 mr-2" />
+                  <svg className="h-5 w-5 mr-2 fill-white flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                   Send via WhatsApp
                 </Button>
                 <Button 

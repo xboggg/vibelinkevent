@@ -9,6 +9,7 @@ export interface PortfolioItem {
   slug: string;
   features: string[];
   imagePosition?: string;
+  demoLabel?: string;
 }
 
 export const portfolioItems: PortfolioItem[] = [
@@ -22,6 +23,7 @@ export const portfolioItems: PortfolioItem[] = [
     slug: "baby-boy-coleman-christening",
     features: ["Animated splash screen", "Wishes wall", "Countdown timer", "RSVP", "Music player", "Parents showcase"],
     imagePosition: "top",
+    demoLabel: "Open Invitation",
   },
   {
     id: 2,
@@ -33,6 +35,7 @@ export const portfolioItems: PortfolioItem[] = [
     slug: "atta-panyin-memorial",
     features: ["Memorial biography", "Photo gallery", "Tribute wall", "Funeral program", "MoMo donations"],
     imagePosition: "top",
+    demoLabel: "Open Invitation",
   },
   {
     id: 3,
@@ -45,6 +48,7 @@ export const portfolioItems: PortfolioItem[] = [
     slug: "wo1-deku-memorial",
     features: ["Military tribute", "Photo gallery", "Event schedule", "Family tribute wall"],
     imagePosition: "top",
+    demoLabel: "Open Invitation",
   },
   {
     id: 4,
@@ -55,6 +59,7 @@ export const portfolioItems: PortfolioItem[] = [
     demoUrl: "https://nortey.vibelinkevent.com/",
     slug: "baby-nortey-naming",
     features: ["Animated hero", "Countdown timer", "Interactive name reveal", "Wishes wall", "RSVP tracking", "Gift registry"],
+    demoLabel: "Open Invitation",
   },
   {
     id: 5,
@@ -66,6 +71,7 @@ export const portfolioItems: PortfolioItem[] = [
     slug: "evans-mina-anniversary",
     features: ["Photo gallery", "RSVP tracking", "Music player", "Countdown timer"],
     imagePosition: "top",
+    demoLabel: "Open Invitation",
   },
   {
     id: 6,
@@ -76,6 +82,7 @@ export const portfolioItems: PortfolioItem[] = [
     demoUrl: "https://osupresec70.vibelinkevent.com/",
     slug: "presec-osu-70th-anniversary",
     features: ["Event countdown", "Photo gallery", "Alumni registration", "Donation portal"],
+    demoLabel: "Open Invitation",
   },
   {
     id: 7,
@@ -158,7 +165,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 14,
     title: "Nana's 60th Birthday",
-    type: "Other",
+    type: "Birthdays",
     description: "A lavish surprise birthday celebration for a beloved community elder.",
     image: "/nana60/vibelink-nana60_5.png",
     thumbnail: "/nana60/vibelink-nana60_5-thumb.jpg",
@@ -169,7 +176,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 15,
     title: "NovaStream CyberSecure Conference",
-    type: "Other",
+    type: "Corporate",
     description: "Ghana's premier cybersecurity conference bringing together industry leaders and professionals.",
     image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80",
     demoUrl: "https://novastream.vibelinkevent.com/",
@@ -179,7 +186,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 16,
     title: "Pastor Mensah's Retirement",
-    type: "Other",
+    type: "Church",
     description: "Celebrating 40 years of dedicated service to the church community.",
     image: "/pastormensah-portfolio.jpg",
     demoUrl: "https://pastormensah.vibelinkevent.com/",
@@ -188,7 +195,7 @@ export const portfolioItems: PortfolioItem[] = [
   },
 ];
 
-export const categories = ["All", "Weddings", "Funerals", "Naming", "Anniversaries", "Graduations", "Other"];
+export const categories = ["All", "Weddings", "Funerals", "Church", "Naming", "Birthdays", "Anniversaries", "Graduations", "Corporate", "Other"];
 
 export const slugToCategoryMap: Record<string, string> = {
   wedding: "Weddings",
@@ -196,5 +203,7 @@ export const slugToCategoryMap: Record<string, string> = {
   naming: "Naming",
   anniversary: "Anniversaries",
   graduation: "Graduations",
-  corporate: "Other",
+  birthday: "Birthdays",
+  church: "Church",
+  corporate: "Corporate",
 };

@@ -15,8 +15,9 @@ const portfolioData: Record<string, {
   story: string;
   package: string;
   highlights: string[];
+  demoLabel?: string;
 }> = {
-  "baby-boy-coleman-christening": {
+  "baby-boy-coleman-christening": { demoLabel: "Open Invitation",
     title: "Baby Boy Coleman — Christening & Dedication",
     type: "Naming",
     description: "A beautiful, animated christening and dedication invitation for the Coleman family, designed in soft sky-blue tones with a warm, celebratory feel.",
@@ -27,7 +28,7 @@ const portfolioData: Record<string, {
     package: "Prestige Vibe",
     highlights: ["Custom animated splash screen", "Live wishes wall (PHP backend)", "Real parent photos integrated"],
   },
-  "wo1-deku-memorial": {
+  "wo1-deku-memorial": { demoLabel: "Open Invitation",
     title: "A Soldier's Final Salute - Ex-WO1 Raphael Yaovi Deku",
     type: "Funeral",
     description: "A dignified military tribute honoring a dedicated soldier of the Ghana Armed Forces who served his nation with honor and distinction.",
@@ -38,7 +39,7 @@ const portfolioData: Record<string, {
     package: "Prestige Vibe",
     highlights: ["Military honor tribute", "3-day event coordination", "Family from diaspora engaged"],
   },
-  "evans-mina-anniversary": {
+  "evans-mina-anniversary": { demoLabel: "Open Invitation",
     title: "Evans & Mina's 15th Anniversary",
     type: "Anniversary",
     description: "A beautiful crystal anniversary celebration with elegant gold accents and heartfelt memories.",
@@ -60,7 +61,7 @@ const portfolioData: Record<string, {
     package: "Prestige Vibe",
     highlights: ["GHS 15,000+ collected via MoMo", "120 RSVPs", "Featured love story timeline"],
   },
-  "presec-osu-70th-anniversary": {
+  "presec-osu-70th-anniversary": { demoLabel: "Open Invitation",
     title: "PRESEC-OSU 70th Anniversary Launch",
     type: "Anniversary",
     description: "A grand celebration marking 70 years of academic excellence, brotherhood, and the enduring legacy of Presbyterian Secondary School, Osu.",
@@ -150,7 +151,7 @@ const portfolioData: Record<string, {
   },
   "nana-60th-birthday": {
     title: "Nana's 60th Birthday",
-    type: "Birthday",
+    type: "Birthdays",
     description: "A lavish surprise birthday celebration for a beloved community elder.",
     image: "/nana60/vibelink-nana60_5-medium.jpg",
     demoUrl: null,
@@ -183,7 +184,7 @@ const portfolioData: Record<string, {
   },
   "novastream-conference": {
     title: "NovaStream CyberSecure Conference",
-    type: "Corporate Event",
+    type: "Corporate",
     description: "Ghana's premier cybersecurity conference bringing together industry leaders and professionals.",
     image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80",
     demoUrl: "https://novastream.vibelinkevent.com/",
@@ -192,7 +193,7 @@ const portfolioData: Record<string, {
     package: "Prestige Vibe",
     highlights: ["200+ registrations", "15 industry speakers", "Multiple session tracks"],
   },
-  "baby-nortey-naming": {
+  "baby-nortey-naming": { demoLabel: "Open Invitation",
     title: "Baby Nortey's Naming Ceremony",
     type: "Naming",
     description: "A dreamy, animation-rich naming ceremony invitation with floating petals, butterflies, and watercolor elegance for Michael and Sarah Nortey's baby girl.",
@@ -203,7 +204,7 @@ const portfolioData: Record<string, {
     package: "Prestige Vibe",
     highlights: ["15+ CSS animations", "Interactive name reveal", "Live wishes & RSVP backend"],
   },
-  "atta-panyin-memorial": {
+  "atta-panyin-memorial": { demoLabel: "Open Invitation",
     title: "Atta Panin Memorial",
     type: "Funeral",
     description: "A dignified digital tribute celebrating the life and legacy of Atta Panin with rich Ghanaian cultural heritage.",
@@ -306,8 +307,8 @@ const PortfolioDetail = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Button variant="gold" size="lg">
-                      View Live Demo
+                    <Button variant={item.demoLabel ? "default" : "gold"} size="lg">
+                      {item.demoLabel || "View Live Demo"}
                       <ExternalLink className="ml-2 h-4 w-4" />
                     </Button>
                   </a>

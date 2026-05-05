@@ -76,8 +76,8 @@ const packages = [
     name: "Classic Vibe",
     price: "GHS 1,500",
     description: "Weddings, funerals & more",
-    popular: true,
-    color: "border-secondary",
+    popular: false,
+    color: "border-border",
     features: [
       { name: "2 hero banner images", included: true },
       { name: "Everything in Starter", included: true, highlight: true },
@@ -95,8 +95,8 @@ const packages = [
     name: "Prestige Vibe",
     price: "GHS 2,500",
     description: "Premium celebrations",
-    popular: false,
-    color: "border-primary/50",
+    popular: true,
+    color: "border-secondary",
     features: [
       { name: "3 hero banner images", included: true },
       { name: "Everything in Classic", included: true, highlight: true },
@@ -343,6 +343,10 @@ const Pricing = () => {
                   <div className="text-white/90 font-semibold text-sm mb-1">Starter</div>
                   <div className="text-secondary font-bold text-lg">GHS 1,000</div>
                 </div>
+                <div className="p-4 text-center border-l border-white/10 hover:bg-white/5 transition-colors">
+                  <div className="text-white/90 font-semibold text-sm mb-1">Classic</div>
+                  <div className="text-secondary font-bold text-lg">GHS 1,500</div>
+                </div>
                 <div className="p-4 pt-6 text-center border-l border-white/10 bg-white/15 relative">
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-bold shadow-xl ring-2 ring-secondary/30">
@@ -350,11 +354,7 @@ const Pricing = () => {
                       POPULAR
                     </span>
                   </div>
-                  <div className="text-white font-semibold text-sm mb-1">Classic</div>
-                  <div className="text-secondary font-bold text-lg">GHS 1,500</div>
-                </div>
-                <div className="p-4 text-center border-l border-white/10 hover:bg-white/5 transition-colors">
-                  <div className="text-white/90 font-semibold text-sm mb-1">Prestige</div>
+                  <div className="text-white font-semibold text-sm mb-1">Prestige</div>
                   <div className="text-secondary font-bold text-lg">GHS 2,500</div>
                 </div>
                 <div className="p-4 text-center border-l border-white/10 hover:bg-white/5 transition-colors">
@@ -400,13 +400,13 @@ const Pricing = () => {
                     <Link to="/get-started">Get Started</Link>
                   </Button>
                 </div>
-                <div className="p-4 flex justify-center border-l border-border/15 bg-secondary/8">
-                  <Button asChild variant="gold" size="sm" className="text-xs h-9 px-5 rounded-full shadow-lg hover:shadow-xl transition-all">
+                <div className="p-4 flex justify-center border-l border-border/15">
+                  <Button asChild variant="outline" size="sm" className="text-xs h-9 px-5 rounded-full hover:bg-primary/10 hover:border-primary/50 transition-all">
                     <Link to="/get-started">Get Started</Link>
                   </Button>
                 </div>
-                <div className="p-4 flex justify-center border-l border-border/15">
-                  <Button asChild variant="outline" size="sm" className="text-xs h-9 px-5 rounded-full hover:bg-primary/10 hover:border-primary/50 transition-all">
+                <div className="p-4 flex justify-center border-l border-border/15 bg-secondary/8">
+                  <Button asChild variant="gold" size="sm" className="text-xs h-9 px-5 rounded-full shadow-lg hover:shadow-xl transition-all">
                     <Link to="/get-started">Get Started</Link>
                   </Button>
                 </div>
@@ -432,6 +432,10 @@ const Pricing = () => {
                         <div className="text-white/90 font-semibold text-xs">Starter</div>
                         <div className="text-secondary font-bold text-sm mt-0.5">GHS 1,000</div>
                       </th>
+                      <th className="p-3 text-center border-l border-white/10 w-[120px]">
+                        <div className="text-white/90 font-semibold text-xs">Classic</div>
+                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 1,500</div>
+                      </th>
                       <th className="p-3 text-center border-l border-white/10 bg-white/15 w-[120px] relative">
                         <div className="absolute -top-1 left-1/2 -translate-x-1/2">
                           <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground text-[9px] font-bold shadow-lg whitespace-nowrap ring-1 ring-secondary/30">
@@ -439,11 +443,7 @@ const Pricing = () => {
                             POPULAR
                           </span>
                         </div>
-                        <div className="text-white font-semibold text-xs mt-3">Classic</div>
-                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 1,500</div>
-                      </th>
-                      <th className="p-3 text-center border-l border-white/10 w-[120px]">
-                        <div className="text-white/90 font-semibold text-xs">Prestige</div>
+                        <div className="text-white font-semibold text-xs mt-3">Prestige</div>
                         <div className="text-secondary font-bold text-sm mt-0.5">GHS 2,500</div>
                       </th>
                       <th className="p-3 text-center border-l border-white/10 w-[120px]">
@@ -486,13 +486,13 @@ const Pricing = () => {
                           <Link to="/get-started">Select</Link>
                         </Button>
                       </td>
-                      <td className="p-3 text-center border-l border-border/15 bg-secondary/8">
-                        <Button asChild variant="gold" size="sm" className="text-[10px] h-8 px-3 rounded-full shadow-md">
+                      <td className="p-3 text-center border-l border-border/15">
+                        <Button asChild variant="outline" size="sm" className="text-[10px] h-8 px-3 rounded-full">
                           <Link to="/get-started">Select</Link>
                         </Button>
                       </td>
-                      <td className="p-3 text-center border-l border-border/15">
-                        <Button asChild variant="outline" size="sm" className="text-[10px] h-8 px-3 rounded-full">
+                      <td className="p-3 text-center border-l border-border/15 bg-secondary/8">
+                        <Button asChild variant="gold" size="sm" className="text-[10px] h-8 px-3 rounded-full shadow-md">
                           <Link to="/get-started">Select</Link>
                         </Button>
                       </td>

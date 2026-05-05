@@ -42,6 +42,8 @@ import namingImg from "@/assets/hero-naming.jpg";
 import anniversaryImg from "@/assets/service-anniversary.jpg";
 import graduationImg from "@/assets/hero-graduation.jpg";
 import corporateImg from "@/assets/hero-corporate.jpg";
+import churchImg from "@/assets/hero-church.jpg";
+import birthdayImg from "@/assets/hero-birthday.jpg";
 
 const services = [
   {
@@ -77,6 +79,22 @@ const services = [
     stats: { created: "200+", satisfaction: "100%", label: "Families Served" },
   },
   {
+    icon: Radio,
+    title: "Church Events",
+    description: "Elegant digital invitations for harvest services, thanksgiving, dedications, pastor anniversaries, and all church programs.",
+    features: [
+      { name: "Service program & order", desc: "Full church program schedule" },
+      { name: "Speaker & minister profiles", desc: "Introduce your speakers" },
+      { name: "Live stream embed", desc: "For members who can't attend" },
+      { name: "Donation & offering links", desc: "Online giving made easy" },
+      { name: "Venue & directions", desc: "Maps & location details" },
+      { name: "Guest messaging wall", desc: "Blessings from the congregation" }
+    ],
+    slug: "church",
+    image: churchImg,
+    stats: { created: "180+", satisfaction: "99%", label: "Church Events Done" },
+  },
+  {
     icon: Baby,
     title: "Naming Ceremonies",
     description: "Celebrate the arrival of new life with joyful digital invitations.",
@@ -94,8 +112,24 @@ const services = [
   },
   {
     icon: Cake,
+    title: "Birthday Celebrations",
+    description: "Make every birthday unforgettable with vibrant, personalised digital invitations.",
+    features: [
+      { name: "Countdown to the big day", desc: "Build excitement early" },
+      { name: "Gift wishlist & registry", desc: "Tell guests what you'd love" },
+      { name: "Guest wishes wall", desc: "Birthday messages & shoutouts" },
+      { name: "RSVP tracking", desc: "Know exactly who's coming" },
+      { name: "Photo & video gallery", desc: "Celebrate the journey" },
+      { name: "Music player", desc: "Set the party mood" }
+    ],
+    slug: "birthday",
+    image: birthdayImg,
+    stats: { created: "220+", satisfaction: "99%", label: "Birthdays Celebrated" },
+  },
+  {
+    icon: Heart,
     title: "Anniversary & Vow Renewal",
-    description: "Mark your milestones with elegant digital celebrations.",
+    description: "Mark your years together with elegant digital celebrations.",
     features: [
       { name: "Journey timeline", desc: "Years together" },
       { name: "Photo memories", desc: "Through the years" },
@@ -106,7 +140,7 @@ const services = [
     ],
     slug: "anniversary",
     image: anniversaryImg,
-    stats: { created: "150+", satisfaction: "97%", label: "Milestones Celebrated" },
+    stats: { created: "150+", satisfaction: "97%", label: "Anniversaries Celebrated" },
   },
   {
     icon: GraduationCap,
@@ -126,19 +160,19 @@ const services = [
   },
   {
     icon: Building,
-    title: "Church & Corporate Events",
-    description: "Professional digital invitations for church programs, conferences, and corporate events.",
+    title: "Corporate Events",
+    description: "Professional digital invitations for conferences, product launches, and corporate gatherings.",
     features: [
       { name: "QR check-in system", desc: "Track attendance" },
       { name: "Speaker profiles", desc: "Who's presenting" },
       { name: "Registration forms", desc: "Attendee sign-up" },
-      { name: "Venue information", desc: "Location details" },
+      { name: "Sponsor showcase", desc: "Feature event partners" },
       { name: "Program agenda", desc: "Detailed itinerary" },
       { name: "Live stream embed", desc: "Hybrid attendance" }
     ],
     slug: "corporate",
     image: corporateImg,
-    stats: { created: "250+", satisfaction: "98%", label: "Events Hosted" },
+    stats: { created: "120+", satisfaction: "98%", label: "Corporate Events Hosted" },
   },
 ];
 

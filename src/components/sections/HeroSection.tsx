@@ -241,6 +241,7 @@ export function HeroSection() {
   const [isPaused, setIsPaused] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(new Array(slides.length).fill(false));
   const sectionRef = useRef<HTMLElement>(null);
+  const touchStartX = useRef<number>(0);
 
   // Parallax scroll effect
   const { scrollY } = useScroll();
@@ -280,14 +281,21 @@ export function HeroSection() {
   };
 
   return (
-    <section 
+    <section
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden"
+      style={{ minHeight: '100dvh' }}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+      onTouchEnd={(e) => {
+        const diff = touchStartX.current - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
+      }}
     >
       {/* Background Images with Crossfade and Parallax */}
-      <motion.div 
+      <div className="absolute inset-0 overflow-hidden">
+      <motion.div
         className="absolute inset-0 bg-navy"
         style={{ y: parallaxY, scale: parallaxScale }}
       >
@@ -321,6 +329,7 @@ export function HeroSection() {
           <div className="absolute inset-0 bg-pattern-dots opacity-20" />
         </div>
       </motion.div>
+      </div>
 
       {/* Floating Particles Effect */}
       <FloatingParticles />
@@ -408,14 +417,14 @@ export function HeroSection() {
       {/* Carousel Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-2 lg:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 flex items-center justify-center text-primary-foreground hover:bg-primary-foreground/20 transition-all duration-300"
+        className="hidden sm:flex absolute left-2 lg:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 items-center justify-center text-primary-foreground hover:bg-primary-foreground/20 transition-all duration-300"
         aria-label="Previous slide"
       >
         <ChevronLeft className="h-5 w-5 lg:h-6 lg:w-6" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 flex items-center justify-center text-primary-foreground hover:bg-primary-foreground/20 transition-all duration-300"
+        className="hidden sm:flex absolute right-2 lg:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-primary-foreground/10 backdrop-blur-sm border border-primary-foreground/20 items-center justify-center text-primary-foreground hover:bg-primary-foreground/20 transition-all duration-300"
         aria-label="Next slide"
       >
         <ChevronRight className="h-5 w-5 lg:h-6 lg:w-6" />
@@ -446,7 +455,7 @@ export function HeroSection() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
             >
-              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary-foreground leading-tight mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-primary-foreground leading-tight mb-6">
                 {slides[currentSlide].headline}{" "}
                 <span className="text-gradient-gold">{slides[currentSlide].highlight}</span>{" "}
                 {slides[currentSlide].subline}
