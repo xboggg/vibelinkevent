@@ -215,6 +215,27 @@ const portfolioData: Record<string, {
     package: "Prestige Vibe",
     highlights: ["Cultural heritage design", "Community tribute wall", "Multi-event coordination"],
   },
+  "charles-taylor-memorial": { demoLabel: "Open Memorial",
+    title: "In Loving Memory — Charles Nii Aryertey Taylor",
+    type: "Funeral",
+    description: "A solemn, server-backed digital memorial for Charles Nii Aryertey Taylor (1971–2026), grandson of Nii Kwabena Bonnie III — one of the most interactive funeral portfolios we have built.",
+    image: "/charlestaylor-detail.jpg",
+    demoUrl: "https://charlestaylor.vibelinkevent.com/",
+    features: [
+      "Candle splash entry — visitor taps a flickering candle to enter",
+      "Light-a-Candle virtual altar (PHP + JSON, live-refreshing every 30s)",
+      "Voice Tribute wall — 30-second browser recordings stored server-side",
+      "Live condolences wall with optional admin-only phone capture",
+      "Cinematic masonry gallery with keyboard/touch lightbox",
+      "Family admin panel: secret-key access, delete, CSV export, ZIP of voice recordings",
+      "Custom 1200×630 OG share card (under 70 KB)",
+      "Cormorant Garamond + Cinzel typography, brushed-gold and crimson palette",
+      "Mobile-first responsive, full WhatsApp share",
+    ],
+    story: "The Taylor and Ayertey families approached VibeLink for a digital memorial worthy of Charles Nii Aryertey Taylor — a beloved son of Osu Alata and grandson of the celebrated Nii Kwabena Bonnie III. They wanted something more than a static invitation; something the diaspora could feel part of, a place where mourners could leave their flame, their voice, their words. We built a single solemn page anchored by a candle splash, with three live community features running on a custom PHP/JSON backend. Hundreds of candles can fill the altar over the weeks before the burial, voice tributes from elderly relatives and family abroad are saved as an audio keepsake, and every condolence is captured for the family — including private phone numbers visible only in the admin panel for personal follow-up. The colour palette draws on royal Ga-Adangbe mourning tradition: deep crimson, brushed gold, ivory parchment.",
+    package: "Prestige Vibe",
+    highlights: ["Custom PHP backend with 3 live features", "Gated family admin with full data exports", "Server-rendered OG card (ImageMagick + Cormorant + Cinzel)"],
+  },
 };
 
 const PortfolioDetail = () => {

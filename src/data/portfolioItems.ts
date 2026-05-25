@@ -193,6 +193,28 @@ export const portfolioItems: PortfolioItem[] = [
     slug: "pastor-mensah-retirement",
     features: ["Tribute messages", "Career timeline", "Event program"],
   },
+  {
+    id: 17,
+    title: "In Loving Memory — Charles Nii Aryertey Taylor",
+    type: "Funerals",
+    description: "A solemn, server-backed memorial honouring Charles Nii Aryertey Taylor (1971–2026), grandson of Nii Kwabena Bonnie III, with a candle-lit splash, virtual altar, voice tributes, and live condolences wall.",
+    image: "/charlestaylor-portfolio.jpg",
+    thumbnail: "/charlestaylor-portfolio-thumb.jpg",
+    demoUrl: "https://charlestaylor.vibelinkevent.com/",
+    slug: "charles-taylor-memorial",
+    features: [
+      "Candle splash entry",
+      "Light-a-Candle altar (server-backed)",
+      "Voice Tribute wall (MediaRecorder)",
+      "Live condolences with admin moderation",
+      "Cinematic photo gallery + lightbox",
+      "Family admin panel with CSV/ZIP exports",
+      "Custom OG share card",
+      "Royal Ga-Adangbe palette: crimson & brushed gold",
+    ],
+    imagePosition: "top",
+    demoLabel: "Open Memorial",
+  },
 ];
 
 export const categories = ["All", "Weddings", "Funerals", "Church", "Naming", "Birthdays", "Anniversaries", "Graduations", "Corporate", "Other"];
