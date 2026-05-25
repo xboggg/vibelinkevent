@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
-  User, Package, Clock, Heart, FileEdit, CreditCard,
+  User, Package, Clock, Heart, FileEdit, CreditCard, RefreshCw,
   LogOut, ChevronRight, Calendar, CheckCircle, AlertCircle, Loader2, Gift,
   Sparkles, PartyPopper, Mail, ArrowRight, Shield
 } from "lucide-react";
@@ -741,6 +742,17 @@ export default function CustomerPortal() {
                             Pay Balance (GH₵{(selectedOrder.total_price * 0.7).toLocaleString()})
                           </Button>
                         )}
+
+                        {/* Re-order button */}
+                        <div className="border-t pt-4">
+                          <p className="text-sm text-muted-foreground mb-3">Planning another event?</p>
+                          <Button asChild variant="outline" className="w-full group">
+                            <Link to={`/get-started?reorder=${selectedOrder.id}&eventType=${encodeURIComponent(selectedOrder.event_type)}`}>
+                              <RefreshCw className="h-4 w-4 mr-2 group-hover:rotate-180 transition-transform duration-500" />
+                              Order Again for a New Event
+                            </Link>
+                          </Button>
+                        </div>
                       </CardContent>
                     </Card>
                   </TabsContent>

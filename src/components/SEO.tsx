@@ -22,7 +22,7 @@ const organizationSchema = {
   url: "https://vibelinkevent.com",
   logo: "https://vibelinkevent.com/og-image.jpg",
   image: "https://vibelinkevent.com/og-image.jpg",
-  telephone: "+233-XX-XXX-XXXX",
+  telephone: "+4915757178561",
   email: "hello@vibelinkevent.com",
   address: {
     "@type": "PostalAddress",
@@ -49,6 +49,7 @@ const organizationSchema = {
     "https://www.instagram.com/vibelinkevent",
     "https://www.facebook.com/vibelinkevent",
     "https://twitter.com/vibelinkevent",
+    "https://www.tiktok.com/@vibelinkevent",
   ],
 };
 

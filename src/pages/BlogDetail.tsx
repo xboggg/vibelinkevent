@@ -1,11 +1,11 @@
 import { useParams, Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CTASection } from "@/components/sections/CTASection";
-import { ArrowLeft, Clock, Calendar, Share2, Facebook, Twitter, Loader2, Tag } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, Share2, Facebook, Twitter, Loader2, Tag, List, ArrowRight, Sparkles } from "lucide-react";
 import SEO, { createArticleSchema, createBreadcrumbSchema } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
@@ -77,6 +77,23 @@ const BlogDetail = () => {
       setLoading(false);
     }
   };
+
+  // Extract H2 headings from HTML content for Table of Contents
+  const tocItems = useMemo(() => {
+    if (!post?.content) return [];
+    const matches = [...post.content.matchAll(/<h2[^>]*>(.*?)<\/h2>/gi)];
+    return matches.map((m, i) => ({
+      id: `toc-${i}`,
+      text: m[1].replace(/<[^>]+>/g, "").trim(),
+    }));
+  }, [post?.content]);
+
+  // Inject IDs into h2 tags for anchor scrolling
+  const contentWithIds = useMemo(() => {
+    if (!post?.content) return "";
+    let idx = 0;
+    return post.content.replace(/<h2([^>]*)>/gi, () => `<h2$1 id="toc-${idx++}">`);
+  }, [post?.content]);
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '';
@@ -239,139 +256,154 @@ const BlogDetail = () => {
         </div>
       </section>
 
-      {/* Featured Image */}
-      <section className="py-8 bg-background">
+      {/* Content + Sidebar */}
+      <section className="py-10 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="max-w-4xl mx-auto"
-          >
-            <img
-              src={post.image_url}
-              alt={post.title}
-              className="w-full rounded-2xl shadow-lg aspect-[16/9] object-cover"
-            />
-          </motion.div>
-        </div>
-      </section>
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10 items-start">
 
-      {/* Content */}
-      <section className="py-12 bg-background">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="prose prose-lg max-w-none dark:prose-invert"
-            >
-              {post.content ? (
-                <div
-                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
-                  className="[&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-foreground [&>h1]:mt-8 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-foreground [&>h2]:mt-8 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-foreground [&>h3]:mt-6 [&>h3]:mb-3 [&>p]:text-muted-foreground [&>p]:leading-relaxed [&>p]:mb-4 [&>ul]:list-disc [&>ul]:ml-6 [&>ul]:mb-4 [&>ul>li]:text-muted-foreground [&>ol]:list-decimal [&>ol]:ml-6 [&>ol]:mb-4 [&>ol>li]:text-muted-foreground [&>blockquote]:border-l-4 [&>blockquote]:border-primary/30 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-muted-foreground [&>a]:text-primary [&>a]:underline [&>img]:rounded-lg [&>img]:max-w-full"
+            {/* ── Left: Article content ── */}
+            <div>
+              {/* Featured image sits at the top of the content column */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="mb-8"
+              >
+                <img
+                  src={post.image_url}
+                  alt={post.title}
+                  className="w-full rounded-2xl shadow-lg aspect-[16/9] object-cover"
                 />
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">
-                    {post.excerpt}
-                  </p>
-                </div>
-              )}
-            </motion.div>
+              </motion.div>
 
-            {/* Share Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-12 pt-8 border-t border-border"
-            >
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div>
-                  <h3 className="font-semibold text-foreground mb-2">Share this article</h3>
-                  <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleShare('facebook')}
-                      className="flex items-center gap-2"
-                    >
-                      <Facebook className="h-4 w-4" />
-                      Facebook
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleShare('twitter')}
-                      className="flex items-center gap-2"
-                    >
-                      <Twitter className="h-4 w-4" />
-                      Twitter
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleShare('copy')}
-                      className="flex items-center gap-2"
-                    >
-                      <Share2 className="h-4 w-4" />
-                      Copy Link
-                    </Button>
-                  </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                {post.content ? (
+                  <div
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(contentWithIds) }}
+                    className="[&>h1]:text-3xl [&>h1]:font-bold [&>h1]:text-foreground [&>h1]:mt-8 [&>h1]:mb-4 [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-foreground [&>h2]:mt-8 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-foreground [&>h3]:mt-6 [&>h3]:mb-3 [&>p]:text-muted-foreground [&>p]:leading-relaxed [&>p]:mb-4 [&>ul]:list-disc [&>ul]:ml-6 [&>ul]:mb-4 [&>ul>li]:text-muted-foreground [&>ol]:list-decimal [&>ol]:ml-6 [&>ol]:mb-4 [&>ol>li]:text-muted-foreground [&>blockquote]:border-l-4 [&>blockquote]:border-primary/30 [&>blockquote]:pl-4 [&>blockquote]:italic [&>blockquote]:text-muted-foreground [&>a]:text-primary [&>a]:underline [&>img]:rounded-lg [&>img]:max-w-full"
+                  />
+                ) : (
+                  <p className="text-muted-foreground">{post.excerpt}</p>
+                )}
+              </motion.div>
+
+              {/* Share */}
+              <div className="mt-12 pt-8 border-t border-border">
+                <h3 className="font-semibold text-foreground mb-3">Share this article</h3>
+                <div className="flex gap-3 flex-wrap">
+                  <Button variant="outline" size="sm" onClick={() => handleShare('facebook')} className="gap-2">
+                    <Facebook className="h-4 w-4" /> Facebook
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => handleShare('twitter')} className="gap-2">
+                    <Twitter className="h-4 w-4" /> Twitter
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => handleShare('copy')} className="gap-2">
+                    <Share2 className="h-4 w-4" /> Copy Link
+                  </Button>
                 </div>
               </div>
-            </motion.div>
+            </div>
+
+            {/* ── Right: Sticky Sidebar ── */}
+            <aside className="space-y-6 lg:sticky lg:top-24">
+
+              {/* 1. Table of Contents */}
+              {tocItems.length > 0 && (
+                <div className="bg-card border border-border rounded-2xl p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <List className="h-4 w-4 text-primary" />
+                    <h3 className="font-bold text-foreground text-sm uppercase tracking-wide">In This Article</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {tocItems.map((item) => (
+                      <li key={item.id}>
+                        <a
+                          href={`#${item.id}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }}
+                          className="text-sm text-muted-foreground hover:text-primary transition-colors leading-snug block py-1 border-l-2 border-transparent hover:border-primary pl-3"
+                        >
+                          {item.text}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* 2. Services CTA */}
+              <div className="bg-gradient-to-br from-[#6B46C1] to-[#44337A] rounded-2xl p-5 text-white">
+                <div className="flex items-center gap-2 mb-3">
+                  <Sparkles className="h-4 w-4 text-secondary" />
+                  <span className="text-secondary text-xs font-bold uppercase tracking-wide">VibeLink Event</span>
+                </div>
+                <h3 className="font-bold text-base mb-2 leading-snug">Planning a Ghanaian event?</h3>
+                <p className="text-white/70 text-sm mb-4 leading-relaxed">
+                  Get a beautiful digital invitation your guests will never forget — crafted for every ceremony.
+                </p>
+                <Button asChild size="sm" className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold gap-2">
+                  <Link to="/get-started">
+                    Start Your Invitation <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+              </div>
+
+              {/* 3. Related Articles */}
+              {relatedPosts.length > 0 && (
+                <div className="bg-card border border-border rounded-2xl p-5">
+                  <h3 className="font-bold text-foreground text-sm uppercase tracking-wide mb-4">Related Articles</h3>
+                  <div className="space-y-4">
+                    {relatedPosts.map((rp) => (
+                      <Link key={rp.id} to={`/blog/${rp.slug}`} className="group flex gap-3 hover:opacity-80 transition-opacity">
+                        <img
+                          src={rp.image_url}
+                          alt={rp.title}
+                          className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+                          onError={(e) => { (e.target as HTMLImageElement).src = '/blog/adinkra-symbols-ghana.jpg'; }}
+                        />
+                        <div className="min-w-0">
+                          <p className="text-xs font-semibold text-primary mb-1">{rp.category}</p>
+                          <p className="text-sm font-medium text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                            {rp.title}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                            <Clock className="h-3 w-3" />{rp.read_time}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </aside>
           </div>
         </div>
       </section>
 
-      {/* Related Posts */}
-      {relatedPosts.length > 0 && (
-        <section className="py-16 bg-muted/50">
-          <div className="container mx-auto px-4 lg:px-8">
-            <h2 className="text-2xl font-bold text-foreground mb-8">
-              Related Articles
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedPosts.map((relatedPost, index) => (
-                <motion.article
-                  key={relatedPost.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group rounded-xl bg-card border border-border overflow-hidden hover:border-primary/30 hover:shadow-lg transition-all duration-300"
-                >
-                  <Link to={`/blog/${relatedPost.slug}`}>
-                    <div className="aspect-[16/10] overflow-hidden">
-                      <img
-                        src={relatedPost.image_url}
-                        alt={relatedPost.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <div className="flex items-center gap-3 mb-2">
-                        <Badge variant="secondary" className="text-xs">
-                          {relatedPost.category}
-                        </Badge>
-                        <span className="flex items-center gap-1 text-muted-foreground text-xs">
-                          <Clock className="h-3 w-3" />
-                          {relatedPost.read_time}
-                        </span>
-                      </div>
-                      <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                        {relatedPost.title}
-                      </h3>
-                    </div>
-                  </Link>
-                </motion.article>
-              ))}
-            </div>
+      {/* Newsletter CTA */}
+      <section className="py-12 bg-gradient-to-r from-primary/10 via-background to-secondary/10 border-t border-border">
+        <div className="container mx-auto px-4 lg:px-8 max-w-2xl text-center">
+          <Sparkles className="h-8 w-8 text-secondary mx-auto mb-3" />
+          <h3 className="text-2xl font-bold text-foreground mb-2">Planning an event?</h3>
+          <p className="text-muted-foreground mb-6">Turn your invitation from a JPEG into a living digital experience your guests will love.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+              <Link to="/get-started">Create My Invitation <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link to="/pricing">View Pricing</Link>
+            </Button>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       <CTASection />
     </Layout>

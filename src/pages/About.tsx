@@ -139,23 +139,45 @@ const whyChooseFeatures = [
   {
     icon: MessageCircleIcon,
     title: "WhatsApp-First Support",
-    description: "We are always just a message away. Get quick responses and updates via WhatsApp.",
+    description: "No emails, no waiting. Chat with us directly on WhatsApp and get real answers in minutes — not days.",
+    tag: "Always Available",
   },
   {
     icon: Users,
     title: "Ghana-Focused Design",
-    description: "Our templates are designed specifically for Ghanaian ceremonies and traditions.",
+    description: "Built for Ghanaian celebrations — from kente patterns to outdooring traditions. Your guests will feel it's made just for them.",
+    tag: "Made for Ghana",
   },
   {
     icon: Globe,
     title: "Diaspora-Ready",
-    description: "Your invitations work perfectly for guests anywhere in the world.",
+    description: "Family in London, New York or Accra? One link works everywhere. No app downloads, no login — just click and attend.",
+    tag: "Global Reach",
+  },
+  {
+    icon: Sparkles,
+    title: "Works for Every Occasion",
+    description: "Wedding, funeral, naming, graduation, corporate — one platform handles every Ghanaian celebration with style.",
+    tag: "All Events",
+  },
+  {
+    icon: Radio,
+    title: "Always Live",
+    description: "Your invitation stays online before, during and after your event. Guests can revisit memories, photos and messages anytime.",
+    tag: "Always On",
+  },
+  {
+    icon: Camera,
+    title: "Photo Gallery Included",
+    description: "Share memories before and after the event. Upload photos directly to your invitation page.",
+    tag: "Memories Forever",
   },
 ];
 
 const About = () => {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loadingTeam, setLoadingTeam] = useState(true);
+  const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState<string[]>(["core"]);
@@ -1032,16 +1054,26 @@ const About = () => {
       </section>
 
       {/* Meet The Vibers */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 lg:px-8">
+      <section className="py-20 bg-background relative overflow-hidden">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="container mx-auto px-4 lg:px-8 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-14"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            <motion.span
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4"
+            >
+              Our Team
+            </motion.span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               Meet The Vibers
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -1051,55 +1083,56 @@ const About = () => {
 
           {loadingTeam ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              <Loader2 className="h-8 w-8 animate-spin text-secondary" />
             </div>
           ) : teamMembers.length === 0 ? (
-            <p className="text-center text-muted-foreground">Team information coming soon.</p>
+            <p className="text-center text-white/40">Team information coming soon.</p>
           ) : (
-            <div className={`grid grid-cols-1 sm:grid-cols-2 ${teamMembers.length >= 3 ? "lg:grid-cols-3" : ""} ${teamMembers.length >= 4 ? "xl:grid-cols-4" : ""} gap-8 max-w-5xl mx-auto`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${teamMembers.length >= 3 ? "lg:grid-cols-3" : ""} ${teamMembers.length >= 4 ? "xl:grid-cols-4" : ""} gap-6 max-w-5xl mx-auto`}>
               {teamMembers.map((member, index) => (
                 <motion.div
                   key={member.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="group text-center"
+                  transition={{ duration: 0.6, delay: index * 0.12 }}
+                  className="group relative h-[420px] rounded-2xl overflow-hidden cursor-pointer"
+                  style={{ border: '2px solid rgba(212,175,55,0.35)' }}
+                  whileHover={{ borderColor: 'rgba(212,175,55,0.85)', boxShadow: '0 0 20px rgba(212,175,55,0.2)' }}
+                  onClick={() => setSelectedMember(member)}
                 >
-                  <div className="relative mb-4 overflow-hidden rounded-2xl">
-                    <img
-                      src={member.photo_url || "/placeholder.svg"}
-                      alt={member.name}
-                      className="w-full aspect-square object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                      <div className="flex gap-3">
-                        {member.social_linkedin && (
-                          <a href={member.social_linkedin} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
-                            <Linkedin className="h-4 w-4 text-white" />
-                          </a>
-                        )}
-                        {member.social_twitter && (
-                          <a href={member.social_twitter} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
-                            <Twitter className="h-4 w-4 text-white" />
-                          </a>
-                        )}
-                        {member.social_instagram && (
-                          <a href={member.social_instagram} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
-                            <Instagram className="h-4 w-4 text-white" />
-                          </a>
-                        )}
-                        {member.social_facebook && (
-                          <a href={member.social_facebook} target="_blank" rel="noopener noreferrer" className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors">
-                            <Facebook className="h-4 w-4 text-white" />
-                          </a>
-                        )}
-                      </div>
+                  {/* Photo */}
+                  <img
+                    src={member.photo_url || "/placeholder.svg"}
+                    alt={member.name}
+                    className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.08]"
+                  />
+
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0414]/95 via-[#0a0414]/40 to-transparent transition-all duration-400 group-hover:from-[#0a0414]/98 group-hover:via-[#0a0414]/70 group-hover:to-[#0a0414]/20" />
+
+                  {/* Gold border */}
+                  <div className="absolute inset-0 rounded-2xl border border-secondary/0 group-hover:border-secondary/40 transition-all duration-400 pointer-events-none" />
+
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <span className="text-xs font-bold tracking-[3px] uppercase text-secondary/80 mb-1.5 block">
+                      {member.role}
+                    </span>
+                    <h3 className="text-xl font-bold text-white mb-0">{member.name}</h3>
+
+                    {/* Bio teaser on hover */}
+                    <div className="max-h-0 overflow-hidden group-hover:max-h-16 transition-all duration-400 ease-in-out">
+                      {member.bio && (
+                        <p className="text-white/55 text-sm leading-relaxed mt-2 line-clamp-2">{member.bio}</p>
+                      )}
+                    </div>
+
+                    {/* View Profile hint */}
+                    <div className="flex items-center gap-1.5 mt-3 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 delay-75">
+                      <span className="text-xs font-semibold text-secondary tracking-widest uppercase">View Profile</span>
+                      <ArrowRight className="h-3 w-3 text-secondary" />
                     </div>
                   </div>
-                  <h3 className="text-lg font-bold text-foreground mb-1">{member.name}</h3>
-                  <p className="text-muted-foreground text-sm">{member.role}</p>
-                  {member.bio && <p className="text-muted-foreground text-xs mt-2 line-clamp-2">{member.bio}</p>}
                 </motion.div>
               ))}
             </div>
@@ -1107,41 +1140,159 @@ const About = () => {
         </div>
       </section>
 
+      {/* Team Member Modal */}
+      {selectedMember && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedMember(null)}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+
+          {/* Modal */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="relative z-10 w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Photo */}
+            <div className="relative h-72">
+              <img
+                src={selectedMember.photo_url || "/placeholder.svg"}
+                alt={selectedMember.name}
+                className="w-full h-full object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0d0820] via-[#0d0820]/30 to-transparent" />
+
+              {/* Close button */}
+              <button
+                onClick={() => setSelectedMember(null)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white transition-all"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="bg-[#0d0820] border border-secondary/20 border-t-0 rounded-b-2xl p-6">
+              <span className="text-xs font-bold tracking-[3px] uppercase text-secondary/80 mb-1 block">
+                {selectedMember.role}
+              </span>
+              <h3 className="text-2xl font-bold text-white mb-3">{selectedMember.name}</h3>
+              <div className="w-12 h-0.5 bg-gradient-to-r from-primary to-secondary mb-4" />
+              {selectedMember.bio && (
+                <p className="text-white/60 text-sm leading-relaxed mb-5">{selectedMember.bio}</p>
+              )}
+
+              {/* Socials */}
+              <div className="flex gap-2">
+                {selectedMember.social_linkedin && (
+                  <a href={selectedMember.social_linkedin} target="_blank" rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-secondary border border-white/20 hover:border-secondary flex items-center justify-center transition-all duration-200">
+                    <Linkedin className="h-4 w-4 text-white" />
+                  </a>
+                )}
+                {selectedMember.social_instagram && (
+                  <a href={selectedMember.social_instagram} target="_blank" rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-secondary border border-white/20 hover:border-secondary flex items-center justify-center transition-all duration-200">
+                    <Instagram className="h-4 w-4 text-white" />
+                  </a>
+                )}
+                {selectedMember.social_twitter && (
+                  <a href={selectedMember.social_twitter} target="_blank" rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-secondary border border-white/20 hover:border-secondary flex items-center justify-center transition-all duration-200">
+                    <Twitter className="h-4 w-4 text-white" />
+                  </a>
+                )}
+                {selectedMember.social_facebook && (
+                  <a href={selectedMember.social_facebook} target="_blank" rel="noopener noreferrer"
+                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-secondary border border-white/20 hover:border-secondary flex items-center justify-center transition-all duration-200">
+                    <Facebook className="h-4 w-4 text-white" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+
       {/* Why Choose VibeLink */}
-      <section className="py-20 bg-muted/30">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-14"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Why Choose VibeLink?
+            <motion.span
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4"
+            >
+              Why Choose Us
+            </motion.span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+              Why Choose{" "}
+              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                VibeLink?
+              </span>
             </h2>
-            <p className="text-muted-foreground text-lg">
-              What makes us different
-            </p>
+            <p className="text-muted-foreground text-lg">What makes us different</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {whyChooseFeatures.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-card rounded-2xl p-8 border border-border shadow-sm hover:shadow-md transition-shadow"
-              >
-                <div className="w-14 h-14 rounded-xl bg-secondary/20 flex items-center justify-center mb-5">
-                  <feature.icon className="h-7 w-7 text-secondary" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {whyChooseFeatures.map((feature, index) => {
+              const isGold = index === 1 || index === 4;
+              return (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ y: -6 }}
+                  className="relative p-[2px] rounded-2xl cursor-default"
+                  style={{
+                    background: isGold
+                      ? 'linear-gradient(135deg, #D4AF37, #6B46C1, #f0c040)'
+                      : 'linear-gradient(135deg, #6B46C1, #D4AF37, #9F7AEA)',
+                    boxShadow: '0 4px 20px rgba(107,70,193,0.06)'
+                  }}
+                >
+                  <div
+                    className="bg-background rounded-2xl p-7 h-full"
+                    style={{ boxShadow: isGold ? '0 20px 50px rgba(212,175,55,0.06)' : '0 20px 50px rgba(107,70,193,0.06)' }}
+                  >
+                    <div
+                      className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
+                      style={{ background: isGold ? 'rgba(212,175,55,0.1)' : 'rgba(107,70,193,0.1)' }}
+                    >
+                      <feature.icon className="h-7 w-7" style={{ color: isGold ? '#D4AF37' : '#6B46C1' }} />
+                    </div>
+                    <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed text-sm mb-4">{feature.description}</p>
+                    <span
+                      className="inline-block text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full"
+                      style={{
+                        background: isGold ? 'rgba(212,175,55,0.1)' : 'rgba(107,70,193,0.08)',
+                        color: isGold ? '#B8961F' : '#6B46C1'
+                      }}
+                    >
+                      {feature.tag}
+                    </span>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -45,6 +45,17 @@ import corporateImg from "@/assets/hero-corporate.jpg";
 import churchImg from "@/assets/hero-church.jpg";
 import birthdayImg from "@/assets/hero-birthday.jpg";
 
+const eventPageMap: Record<string, string> = {
+  wedding: "/wedding-invitations",
+  funeral: "/funeral-programs",
+  church: "/church-events",
+  naming: "/naming-ceremony",
+  birthday: "/birthday",
+  anniversary: "/birthday",
+  graduation: "/graduation",
+  corporate: "/corporate-events",
+};
+
 const services = [
   {
     icon: Heart,
@@ -298,6 +309,7 @@ const Services = () => {
         description="Digital invitations for weddings, funerals, naming ceremonies, anniversaries, graduations and corporate events in Ghana. Beautiful designs, easy sharing via WhatsApp."
         keywords="wedding invitations Ghana, funeral programs Accra, naming ceremony invitations, digital event invitations"
         canonical="/services"
+        ogImage="https://vibelinkevent.com/og-services.jpg"
         jsonLd={[servicesSchema, breadcrumbSchema]}
       />
 
@@ -367,7 +379,14 @@ const Services = () => {
                     </ul>
 
                     <div className="flex flex-wrap gap-3 pt-2">
-                      <Button asChild variant="default" size="default">
+                      {eventPageMap[service.slug] && (
+                        <Button asChild variant="default" size="default">
+                          <Link to={eventPageMap[service.slug]}>
+                            Explore {service.title} →
+                          </Link>
+                        </Button>
+                      )}
+                      <Button asChild variant="outline" size="default">
                         <Link to={`/portfolio?type=${service.slug}`}>See Examples</Link>
                       </Button>
                       <Button asChild variant="ghost" size="default">
@@ -653,6 +672,42 @@ const Services = () => {
               </Button>
             </motion.div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Event pages strip */}
+      <section className="py-8 bg-muted/20 border-t border-border">
+        <div className="container mx-auto px-4 lg:px-8">
+          <p className="text-center text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Dedicated Pages for Every Event</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {[
+              { label: "💍 Weddings", href: "/wedding-invitations" },
+              { label: "🕊️ Funerals", href: "/funeral-programs" },
+              { label: "👶 Naming Ceremony", href: "/naming-ceremony" },
+              { label: "🎓 Graduation", href: "/graduation" },
+              { label: "🎂 Birthday", href: "/birthday" },
+              { label: "⛪ Church Events", href: "/church-events" },
+              { label: "💼 Corporate", href: "/corporate-events" },
+            ].map(e => (
+              <Link key={e.href} to={e.href}
+                className="px-4 py-2 rounded-full border border-border bg-background text-sm text-muted-foreground hover:text-primary hover:border-primary/40 transition-all">
+                {e.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quick nav strip */}
+      <section className="py-6 bg-muted/30 border-t border-border">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-muted-foreground">
+            <Link to="/how-it-works" className="hover:text-primary transition-colors">How It Works →</Link>
+            <Link to="/pricing" className="hover:text-primary transition-colors">View Pricing →</Link>
+            <Link to="/portfolio" className="hover:text-primary transition-colors">See Portfolio →</Link>
+            <Link to="/blog" className="hover:text-primary transition-colors">Read Our Blog →</Link>
+            <Link to="/faq" className="hover:text-primary transition-colors">FAQs →</Link>
+          </div>
         </div>
       </section>
 

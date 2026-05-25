@@ -23,6 +23,12 @@ const quickLinks = [{
 }, {
   name: "Pricing",
   href: "/pricing"
+}, {
+  name: "Book Consultation",
+  href: "/book-consultation"
+}, {
+  name: "FAQ",
+  href: "/faq"
 }];
 const policyLinks = [{
   name: "Privacy",
@@ -36,25 +42,34 @@ const policyLinks = [{
 }, {
   name: "Cookies",
   href: "/cookie-policy"
+}, {
+  name: "Sitemap",
+  href: "/sitemap.xml"
 }];
 const eventTypes = [{
   name: "Weddings",
-  href: "/services#wedding"
+  href: "/wedding-invitations"
 }, {
   name: "Funerals",
-  href: "/services#funeral"
+  href: "/funeral-programs"
 }, {
   name: "Naming Ceremonies",
-  href: "/services#naming"
+  href: "/naming-ceremony"
 }, {
   name: "Anniversaries",
-  href: "/services#anniversary"
+  href: "/birthday"
 }, {
   name: "Graduations",
-  href: "/services#graduation"
+  href: "/graduation"
+}, {
+  name: "Birthday Celebrations",
+  href: "/birthday"
+}, {
+  name: "Church Events",
+  href: "/church-events"
 }, {
   name: "Corporate Events",
-  href: "/services#corporate"
+  href: "/corporate-events"
 }];
 const socialLinks = [{
   name: "Instagram",
@@ -217,7 +232,7 @@ export function Footer() {
               <li className="flex items-center justify-center md:justify-start gap-3 text-sm">
                 <MapPin className="h-4 w-4 text-secondary" />
                 <span className="text-primary-foreground/70">
-                  Accra, Ghana
+                  Accra, Ghana &amp; Berlin, Germany
                 </span>
               </li>
             </ul>

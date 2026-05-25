@@ -63,6 +63,7 @@ const Portfolio = () => {
         description="Browse our portfolio of stunning digital invitations for weddings, funerals, naming ceremonies & more. See real examples of our work for Ghanaian events."
         keywords="digital invitation examples Ghana, wedding invitation samples, funeral program examples"
         canonical="/portfolio"
+        ogImage="https://vibelinkevent.com/og-portfolio.jpg"
       />
       {/* Hero */}
       <section className="pt-24 lg:pt-32 pb-16 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A]">
@@ -190,6 +191,15 @@ const Portfolio = () => {
         </div>
       </section>
 
+      <section className="py-6 bg-muted/30 border-t border-border">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-muted-foreground">
+            <Link to="/how-it-works" className="hover:text-primary transition-colors">How It Works →</Link>
+            <Link to="/pricing" className="hover:text-primary transition-colors">View Pricing →</Link>
+            <Link to="/get-started" className="hover:text-primary transition-colors">Start Your Invitation →</Link>
+          </div>
+        </div>
+      </section>
       <CTASection hideViewWork />
     </Layout>
   );

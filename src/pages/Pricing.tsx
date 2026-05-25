@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/CTASection";
-import { Check, X, Star, MessageCircle, Sparkles, Crown, Percent, Gift, Users, Banknote, ArrowRight } from "lucide-react";
+import { Check, X, Star, MessageCircle, Sparkles, Crown, Percent, Gift, Users, Banknote, ArrowRight, Calculator, Trash2, Shield } from "lucide-react";
+import { useState } from "react";
 import SEO, { createBreadcrumbSchema } from "@/components/SEO";
 
 const pricingBreadcrumb = createBreadcrumbSchema([
@@ -148,13 +149,12 @@ const addOns = [
   { name: "Digital Guestbook", price: "GHS 150", desc: "Guests leave messages & photos" },
   { name: "Gift Acknowledgment Page", price: "GHS 150", desc: "Publicly thank gift contributors" },
   { name: "Live Stream Embed", price: "GHS 200", desc: "Stream your event live to guests" },
-  { name: "Extended Hosting (6 months)", price: "GHS 250", desc: "Keep your invite live longer" },
-  { name: "Extended Hosting (1 year)", price: "GHS 600", desc: "Full year of hosting" },
-  { name: "Custom Domain", price: "GHS 300/yr", desc: "Use your own domain name" },
+  { name: "Extended Hosting (6 months)", price: "GHS 500", desc: "Your event page expires after your package hosting period. Extend to keep it live." },
+  { name: "Extended Hosting (1 year)", price: "GHS 1,000", desc: "Your event page expires after your package hosting period. Extend to keep it live." },
+  { name: "Custom Domain (1 year)", price: "GHS 300", desc: "Use your own domain name" },
   { name: "Extra Photos (+10)", price: "GHS 100", desc: "Expand your photo gallery" },
   { name: "Additional Language", price: "GHS 150", desc: "Add Twi, French, or others" },
   { name: "Background Music", price: "GHS 50", desc: "Add music to your invitation" },
-  { name: "Memorial Page Renewal", price: "GHS 100/yr", desc: "Keep tribute pages live yearly" },
   { name: "Obituary Section", price: "Free", desc: "Add obituary for funeral invites (on request)" },
   { name: "Lost & Found", price: "GHS 100", desc: "Help guests find lost items" },
   { name: "Nearby Accommodation", price: "GHS 100", desc: "Show hotels near your venue" },
@@ -189,6 +189,196 @@ const comparisonFeatures = [
   { feature: "Delivery Time", starter: "5-7 days", classic: "5-7 days", prestige: "5-7 days", royal: "7-10 days" },
 ];
 
+const calcPackages = [
+  { name: "Starter Vibe", price: 1000 },
+  { name: "Classic Vibe", price: 1500 },
+  { name: "Prestige Vibe", price: 2500 },
+  { name: "Royal Vibe", price: 4000 },
+];
+
+const calcAddOns = addOns
+  .filter(a => a.price !== "Free")
+  .map(a => ({ name: a.name, price: parseInt(a.price.replace(/[^0-9]/g, "")) || 0 }))
+  .filter(a => a.price > 0);
+
+function PricingCalculator() {
+  const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
+  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
+  const [paymentPlan, setPaymentPlan] = useState<"full" | "split">("full");
+  const [refCode, setRefCode] = useState("");
+
+  const packageTotal = selectedPackage ?? 0;
+  const addOnsTotal = selectedAddOns.reduce((sum, name) => {
+    const a = calcAddOns.find(x => x.name === name);
+    return sum + (a?.price ?? 0);
+  }, 0);
+  const grandTotal = packageTotal + addOnsTotal;
+  const deposit = Math.ceil(grandTotal * 0.5 / 10) * 10;
+
+  const toggleAddOn = (name: string) => {
+    setSelectedAddOns(prev =>
+      prev.includes(name) ? prev.filter(x => x !== name) : [...prev, name]
+    );
+  };
+
+  return (
+    <section className="py-16 lg:py-24 bg-gradient-to-b from-muted/20 to-background">
+      <div className="container mx-auto px-4 lg:px-8">
+        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-4">
+            <Calculator className="h-6 w-6 text-primary" />
+          </div>
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Price Calculator</h2>
+          <p className="text-muted-foreground">Build your package and see your total instantly</p>
+        </motion.div>
+
+        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left — Selector */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Step 1: Package */}
+            <div className="bg-card border border-border rounded-2xl p-5">
+              <p className="text-xs font-bold tracking-widest uppercase text-primary mb-4">Step 1 — Choose Package</p>
+              <div className="grid grid-cols-2 gap-3">
+                {calcPackages.map(pkg => (
+                  <button
+                    key={pkg.name}
+                    onClick={() => setSelectedPackage(pkg.price)}
+                    className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
+                      selectedPackage === pkg.price
+                        ? "border-primary bg-primary/5 shadow-md"
+                        : "border-border hover:border-primary/40 bg-background"
+                    }`}
+                  >
+                    <p className={`font-bold text-sm ${selectedPackage === pkg.price ? "text-primary" : "text-foreground"}`}>{pkg.name}</p>
+                    <p className="text-lg font-black text-foreground mt-0.5">GHS {pkg.price.toLocaleString()}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Step 2: Add-ons */}
+            <div className="bg-card border border-border rounded-2xl p-5">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-xs font-bold tracking-widest uppercase text-primary">Step 2 — Add-ons (optional)</p>
+                {selectedAddOns.length > 0 && (
+                  <button onClick={() => setSelectedAddOns([])} className="text-xs text-muted-foreground hover:text-destructive flex items-center gap-1 transition-colors">
+                    <Trash2 className="h-3 w-3" /> Clear all
+                  </button>
+                )}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-72 overflow-y-auto pr-1">
+                {calcAddOns.map(addon => (
+                  <button
+                    key={addon.name}
+                    onClick={() => toggleAddOn(addon.name)}
+                    className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-200 text-left ${
+                      selectedAddOns.includes(addon.name)
+                        ? "border-secondary bg-secondary/5"
+                        : "border-border hover:border-secondary/40 bg-background"
+                    }`}
+                  >
+                    <span className={`text-xs font-medium truncate ${selectedAddOns.includes(addon.name) ? "text-secondary" : "text-foreground"}`}>{addon.name}</span>
+                    <span className="text-xs font-bold text-muted-foreground ml-2 flex-shrink-0">+{addon.price.toLocaleString()}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Step 3: Payment Plan */}
+            <div className="bg-card border border-border rounded-2xl p-5">
+              <p className="text-xs font-bold tracking-widest uppercase text-primary mb-4">Step 3 — Payment Plan</p>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setPaymentPlan("full")}
+                  className={`p-4 rounded-xl border-2 transition-all text-left ${paymentPlan === "full" ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"}`}
+                >
+                  <p className={`font-bold text-sm ${paymentPlan === "full" ? "text-primary" : "text-foreground"}`}>Full Payment</p>
+                  <p className="text-xs text-muted-foreground mt-1">Priority processing + FREE Save the Date</p>
+                </button>
+                <button
+                  onClick={() => setPaymentPlan("split")}
+                  className={`p-4 rounded-xl border-2 transition-all text-left ${paymentPlan === "split" ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"}`}
+                >
+                  <p className={`font-bold text-sm ${paymentPlan === "split" ? "text-primary" : "text-foreground"}`}>50% + 50%</p>
+                  <p className="text-xs text-muted-foreground mt-1">Pay deposit now, balance before delivery</p>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right — Summary */}
+          <div className="lg:col-span-1">
+            <div className="bg-card border border-border rounded-2xl p-5 sticky top-24">
+              <p className="text-xs font-bold tracking-widest uppercase text-muted-foreground mb-4">Your Estimate</p>
+
+              {selectedPackage === null ? (
+                <p className="text-sm text-muted-foreground italic py-4 text-center">Select a package to see your total</p>
+              ) : (
+                <>
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{calcPackages.find(p => p.price === selectedPackage)?.name}</span>
+                      <span className="font-semibold">GHS {packageTotal.toLocaleString()}</span>
+                    </div>
+                    {selectedAddOns.map(name => {
+                      const a = calcAddOns.find(x => x.name === name);
+                      return (
+                        <div key={name} className="flex justify-between text-sm">
+                          <span className="text-muted-foreground truncate max-w-[160px]">{name}</span>
+                          <span className="font-semibold flex-shrink-0">+{a?.price.toLocaleString()}</span>
+                        </div>
+                      );
+                    })}
+                    {selectedAddOns.length > 0 && (
+                      <div className="flex justify-between text-sm text-muted-foreground border-t border-border pt-2">
+                        <span>Add-ons ({selectedAddOns.length})</span>
+                        <span>GHS {addOnsTotal.toLocaleString()}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="border-t border-border pt-4 mb-4">
+                    <div className="flex justify-between items-baseline">
+                      <span className="font-bold text-foreground">Total</span>
+                      <span className="text-2xl font-black text-primary">GHS {grandTotal.toLocaleString()}</span>
+                    </div>
+                    {paymentPlan === "split" && (
+                      <div className="mt-2 p-3 bg-secondary/10 rounded-xl">
+                        <p className="text-xs text-secondary font-semibold">50% deposit to start</p>
+                        <p className="text-lg font-black text-secondary">GHS {deposit.toLocaleString()}</p>
+                        <p className="text-xs text-muted-foreground">Balance: GHS {(grandTotal - deposit).toLocaleString()} before delivery</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Referral/coupon code */}
+                  <div className="flex gap-2 mb-3">
+                    <input
+                      type="text"
+                      placeholder="Referral code (optional)"
+                      value={refCode}
+                      onChange={e => setRefCode(e.target.value.toUpperCase())}
+                      className="flex-1 text-xs border border-border rounded-lg px-3 py-2 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+                      maxLength={20}
+                    />
+                  </div>
+
+                  <Button asChild className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+                    <Link to={`/get-started${refCode ? `?ref=${refCode}` : ""}`}>
+                      Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <p className="text-xs text-muted-foreground text-center mt-3">Prices in GHS. Final quote confirmed via WhatsApp.</p>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const Pricing = () => {
   const renderCellValue = (value: boolean | string) => {
     if (typeof value === "boolean") {
@@ -220,6 +410,7 @@ const Pricing = () => {
         description="Affordable digital invitation packages starting from GHS 1,000. Choose from Starter, Classic, Prestige or Royal packages for your wedding, funeral, or event in Ghana."
         keywords="digital invitation prices Ghana, wedding invitation cost, event invitation packages Accra"
         canonical="/pricing"
+        ogImage="https://vibelinkevent.com/og-pricing.jpg"
         jsonLd={[pricingSchema, pricingBreadcrumb]}
       />
 
@@ -298,10 +489,14 @@ const Pricing = () => {
                   className="w-full"
                   size="sm"
                 >
-                  <Link to={pkg.name === "Royal Vibe" ? "/contact" : "/get-started"}>
+                  <Link to={pkg.name === "Royal Vibe" ? "/contact" : `/get-started?package=${encodeURIComponent(pkg.name)}`}>
                     {pkg.name === "Royal Vibe" ? "Contact Us" : "Get Started"}
                   </Link>
                 </Button>
+                <p className="text-center text-xs text-muted-foreground mt-2 flex items-center justify-center gap-1">
+                  <Shield className="h-3 w-3 text-green-500" />
+                  Money-back guarantee
+                </p>
               </motion.div>
             ))}
           </div>
@@ -514,6 +709,8 @@ const Pricing = () => {
           </motion.div>
         </div>
       </section>
+
+      <PricingCalculator />
 
       {/* Add-ons Section */}
       <section className="py-12 lg:py-16 bg-background">

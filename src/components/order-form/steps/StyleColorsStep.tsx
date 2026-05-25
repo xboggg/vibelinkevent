@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { OrderFormData, colorPalettes, stylePreferences } from "@/data/orderFormData";
-import { ArrowLeft, ArrowRight, Palette, Sparkles, Check, Upload, X, Image } from "lucide-react";
+import { ArrowLeft, ArrowRight, Palette, Sparkles, Check, Upload, X, Image, ExternalLink, MessageCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { styleColorsSchema } from "@/lib/validationSchemas";
@@ -365,7 +366,33 @@ export const StyleColorsStep = ({
         </p>
       </div>
 
-      <div className="flex justify-between pt-4">
+      {/* Portfolio inspiration link */}
+      {formData.stylePreference && (
+        <div className="rounded-xl bg-primary/5 border border-primary/20 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-semibold text-foreground mb-0.5">Want to see examples in this style?</p>
+            <p className="text-xs text-muted-foreground">Browse our portfolio to see real invitations we've created.</p>
+          </div>
+          <Link
+            to="/portfolio"
+            target="_blank"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline whitespace-nowrap flex-shrink-0"
+          >
+            View Portfolio <ExternalLink className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+      )}
+
+      {/* Draft promise */}
+      <div className="rounded-xl bg-secondary/10 border border-secondary/20 p-4 flex items-start gap-3">
+        <MessageCircle className="h-5 w-5 text-secondary flex-shrink-0 mt-0.5" />
+        <div>
+          <p className="text-sm font-semibold text-foreground mb-0.5">Not sure yet? No problem.</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">Once your deposit is paid, we'll send you a <strong className="text-foreground">draft concept on WhatsApp within 24 hours</strong> for your feedback — before we build the full invitation.</p>
+        </div>
+      </div>
+
+      <div className="flex justify-between pt-2">
         <Button variant="outline" onClick={onPrev} size="lg" className="gap-2">
           <ArrowLeft className="h-4 w-4" />
           Back

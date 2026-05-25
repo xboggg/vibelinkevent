@@ -37,9 +37,9 @@ const steps = [
     description: "Tell us about your event in just 2 minutes.",
     details: "Choose your event type, select a package, pick your add-ons, and share your vision. Our form guides you through everything we need to create your perfect invitation.",
     duration: "2 minutes",
-    color: "from-violet-500 to-purple-600",
-    bgColor: "bg-violet-500",
-    lightBg: "bg-violet-50 dark:bg-violet-950/30",
+    color: "from-primary to-secondary",
+    bgColor: "bg-primary",
+    lightBg: "bg-primary/5 dark:bg-primary/10",
   },
   {
     number: "02",
@@ -48,9 +48,9 @@ const steps = [
     description: "We'll WhatsApp you within 2 hours.",
     details: "Our team reviews your requirements and sends you a detailed confirmation with your package summary. We'll answer any questions and discuss your vision.",
     duration: "Within 2 hours",
-    color: "from-amber-500 to-orange-500",
-    bgColor: "bg-amber-500",
-    lightBg: "bg-amber-50 dark:bg-amber-950/30",
+    color: "from-primary to-secondary",
+    bgColor: "bg-primary",
+    lightBg: "bg-secondary/5 dark:bg-secondary/10",
   },
   {
     number: "03",
@@ -59,9 +59,9 @@ const steps = [
     description: "Secure your spot with 50% deposit.",
     details: "Pay via MoMo or Card to confirm your order. Choose full payment for priority processing and a FREE 'Save the Date' teaser delivered in 24 hours!",
     duration: "Same day",
-    color: "from-emerald-500 to-teal-500",
-    bgColor: "bg-emerald-500",
-    lightBg: "bg-emerald-50 dark:bg-emerald-950/30",
+    color: "from-primary to-secondary",
+    bgColor: "bg-primary",
+    lightBg: "bg-primary/5 dark:bg-primary/10",
   },
   {
     number: "04",
@@ -70,9 +70,9 @@ const steps = [
     description: "Our team crafts your beautiful invitation.",
     details: "Our talented designers bring your vision to life with stunning visuals, smooth animations, and all your selected features. Need it faster? Rush delivery available in 48 hours!",
     duration: "5-7 days",
-    color: "from-pink-500 to-rose-500",
-    bgColor: "bg-pink-500",
-    lightBg: "bg-pink-50 dark:bg-pink-950/30",
+    color: "from-primary to-secondary",
+    bgColor: "bg-primary",
+    lightBg: "bg-secondary/5 dark:bg-secondary/10",
   },
   {
     number: "05",
@@ -81,9 +81,9 @@ const steps = [
     description: "Preview and request any changes.",
     details: "We share a preview link for you to review. Request changes and we'll perfect every detail. Revision rounds are included in your package—we don't stop until you love it!",
     duration: "1-2 days",
-    color: "from-cyan-500 to-blue-500",
-    bgColor: "bg-cyan-500",
-    lightBg: "bg-cyan-50 dark:bg-cyan-950/30",
+    color: "from-primary to-secondary",
+    bgColor: "bg-primary",
+    lightBg: "bg-primary/5 dark:bg-primary/10",
   },
   {
     number: "06",
@@ -92,9 +92,9 @@ const steps = [
     description: "Share your invitation with the world.",
     details: "Pay the remaining balance (if split payment), receive your unique link, and share instantly on WhatsApp! Watch RSVPs roll in and manage everything from your dashboard.",
     duration: "Same day",
-    color: "from-fuchsia-500 to-purple-500",
-    bgColor: "bg-fuchsia-500",
-    lightBg: "bg-fuchsia-50 dark:bg-fuchsia-950/30",
+    color: "from-primary to-secondary",
+    bgColor: "bg-primary",
+    lightBg: "bg-secondary/5 dark:bg-secondary/10",
   },
 ];
 
@@ -265,7 +265,7 @@ const HowItWorks = () => {
                 />
               </span>{" "}
               to{" "}
-              <span className="bg-gradient-to-r from-pink-300 via-purple-300 to-pink-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-secondary via-yellow-300 to-secondary bg-clip-text text-transparent">
                 Celebration
               </span>
             </motion.h1>
@@ -359,10 +359,10 @@ const HowItWorks = () => {
                   }`}
                 >
                   {/* Timeline connector */}
-                  <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-1">
+                  <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[3px]">
                     {index < steps.length - 1 && (
                       <motion.div
-                        className={`w-full h-full bg-gradient-to-b ${step.color}`}
+                        className="w-full h-full bg-gradient-to-b from-primary via-secondary to-primary opacity-40"
                         initial={{ scaleY: 0 }}
                         whileInView={{ scaleY: 1 }}
                         viewport={{ once: true }}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { MessageCircle as MessageCircleIcon, Mail, MapPin, Phone, Clock, HelpCircle } from "lucide-react";
@@ -172,7 +173,7 @@ ${formData.message.trim()}`;
               { icon: MapPin, title: "Ghana Office", detail: "Accra, Ghana", flag: "🇬🇭", delay: 0 },
               { icon: MapPin, title: "Germany Office", detail: "Berlin, Germany", flag: "🇩🇪", delay: 0.1 },
               { icon: Phone, title: "Phone / WhatsApp", detail: "+49 157 571 78561", flag: null, delay: 0.2 },
-              { icon: Clock, title: "Response Time", detail: "Within 24 hours", flag: null, delay: 0.3 },
+              { icon: Clock, title: "Response Time", detail: "Within 2 hours", flag: null, delay: 0.3 },
             ].map((card, i) => (
               <motion.div
                 key={i}
@@ -384,6 +385,13 @@ ${formData.message.trim()}`;
                 </AccordionItem>
               ))}
             </Accordion>
+
+            <div className="text-center mt-8">
+              <p className="text-muted-foreground text-sm mb-3">Looking for more answers?</p>
+              <Link to="/faq" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline text-sm">
+                View Full FAQ Page →
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>

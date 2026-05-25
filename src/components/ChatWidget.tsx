@@ -33,10 +33,23 @@ interface ChatWidgetProps {
 
 export function ChatWidget({ onOpenChange }: ChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showProactiveGreeting, setShowProactiveGreeting] = useState(false);
+
+  // Proactive greeting — show bubble after 30s on first visit
+  useEffect(() => {
+    const seen = sessionStorage.getItem("vl_chat_greeted");
+    if (seen) return;
+    const timer = setTimeout(() => {
+      setShowProactiveGreeting(true);
+      sessionStorage.setItem("vl_chat_greeted", "1");
+    }, 30000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Notify parent when open state changes
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
+    setShowProactiveGreeting(false);
     onOpenChange?.(open);
   };
   const [input, setInput] = useState("");
@@ -315,6 +328,27 @@ export function ChatWidget({ onOpenChange }: ChatWidgetProps) {
             transition={{ type: "spring", stiffness: 200 }}
             className="fixed bottom-24 right-5 z-50 md:bottom-20 md:right-7"
           >
+            {/* Proactive greeting bubble */}
+            <AnimatePresence>
+              {showProactiveGreeting && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  className="absolute bottom-14 right-0 w-56 bg-white dark:bg-gray-900 rounded-2xl rounded-br-sm shadow-xl border border-border p-3 cursor-pointer"
+                  onClick={() => handleOpenChange(true)}
+                >
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowProactiveGreeting(false); }}
+                    className="absolute top-1.5 right-1.5 text-muted-foreground hover:text-foreground text-xs"
+                  >✕</button>
+                  <p className="text-xs font-semibold text-foreground mb-0.5">👋 Need help?</p>
+                  <p className="text-xs text-muted-foreground leading-snug">Ask me anything about packages, pricing, or getting started!</p>
+                  <div className="absolute -bottom-2 right-3 w-4 h-4 bg-white dark:bg-gray-900 border-r border-b border-border rotate-45" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             {/* AI Chat Button with pulsating effect */}
             <motion.button
               onClick={() => handleOpenChange(true)}

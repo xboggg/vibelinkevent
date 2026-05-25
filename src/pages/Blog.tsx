@@ -47,6 +47,7 @@ const Blog = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_LOAD);
 
   useEffect(() => {
@@ -109,13 +110,23 @@ const Blog = () => {
   }, [posts, searchQuery, activeCategory, activeTag]);
 
   useEffect(() => {
+    setCurrentPage(1);
     setVisibleCount(POSTS_PER_LOAD);
   }, [searchQuery, activeCategory, activeTag]);
 
-  const visiblePosts = useMemo(() => filteredPosts.slice(0, visibleCount), [filteredPosts, visibleCount]);
-  const featuredPosts = posts.filter((post) => post.featured).slice(0, 3);
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_LOAD);
+  const visiblePosts = useMemo(() => {
+    const start = (currentPage - 1) * POSTS_PER_LOAD;
+    return filteredPosts.slice(start, start + POSTS_PER_LOAD);
+  }, [filteredPosts, currentPage]);
+  const featuredPosts = posts.filter((post) => post.featured).slice(0, 4);
   const hasMorePosts = visibleCount < filteredPosts.length;
   const remainingPosts = filteredPosts.length - visibleCount;
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    document.getElementById("articles-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "";
@@ -141,13 +152,12 @@ const Blog = () => {
         canonical="/blog"
       />
 
-      {/* Hero Section - Magazine Style */}
+      {/* Hero — clean, just title + search */}
       <section className="pt-24 lg:pt-32 pb-12 bg-gradient-to-br from-[#6B46C1] via-[#553C9A] to-[#322659] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-32 h-32 bg-secondary rounded-full blur-3xl" />
           <div className="absolute bottom-10 right-20 w-48 h-48 bg-primary rounded-full blur-3xl" />
         </div>
-
         <div className="container mx-auto px-4 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -159,13 +169,69 @@ const Blog = () => {
               <Sparkles className="h-4 w-4" />
               <span>VibeLink Event Blog</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
               Event Planning <span className="text-secondary">Resources</span> & Inspiration
             </h1>
-            <p className="text-white/80 text-lg lg:text-xl max-w-2xl mx-auto">
-              Your guide to beautiful Ghanaian ceremonies. Tips, traditions, and inspiration for weddings, funerals, naming ceremonies, and more.
+            <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">
+              Your guide to beautiful Ghanaian ceremonies. Tips, traditions, and inspiration for every occasion.
             </p>
+            {/* Search bar in hero */}
+            <div className="max-w-lg mx-auto">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/50" />
+                <Input
+                  type="text"
+                  placeholder="Search articles by title, topic, or tag..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-12 pr-12 py-6 rounded-full bg-white/10 border-white/20 text-white placeholder:text-white/50 focus:bg-white/15 focus:border-white/40 text-base"
+                />
+                {searchQuery && (
+                  <button onClick={() => setSearchQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white">
+                    <X className="h-5 w-5" />
+                  </button>
+                )}
+              </div>
+            </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Category tabs — separate bar below hero, matching portfolio style */}
+      <section className="py-6 bg-background border-b border-border">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="flex flex-wrap justify-center gap-2">
+            {categories.map((category, i) => (
+              <motion.button
+                key={category.name}
+                onClick={() => { setActiveCategory(category.name); setActiveTag(null); }}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.04 }}
+                whileHover={{ scale: 1.07, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 border shadow-sm ${
+                  activeCategory === category.name
+                    ? `${category.color} shadow-md`
+                    : category.inactive
+                }`}
+              >
+                <span>{category.icon}</span>
+                <span className="hidden sm:inline">{category.name}</span>
+              </motion.button>
+            ))}
+          </div>
+          {activeTag && (
+            <div className="flex justify-center mt-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 text-secondary">
+                <Tag className="h-4 w-4" />
+                <span className="text-sm font-medium">{activeTag}</span>
+                <button onClick={() => setActiveTag(null)} className="ml-1 hover:bg-secondary/20 rounded-full p-0.5">
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -238,35 +304,37 @@ const Blog = () => {
               )}
 
               {/* RIGHT — 3 Stacked Editorial Cards (2/5 width) */}
-              <div className="lg:col-span-2 flex flex-col gap-4">
+              <div className="lg:col-span-2 flex flex-col gap-3">
                 {featuredPosts.slice(1, 4).map((post, index) => (
                   <motion.article
                     key={post.id}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: (index + 1) * 0.12 }}
-                    className="group flex gap-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 hover:bg-white/10 hover:border-white/20 transition-all duration-300 flex-1"
+                    className="group"
                   >
-                    <Link to={`/blog/${post.slug}`} className="flex gap-4 w-full">
+                    <Link to={`/blog/${post.slug}`} className="flex gap-3 bg-card border border-border rounded-2xl p-4 hover:shadow-md hover:border-primary/30 transition-all duration-300">
                       {/* Thumbnail */}
-                      <div className="w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden">
+                      <div className="w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden bg-muted">
                         <img
                           src={post.image_url}
                           alt={post.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          onError={(e) => { (e.target as HTMLImageElement).src = '/blog/adinkra-symbols-ghana.jpg'; }}
                         />
                       </div>
                       {/* Text */}
-                      <div className="flex flex-col justify-between flex-1 min-w-0">
-                        <div>
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold mb-2 ${getCategoryColor(post.category).active}`}>
-                            {getCategoryIcon(post.category)} {post.category}
-                          </span>
-                          <h3 className="text-white font-semibold text-sm leading-snug line-clamp-2 group-hover:text-secondary transition-colors">
-                            {post.title}
-                          </h3>
-                        </div>
-                        <div className="flex items-center gap-3 text-white/40 text-xs mt-2">
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold mb-1.5 w-fit ${getCategoryColor(post.category).active}`}>
+                          {getCategoryIcon(post.category)} {post.category}
+                        </span>
+                        <h3 className="text-foreground font-bold text-sm leading-snug line-clamp-2 group-hover:text-primary transition-colors mb-1.5">
+                          {post.title}
+                        </h3>
+                        <p className="text-muted-foreground text-xs line-clamp-2 mb-2">
+                          {post.excerpt}
+                        </p>
+                        <div className="flex items-center gap-3 text-muted-foreground text-xs">
                           <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{post.read_time}</span>
                           <span>{formatDate(post.published_at || post.created_at)}</span>
                         </div>
@@ -281,65 +349,7 @@ const Blog = () => {
         </section>
       )}
 
-      {/* Search & Categories */}
-      <section className="py-8 bg-muted/30 border-y border-border sticky top-16 z-30 backdrop-blur-lg bg-background/80">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-lg mx-auto mb-6">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Search articles by title, topic, or tag..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-12 py-6 rounded-full bg-background border-2 focus:border-primary text-base"
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-2">
-            {categories.map((category, i) => (
-              <motion.button
-                key={category.name}
-                onClick={() => { setActiveCategory(category.name); setActiveTag(null); }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: i * 0.05 }}
-                whileHover={{ scale: 1.08, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 border shadow-sm ${
-                  activeCategory === category.name
-                    ? `${category.color} shadow-md`
-                    : category.inactive
-                }`}
-              >
-                <span>{category.icon}</span>
-                <span className="hidden sm:inline">{category.name}</span>
-              </motion.button>
-            ))}
-          </div>
-
-          {activeTag && (
-            <div className="flex justify-center mt-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 text-secondary">
-                <Tag className="h-4 w-4" />
-                <span className="text-sm font-medium">{activeTag}</span>
-                <button onClick={() => setActiveTag(null)} className="ml-1 hover:bg-secondary/20 rounded-full p-0.5">
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
+      {/* spacer removed — search/categories now in hero */}
 
       {/* Blog Grid */}
       <section id="articles-section" className="py-16 bg-background">
@@ -459,21 +469,54 @@ const Blog = () => {
                 })}
               </div>
 
-              {hasMorePosts && (
+              {/* Pagination */}
+              {totalPages > 1 && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="mt-12 text-center"
+                  className="mt-12 flex items-center justify-center gap-2"
                 >
-                  <Button
-                    onClick={() => setVisibleCount(prev => prev + POSTS_PER_LOAD)}
-                    variant="outline"
-                    size="lg"
-                    className="px-8 rounded-full gap-2"
+                  {/* Previous */}
+                  <button
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="w-11 h-11 md:w-10 md:h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-white hover:border-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all"
                   >
-                    <ChevronDown className="h-4 w-4" />
-                    Load {Math.min(remainingPosts, POSTS_PER_LOAD)} More Articles
-                  </Button>
+                    <ArrowRight className="h-4 w-4 rotate-180" />
+                  </button>
+
+                  {/* Page numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+                    const showPage = page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1;
+                    const showEllipsisBefore = page === currentPage - 2 && currentPage > 3;
+                    const showEllipsisAfter = page === currentPage + 2 && currentPage < totalPages - 2;
+                    if (showEllipsisBefore || showEllipsisAfter) {
+                      return <span key={`ellipsis-${page}`} className="text-muted-foreground px-1">…</span>;
+                    }
+                    if (!showPage) return null;
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => goToPage(page)}
+                        className={`w-10 h-10 rounded-full text-sm font-semibold transition-all ${
+                          currentPage === page
+                            ? "bg-primary text-white shadow-md shadow-primary/25"
+                            : "border border-border text-foreground hover:bg-primary hover:text-white hover:border-primary"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+
+                  {/* Next */}
+                  <button
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="w-11 h-11 md:w-10 md:h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-primary hover:text-white hover:border-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  >
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
                 </motion.div>
               )}
             </>

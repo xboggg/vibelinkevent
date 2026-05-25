@@ -1,8 +1,8 @@
 {
-  "name": "VibeLink Ghana Admin",
-  "short_name": "VL Admin",
-  "description": "VibeLink Ghana Admin Dashboard - Manage orders, blog posts, and analytics",
-  "start_url": "/admin",
+  "name": "VibeLink Event",
+  "short_name": "VibeLink",
+  "description": "Ghana's premier digital invitation service for weddings, funerals, naming ceremonies, graduations & corporate events.",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#7C3AED",

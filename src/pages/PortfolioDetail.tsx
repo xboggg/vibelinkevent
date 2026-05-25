@@ -186,7 +186,7 @@ const portfolioData: Record<string, {
     title: "NovaStream CyberSecure Conference",
     type: "Corporate",
     description: "Ghana's premier cybersecurity conference bringing together industry leaders and professionals.",
-    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1200&q=80",
+    image: "/novastream-portfolio.jpg",
     demoUrl: "https://novastream.vibelinkevent.com/",
     features: ["Speaker lineup", "Agenda schedule", "Registration portal", "Sponsor showcase", "Venue directions", "Networking sessions", "WhatsApp sharing"],
     story: "NovaStream Digital needed a professional landing page for their annual cybersecurity conference. We created a sleek, tech-themed invitation that showcased their impressive speaker lineup and made registration seamless. The agenda schedule helped attendees plan their day across multiple tracks.",

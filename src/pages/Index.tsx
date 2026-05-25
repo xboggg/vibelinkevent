@@ -5,7 +5,7 @@ import { EventTypesSection } from "@/components/sections/EventTypesSection";
 import { PortfolioPreviewSection } from "@/components/sections/PortfolioPreviewSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { HowItWorksPreviewSection } from "@/components/sections/HowItWorksPreviewSection";
-import { CTASection } from "@/components/sections/CTASection";
+import { HomeClosingSection } from "@/components/sections/HomeClosingSection";
 import SEO, { createServiceSchema } from "@/components/SEO";
 
 const homePageServices = [
@@ -30,8 +30,8 @@ const Index = () => {
       <EventTypesSection />
       <PortfolioPreviewSection />
       <TestimonialsSection />
+      <HomeClosingSection />
       <HowItWorksPreviewSection />
-      <CTASection />
     </Layout>
   );
 };

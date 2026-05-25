@@ -32,8 +32,13 @@ const itemVariants = {
   },
 };
 
-// Show first 4 items from the shared portfolio data
-const previewItems = portfolioItems.slice(0, 4);
+// Handpicked homepage preview items
+const previewItems = [
+  portfolioItems.find(p => p.slug === "baby-boy-coleman-christening"),
+  portfolioItems.find(p => p.slug === "atta-panyin-memorial"),
+  portfolioItems.find(p => p.slug === "pastor-mensah-retirement"),
+  portfolioItems.find(p => p.slug === "sarah-john-wedding"),
+].filter(Boolean) as typeof portfolioItems;
 
 export function PortfolioPreviewSection() {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -58,10 +63,10 @@ export function PortfolioPreviewSection() {
             variant="fade-up"
             className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4"
           >
-            Our Work
+            Real Events
           </AnimatedHeading>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            <AnimatedText text="Our" className="justify-center" />
+            <AnimatedText text="See It" className="justify-center" />
             {" "}
             <AnimatedHeading
               as="span"
@@ -69,11 +74,7 @@ export function PortfolioPreviewSection() {
               delay={0.2}
               className="text-primary inline-block"
             >
-              Recent
-            </AnimatedHeading>
-            {" "}
-            <AnimatedHeading as="span" variant="wave" delay={0.4} className="inline-block">
-              Work
+              in Action
             </AnimatedHeading>
           </h2>
           <AnimatedHeading
@@ -82,8 +83,7 @@ export function PortfolioPreviewSection() {
             delay={0.3}
             className="text-muted-foreground text-lg max-w-2xl mx-auto"
           >
-            See how we've helped Ghanaian families create unforgettable digital
-            experiences.
+            Real invitations built for real families — from weddings to memorials, across the world.
           </AnimatedHeading>
         </motion.div>
 
@@ -132,8 +132,8 @@ export function PortfolioPreviewSection() {
                         rel="noopener noreferrer"
                         className="flex-1"
                       >
-                        <Button variant="gold" size="sm" className="w-full">
-                          View Demo
+                        <Button variant={item.demoLabel ? "default" : "gold"} size="sm" className="w-full">
+                          {item.demoLabel || "View Demo"}
                           <ExternalLink className="ml-2 h-3 w-3" />
                         </Button>
                       </a>

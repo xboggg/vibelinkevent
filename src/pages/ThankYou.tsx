@@ -393,16 +393,18 @@ const ThankYou = () => {
               <ul className="space-y-3">
                 {(depositPaid ? [
                   "✓ Our team has received your deposit",
-                  "We're now designing your invitation",
-                  "You'll receive a preview within 24-48 hours",
+                  "We're crafting your invitation design now",
+                  "📱 You'll receive a draft concept on WhatsApp within 24 hours",
+                  "Review and share your feedback — revisions included",
                   "Pay remaining 50% after you approve the design",
-                  "Receive your final invitation files",
+                  "Receive your live invitation link",
                 ] : [
-                  "Pay 50% deposit above to start",
-                  "Our team begins designing your invitation",
-                  "You receive a preview within 24-48 hours",
+                  "Pay 50% deposit above to get started",
+                  "We start designing your invitation immediately",
+                  "📱 Draft concept sent to your WhatsApp within 24 hours",
+                  "Review, give feedback — revisions included",
                   "Pay remaining 50% after you approve",
-                  "Receive your beautiful invite!",
+                  "Receive your live invitation link!",
                 ]).map((step, index) => (
                   <li
                     key={index}

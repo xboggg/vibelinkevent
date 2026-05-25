@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -27,15 +27,43 @@ const steps = [
 interface OrderFormWizardProps {
   onComplete?: (data: OrderFormData) => void;
   initialReferralCode?: string;
+  initialPackage?: string;
 }
 
-export const OrderFormWizard = ({ onComplete, initialReferralCode = "" }: OrderFormWizardProps) => {
-  const [currentStep, setCurrentStep] = useState(1);
+const DRAFT_KEY = "vibelink_order_draft";
+
+export const OrderFormWizard = ({ onComplete, initialReferralCode = "", initialPackage = "" }: OrderFormWizardProps) => {
+  const savedDraft = (() => { try { const d = localStorage.getItem(DRAFT_KEY); return d ? JSON.parse(d) : null; } catch { return null; } })();
+
+  const [currentStep, setCurrentStep] = useState(savedDraft?.step || 1);
   const [formData, setFormData] = useState<OrderFormData>({
     ...initialFormData,
     referralCode: initialReferralCode,
+    ...(initialPackage ? { selectedPackage: initialPackage } : {}),
+    ...(savedDraft?.data || {}),
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDraftNotice, setShowDraftNotice] = useState(!!savedDraft);
+
+  useEffect(() => {
+    if (currentStep > 1 || Object.values(formData).some(v => v && v !== initialFormData[v as keyof OrderFormData])) {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ step: currentStep, data: formData }));
+    }
+    // Track abandoned carts when user reaches contact step with email
+    if (currentStep >= 7 && formData.email) {
+      supabase.from("abandoned_carts").upsert({
+        email: formData.email,
+        name: formData.fullName || null,
+        event_type: formData.eventType || null,
+        package_name: formData.selectedPackage || null,
+        step_reached: currentStep,
+        form_data: formData,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "email" }).then(() => {});
+    }
+  }, [formData, currentStep]);
+
+  const clearDraft = () => localStorage.removeItem(DRAFT_KEY);
 
   const updateFormData = (updates: Partial<OrderFormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
@@ -407,6 +435,10 @@ ${formData.designNotes}` : ""}`;
       sessionStorage.setItem("vibelink_order_name", formData.fullName);
       sessionStorage.setItem("vibelink_order_event_title", formData.eventTitle);
       
+      clearDraft();
+      if (formData.email) {
+        supabase.from("abandoned_carts").delete().eq("email", formData.email).then(() => {});
+      }
       onComplete?.(formData);
     } catch (error) {
       console.error("Order submission failed:", error);
@@ -455,6 +487,13 @@ ${formData.designNotes}` : ""}`;
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Main Form Area */}
       <div className="lg:col-span-2 space-y-6">
+        {/* Draft notice */}
+        {showDraftNotice && (
+          <div className="flex items-center justify-between bg-secondary/10 border border-secondary/30 rounded-xl px-4 py-3 text-sm">
+            <span className="text-foreground font-medium">✦ Draft restored — you left off at step {currentStep}</span>
+            <button onClick={() => { clearDraft(); setFormData({ ...initialFormData, referralCode: initialReferralCode }); setCurrentStep(1); setShowDraftNotice(false); }} className="text-xs text-muted-foreground hover:text-destructive underline ml-4">Clear draft</button>
+          </div>
+        )}
         {/* Progress Steps */}
         <div className="bg-card rounded-2xl border border-border p-4 lg:p-6">
           <div className="flex items-center justify-between overflow-x-auto pb-2">

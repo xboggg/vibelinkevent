@@ -30,6 +30,16 @@ import CustomerPortal from "./pages/CustomerPortal";
 import Survey from "./pages/Survey";
 import InvoiceView from "./pages/InvoiceView";
 import ResetPassword from "./pages/ResetPassword";
+import FAQ from "./pages/FAQ";
+import BookConsultation from "./pages/BookConsultation";
+import Referral from "./pages/Referral";
+import WeddingInvitations from "./pages/events/WeddingInvitations";
+import FuneralPrograms from "./pages/events/FuneralPrograms";
+import NamingCeremony from "./pages/events/NamingCeremony";
+import GraduationInvitations from "./pages/events/GraduationInvitations";
+import BirthdayInvitations from "./pages/events/BirthdayInvitations";
+import ChurchEvents from "./pages/events/ChurchEvents";
+import CorporateEvents from "./pages/events/CorporateEvents";
 import { ScrollToTop } from "@/components/ScrollToTop";
 
 const queryClient = new QueryClient();
@@ -58,6 +68,17 @@ const App = () => (
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/book-consultation" element={<BookConsultation />} />
+              <Route path="/ref/:code" element={<Referral />} />
+              <Route path="/referral" element={<Referral />} />
+              <Route path="/wedding-invitations" element={<WeddingInvitations />} />
+              <Route path="/funeral-programs" element={<FuneralPrograms />} />
+              <Route path="/naming-ceremony" element={<NamingCeremony />} />
+              <Route path="/graduation" element={<GraduationInvitations />} />
+              <Route path="/birthday" element={<BirthdayInvitations />} />
+              <Route path="/church-events" element={<ChurchEvents />} />
+              <Route path="/corporate-events" element={<CorporateEvents />} />
               <Route path="/get-started" element={<GetStarted />} />
               <Route path="/thank-you" element={<ThankYou />} />
               <Route path="/blog" element={<Blog />} />

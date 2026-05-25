@@ -5,12 +5,13 @@ import { OrderFormWizard } from "@/components/order-form/OrderFormWizard";
 import { OrderFormData } from "@/data/orderFormData";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
-import { Gift } from "lucide-react";
+import { Gift, Clock, MessageCircle, Shield, Sparkles } from "lucide-react";
 
 const GetStarted = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const referralCode = searchParams.get("ref") || "";
+  const preselectedPackage = searchParams.get("package") || "";
 
   const handleFormComplete = (data: OrderFormData) => {
     toast.success("Order submitted successfully! We'll contact you within 2 hours.");
@@ -25,7 +26,7 @@ const GetStarted = () => {
     <Layout>
       <SEO 
         title="Get Started"
-        description="Create your digital invitation today. Fill out our simple order form and get your stunning event invitation within 24-48 hours."
+        description="Create your digital invitation today. Fill out our simple 7-step form and receive your custom quote on WhatsApp within 2 hours."
         keywords="order digital invitation Ghana, create wedding invitation, event invitation order"
         canonical="/get-started"
       />
@@ -44,10 +45,21 @@ const GetStarted = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6">
               Let's Create Your Invitation
             </h1>
-            <p className="text-primary-foreground/80 text-lg lg:text-xl">
+            <p className="text-primary-foreground/80 text-lg lg:text-xl mb-6">
               Fill out the form below with your event details and style preferences.
               We'll get back to you within 2 hours with a custom quote.
             </p>
+            <div className="flex flex-wrap justify-center gap-4 text-sm">
+              {[
+                { icon: Clock, text: "Takes about 2 minutes" },
+                { icon: MessageCircle, text: "Quote on WhatsApp in 2 hrs" },
+                { icon: Shield, text: "Money-back guarantee" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-1.5 text-primary-foreground/70">
+                  <item.icon className="h-4 w-4 text-secondary" />
+                  <span>{item.text}</span>
+                </div>
+              ))}</div>
             {referralCode && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -68,7 +80,13 @@ const GetStarted = () => {
       {/* Form Section */}
       <section className="py-12 lg:py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
-          <OrderFormWizard onComplete={handleFormComplete} initialReferralCode={referralCode} />
+          {preselectedPackage && (
+            <div className="mb-6 flex items-center gap-2 px-4 py-3 rounded-xl bg-secondary/15 border border-secondary/30 max-w-2xl mx-auto">
+              <Sparkles className="h-4 w-4 text-secondary flex-shrink-0" />
+              <span className="text-sm text-foreground">Package pre-selected: <strong className="text-secondary">{preselectedPackage}</strong> — you can change it at step 4.</span>
+            </div>
+          )}
+          <OrderFormWizard onComplete={handleFormComplete} initialReferralCode={referralCode} initialPackage={preselectedPackage} />
         </div>
       </section>
     </Layout>
