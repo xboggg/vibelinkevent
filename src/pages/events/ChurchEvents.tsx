@@ -46,7 +46,7 @@ export default function ChurchEvents() {
     recommendedDesc: "Classic is ideal for most church events — RSVP, full programme, livestream embed, maps and 90 days hosting. For large conventions and crusades with high attendance, Prestige or Royal is recommended.",
     testimonials: [
       { name: "Pastor Emmanuel Acheampong", location: "Accra", quote: "We used it for our annual convention. 400+ attendees, all got the link via WhatsApp. The prayer wall was full by the morning of the event. Worth every pesewa." },
-      { name: "Deaconess Abena Owusu", location: "Kumasi", quote: "Our Sunday special service invitation looked so professional. New visitors told us they felt welcome even before they arrived because of the invitation." },
+      { name: "Deaconess Akua Boateng", location: "Kumasi", quote: "Our Sunday special service invitation looked so professional. New visitors told us they felt welcome even before they arrived because of the invitation." },
       { name: "Elder Kofi Mensah", location: "London, UK", quote: "Our church in Ghana started using VibeLink for events. Members in the diaspora are more connected than ever — we watch every service live." },
     ],
     faqs: [
