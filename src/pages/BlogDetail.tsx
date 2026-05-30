@@ -12,6 +12,76 @@ import { format } from "date-fns";
 import { ReadingProgressBar } from "@/components/ReadingProgressBar";
 import DOMPurify from "dompurify";
 
+// Map blog post to a contextual CTA. Funeral readers get a memorial CTA,
+// wedding readers get a wedding CTA, etc. Matches against category, title,
+// and slug so articles tagged generically (e.g. "Event Planning") still get
+// the right CTA based on subject keywords.
+function getCategoryCTA(category?: string, title?: string, slug?: string) {
+  const c = `${category || ""} ${title || ""} ${slug || ""}`.toLowerCase();
+  if (c.includes("funeral") || c.includes("memorial")) {
+    return {
+      heading: "Lost someone you love?",
+      pitch: "Build a dignified memorial page family can revisit forever — one link, shared via WhatsApp.",
+      buttonText: "Build a Memorial Page",
+      url: "/funeral-programs",
+    };
+  }
+  if (c.includes("naming") || c.includes("outdooring") || c.includes("baby")) {
+    return {
+      heading: "Welcoming a new baby?",
+      pitch: "Create an outdooring invitation diaspora family can open in one tap.",
+      buttonText: "Start Your Outdooring Invite",
+      url: "/naming-ceremony",
+    };
+  }
+  if (c.includes("wedding") || c.includes("bride") || c.includes("couple")) {
+    return {
+      heading: "Planning your Ghanaian wedding?",
+      pitch: "RSVP tracking, photo gallery, livestream, wish wall — all in one share-able link.",
+      buttonText: "Create Your Wedding Invite",
+      url: "/wedding-invitations",
+    };
+  }
+  if (c.includes("church") || c.includes("harvest") || c.includes("thanksgiving")) {
+    return {
+      heading: "Hosting a church event?",
+      pitch: "Get your members to actually show up — invitations, programmes and live updates.",
+      buttonText: "Create Your Church Invite",
+      url: "/church-events",
+    };
+  }
+  if (c.includes("corporate") || c.includes("business") || c.includes("agm")) {
+    return {
+      heading: "Running a corporate event?",
+      pitch: "Make a first impression that arrives before the day. RSVP-tracked, brand-aligned.",
+      buttonText: "Create Your Corporate Invite",
+      url: "/corporate-events",
+    };
+  }
+  if (c.includes("birthday") || c.includes("anniversary")) {
+    return {
+      heading: "Marking a milestone?",
+      pitch: "From 1st to 70th — a birthday invitation people actually open and remember.",
+      buttonText: "Start Your Invite",
+      url: "/birthday",
+    };
+  }
+  if (c.includes("graduation") || c.includes("academic")) {
+    return {
+      heading: "Graduating soon?",
+      pitch: "Family abroad shouldn't miss it. One link, photos, livestream, the whole moment.",
+      buttonText: "Create Your Graduation Invite",
+      url: "/graduation",
+    };
+  }
+  return {
+    heading: "Planning a Ghanaian event?",
+    pitch: "Get a beautiful digital invitation your guests will never forget.",
+    buttonText: "Start Your Invitation",
+    url: "/get-started",
+  };
+}
+
 interface BlogPost {
   id: string;
   slug: string;
@@ -338,22 +408,25 @@ const BlogDetail = () => {
                 </div>
               )}
 
-              {/* 2. Services CTA */}
-              <div className="bg-gradient-to-br from-[#6B46C1] to-[#44337A] rounded-2xl p-5 text-white">
-                <div className="flex items-center gap-2 mb-3">
-                  <Sparkles className="h-4 w-4 text-secondary" />
-                  <span className="text-secondary text-xs font-bold uppercase tracking-wide">VibeLink Event</span>
-                </div>
-                <h3 className="font-bold text-base mb-2 leading-snug">Planning a Ghanaian event?</h3>
-                <p className="text-white/70 text-sm mb-4 leading-relaxed">
-                  Get a beautiful digital invitation your guests will never forget — crafted for every ceremony.
-                </p>
-                <Button asChild size="sm" className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold gap-2">
-                  <Link to="/get-started">
-                    Start Your Invitation <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </Button>
-              </div>
+              {/* 2. Services CTA — contextualized to article category */}
+              {(() => {
+                const cta = getCategoryCTA(post.category, post.title, post.slug);
+                return (
+                  <div className="bg-gradient-to-br from-[#6B46C1] to-[#44337A] rounded-2xl p-5 text-white">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sparkles className="h-4 w-4 text-secondary" />
+                      <span className="text-secondary text-xs font-bold uppercase tracking-wide">VibeLink Event</span>
+                    </div>
+                    <h3 className="font-bold text-base mb-2 leading-snug">{cta.heading}</h3>
+                    <p className="text-white/70 text-sm mb-4 leading-relaxed">{cta.pitch}</p>
+                    <Button asChild size="sm" className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold gap-2">
+                      <Link to={cta.url}>
+                        {cta.buttonText} <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </Button>
+                  </div>
+                );
+              })()}
 
               {/* 3. Related Articles */}
               {relatedPosts.length > 0 && (
@@ -388,24 +461,27 @@ const BlogDetail = () => {
         </div>
       </section>
 
-      {/* Newsletter CTA */}
-      <section className="py-12 bg-gradient-to-r from-primary/10 via-background to-secondary/10 border-t border-border">
-        <div className="container mx-auto px-4 lg:px-8 max-w-2xl text-center">
-          <Sparkles className="h-8 w-8 text-secondary mx-auto mb-3" />
-          <h3 className="text-2xl font-bold text-foreground mb-2">Planning an event?</h3>
-          <p className="text-muted-foreground mb-6">Turn your invitation from a JPEG into a living digital experience your guests will love.</p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-              <Link to="/get-started">Create My Invitation <ArrowRight className="ml-2 h-4 w-4" /></Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link to="/pricing">View Pricing</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <CTASection />
+      {/* Footer CTA — also contextualized */}
+      {(() => {
+        const cta = getCategoryCTA(post.category, post.title, post.slug);
+        return (
+          <section className="py-12 bg-gradient-to-r from-primary/10 via-background to-secondary/10 border-t border-border">
+            <div className="container mx-auto px-4 lg:px-8 max-w-2xl text-center">
+              <Sparkles className="h-8 w-8 text-secondary mx-auto mb-3" />
+              <h3 className="text-2xl font-bold text-foreground mb-2">{cta.heading}</h3>
+              <p className="text-muted-foreground mb-6">{cta.pitch}</p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+                  <Link to={cta.url}>{cta.buttonText} <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                </Button>
+                <Button asChild variant="outline" size="lg">
+                  <Link to="/pricing">View Pricing</Link>
+                </Button>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
     </Layout>
   );
 };
