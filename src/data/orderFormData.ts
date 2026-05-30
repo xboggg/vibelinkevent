@@ -254,6 +254,9 @@ export interface OrderFormData {
 
   // Referral
   referralCode: string;
+
+  // Honeypot — hidden field; non-empty value indicates a bot.
+  companyName: string;
 }
 
 export const initialFormData: OrderFormData = {
@@ -280,4 +283,5 @@ export const initialFormData: OrderFormData = {
   whatsapp: "",
   hearAboutUs: "",
   referralCode: "",
+  companyName: "",
 };

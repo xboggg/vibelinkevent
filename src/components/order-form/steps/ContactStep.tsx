@@ -136,6 +136,15 @@ export const ContactStep = ({
       // Get reCAPTCHA token
       const captchaToken = await executeRecaptcha();
 
+      // Honeypot: legitimate users never see this field (display:none in JSX).
+      // Bots typically fill every input, so a non-empty value = bot. Reject silently.
+      if (formData.companyName && formData.companyName.length > 0) {
+        console.warn("Honeypot triggered, dropping submission.");
+        toast.error("Submission could not be processed. Please try again.");
+        setIsVerifying(false);
+        return;
+      }
+
       // If captcha token is available, verify it
       if (captchaToken) {
         try {
@@ -143,13 +152,22 @@ export const ContactStep = ({
             body: { token: captchaToken, action: "submit_order" },
           });
 
-          if (error || !data?.success) {
-            // Log the issue but proceed with submission to not block real customers
-            console.warn("reCAPTCHA verification failed, proceeding anyway:", error || data);
+          // Distinguish two failure modes:
+          // - data.success === false means reCAPTCHA EXPLICITLY rejected the token (likely bot) -> block.
+          // - error/network issue means we couldn't reach reCAPTCHA -> proceed (fail open
+          //   for availability so ad-blockers / poor connections don't lose us real customers).
+          if (data && data.success === false) {
+            console.warn("reCAPTCHA explicitly rejected token, blocking submission.");
+            toast.error("Verification failed. If you're a real person, please try again or contact us via WhatsApp.");
+            setIsVerifying(false);
+            return;
+          }
+          if (error) {
+            console.warn("reCAPTCHA verify network error, proceeding without verification:", error);
           }
         } catch (verifyError) {
-          // If verification fails, log but proceed with submission
-          console.warn("reCAPTCHA verification error, proceeding anyway:", verifyError);
+          // Network/server error reaching verify-captcha -> proceed (fail open)
+          console.warn("reCAPTCHA verification error, proceeding without verification:", verifyError);
         }
       }
 
@@ -185,6 +203,22 @@ export const ContactStep = ({
         <p className="text-muted-foreground">
           Enter your contact details and review your order.
         </p>
+      </div>
+
+      {/* Honeypot — hidden from real users, bots fill it = silently rejected */}
+      <div
+        aria-hidden="true"
+        style={{ position: "absolute", left: "-10000px", top: "auto", width: "1px", height: "1px", overflow: "hidden" }}
+      >
+        <label htmlFor="company-website-url">Company website</label>
+        <input
+          id="company-website-url"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={formData.companyName}
+          onChange={(e) => updateFormData({ companyName: e.target.value })}
+        />
       </div>
 
       {/* Contact Form */}
