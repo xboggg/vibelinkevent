@@ -831,16 +831,78 @@
   }
   .cond-submit:hover{background:var(--gold-deep);color:var(--ink);transform:translateY(-2px)}
 
-  .cond-wall{
-    max-width:920px;margin:0 auto;
-    display:grid;grid-template-columns:1fr;gap:1.2rem;
+  /* ===== Carousel ===== */
+  .cond-carousel{max-width:1100px;margin:0 auto;position:relative}
+  .cond-counter{
+    text-align:center;font-family:'Inter',sans-serif;
+    font-size:.72rem;letter-spacing:.32em;color:var(--smoke);
+    text-transform:uppercase;margin-bottom:1.2rem;
   }
-  @media(min-width:720px){.cond-wall{grid-template-columns:1fr 1fr}}
+  .cond-counter strong{color:var(--gold-bright);font-weight:500;margin:0 .35rem}
+  .cond-viewport{
+    overflow:hidden;position:relative;
+  }
+  .cond-track{
+    display:flex;width:100%;
+    transition:transform .55s cubic-bezier(.4,.0,.2,1);
+    will-change:transform;
+  }
+  .cond-slide{
+    flex:0 0 100%;min-width:0;
+    display:grid;gap:1.2rem;padding:.5rem;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+  }
+  @media(max-width:1024px){.cond-slide{grid-template-columns:repeat(2, minmax(0, 1fr))}}
+  @media(max-width:640px){.cond-slide{grid-template-columns:1fr;gap:1rem}}
   .cond-card{
-    padding:1.6rem;
-    background:linear-gradient(135deg, rgba(20,9,12,.6), rgba(10,6,8,.3));
+    padding:1.6rem 1.4rem 1.4rem;
+    background:linear-gradient(135deg, rgba(20,9,12,.7), rgba(10,6,8,.4));
     border:1px solid var(--line);position:relative;
+    min-height:200px;display:flex;flex-direction:column;
   }
+  .cond-nav{
+    display:flex;align-items:center;justify-content:center;
+    gap:1rem;margin-top:1.4rem;
+  }
+  .cond-arrow{
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(20,9,12,.7);border:1px solid var(--gold);
+    color:var(--gold-bright);font-size:1.1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .3s;
+  }
+  .cond-arrow:hover:not(:disabled){background:var(--crimson);transform:scale(1.06)}
+  .cond-arrow:disabled{opacity:.3;cursor:not-allowed}
+  .cond-dots{display:flex;gap:.45rem;align-items:center;flex-wrap:wrap;max-width:60vw;justify-content:center}
+  .cond-dot{
+    width:9px;height:9px;border-radius:50%;
+    background:rgba(201,162,74,.25);border:none;cursor:pointer;
+    transition:all .25s;padding:0;
+  }
+  .cond-dot:hover{background:rgba(201,162,74,.55)}
+  .cond-dot.active{background:var(--gold-bright);transform:scale(1.3);box-shadow:0 0 8px rgba(232,200,120,.5)}
+  .cond-view-all{
+    display:block;margin:1.4rem auto 0;
+    background:transparent;border:1px solid var(--line);
+    color:var(--gold);font-family:'Cinzel',serif;
+    font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;
+    padding:.7rem 1.4rem;cursor:pointer;
+    transition:all .3s;
+  }
+  .cond-view-all:hover{border-color:var(--gold);color:var(--gold-bright);background:rgba(201,162,74,.06)}
+  .cond-view-all[hidden]{display:none}
+  /* Expanded grid mode (when "View all" clicked) */
+  .cond-expanded{
+    display:grid;gap:1.2rem;margin-top:1.4rem;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+  @media(max-width:640px){.cond-expanded{grid-template-columns:1fr}}
+  .cond-empty{
+    text-align:center;padding:2.4rem;color:var(--smoke);
+    font-style:italic;grid-column:1/-1;
+  }
+  /* Touch swipe hint on mobile */
+  .cond-viewport{touch-action:pan-y pinch-zoom}
   .cond-card::before{
     content:'\201C';position:absolute;top:-10px;left:14px;
     font-family:'Cinzel',serif;font-size:3rem;color:var(--gold);
@@ -886,10 +948,11 @@
   /* ===== CALL FAMILY ===== */
   .family-call{padding:4rem 1.5rem;background:#0a0608;position:relative;z-index:3}
   .family-grid{
-    max-width:720px;margin:0 auto;
-    display:grid;grid-template-columns:1fr;gap:1rem;
+    max-width:980px;margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    gap:1rem;
   }
-  @media(min-width:600px){.family-grid{grid-template-columns:1fr 1fr}}
   .fc-card{
     display:flex;align-items:center;gap:1rem;
     padding:1.4rem;
@@ -1150,7 +1213,10 @@
     .cond-form{padding:1.6rem 1.2rem}
     .cond-form input, .cond-form textarea{font-size:.95rem;padding:.75rem .85rem}
     .cond-submit{font-size:.7rem;letter-spacing:.2em;padding:.9rem}
-    .cond-card{padding:1.3rem 1.1rem}
+    .cond-card{padding:1.3rem 1.1rem;min-height:180px}
+    .cond-counter{font-size:.65rem;letter-spacing:.25em}
+    .cond-arrow{width:38px;height:38px;font-size:1rem}
+    .cond-view-all{font-size:.65rem;letter-spacing:.22em;padding:.6rem 1rem}
     .cond-message{font-size:.92rem;padding-left:.6rem}
     .cond-author{font-size:.7rem;letter-spacing:.15em}
 
@@ -1516,7 +1582,21 @@
       <button type="submit" class="cond-submit">Send My Condolence</button>
     </form>
 
-    <div class="cond-wall" id="condWall"></div>
+    <div class="cond-carousel" id="condCarousel" hidden>
+      <div class="cond-counter">
+        <strong id="condCount">0</strong> messages &middot; page <strong id="condPage">1</strong> of <strong id="condPages">1</strong>
+      </div>
+      <div class="cond-viewport" id="condViewport">
+        <div class="cond-track" id="condTrack"></div>
+      </div>
+      <div class="cond-nav">
+        <button class="cond-arrow" id="condPrev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+        <div class="cond-dots" id="condDots"></div>
+        <button class="cond-arrow" id="condNext" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+      </div>
+      <button class="cond-view-all" id="condViewAll" hidden>View all messages</button>
+    </div>
+    <div class="cond-expanded" id="condExpanded" hidden></div>
   </div>
 </section>
 
@@ -1573,9 +1653,17 @@
       <a class="fc-card" href="tel:+233244658608">
         <span class="fc-icon"><i class="fas fa-phone"></i></span>
         <div class="fc-meta">
-          <div class="fc-role">Family</div>
+          <div class="fc-role">Brother</div>
           <div class="fc-name">George Taylor</div>
           <div class="fc-num">0244 658 608</div>
+        </div>
+      </a>
+      <a class="fc-card" href="tel:+447853980382">
+        <span class="fc-icon"><i class="fas fa-phone"></i></span>
+        <div class="fc-meta">
+          <div class="fc-role">Brother &middot; UK</div>
+          <div class="fc-name">Vincent Nii Aryertey Taylor</div>
+          <div class="fc-num">+44 7853 980382</div>
         </div>
       </a>
     </div>
@@ -1924,34 +2012,183 @@ async function refreshVoices(){
 refreshVoices();
 setInterval(refreshVoices, 30000);
 
-/* ============== CONDOLENCES (server-backed, seeded cards stay) ============== */
-async function fetchCond(){
+/* ============== CONDOLENCES — carousel ============== */
+const condState = {
+  items: [],          // newest-first array, already returned by API in that order
+  total: 0,           // server-side total
+  hasMore: false,     // true if server returned a cap (total > returned)
+  page: 0,            // 0-based current slide index
+  cardsPerSlide: 3,   // recalculated on resize
+  expanded: false,    // "View all" mode
+};
+
+function cardsPerSlideForViewport(){
+  const w = window.innerWidth;
+  if (w <= 640) return 1;
+  if (w <= 1024) return 2;
+  return 3;
+}
+
+function condCardMarkup(c){
+  const author = `&mdash; ${escapeHtml(c.name)}${c.rel ? ', ' + escapeHtml(c.rel) : ''}`;
+  return `
+    <div class="cond-card">
+      <p class="cond-message">${escapeHtml(c.msg)}</p>
+      <div class="cond-author">${author}</div>
+    </div>`;
+}
+
+function buildSlides(){
+  const track = document.getElementById('condTrack');
+  const carousel = document.getElementById('condCarousel');
+  const expandedEl = document.getElementById('condExpanded');
+  const items = condState.items;
+
+  // Hide both initially while we decide
+  carousel.hidden = items.length === 0;
+  expandedEl.hidden = true;
+
+  if (items.length === 0){
+    track.innerHTML = '';
+    return;
+  }
+
+  if (condState.expanded){
+    // Render flat grid of everything
+    carousel.hidden = true;
+    expandedEl.hidden = false;
+    expandedEl.innerHTML = items.map(condCardMarkup).join('');
+    return;
+  }
+
+  // Group items into slides of cardsPerSlide
+  const per = condState.cardsPerSlide;
+  const slidesCount = Math.ceil(items.length / per);
+  const slides = [];
+  for (let i = 0; i < slidesCount; i++){
+    const chunk = items.slice(i * per, (i + 1) * per).map(condCardMarkup).join('');
+    slides.push(`<div class="cond-slide">${chunk}</div>`);
+  }
+  track.innerHTML = slides.join('');
+
+  // Clamp page
+  if (condState.page >= slidesCount) condState.page = Math.max(0, slidesCount - 1);
+
+  // Counter
+  document.getElementById('condCount').textContent = condState.total;
+  document.getElementById('condPage').textContent = condState.page + 1;
+  document.getElementById('condPages').textContent = slidesCount;
+
+  // Dots
+  const dots = document.getElementById('condDots');
+  dots.innerHTML = '';
+  for (let i = 0; i < slidesCount; i++){
+    const b = document.createElement('button');
+    b.className = 'cond-dot' + (i === condState.page ? ' active' : '');
+    b.setAttribute('aria-label', `Page ${i + 1}`);
+    b.addEventListener('click', () => goToSlide(i));
+    dots.appendChild(b);
+  }
+
+  // Arrows
+  document.getElementById('condPrev').disabled = condState.page === 0;
+  document.getElementById('condNext').disabled = condState.page >= slidesCount - 1;
+
+  // "View all" — show only if server capped (more than what we already have OR more than 1 slide and want a full grid)
+  const viewAll = document.getElementById('condViewAll');
+  viewAll.hidden = !(condState.hasMore || slidesCount > 1);
+  viewAll.textContent = `View all ${condState.total} messages`;
+
+  // Position track
+  applyTrackTransform();
+}
+
+function applyTrackTransform(){
+  const track = document.getElementById('condTrack');
+  track.style.transform = `translateX(-${condState.page * 100}%)`;
+  // Update active dot
+  document.querySelectorAll('.cond-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === condState.page);
+  });
+  document.getElementById('condPage').textContent = condState.page + 1;
+  const totalSlides = document.querySelectorAll('.cond-slide').length;
+  document.getElementById('condPrev').disabled = condState.page === 0;
+  document.getElementById('condNext').disabled = condState.page >= totalSlides - 1;
+}
+
+function goToSlide(i){
+  const totalSlides = document.querySelectorAll('.cond-slide').length;
+  if (i < 0 || i >= totalSlides) return;
+  condState.page = i;
+  applyTrackTransform();
+}
+
+async function fetchCond(all = false){
   try {
-    const r = await fetch(API_COND, { cache: 'no-store' });
+    const url = all ? `${API_COND}?all=1` : API_COND;
+    const r = await fetch(url, { cache: 'no-store' });
     if (!r.ok) return null;
     return await r.json();
   } catch(e){ return null; }
 }
-function renderCond(payload){
-  const wall = document.getElementById('condWall');
-  // Remove dynamic cards (those without the .seeded class)
-  wall.querySelectorAll('.cond-card.dyn').forEach(el => el.remove());
-  if (!payload || !payload.items) return;
-  // Prepend newest first
-  payload.items.forEach(c => {
-    const el = document.createElement('div');
-    el.className = 'cond-card dyn';
-    el.innerHTML = `
-      <p class="cond-message">${escapeHtml(c.msg)}</p>
-      <div class="cond-author">— ${escapeHtml(c.name)}${c.rel ? ', ' + escapeHtml(c.rel) : ''}</div>
-    `;
-    wall.insertBefore(el, wall.firstChild);
-  });
-}
+
 async function refreshCond(){
-  const data = await fetchCond();
-  if (data) renderCond(data);
+  const data = await fetchCond(condState.expanded);
+  if (!data) return;
+  condState.items = data.items || [];
+  condState.total = data.count || 0;
+  condState.hasMore = (data.count || 0) > (data.returned || 0);
+  condState.cardsPerSlide = cardsPerSlideForViewport();
+  buildSlides();
 }
+
+/* Nav handlers */
+document.getElementById('condPrev').addEventListener('click', () => goToSlide(condState.page - 1));
+document.getElementById('condNext').addEventListener('click', () => goToSlide(condState.page + 1));
+
+/* "View all" — fetch the full set and switch to expanded grid */
+document.getElementById('condViewAll').addEventListener('click', async () => {
+  const viewAll = document.getElementById('condViewAll');
+  viewAll.disabled = true;
+  viewAll.textContent = 'Loading…';
+  // If we already have all, just expand without refetch
+  if (!condState.hasMore){
+    condState.expanded = true;
+    buildSlides();
+  } else {
+    condState.expanded = true;
+    await refreshCond();
+  }
+  viewAll.disabled = false;
+});
+
+/* Touch swipe support */
+(function(){
+  const viewport = document.getElementById('condViewport');
+  let startX = null;
+  viewport.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  viewport.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50){
+      goToSlide(condState.page + (dx < 0 ? 1 : -1));
+    }
+    startX = null;
+  }, { passive: true });
+})();
+
+/* Resize handler — only rebuild if cardsPerSlide actually changes */
+let condResizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(condResizeTimer);
+  condResizeTimer = setTimeout(() => {
+    const newPer = cardsPerSlideForViewport();
+    if (newPer !== condState.cardsPerSlide){
+      condState.cardsPerSlide = newPer;
+      buildSlides();
+    }
+  }, 180);
+});
 
 document.getElementById('condForm').addEventListener('submit', async e => {
   e.preventDefault();

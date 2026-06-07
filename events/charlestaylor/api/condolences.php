@@ -6,14 +6,19 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 if ($method === 'GET') {
     $arr = load_store('condolences.json');
+    $total = count($arr);
     // Strip phone from public view — admin only field
     $public = array_map(function($c){
         unset($c['phone']);
         return $c;
     }, $arr);
+    $newest = array_reverse($public); // newest first
+    $all = ($_GET['all'] ?? '') === '1';
+    $items = $all ? $newest : array_slice($newest, 0, 50);
     json_out([
-        'count' => count($public),
-        'items' => array_reverse($public),
+        'count' => $total,
+        'returned' => count($items),
+        'items' => $items,
     ]);
 }
 
