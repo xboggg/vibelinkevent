@@ -23,23 +23,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
-
-      - name: Build (vite)
-        run: npm run build
-
-      - name: Package deploy bundle
-        # Ship just dist/. events/, portfolio/, prerendered routes etc. on
-        # the server are preserved by the install script's additive rsync.
+      - name: Package source tarball
+        # Ship SOURCE (small — ~5MB). The server builds with npm ci +
+        # vite build, then additively rsyncs dist/ over the webroot.
+        # We tried shipping the full dist (~75MB) but the GH-runner → 38
+        # network path drops scp after 120s.
         run: |
-          tar -czf /tmp/vibelinkevent-new.tar.gz dist
+          tar --exclude='./.git' \
+              --exclude='./.github' \
+              --exclude='./node_modules' \
+              --exclude='./dist' \
+              --exclude='./dist.tar.gz' \
+              --exclude='./dist.zip' \
+              --exclude='./.cache' \
+              --exclude='./docs' \
+              --exclude='./DOCS' \
+              --exclude='./*.md' \
+              --exclude='./backup_jan23' \
+              --exclude='./.env' \
+              --exclude='./.env.local' \
+              -czf /tmp/vibelinkevent-new.tar.gz .
           ls -lh /tmp/vibelinkevent-new.tar.gz
 
       - name: Install SSH key
