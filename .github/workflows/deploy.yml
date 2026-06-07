@@ -24,10 +24,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Package source tarball
-        # Ship SOURCE (small — ~5MB). The server builds with npm ci +
-        # vite build, then additively rsyncs dist/ over the webroot.
-        # We tried shipping the full dist (~75MB) but the GH-runner → 38
-        # network path drops scp after 120s.
+        # Ship SOURCE for an on-server build. Excludes everything heavy or
+        # generated: node_modules, dist, the legacy dist.tar.gz/.zip, the
+        # 289M events/ tree (server already has it; mini-site code is
+        # deployed manually), the 27M audio/ tree, and editor/dotfiles.
+        # The GH-runner → server-38 network path drops scp after exactly
+        # 120s, so the bundle must stay small (target: <10MB).
         run: |
           tar --exclude='./.git' \
               --exclude='./.github' \
@@ -40,6 +42,8 @@ jobs:
               --exclude='./DOCS' \
               --exclude='./*.md' \
               --exclude='./backup_jan23' \
+              --exclude='./audio' \
+              --exclude='./events' \
               --exclude='./.env' \
               --exclude='./.env.local' \
               -czf /tmp/vibelinkevent-new.tar.gz .
