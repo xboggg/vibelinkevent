@@ -1,16 +1,26 @@
-name: Build and Deploy
+name: Deploy VibeLink Event
 
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'DOCS/**'
+      - 'LICENSE'
+      - '.gitignore'
   workflow_dispatch:
+
+concurrency:
+  group: deploy-vibelinkevent
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+    timeout-minutes: 15
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -20,19 +30,33 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
-      - name: Build
+      - name: Build (vite)
         run: npm run build
 
-      - name: Deploy to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.CONTABO_HOST }}
-          username: ${{ secrets.CONTABO_USERNAME }}
-          key: ${{ secrets.CONTABO_SSH_KEY }}
-          port: 80
-          source: 'dist/*'
-          target: '/var/www/vibelinkgh.com'
-          strip_components: 1
-          rm: true
+      - name: Package deploy bundle
+        # Ship just dist/. events/, portfolio/, prerendered routes etc. on
+        # the server are preserved by the install script's additive rsync.
+        run: |
+          tar -czf /tmp/vibelinkevent-new.tar.gz dist
+          ls -lh /tmp/vibelinkevent-new.tar.gz
+
+      - name: Install SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Ship tarball to server
+        # -O forces legacy SCP protocol — the deploy gate only allows `scp -t`.
+        run: |
+          scp -O -i ~/.ssh/deploy_key /tmp/vibelinkevent-new.tar.gz \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/tmp/vibelinkevent-new.tar.gz
+
+      - name: Run install on server
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
+            /usr/local/bin/vibelinkevent-install
