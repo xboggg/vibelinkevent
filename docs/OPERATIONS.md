@@ -5,32 +5,40 @@
 **Auto-deploy:** push to `main` triggers
 `.github/workflows/deploy.yml`. The workflow:
 
-1. `npm ci --legacy-peer-deps` (some Radix peer deps need this)
-2. `npm run build` (vite → dist/)
-3. Tars `dist/` only
-4. SCPs tarball to server 38 via locked deploy key
-5. Runs `/usr/local/bin/vibelinkevent-install`, which:
-   - Stages the tarball
-   - **Additive rsync** dist contents → webroot (NO --delete, so
-     prerendered routes, events/*, portfolio/docs/*, and any other
-     server-managed content are preserved)
-   - Sets perms (www-data:www-data, dirs 755, files 644)
-   - `nginx -t && systemctl reload nginx`
+1. Tars SOURCE (excluding `node_modules`, `dist`, `events/`, `audio/`,
+   `backup_jan23/`, `docs/`, `.env`) — ~5MB bundle
+2. SCPs the source tarball to **server 144** (relay) via locked deploy key
+3. Runs `/usr/local/bin/vibelinkevent-forward` on 144, which:
+   - scp's the tarball onward to server 38 (fast — ~12s)
+   - ssh's 38 to run `/usr/local/bin/vibelinkevent-install`
+4. On 38, the install script:
+   - Stages source in `/opt/vibelinkevent-build/`
+   - Runs `npm ci --legacy-peer-deps` only if `package*.json` changed
+     (`node_modules/` is reused across deploys for speed)
+   - `npm run build` (vite → dist/)
+   - **Additive rsync** `dist/*` → `/var/www/vibelinkevent.com/`
+     (NO --delete — so prerendered HTML routes, portfolio/docs/,
+     legacy folders, etc. survive)
+   - chown www-data, fix perms, `nginx -t && systemctl reload nginx`
+
+**Why the relay through 144?** Direct GH-runner → server-38 scp drops at
+exactly 120s every attempt (something in that network path doesn't
+tolerate long-running SSH). The 144→38 hop completes in seconds, so we
+relay through it.
 
 **Docs-only commits skip the deploy** — workflow uses
-`paths-ignore: ['**.md', 'DOCS/**']`.
+`paths-ignore: ['**.md', 'docs/**', 'DOCS/**']`.
 
 Watch a deploy: https://github.com/xboggg/vibelinkevent/actions
 
-**Manual deploy (server SSH):**
+**Manual deploy (from your workstation):**
 ```bash
-# On a workstation
 cd ~/vibelink
-npm ci --legacy-peer-deps
-npm run build
-tar -czf /tmp/vlb.tar.gz dist
-scp /tmp/vlb.tar.gz root@38.242.195.0:/tmp/vibelinkevent-new.tar.gz
-ssh root@38.242.195.0 /usr/local/bin/vibelinkevent-install
+tar --exclude='./node_modules' --exclude='./dist' --exclude='./events' \
+    --exclude='./audio' --exclude='./.env' \
+    -czf /tmp/vlb.tar.gz .
+scp /tmp/vlb.tar.gz root@144.91.71.106:/tmp/vibelinkevent-fwd.tar.gz
+ssh root@144.91.71.106 /usr/local/bin/vibelinkevent-forward
 ```
 
 **Re-running prerender for SEO:**
@@ -49,16 +57,37 @@ rsync -a dist/pricing/ /var/www/vibelinkevent.com/pricing/
 
 ## Subdomain mirrors
 
-Each major event also runs from a sibling subdomain
+Each major event has its OWN subdomain and webroot
 (e.g. `charlestaylor.vibelinkevent.com` → `/var/www/charlestaylor.vibelinkevent.com/`).
-**These are NOT updated by the main deploy.** Update them with rsync:
+**These are NOT updated by the main deploy.** The main vhost has no
+`/events/<event>/` mirror — that URL just falls through to the SPA.
+Always link users to the subdomain.
+
+To update an event mini-site from your local source, rsync from the
+local `events/<event>/` source folder to its subdomain webroot:
 
 ```bash
-ssh root@38.242.195.0
-rsync -a /var/www/vibelinkevent.com/events/charlestaylor/ \
-        /var/www/charlestaylor.vibelinkevent.com/
-chown -R www-data:www-data /var/www/charlestaylor.vibelinkevent.com/
+# From your local vibelink checkout
+rsync -a --delete events/charlestaylor/ \
+      root@38.242.195.0:/var/www/charlestaylor.vibelinkevent.com/
+ssh root@38.242.195.0 'chown -R www-data:www-data /var/www/charlestaylor.vibelinkevent.com/'
 ```
+
+Subdomain → folder map (verify in `/etc/nginx/sites-enabled/` before
+pushing — naming isn't always one-for-one with the source folder):
+
+| Local source            | Subdomain                          |
+| ----------------------- | ---------------------------------- |
+| `events/charlestaylor/` | `charlestaylor.vibelinkevent.com`  |
+| `events/atta-panyin/`   | `attapanin.vibelinkevent.com`      |
+| `events/baby-adjoa/`    | `babyadjoa.vibelinkevent.com`      |
+| `events/baby-kwame/`    | `babykwame.vibelinkevent.com`      |
+| `events/coleman/`       | `coleman.vibelinkevent.com`        |
+| `events/dr-mensah/`     | `drmensah.vibelinkevent.com`       |
+| `events/kweku-efua/`    | `kwekuefua.vibelinkevent.com`      |
+| `events/mama-akosua/`   | `mamaakosua.vibelinkevent.com`     |
+| `events/nana60/`        | `nana60.vibelinkevent.com`         |
+| `events/nanayaw/`       | `nanayaw.vibelinkevent.com`        |
 
 ## nginx
 

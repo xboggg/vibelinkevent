@@ -35,15 +35,19 @@ public/                       Verbatim-copied to dist/
 ├── icons/                    PWA icons
 └── nana60/                   Event-specific images (Nana 60)
 
-events/                       Per-event mini-sites (NOT in vite build)
-├── charlestaylor/            Charles Taylor memorial
-│   ├── index.html            Custom event page
+events/                       SOURCE for per-event mini-sites (NOT in vite build,
+                              NOT auto-deployed). Each subfolder is the source
+                              for a SUBDOMAIN like charlestaylor.vibelinkevent.com.
+├── charlestaylor/            Source for charlestaylor.vibelinkevent.com
+│   ├── index.html
 │   └── api/
 │       └── condolences.php   PHP endpoint (saves condolences)
-├── atta-panyin/
-├── baby-adjoa/
+├── atta-panyin/              Source for attapanin.vibelinkevent.com
+├── baby-adjoa/               Source for babyadjoa.vibelinkevent.com
 ├── ...
-└── (each: own HTML + maybe own /api/*.php)
+└── (each subfolder deploys MANUALLY via rsync to its own subdomain
+   webroot — see OPERATIONS.md "Event subdomain deploys". The main
+   GitHub Actions deploy does NOT touch event subdomains.)
 
 scripts/                       Build helpers
 prerender.js                   Optional SEO prerender (puppeteer)
@@ -53,17 +57,19 @@ deploy-webhook.cjs             Legacy deploy webhook (superseded by GH Actions)
 ## Request lifecycle
 
 ```
-client → Cloudflare → nginx (vibelinkevent.com)
-                       ├── /events/<event>/api/*.php  → php-fpm
-                       ├── /events/<event>/*          → static (event HTML)
+client → Cloudflare → nginx (vibelinkevent.com)        ← MAIN domain (SPA only)
                        ├── /portfolio/docs/*          → Basic-Auth gated wiki
                        ├── /assets/*                  → 1-year cache
                        ├── /deploy-webhook            → restricted to GH IPs (legacy)
                        └── /*                          → SPA shell + try_files
+
+         → nginx (<event>.vibelinkevent.com)          ← SUBDOMAIN per event
+                       ├── /api/*.php                 → php-fpm (condolences/RSVP)
+                       └── /*                          → event-specific static HTML
 ```
 
-For SPA routes, nginx serves prerendered HTML where it exists
-(`/about/index.html`, `/pricing/index.html`, etc. from
+For main-domain SPA routes, nginx serves prerendered HTML where it
+exists (`/about/index.html`, `/pricing/index.html`, etc. from
 `prerender.js`), falling through to `/index.html` for everything else.
 
 ## Per-event mini-sites
@@ -74,10 +80,16 @@ Each event in `events/<event>/` is a self-contained mini-site with:
   submissions, RSVP forms)
 - Asset folders for event-specific images
 
-Event sites have their own DNS — e.g. `charlestaylor.vibelinkevent.com`
-serves from `/var/www/charlestaylor.vibelinkevent.com/` (a sibling
-vhost). The same content also lives at
-`vibelinkevent.com/events/charlestaylor/`. Nginx mirrors both.
+Event sites have their own DNS and their own nginx vhost — e.g.
+`charlestaylor.vibelinkevent.com` serves from
+`/var/www/charlestaylor.vibelinkevent.com/`. There is **no** mirror on
+the main `vibelinkevent.com/events/<event>/` path; that URL falls
+through to the SPA shell. Always link users to the subdomain.
+
+To update an event mini-site, manually rsync from local
+`events/<event>/` to the matching `/var/www/<event>.vibelinkevent.com/`.
+The main GitHub Actions deploy does NOT touch event subdomains. See
+OPERATIONS.md for the subdomain mapping.
 
 ## Hardening
 
