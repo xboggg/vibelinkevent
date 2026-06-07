@@ -56,19 +56,20 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
 
-      - name: Ship tarball to server
-        # -O forces legacy SCP protocol — the deploy gate only allows `scp -t`.
-        # ServerAliveInterval keeps the NAT path alive during the 70+MB upload
-        # (some networks drop idle TCP after 120s).
+      - name: Ship tarball to relay (144) then forward to 38
+        # Direct GH-runner → server-38 scp drops at exactly 120s (something
+        # in the network path between them refuses long-running SSH). So we
+        # send the bundle to server 144 first (works fine), and the
+        # `vibelinkevent-forward` script on 144 scp's it onward to 38 (the
+        # 144→38 path is fast, ~12s for 70MB) before triggering install.
+        # -O forces legacy SCP — the deploy gate only allows `scp -t`.
         run: |
           scp -O -i ~/.ssh/deploy_key \
-            -o ServerAliveInterval=20 -o ServerAliveCountMax=15 \
             /tmp/vibelinkevent-new.tar.gz \
-            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/tmp/vibelinkevent-new.tar.gz
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/tmp/vibelinkevent-fwd.tar.gz
 
-      - name: Run install on server
+      - name: Trigger relay forward + install
         run: |
           ssh -i ~/.ssh/deploy_key \
-            -o ServerAliveInterval=20 -o ServerAliveCountMax=15 \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-            /usr/local/bin/vibelinkevent-install
+            /usr/local/bin/vibelinkevent-forward
