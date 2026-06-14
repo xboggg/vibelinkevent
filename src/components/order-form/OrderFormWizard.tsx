@@ -33,7 +33,26 @@ interface OrderFormWizardProps {
 const DRAFT_KEY = "vibelink_order_draft";
 
 export const OrderFormWizard = ({ onComplete, initialReferralCode = "", initialPackage = "" }: OrderFormWizardProps) => {
-  const savedDraft = (() => { try { const d = localStorage.getItem(DRAFT_KEY); return d ? JSON.parse(d) : null; } catch { return null; } })();
+  const savedDraft = (() => {
+    try {
+      const d = localStorage.getItem(DRAFT_KEY);
+      if (!d) return null;
+      const parsed = JSON.parse(d);
+      // JSON.stringify turns Date -> ISO string; revive them so .toISOString()
+      // still works at submission and the date picker shows the right value.
+      if (parsed?.data) {
+        if (typeof parsed.data.eventDate === "string") {
+          parsed.data.eventDate = new Date(parsed.data.eventDate);
+        }
+        if (typeof parsed.data.preferredDeliveryDate === "string") {
+          parsed.data.preferredDeliveryDate = new Date(parsed.data.preferredDeliveryDate);
+        }
+      }
+      return parsed;
+    } catch {
+      return null;
+    }
+  })();
 
   const [currentStep, setCurrentStep] = useState(savedDraft?.step || 1);
   const [formData, setFormData] = useState<OrderFormData>({
@@ -383,7 +402,7 @@ ${formData.designNotes}` : ""}`;
       const { data: orderId, error: insertError } = await supabase.rpc('insert_order', {
         p_event_type: formData.eventType,
         p_event_title: formData.eventTitle,
-        p_event_date: formData.eventDate ? formData.eventDate.toISOString().split("T")[0] : null,
+        p_event_date: formData.eventDate ? new Date(formData.eventDate).toISOString().split("T")[0] : null,
         p_event_time: formData.eventTime || null,
         p_venue_name: formData.eventVenue || null,
         p_venue_address: formData.eventAddress || null,
@@ -398,7 +417,7 @@ ${formData.designNotes}` : ""}`;
         p_add_ons: selectedAddOnsList,
         p_delivery_type: formData.deliveryUrgency,
         p_preferred_delivery_date: formData.preferredDeliveryDate
-          ? formData.preferredDeliveryDate.toISOString().split("T")[0]
+          ? new Date(formData.preferredDeliveryDate).toISOString().split("T")[0]
           : null,
         p_special_requests: formData.designNotes || null,
         p_client_name: formData.fullName,
