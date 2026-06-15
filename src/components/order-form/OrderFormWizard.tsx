@@ -82,6 +82,14 @@ export const OrderFormWizard = ({ onComplete, initialReferralCode = "", initialP
     }
   }, [formData, currentStep]);
 
+  // Wizard step changes don't trigger a route change, so the browser keeps
+  // the user's scroll position from the bottom of the previous step. Reset
+  // to the top of the page on every step change so the new step's content
+  // is visible without manual scrolling.
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentStep]);
+
   const clearDraft = () => localStorage.removeItem(DRAFT_KEY);
 
   const updateFormData = (updates: Partial<OrderFormData>) => {
