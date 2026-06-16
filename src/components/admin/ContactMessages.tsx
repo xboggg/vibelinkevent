@@ -61,7 +61,7 @@ export const ContactMessages = () => {
   const fetchMessages = async () => {
     setLoading(true);
     const { data, error } = await supabase
-      .from("contact_messages")
+      .from("vl_contact_messages")
       .select("*")
       .order("created_at", { ascending: false });
     if (error) {
@@ -80,7 +80,7 @@ export const ContactMessages = () => {
     const patch: Record<string, unknown> = { status };
     if (status === "responded") patch.responded_at = new Date().toISOString();
 
-    const { error } = await supabase.from("contact_messages").update(patch).eq("id", id);
+    const { error } = await supabase.from("vl_contact_messages").update(patch).eq("id", id);
     if (error) {
       toast({ title: "Update failed", description: error.message, variant: "destructive" });
       return;
@@ -95,7 +95,7 @@ export const ContactMessages = () => {
     if (!selected) return;
     setSavingNote(true);
     const { error } = await supabase
-      .from("contact_messages")
+      .from("vl_contact_messages")
       .update({ notes: noteDraft })
       .eq("id", selected.id);
     setSavingNote(false);

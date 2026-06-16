@@ -107,7 +107,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Save to DB (service role bypasses RLS — that's fine, this function is the
     // only writer; anon never touches the table).
     const { data: inserted, error: insertErr } = await supabase
-      .from("contact_messages")
+      .from("vl_contact_messages")
       .insert({
         name,
         email: email || null,
