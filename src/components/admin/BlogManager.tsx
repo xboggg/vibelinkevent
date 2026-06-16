@@ -28,7 +28,8 @@ import {
 const CATEGORIES = [
   "Wedding", "Funeral & Memorial", "Anniversaries", "Church",
   "Community", "Ghanaian Culture", "Event Planning",
-  "Naming Ceremonies", "Inspirations", "Tips & Guides"
+  "Naming Ceremonies", "Inspirations", "Tips & Guides",
+  "Birthdays", "Graduations", "Corporate Events"
 ];
 
 interface BlogPost {
