@@ -235,6 +235,14 @@ const BlogDetail = () => {
 
   // Use meta_description if available, fallback to excerpt
   const seoDescription = post.meta_description || post.excerpt;
+
+  // OG / Twitter crawlers don't run JavaScript and they don't resolve
+  // relative URLs against window.location — they need a fully-qualified
+  // absolute URL. Convert post.image_url to absolute here.
+  const siteOrigin = "https://vibelinkevent.com";
+  const absoluteOgImage = post.image_url
+    ? (post.image_url.startsWith("http") ? post.image_url : `${siteOrigin}${post.image_url.startsWith("/") ? "" : "/"}${post.image_url}`)
+    : `${siteOrigin}/og-image.jpg`;
   
   // Build keywords from focus_keyword, category, and tags
   const keywordParts = [
@@ -271,7 +279,7 @@ const BlogDetail = () => {
         description={seoDescription}
         keywords={seoKeywords}
         canonical={`/blog/${slug}`}
-        ogImage={post.image_url}
+        ogImage={absoluteOgImage}
         ogType="article"
         jsonLd={[articleSchema, breadcrumbSchema]}
       />
