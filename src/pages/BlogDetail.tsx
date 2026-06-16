@@ -407,32 +407,37 @@ const BlogDetail = () => {
               </div>
             </article>
 
-            {/* ── Right: Sidebar (sticky on desktop) ── */}
-            <aside className="space-y-6 lg:sticky lg:top-24 self-start">
+            {/* ── Right: Sidebar — flows with the article (no sticky on whole aside) ── */}
+            {/* Only the TOC card is sticky-positioned so navigation stays available;     */}
+            {/* the rest flow naturally so Trending, CTA and ad slots appear at their     */}
+            {/* correct vertical positions as the reader scrolls.                         */}
+            <aside className="space-y-5 self-start">
 
-              {/* 1. Table of Contents */}
+              {/* 1. Table of Contents (the only sticky element so it's always reachable) */}
               {tocItems.length > 0 && (
-                <div className="bg-card border border-border rounded-2xl p-5">
-                  <div className="flex items-center gap-2 mb-4">
-                    <List className="h-4 w-4 text-primary" />
-                    <h3 className="font-bold text-foreground text-sm uppercase tracking-wide">In This Article</h3>
+                <div className="lg:sticky lg:top-24 z-10">
+                  <div className="bg-card border border-border rounded-2xl p-5">
+                    <div className="flex items-center gap-2 mb-4">
+                      <List className="h-4 w-4 text-primary" />
+                      <h3 className="font-bold text-foreground text-sm uppercase tracking-wide">In This Article</h3>
+                    </div>
+                    <ul className="space-y-1.5 max-h-[60vh] overflow-y-auto">
+                      {tocItems.map((item) => (
+                        <li key={item.id}>
+                          <a
+                            href={`#${item.id}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            }}
+                            className="text-sm text-muted-foreground hover:text-primary transition-colors leading-snug block py-1.5 border-l-2 border-transparent hover:border-primary pl-3"
+                          >
+                            {item.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <ul className="space-y-1.5 max-h-[420px] overflow-y-auto">
-                    {tocItems.map((item) => (
-                      <li key={item.id}>
-                        <a
-                          href={`#${item.id}`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-                          }}
-                          className="text-sm text-muted-foreground hover:text-primary transition-colors leading-snug block py-1.5 border-l-2 border-transparent hover:border-primary pl-3"
-                        >
-                          {item.text}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
                 </div>
               )}
 
@@ -466,10 +471,7 @@ const BlogDetail = () => {
                 </div>
               )}
 
-              {/* 3. Ad slot #1 */}
-              <BlogAdSlot size="300x250" />
-
-              {/* 4. Contextual VibeLink CTA */}
+              {/* 3. Contextual VibeLink CTA — close to the content, before ads */}
               {(() => {
                 const cta = getCategoryCTA(post.category, post.title, post.slug);
                 return (
@@ -489,8 +491,11 @@ const BlogDetail = () => {
                 );
               })()}
 
-              {/* 5. Ad slot #2 */}
-              <BlogAdSlot size="300x250" />
+              {/* 4 + 5. Ad slots — grouped at the foot, light divider for visual clarity */}
+              <div className="space-y-4 pt-2 border-t border-dashed border-border/60">
+                <BlogAdSlot size="300x250" />
+                <BlogAdSlot size="300x250" />
+              </div>
 
             </aside>
           </div>

@@ -1,5 +1,3 @@
-import { Zap } from "lucide-react";
-
 interface Props {
   size?: "300x250" | "300x600" | "320x100";
   label?: string;
@@ -12,28 +10,24 @@ const dims = {
 };
 
 /**
- * Ad slot placeholder. Renders a 300x250 medium-rectangle dashed box that's
- * clearly visible (so you know the slot is there). When you have real ad
- * scripts, replace the children with the network's <ins> or iframe and
- * delete the placeholder body.
+ * Ad slot placeholder, styled to read as a real-but-quiet ad unit rather than
+ * a heavy placeholder card. Spec-compliant medium rectangle by default.
+ * When you have a real ad network, replace the inner placeholder block with
+ * the network's <ins> tag — the surrounding label + sizing stays.
  */
 export const BlogAdSlot = ({ size = "300x250", label = "Advertisement" }: Props) => {
   const d = dims[size];
   return (
-    <aside
-      aria-label="Advertisement"
-      className="bg-card border border-border rounded-2xl p-4"
-    >
-      <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-muted-foreground text-center mb-3">
-        — {label} —
-      </div>
+    <aside aria-label="Advertisement" className="w-full">
+      <p className="text-[9px] font-semibold tracking-[0.25em] uppercase text-muted-foreground/80 text-center mb-1.5">
+        {label}
+      </p>
       <div
-        className="border-2 border-dashed border-primary/30 rounded-xl bg-gradient-to-br from-primary/5 via-secondary/5 to-primary/10 flex flex-col items-center justify-center text-center px-4 mx-auto"
+        className="mx-auto rounded-xl border border-border bg-gradient-to-br from-muted/40 via-background to-muted/20 flex flex-col items-center justify-center text-center"
         style={{ width: "100%", maxWidth: d.w, height: d.h }}
       >
-        <Zap className="h-7 w-7 mb-2 text-primary/60" />
-        <p className="text-sm font-semibold text-foreground/70">Your ad could be here</p>
-        <p className="text-[11px] text-muted-foreground mt-1">{d.name}</p>
+        <p className="text-sm font-medium text-muted-foreground">Your ad could be here</p>
+        <p className="text-[10px] text-muted-foreground/70 mt-1">{d.name}</p>
       </div>
     </aside>
   );
