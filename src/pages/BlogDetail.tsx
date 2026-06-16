@@ -117,23 +117,27 @@ const BlogDetail = () => {
   const fetchPost = async (postSlug: string) => {
     setLoading(true);
     try {
-      // Fetch the main post
+      // Posts with published=true AND published_at in the future are scheduled —
+      // we treat them as "not yet released" on the public site.
+      const nowIso = new Date().toISOString();
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
         .eq('slug', postSlug)
         .eq('published', true)
+        .lte('published_at', nowIso)
         .single();
 
       if (error) throw error;
       setPost(data);
 
-      // Fetch related posts from the same category
+      // Fetch related posts from the same category (also gated by release date)
       if (data) {
         const { data: related } = await supabase
           .from('blog_posts')
           .select('*')
           .eq('published', true)
+          .lte('published_at', nowIso)
           .eq('category', data.category)
           .neq('id', data.id)
           .limit(3);

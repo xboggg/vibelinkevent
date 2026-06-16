@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { BlogBulkImport } from "./BlogBulkImport";
+import { BlogBulkSchedule } from "./BlogBulkSchedule";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -325,7 +326,7 @@ export function BlogManager() {
   const [editPost, setEditPost] = useState<Partial<BlogPost> | null>(null);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
-  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft" | "featured">("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft" | "featured" | "scheduled">("all");
   const [sortBy, setSortBy] = useState<"title" | "category" | "status" | "created_at">("created_at");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -381,17 +382,26 @@ export function BlogManager() {
     return sortDir === "asc" ? r : -r;
   };
 
+  const now = new Date();
+  const isLive = (p: BlogPost) => p.published && (!p.published_at || new Date(p.published_at) <= now);
+  const isScheduled = (p: BlogPost) => p.published && !!p.published_at && new Date(p.published_at) > now;
+
   const filtered = posts
     .filter(p => {
       if (categoryFilter !== "all" && p.category !== categoryFilter) return false;
-      if (statusFilter === "published" && !p.published) return false;
+      if (statusFilter === "published" && !isLive(p)) return false;
       if (statusFilter === "draft" && p.published) return false;
       if (statusFilter === "featured" && !p.featured) return false;
+      if (statusFilter === "scheduled" && !isScheduled(p)) return false;
       if (!search.trim()) return true;
       const q = search.toLowerCase();
       return p.title.toLowerCase().includes(q) || p.category.toLowerCase().includes(q) || (p.author_name || "").toLowerCase().includes(q);
     })
     .sort(sortCmp);
+
+  const liveCount = posts.filter(isLive).length;
+  const scheduledCount = posts.filter(isScheduled).length;
+  const draftCount = posts.filter(p => !p.published).length;
 
   const toggleSort = (col: typeof sortBy) => {
     if (sortBy === col) setSortDir(sortDir === "asc" ? "desc" : "asc");
@@ -423,8 +433,9 @@ export function BlogManager() {
           <h2 className="text-2xl font-bold">Blog Manager</h2>
           <p className="text-muted-foreground text-sm mt-1">{posts.length} articles · {posts.filter(p => p.published).length} published · {posts.filter(p => p.featured).length} featured</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <BlogBulkImport onComplete={fetchPosts} />
+          <BlogBulkSchedule posts={posts} onComplete={fetchPosts} />
           <Button onClick={() => { setEditPost(null); setView("create"); }} className="gap-2">
             <PlusCircle className="h-4 w-4" /> New Article
           </Button>
@@ -452,8 +463,9 @@ export function BlogManager() {
           className="px-3 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:border-primary cursor-pointer min-w-[140px]"
         >
           <option value="all">All statuses</option>
-          <option value="published">Published</option>
-          <option value="draft">Drafts</option>
+          <option value="published">Live ({liveCount})</option>
+          <option value="scheduled">Scheduled ({scheduledCount})</option>
+          <option value="draft">Drafts ({draftCount})</option>
           <option value="featured">Featured</option>
         </select>
         {(categoryFilter !== "all" || statusFilter !== "all" || search) && (
@@ -471,8 +483,14 @@ export function BlogManager() {
         <p className="text-xs text-muted-foreground -mt-3">Showing {filtered.length} of {posts.length} articles</p>
       )}
 
-      <div className="grid grid-cols-4 gap-4">
-        {[{ label: "Total", v: posts.length, c: "text-primary" }, { label: "Published", v: posts.filter(p => p.published).length, c: "text-green-600" }, { label: "Drafts", v: posts.filter(p => !p.published).length, c: "text-yellow-600" }, { label: "Featured", v: posts.filter(p => p.featured).length, c: "text-secondary" }].map(s => (
+      <div className="grid grid-cols-5 gap-4">
+        {[
+          { label: "Total", v: posts.length, c: "text-primary" },
+          { label: "Live", v: liveCount, c: "text-green-600" },
+          { label: "Scheduled", v: scheduledCount, c: "text-blue-600" },
+          { label: "Drafts", v: draftCount, c: "text-yellow-600" },
+          { label: "Featured", v: posts.filter(p => p.featured).length, c: "text-secondary" },
+        ].map(s => (
           <div key={s.label} className="bg-card border border-border rounded-xl p-4 text-center">
             <div className={`text-2xl font-bold ${s.c}`}>{s.v}</div>
             <div className="text-xs text-muted-foreground mt-0.5">{s.label}</div>
@@ -535,10 +553,27 @@ export function BlogManager() {
                       </button>
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <button onClick={() => togglePublish(post)} className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-colors ${post.published ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"}`}>
-                        {post.published ? <CheckCircle2 className="h-3 w-3" /> : <AlertCircle className="h-3 w-3" />}
-                        {post.published ? "Live" : "Draft"}
-                      </button>
+                      {(() => {
+                        const isScheduled = post.published && post.published_at && new Date(post.published_at) > new Date();
+                        if (isScheduled) {
+                          return (
+                            <button
+                              onClick={() => togglePublish(post)}
+                              className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors"
+                              title={`Releases ${new Date(post.published_at!).toLocaleString()}`}
+                            >
+                              <Clock className="h-3 w-3" />
+                              {new Date(post.published_at!).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}
+                            </button>
+                          );
+                        }
+                        return (
+                          <button onClick={() => togglePublish(post)} className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-colors ${post.published ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"}`}>
+                            {post.published ? <CheckCircle2 className="h-3 w-3" /> : <AlertCircle className="h-3 w-3" />}
+                            {post.published ? "Live" : "Draft"}
+                          </button>
+                        );
+                      })()}
                     </td>
                     <td className="px-4 py-3 text-center">
                       <button onClick={async () => { await supabase.from("blog_posts").update({ featured: !post.featured }).eq("id", post.id); fetchPosts(); }}>

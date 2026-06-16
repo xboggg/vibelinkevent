@@ -61,10 +61,13 @@ const Blog = () => {
 
   const fetchPosts = async () => {
     try {
+      // Posts with published=true AND published_at in the future are scheduled —
+      // we filter them out on the public page until their release time arrives.
       const { data, error } = await supabase
         .from("blog_posts")
         .select("id, slug, title, excerpt, category, image_url, read_time, featured, published_at, created_at, tags")
         .eq("published", true)
+        .lte("published_at", new Date().toISOString())
         .order("published_at", { ascending: false });
 
       if (error) throw error;
