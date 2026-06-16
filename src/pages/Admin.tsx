@@ -1208,10 +1208,10 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-muted/30 flex">
-      {/* Sidebar */}
+      {/* Sidebar — pinned on desktop, slide-in on mobile */}
       <aside className={`
         fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-200 ease-in-out
-        lg:relative lg:translate-x-0
+        lg:translate-x-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="flex flex-col h-full">
@@ -1321,8 +1321,8 @@ const Admin = () => {
         />
       )}
 
-      {/* Main Content */}
-      <main className="flex-1 min-h-screen">
+      {/* Main Content — offset by sidebar width on desktop since sidebar is fixed */}
+      <main className="flex-1 min-h-screen lg:ml-64">
         {/* Mobile Header */}
         <header className="lg:hidden sticky top-0 z-30 bg-card border-b border-border px-4 py-3">
           <div className="flex items-center justify-between">

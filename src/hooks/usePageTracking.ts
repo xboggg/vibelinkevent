@@ -1,8 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
-// Generate a unique session ID for tracking
 const getSessionId = () => {
   let sessionId = sessionStorage.getItem("analytics_session_id");
   if (!sessionId) {
@@ -12,19 +11,13 @@ const getSessionId = () => {
   return sessionId;
 };
 
-// Detect device type
 const getDeviceType = (): string => {
   const ua = navigator.userAgent;
-  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
-    return "tablet";
-  }
-  if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
-    return "mobile";
-  }
+  if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "tablet";
+  if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) return "mobile";
   return "desktop";
 };
 
-// Detect browser
 const getBrowser = (): string => {
   const ua = navigator.userAgent;
   if (ua.includes("Firefox")) return "Firefox";
@@ -38,7 +31,6 @@ const getBrowser = (): string => {
   return "Unknown";
 };
 
-// Detect OS
 const getOS = (): string => {
   const ua = navigator.userAgent;
   if (ua.includes("Windows")) return "Windows";
@@ -51,50 +43,19 @@ const getOS = (): string => {
 
 export const usePageTracking = () => {
   const location = useLocation();
-  const pageEntryTime = useRef<number>(Date.now());
-  const currentPageViewId = useRef<string | null>(null);
 
   useEffect(() => {
-    const trackPageView = async () => {
-      try {
-        const sessionId = getSessionId();
-        pageEntryTime.current = Date.now();
-
-        const { data, error } = await supabase.from("page_views").insert({
-          page_path: location.pathname,
-          page_title: document.title,
-          referrer: document.referrer || null,
-          user_agent: navigator.userAgent,
-          session_id: sessionId,
-          device_type: getDeviceType(),
-          browser: getBrowser(),
-          os: getOS(),
-          screen_width: window.screen.width,
-          screen_height: window.screen.height,
-        }).select('id').single();
-
-        if (!error && data) {
-          currentPageViewId.current = data.id;
-        }
-        // Silently ignore errors - table may not exist
-      } catch {
-        // Silently fail - don't break the app for analytics
-      }
-    };
-
-    trackPageView();
-
-    // Update time spent when leaving page
-    return () => {
-      if (currentPageViewId.current) {
-        const timeSpent = Math.round((Date.now() - pageEntryTime.current) / 1000);
-        // Fire and forget - don't await
-        supabase
-          .from("page_views")
-          .update({ time_spent: timeSpent })
-          .eq("id", currentPageViewId.current)
-          .then(() => {});
-      }
-    };
+    supabase.from("page_views").insert({
+      page_path: location.pathname,
+      page_title: document.title,
+      referrer: document.referrer || null,
+      user_agent: navigator.userAgent,
+      session_id: getSessionId(),
+      device_type: getDeviceType(),
+      browser: getBrowser(),
+      os: getOS(),
+      screen_width: window.screen.width,
+      screen_height: window.screen.height,
+    }).then(() => {});
   }, [location.pathname]);
 };

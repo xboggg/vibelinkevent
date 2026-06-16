@@ -1,87 +1,87 @@
-// VibeLink Ghana Admin Service Worker
-const CACHE_NAME = 'vibelink-admin-v1';
+// VibeLink Service Worker
+// Strategy:
+//   - HTML (navigation requests): network-only, offline.html fallback only on failure.
+//     Reason: HTML embeds hashed bundle URLs that change every deploy. Caching HTML
+//     causes "blank screen after deploy" because the cached HTML references a JS bundle
+//     the server no longer has.
+//   - Hashed assets (JS/CSS): cache-first, immutable. The hash in the filename makes
+//     each version a different URL, so we never serve a stale one.
+//   - Images / icons / fonts: cache-first.
+//   - Supabase / API / functions: bypassed entirely (must always hit the network).
+
+const CACHE_NAME = 'vibelink-v3';
 const OFFLINE_URL = '/offline.html';
 
-// Assets to cache immediately
-const STATIC_ASSETS = [
-  '/',
-  '/admin',
-  '/manifest.json',
-  '/favicon.ico',
-  '/offline.html'
-];
-
-// Install event - cache static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[SW] Caching static assets');
-      return cache.addAll(STATIC_ASSETS);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll([OFFLINE_URL]))
   );
   self.skipWaiting();
 });
 
-// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
-      );
-    })
+    caches.keys().then((names) =>
+      Promise.all(names.filter((n) => n !== CACHE_NAME).map((n) => caches.delete(n)))
+    )
   );
   self.clients.claim();
 });
 
-// Fetch event - network first, fallback to cache
+const isApiRequest = (url) =>
+  url.origin.includes('supabase') ||
+  url.pathname.startsWith('/api') ||
+  url.pathname.includes('functions') ||
+  url.hostname.includes('google.com') ||
+  url.hostname.includes('gstatic.com');
+
+const isHashedAsset = (url) =>
+  /\/assets\/.*\-[A-Za-z0-9_]{6,}\.(?:js|css|woff2?|ttf|otf|png|jpg|jpeg|webp|svg|ico)$/.test(url.pathname);
+
+const isStaticAsset = (url) =>
+  /\.(?:png|jpg|jpeg|webp|svg|gif|ico|woff2?|ttf|otf)$/i.test(url.pathname) ||
+  url.pathname === '/manifest.json' ||
+  url.pathname === '/favicon.ico';
+
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests
   if (event.request.method !== 'GET') return;
 
-  // Skip Supabase/API requests
   const url = new URL(event.request.url);
-  if (url.origin.includes('supabase') || 
-      url.pathname.startsWith('/api') ||
-      url.pathname.includes('functions')) {
+
+  if (isApiRequest(url)) return;
+
+  // HTML / navigation: ALWAYS go to network. Fall back to offline.html only on failure.
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(OFFLINE_URL))
+    );
     return;
   }
 
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // Clone response for caching
-        const responseClone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          // Only cache successful responses
+  // Hashed assets: cache-first, store immutably.
+  if (isHashedAsset(url) || isStaticAsset(url)) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((response) => {
           if (response.status === 200) {
-            cache.put(event.request, responseClone);
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           }
-        });
-        return response;
-      })
-      .catch(() => {
-        // Network failed, try cache
-        return caches.match(event.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          // Show offline page for navigation requests
-          if (event.request.mode === 'navigate') {
-            return caches.match(OFFLINE_URL);
-          }
-          return new Response('Network error', { status: 408 });
+          return response;
         });
       })
-  );
+    );
+    return;
+  }
+
+  // Everything else: try network, no caching.
+  event.respondWith(fetch(event.request).catch(() => new Response('Network error', { status: 408 })));
 });
 
-// Handle push notifications (for future use)
 self.addEventListener('push', (event) => {
   const data = event.data?.json() ?? {};
-  const title = data.title || 'VibeLink Ghana';
+  const title = data.title || 'VibeLink Event';
   const options = {
     body: data.body || 'You have a new notification',
     icon: '/icons/icon-192x192.png',
@@ -89,16 +89,10 @@ self.addEventListener('push', (event) => {
     vibrate: [200, 100, 200],
     data: data.url || '/admin'
   };
-
-  event.waitUntil(
-    self.registration.showNotification(title, options)
-  );
+  event.waitUntil(self.registration.showNotification(title, options));
 });
 
-// Handle notification click
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
-  event.waitUntil(
-    clients.openWindow(event.notification.data || '/admin')
-  );
+  event.waitUntil(clients.openWindow(event.notification.data || '/admin'));
 });

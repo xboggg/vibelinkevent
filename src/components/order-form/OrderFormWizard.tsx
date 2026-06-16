@@ -68,17 +68,21 @@ export const OrderFormWizard = ({ onComplete, initialReferralCode = "", initialP
     if (currentStep > 1 || Object.values(formData).some(v => v && v !== initialFormData[v as keyof OrderFormData])) {
       localStorage.setItem(DRAFT_KEY, JSON.stringify({ step: currentStep, data: formData }));
     }
-    // Track abandoned carts when user reaches contact step with email
     if (currentStep >= 7 && formData.email) {
+      let sessionId = sessionStorage.getItem("vibelink_cart_session");
+      if (!sessionId) {
+        sessionId = crypto.randomUUID();
+        sessionStorage.setItem("vibelink_cart_session", sessionId);
+      }
       supabase.from("abandoned_carts").upsert({
-        email: formData.email,
-        name: formData.fullName || null,
+        session_id: sessionId,
+        customer_email: formData.email,
+        customer_name: formData.fullName || null,
         event_type: formData.eventType || null,
         package_name: formData.selectedPackage || null,
-        step_reached: currentStep,
-        form_data: formData,
+        cart_data: formData as unknown as Record<string, unknown>,
         updated_at: new Date().toISOString(),
-      }, { onConflict: "email" }).then(() => {});
+      }, { onConflict: "session_id" }).then(() => {});
     }
   }, [formData, currentStep]);
 
@@ -464,8 +468,9 @@ ${formData.designNotes}` : ""}`;
       
       clearDraft();
       if (formData.email) {
-        supabase.from("abandoned_carts").delete().eq("email", formData.email).then(() => {});
+        supabase.from("abandoned_carts").delete().eq("customer_email", formData.email).then(() => {});
       }
+      sessionStorage.removeItem("vibelink_cart_session");
       onComplete?.(formData);
     } catch (error) {
       console.error("Order submission failed:", error);
