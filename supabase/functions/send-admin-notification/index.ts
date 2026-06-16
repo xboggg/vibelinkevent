@@ -291,17 +291,23 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send to admin email
-    const adminEmail = "info@vibelinkevent.com";
-    
+    // Send admin notification directly to Edmund's Gmail to bypass Namecheap
+    // forwarding (Resend → info@vibelinkevent.com bounces because vibelinkevent.com's
+    // SPF only authorises Namecheap, not Resend). Customer-facing addresses (orders@,
+    // hello@, info@) remain branded; this is internal routing only.
+    const adminEmail = "vibelinkevent@gmail.com";
+
     const emailResponse = await resend.emails.send({
       from: "VibeLink Event <orders@vibelinkevent.com>",
       to: [adminEmail],
       subject: `🔔 NEW ORDER: ${data.eventTitle} - GHS ${data.totalPrice.toLocaleString()} | ${data.clientName}`,
       html: emailHtml,
     });
-
-    console.log("Admin notification email sent successfully:", emailResponse);
+    if ((emailResponse as { error?: unknown })?.error) {
+      console.error("Admin notification email FAILED:", (emailResponse as { error: unknown }).error);
+    } else {
+      console.log("Admin notification email sent, id:", (emailResponse as { data?: { id?: string } })?.data?.id);
+    }
 
     return new Response(JSON.stringify({ success: true, data: emailResponse }), {
       status: 200,

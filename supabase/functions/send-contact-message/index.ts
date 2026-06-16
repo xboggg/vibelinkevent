@@ -15,7 +15,11 @@ interface ContactRequest {
   message: string;
 }
 
-const ADMIN_INBOX = "info@vibelinkevent.com";
+// Send admin notifications directly to Edmund's Gmail to bypass Namecheap
+// forwarding (Resend → info@vibelinkevent.com bounces because vibelinkevent.com's
+// SPF only authorises Namecheap, not Resend). Customer-facing addresses (orders@,
+// hello@, info@) remain branded; this is internal routing only.
+const ADMIN_INBOX = "vibelinkevent@gmail.com";
 const FROM_ADDRESS = "VibeLink Event <orders@vibelinkevent.com>";
 
 const RATE_LIMIT_MAX_REQUESTS = 5;
@@ -162,13 +166,18 @@ const handler = async (req: Request): Promise<Response> => {
       </body></html>
     `;
 
-    await resend.emails.send({
+    const adminSendResult = await resend.emails.send({
       from: FROM_ADDRESS,
       to: [ADMIN_INBOX],
       reply_to: email || undefined,
       subject: `📨 New Contact: ${name}${eventType ? ` (${eventType})` : ""}`,
       html: adminHtml,
     });
+    if ((adminSendResult as { error?: unknown })?.error) {
+      console.error("Admin email send failed:", (adminSendResult as { error: unknown }).error);
+    } else {
+      console.log("Admin email sent, id:", (adminSendResult as { data?: { id?: string } })?.data?.id);
+    }
 
     // Visitor auto-acknowledgement — only if they gave an email
     if (email) {
@@ -206,12 +215,17 @@ const handler = async (req: Request): Promise<Response> => {
         </body></html>
       `;
 
-      await resend.emails.send({
+      const ackSendResult = await resend.emails.send({
         from: FROM_ADDRESS,
         to: [email],
         subject: `We got your message — VibeLink Event`,
         html: ackHtml,
       });
+      if ((ackSendResult as { error?: unknown })?.error) {
+        console.error("Visitor ack email send failed:", (ackSendResult as { error: unknown }).error);
+      } else {
+        console.log("Visitor ack email sent, id:", (ackSendResult as { data?: { id?: string } })?.data?.id);
+      }
     }
 
     return new Response(
