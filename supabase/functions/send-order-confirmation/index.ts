@@ -59,11 +59,11 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const resendKey = Deno.env.get("RESEND_API_KEY");
+    const resendKey = Deno.env.get("VL_RESEND_API_KEY") ?? Deno.env.get("RESEND_API_KEY");
     if (!resendKey) {
-      console.error("RESEND_API_KEY is not set");
+      console.error("VL_RESEND_API_KEY is not set");
       return new Response(
-        JSON.stringify({ error: "Email service is not configured (missing RESEND_API_KEY)." }),
+        JSON.stringify({ error: "Email service is not configured (missing VL_RESEND_API_KEY)." }),
         { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
