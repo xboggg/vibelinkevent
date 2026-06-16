@@ -324,6 +324,10 @@ export function BlogManager() {
   const [view, setView] = useState<"list" | "create" | "edit">("list");
   const [editPost, setEditPost] = useState<Partial<BlogPost> | null>(null);
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "published" | "draft" | "featured">("all");
+  const [sortBy, setSortBy] = useState<"title" | "category" | "status" | "created_at">("created_at");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [deleting, setDeleting] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -362,7 +366,40 @@ export function BlogManager() {
     fetchPosts();
   };
 
-  const filtered = posts.filter(p => p.title.toLowerCase().includes(search.toLowerCase()) || p.category.toLowerCase().includes(search.toLowerCase()));
+  const categoryCounts = posts.reduce<Record<string, number>>((acc, p) => {
+    acc[p.category] = (acc[p.category] || 0) + 1;
+    return acc;
+  }, {});
+  const availableCategories = Object.keys(categoryCounts).sort();
+
+  const sortCmp = (a: BlogPost, b: BlogPost): number => {
+    let r = 0;
+    if (sortBy === "title") r = a.title.localeCompare(b.title);
+    else if (sortBy === "category") r = a.category.localeCompare(b.category);
+    else if (sortBy === "status") r = Number(b.published) - Number(a.published);
+    else r = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+    return sortDir === "asc" ? r : -r;
+  };
+
+  const filtered = posts
+    .filter(p => {
+      if (categoryFilter !== "all" && p.category !== categoryFilter) return false;
+      if (statusFilter === "published" && !p.published) return false;
+      if (statusFilter === "draft" && p.published) return false;
+      if (statusFilter === "featured" && !p.featured) return false;
+      if (!search.trim()) return true;
+      const q = search.toLowerCase();
+      return p.title.toLowerCase().includes(q) || p.category.toLowerCase().includes(q) || (p.author_name || "").toLowerCase().includes(q);
+    })
+    .sort(sortCmp);
+
+  const toggleSort = (col: typeof sortBy) => {
+    if (sortBy === col) setSortDir(sortDir === "asc" ? "desc" : "asc");
+    else { setSortBy(col); setSortDir(col === "created_at" ? "desc" : "asc"); }
+  };
+
+  const sortIndicator = (col: typeof sortBy) =>
+    sortBy === col ? <span className="ml-1 text-primary">{sortDir === "asc" ? "▲" : "▼"}</span> : null;
 
   if (view !== "list") {
     return (
@@ -394,10 +431,45 @@ export function BlogManager() {
         </div>
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search articles..." className="w-full pl-10 pr-4 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:border-primary" />
+      <div className="flex flex-col md:flex-row gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search articles..." className="w-full pl-10 pr-4 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:border-primary" />
+        </div>
+        <select
+          value={categoryFilter}
+          onChange={e => setCategoryFilter(e.target.value)}
+          className="px-3 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:border-primary cursor-pointer min-w-[180px]"
+        >
+          <option value="all">All categories ({posts.length})</option>
+          {availableCategories.map(c => (
+            <option key={c} value={c}>{c} ({categoryCounts[c]})</option>
+          ))}
+        </select>
+        <select
+          value={statusFilter}
+          onChange={e => setStatusFilter(e.target.value as typeof statusFilter)}
+          className="px-3 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:border-primary cursor-pointer min-w-[140px]"
+        >
+          <option value="all">All statuses</option>
+          <option value="published">Published</option>
+          <option value="draft">Drafts</option>
+          <option value="featured">Featured</option>
+        </select>
+        {(categoryFilter !== "all" || statusFilter !== "all" || search) && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => { setCategoryFilter("all"); setStatusFilter("all"); setSearch(""); }}
+            className="text-muted-foreground self-stretch"
+          >
+            Clear
+          </Button>
+        )}
       </div>
+      {(categoryFilter !== "all" || statusFilter !== "all" || search) && (
+        <p className="text-xs text-muted-foreground -mt-3">Showing {filtered.length} of {posts.length} articles</p>
+      )}
 
       <div className="grid grid-cols-4 gap-4">
         {[{ label: "Total", v: posts.length, c: "text-primary" }, { label: "Published", v: posts.filter(p => p.published).length, c: "text-green-600" }, { label: "Drafts", v: posts.filter(p => !p.published).length, c: "text-yellow-600" }, { label: "Featured", v: posts.filter(p => p.featured).length, c: "text-secondary" }].map(s => (
@@ -415,11 +487,27 @@ export function BlogManager() {
           <table className="w-full">
             <thead className="bg-muted/50 border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase">Article</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase w-36">Category</th>
-                <th className="text-center px-4 py-3 text-xs font-medium text-muted-foreground uppercase w-24">Status</th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase">
+                  <button onClick={() => toggleSort("title")} className="inline-flex items-center hover:text-foreground transition-colors">
+                    Article{sortIndicator("title")}
+                  </button>
+                </th>
+                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase w-36">
+                  <button onClick={() => toggleSort("category")} className="inline-flex items-center hover:text-foreground transition-colors">
+                    Category{sortIndicator("category")}
+                  </button>
+                </th>
+                <th className="text-center px-4 py-3 text-xs font-medium text-muted-foreground uppercase w-24">
+                  <button onClick={() => toggleSort("status")} className="inline-flex items-center hover:text-foreground transition-colors">
+                    Status{sortIndicator("status")}
+                  </button>
+                </th>
                 <th className="text-center px-4 py-3 text-xs font-medium text-muted-foreground uppercase w-20">Featured</th>
-                <th className="text-right px-4 py-3 text-xs font-medium text-muted-foreground uppercase w-28">Actions</th>
+                <th className="text-right px-4 py-3 text-xs font-medium text-muted-foreground uppercase w-28">
+                  <button onClick={() => toggleSort("created_at")} className="inline-flex items-center hover:text-foreground transition-colors">
+                    Actions / Date{sortIndicator("created_at")}
+                  </button>
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/50">
@@ -437,7 +525,15 @@ export function BlogManager() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3"><span className="text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded-full">{post.category}</span></td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => setCategoryFilter(post.category)}
+                        className="text-xs bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary px-2 py-0.5 rounded-full transition-colors"
+                        title={`Filter to ${post.category}`}
+                      >
+                        {post.category}
+                      </button>
+                    </td>
                     <td className="px-4 py-3 text-center">
                       <button onClick={() => togglePublish(post)} className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium transition-colors ${post.published ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"}`}>
                         {post.published ? <CheckCircle2 className="h-3 w-3" /> : <AlertCircle className="h-3 w-3" />}
