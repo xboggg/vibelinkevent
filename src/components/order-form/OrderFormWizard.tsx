@@ -74,15 +74,16 @@ export const OrderFormWizard = ({ onComplete, initialReferralCode = "", initialP
         sessionId = crypto.randomUUID();
         sessionStorage.setItem("vibelink_cart_session", sessionId);
       }
-      supabase.from("abandoned_carts").upsert({
-        session_id: sessionId,
-        customer_email: formData.email,
-        customer_name: formData.fullName || null,
-        event_type: formData.eventType || null,
-        package_name: formData.selectedPackage || null,
-        cart_data: formData as unknown as Record<string, unknown>,
-        updated_at: new Date().toISOString(),
-      }, { onConflict: "session_id" }).then(() => {});
+      // Route through SECURITY DEFINER RPC so anon doesn't need SELECT on the
+      // table (avoids exposing other customers' emails to the anon key).
+      supabase.rpc("track_abandoned_cart", {
+        p_session_id: sessionId,
+        p_customer_email: formData.email,
+        p_customer_name: formData.fullName || null,
+        p_event_type: formData.eventType || null,
+        p_package_name: formData.selectedPackage || null,
+        p_cart_data: formData as unknown as Record<string, unknown>,
+      }).then(() => {});
     }
   }, [formData, currentStep]);
 
