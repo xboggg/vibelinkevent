@@ -59,6 +59,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { AnalyticsDashboard } from "@/components/admin/AnalyticsDashboard";
+import { ContactMessages } from "@/components/admin/ContactMessages";
 import { OrderAnalytics } from "@/components/admin/OrderAnalytics";
 import { ReportBuilder } from "@/components/admin/ReportBuilder";
 import { CampaignAnalytics } from "@/components/admin/CampaignAnalytics";
@@ -158,7 +159,7 @@ interface RevisionRequest {
   updated_at: string;
 }
 
-type AdminSection = "dashboard" | "orders" | "analytics" | "chatbot" | "blog" | "testimonials" | "newsletter" | "follow-ups" | "email-settings" | "users" | "team" | "abandoned-carts" | "coupons" | "referrals" | "invoices" | "expenses" | "reports" | "surveys" | "templates" | "backup" | "ai-emails" | "ai-summary" | "escalations" | "segmentation" | "seo-calendar" | "funnel" | "currency" | "languages";
+type AdminSection = "dashboard" | "orders" | "messages" | "analytics" | "chatbot" | "blog" | "testimonials" | "newsletter" | "follow-ups" | "email-settings" | "users" | "team" | "abandoned-carts" | "coupons" | "referrals" | "invoices" | "expenses" | "reports" | "surveys" | "templates" | "backup" | "ai-emails" | "ai-summary" | "escalations" | "segmentation" | "seo-calendar" | "funnel" | "currency" | "languages";
 
 const orderStatusColors: Record<OrderStatus, string> = {
   pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
@@ -183,6 +184,7 @@ const navCategories = [
     items: [
       { id: "dashboard" as AdminSection, label: "Dashboard", icon: LayoutDashboard },
       { id: "orders" as AdminSection, label: "Orders", icon: Package },
+      { id: "messages" as AdminSection, label: "Messages", icon: MessageCircle },
     ],
   },
   {
@@ -1093,6 +1095,9 @@ const Admin = () => {
             )}
           </div>
         );
+
+      case "messages":
+        return <ContactMessages />;
 
       case "analytics":
         return (
