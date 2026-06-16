@@ -12,28 +12,28 @@ const dims = {
 };
 
 /**
- * Ad slot placeholder. Renders a dashed-border box matching common ad unit
- * sizes (defaults to 300x250 medium rectangle). When you have real ad scripts
- * to drop in, replace the children with the script's <ins> or iframe.
- *
- * To wire AdSense or another network later:
- *   - Pass a `slot` prop with the network's slot ID
- *   - Replace the placeholder children with the network's <ins> tag
+ * Ad slot placeholder. Renders a 300x250 medium-rectangle dashed box that's
+ * clearly visible (so you know the slot is there). When you have real ad
+ * scripts, replace the children with the network's <ins> or iframe and
+ * delete the placeholder body.
  */
 export const BlogAdSlot = ({ size = "300x250", label = "Advertisement" }: Props) => {
   const d = dims[size];
   return (
-    <aside aria-label="Advertisement" className="ad-slot">
-      <div className="text-[10px] font-semibold tracking-[0.2em] uppercase text-muted-foreground/70 text-center mb-2">
-        {label}
+    <aside
+      aria-label="Advertisement"
+      className="bg-card border border-border rounded-2xl p-4"
+    >
+      <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-muted-foreground text-center mb-3">
+        — {label} —
       </div>
       <div
-        className="border-2 border-dashed border-border/60 rounded-xl bg-gradient-to-br from-muted/30 to-muted/10 flex flex-col items-center justify-center text-center text-muted-foreground/60 px-4"
-        style={{ width: "100%", maxWidth: d.w, height: d.h, marginInline: "auto" }}
+        className="border-2 border-dashed border-primary/30 rounded-xl bg-gradient-to-br from-primary/5 via-secondary/5 to-primary/10 flex flex-col items-center justify-center text-center px-4 mx-auto"
+        style={{ width: "100%", maxWidth: d.w, height: d.h }}
       >
-        <Zap className="h-5 w-5 mb-2 opacity-50" />
-        <p className="text-xs font-medium">Your ad could be here</p>
-        <p className="text-[10px] opacity-70 mt-0.5">{d.name}</p>
+        <Zap className="h-7 w-7 mb-2 text-primary/60" />
+        <p className="text-sm font-semibold text-foreground/70">Your ad could be here</p>
+        <p className="text-[11px] text-muted-foreground mt-1">{d.name}</p>
       </div>
     </aside>
   );
