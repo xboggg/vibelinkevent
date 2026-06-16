@@ -91,39 +91,53 @@ function parseMarkdown(md: string, file: string): Parsed {
 }
 
 // ─── HTML enrichment ─────────────────────────────────────────────────────────
+// All styling is class-based — actual CSS lives in src/styles/blog-content.css.
+// This function only does SEMANTIC transformations:
+//   1. Promotes "**Bold lead.** explanation" patterns to real <h3> + <p> pairs
+//      so the visual hierarchy is clean and SEO-friendly
+//   2. Wraps the first paragraph in .blog-lead + drop-cap span
+//   3. Tags the Twi/Pidgin closing line as .blog-twi
+//   4. Tags "What I would say to..." H2s as .blog-takeaway
+//   5. Injects a pull-quote (.blog-pullquote) after the 2nd H2
+//   6. Wraps the final author CTA in .blog-cta
 function enrichHtml(rawHtml: string): string {
   let html = rawHtml;
-  // Drop cap on first paragraph
+
+  // 1. Promote "<p><strong>Lead.</strong> body...</p>" → "<h3>Lead</h3><p>body...</p>"
+  //    Catches the bold-led paragraph pattern used throughout the articles.
+  html = html.replace(
+    /<p><strong>([^<]+?)\.<\/strong>\s+([\s\S]+?)<\/p>/g,
+    (_m, lead, body) => `<h3>${lead.trim()}</h3>\n<p>${body.trim()}</p>`
+  );
+
+  // 2. Drop cap on first paragraph (after step 1 — must still be a <p> not an <h3>)
   html = html.replace(
     /(<p>)([A-Za-z])/,
     (_m, _p, letter) =>
-      `<p class="blog-lead" style="font-size:1.18em;line-height:1.7;color:#27272a;margin-bottom:1.5em;">` +
-      `<span class="blog-dropcap" style="float:left;font-family:'Playfair Display',Georgia,serif;font-size:4.2em;line-height:0.85;padding:0.08em 0.12em 0 0;color:#7c3aed;font-weight:700;">${letter}</span>`
+      `<p class="blog-lead"><span class="blog-dropcap">${letter}</span>`
   );
-  // Twi/Pidgin closing phrase → gold callout
+
+  // 3. Twi/Pidgin closing line → gold callout
   html = html.replace(
     /<p>(<em>[^<]+<\/em>\s*[—-]\s*[^<.]+\.)\s*([^<]*)<\/p>/g,
     (_m, twi, rest) =>
-      `<div style="background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%);border-left:5px solid #d97706;padding:1.1em 1.4em;border-radius:10px;margin:2em 0;font-style:italic;color:#78350f;font-size:1.05em;">${twi}${rest ? ` ${rest}` : ""}</div>`
+      `<div class="blog-twi">${twi}${rest ? ` ${rest}` : ""}</div>`
   );
-  // "What I would say to..." purple header
+
+  // 4. "What I would say / What I tell" closing-section H2 → .blog-takeaway
   html = html.replace(
     /<h2>(What I (?:would say|tell)[^<]+)<\/h2>/gi,
-    (_m, heading) =>
-      `<div style="background:linear-gradient(135deg,#fdf4ff 0%,#fae8ff 100%);border-left:5px solid #a855f7;padding:0.4em 1.4em 0.1em 1.4em;border-radius:10px 10px 0 0;margin:2.5em 0 -1em 0;"><h2 style="color:#6b21a8;margin:0.6em 0 0.4em 0;font-size:1.5em;">✨ ${heading}</h2></div>`
+    (_m, heading) => `<h2 class="blog-takeaway">${heading}</h2>`
   );
-  // Pull-quote after 2nd H2
-  const h2Positions = [...html.matchAll(/<h2/g)].map((m) => m.index ?? 0);
+
+  // 5. Pull-quote after the 2nd H2 — finds the first short, declarative sentence
+  const h2Positions = [...html.matchAll(/<h2[\s>]/g)].map((m) => m.index ?? 0);
   if (h2Positions.length >= 2) {
     const after = html.slice(h2Positions[1]);
     const sentenceMatch = after.match(/<p>([^<]{60,180}?\.)\s/);
     if (sentenceMatch) {
       const sentence = sentenceMatch[1].trim();
-      const pullQuote = `
-<aside style="margin:2.5em 0;padding:1.5em 2em;background:linear-gradient(135deg,#7c3aed 0%,#5b21b6 100%);border-radius:14px;color:#fff;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:1.35em;line-height:1.5;text-align:center;box-shadow:0 8px 24px -8px rgba(124,58,237,0.4);">
-  <span style="font-size:2em;display:block;line-height:0;margin-bottom:0.1em;opacity:0.4;">"</span>
-  ${sentence}
-</aside>`;
+      const pullQuote = `\n<aside class="blog-pullquote">${sentence}</aside>\n`;
       const insertAfter = html.indexOf(sentenceMatch[0]) + sentenceMatch[0].length;
       const endOfP = html.indexOf("</p>", insertAfter);
       if (endOfP > 0) {
@@ -131,25 +145,17 @@ function enrichHtml(rawHtml: string): string {
       }
     }
   }
-  // H2 accent bar
+
+  // 6. Final author CTA card — recognises "VibeLink builds ... If ..." closing pattern
   html = html.replace(
-    /<h2>(?!<)/g,
-    `<h2 style="position:relative;padding-left:0.6em;border-left:4px solid #a855f7;margin-top:2.5em;margin-bottom:0.7em;color:#1f2937;font-weight:700;">`
+    /<p>(VibeLink builds[^<]+\.)\s+(If [^<]+\.)\s*<\/p>\s*$/,
+    (_m, headline, body) => `
+<div class="blog-cta">
+  <p class="blog-cta-headline">${headline.trim()}</p>
+  <p class="blog-cta-body">${body.trim()}</p>
+</div>`
   );
-  // Final author CTA card
-  html = html.replace(
-    /<p>(VibeLink builds[^<]+\.\s*If [^<]+\.)\s*<\/p>\s*$/,
-    (_m, cta) => {
-      const [first, ...rest] = cta.split(". ");
-      const heading = first.trim();
-      const tail = rest.join(". ");
-      return `
-<div style="margin-top:3em;padding:2em 2em;background:linear-gradient(135deg,#1f2937 0%,#4c1d95 100%);border-radius:16px;color:#fff;box-shadow:0 12px 32px -10px rgba(76,29,149,0.5);">
-  <p style="margin:0 0 0.5em 0;font-size:1.1em;font-weight:600;color:#fff;">${heading}.</p>
-  <p style="margin:0;color:#e9d5ff;line-height:1.7;">${tail}</p>
-</div>`;
-    }
-  );
+
   return html;
 }
 

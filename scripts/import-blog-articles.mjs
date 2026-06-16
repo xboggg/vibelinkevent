@@ -152,52 +152,42 @@ function parseFrontmatter(md, file) {
   return { title, author, categoryRaw, readTime, body };
 }
 
-// ─── HTML enrichment — adds visual elements after markdown conversion ────────
-function enrichHtml(rawHtml, title) {
+// ─── HTML enrichment — class-based, styling lives in blog-content.css ────────
+function enrichHtml(rawHtml) {
   let html = rawHtml;
 
-  // Drop cap on the first <p> after the lead.
-  // We turn the first paragraph into a lead block with an oversized first letter.
+  // 1. Promote "<p><strong>Lead.</strong> body</p>" → "<h3>Lead</h3><p>body</p>"
+  html = html.replace(
+    /<p><strong>([^<]+?)\.<\/strong>\s+([\s\S]+?)<\/p>/g,
+    (_m, lead, body) => `<h3>${lead.trim()}</h3>\n<p>${body.trim()}</p>`
+  );
+
+  // 2. Drop cap on first paragraph
   html = html.replace(
     /(<p>)([A-Za-z])/,
-    (_m, p, letter) =>
-      `<p class="blog-lead" style="font-size:1.18em;line-height:1.7;color:#27272a;margin-bottom:1.5em;">` +
-      `<span class="blog-dropcap" style="float:left;font-family:'Playfair Display',Georgia,serif;font-size:4.2em;line-height:0.85;padding:0.08em 0.12em 0 0;color:#7c3aed;font-weight:700;">${letter}</span>`
+    (_m, _p, letter) => `<p class="blog-lead"><span class="blog-dropcap">${letter}</span>`
   );
 
-  // Style the opening Twi/Pidgin phrase paragraph (italic line near the end starting with *)
-  // marked converts *...* to <em>...</em>. We catch the standalone <em>...</em> followed
-  // by " — " and an English gloss, and wrap it in a warm-toned callout.
+  // 3. Twi/Pidgin closing line → gold callout
   html = html.replace(
     /<p>(<em>[^<]+<\/em>\s*[—-]\s*[^<.]+\.)\s*([^<]*)<\/p>/g,
-    (_m, twi, rest) =>
-      `<div style="background:linear-gradient(135deg,#fef3c7 0%,#fde68a 100%);border-left:5px solid #d97706;padding:1.1em 1.4em;border-radius:10px;margin:2em 0;font-style:italic;color:#78350f;font-size:1.05em;">` +
-      `${twi}${rest ? ` ${rest}` : ""}</div>`
+    (_m, twi, rest) => `<div class="blog-twi">${twi}${rest ? ` ${rest}` : ""}</div>`
   );
 
-  // The "What I would say to..." / "What I tell..." section header becomes a gold callout.
+  // 4. "What I would say / What I tell" closing-section H2 → .blog-takeaway
   html = html.replace(
     /<h2>(What I (?:would say|tell)[^<]+)<\/h2>/gi,
-    (_m, heading) =>
-      `<div style="background:linear-gradient(135deg,#fdf4ff 0%,#fae8ff 100%);border-left:5px solid #a855f7;padding:0.4em 1.4em 0.1em 1.4em;border-radius:10px 10px 0 0;margin:2.5em 0 -1em 0;">` +
-      `<h2 style="color:#6b21a8;margin:0.6em 0 0.4em 0;font-size:1.5em;">✨ ${heading}</h2></div>`
+    (_m, heading) => `<h2 class="blog-takeaway">${heading}</h2>`
   );
 
-  // Pull-quote treatment: find the second <h2> and inject a stylised quote of the next
-  // short, declarative sentence after it.
-  const h2Positions = [...html.matchAll(/<h2>/g)].map((m) => m.index);
+  // 5. Pull-quote after 2nd H2
+  const h2Positions = [...html.matchAll(/<h2[\s>]/g)].map((m) => m.index);
   if (h2Positions.length >= 2) {
-    // Find a sentence in the paragraph following the 2nd H2 that's between 60 and 180 chars
     const after = html.slice(h2Positions[1]);
     const sentenceMatch = after.match(/<p>([^<]{60,180}?\.)\s/);
     if (sentenceMatch) {
       const sentence = sentenceMatch[1].trim();
-      const pullQuote = `
-<aside style="margin:2.5em 0;padding:1.5em 2em;background:linear-gradient(135deg,#7c3aed 0%,#5b21b6 100%);border-radius:14px;color:#fff;font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:1.35em;line-height:1.5;text-align:center;box-shadow:0 8px 24px -8px rgba(124,58,237,0.4);">
-  <span style="font-size:2em;display:block;line-height:0;margin-bottom:0.1em;opacity:0.4;">"</span>
-  ${sentence}
-</aside>`;
-      // Insert pull-quote after the paragraph that contains this sentence
+      const pullQuote = `\n<aside class="blog-pullquote">${sentence}</aside>\n`;
       const insertAfter = html.indexOf(sentenceMatch[0]) + sentenceMatch[0].length;
       const endOfP = html.indexOf("</p>", insertAfter);
       if (endOfP > 0) {
@@ -206,25 +196,14 @@ function enrichHtml(rawHtml, title) {
     }
   }
 
-  // Style every H2 with a small decorative accent bar.
+  // 6. Final author CTA card
   html = html.replace(
-    /<h2>(?!<)/g,
-    `<h2 style="position:relative;padding-left:0.6em;border-left:4px solid #a855f7;margin-top:2.5em;margin-bottom:0.7em;color:#1f2937;font-weight:700;">`
-  );
-
-  // Style the final author CTA paragraph (the one that mentions VibeLink builds).
-  html = html.replace(
-    /<p>(VibeLink builds[^<]+\.\s*If [^<]+\.)\s*<\/p>\s*$/,
-    (_m, cta) => {
-      const [first, ...rest] = cta.split(". ");
-      const heading = first.trim();
-      const tail = rest.join(". ");
-      return `
-<div style="margin-top:3em;padding:2em 2em;background:linear-gradient(135deg,#1f2937 0%,#4c1d95 100%);border-radius:16px;color:#fff;box-shadow:0 12px 32px -10px rgba(76,29,149,0.5);">
-  <p style="margin:0 0 0.5em 0;font-size:1.1em;font-weight:600;color:#fff;">${heading}.</p>
-  <p style="margin:0;color:#e9d5ff;line-height:1.7;">${tail}</p>
-</div>`;
-    }
+    /<p>(VibeLink builds[^<]+\.)\s+(If [^<]+\.)\s*<\/p>\s*$/,
+    (_m, headline, body) => `
+<div class="blog-cta">
+  <p class="blog-cta-headline">${headline.trim()}</p>
+  <p class="blog-cta-body">${body.trim()}</p>
+</div>`
   );
 
   return html;

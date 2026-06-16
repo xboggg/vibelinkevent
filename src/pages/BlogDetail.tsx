@@ -11,6 +11,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { ReadingProgressBar } from "@/components/ReadingProgressBar";
 import DOMPurify from "dompurify";
+import "@/styles/blog-content.css";
+import { BlogSocialToolbar } from "@/components/blog/BlogSocialToolbar";
+import { BlogAdSlot } from "@/components/blog/BlogAdSlot";
 
 // Map blog post to a contextual CTA. Funeral readers get a memorial CTA,
 // wedding readers get a wedding CTA, etc. Matches against category, title,
@@ -140,7 +143,8 @@ const BlogDetail = () => {
           .lte('published_at', nowIso)
           .eq('category', data.category)
           .neq('id', data.id)
-          .limit(3);
+          .order('published_at', { ascending: false })
+          .limit(5);
 
         setRelatedPosts(related || []);
       }
@@ -272,119 +276,131 @@ const BlogDetail = () => {
         jsonLd={[articleSchema, breadcrumbSchema]}
       />
       
-      {/* Hero */}
-      <section className="pt-24 lg:pt-32 pb-8 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A]">
+      {/* Hero — slim header strip with title, category, byline */}
+      <section className="pt-24 lg:pt-28 pb-8 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A]">
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
             className="max-w-3xl mx-auto"
           >
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-2 text-primary-foreground/70 hover:text-secondary transition-colors mb-6"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Blog
+            <Link to="/blog" className="inline-flex items-center gap-2 text-primary-foreground/70 hover:text-secondary transition-colors mb-6 text-sm">
+              <ArrowLeft className="h-4 w-4" /> Back to Blog
             </Link>
-
-            <span className="inline-block px-4 py-1.5 rounded-full bg-secondary/20 text-secondary text-sm font-medium mb-4">
+            <span className="inline-block px-3 py-1 rounded-full bg-secondary/20 text-secondary text-xs font-semibold uppercase tracking-wide mb-4">
               {post.category}
             </span>
-
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-5 leading-tight">
               {post.title}
             </h1>
-
-            <div className="flex flex-wrap items-center gap-4 text-primary-foreground/70">
+            <p className="text-primary-foreground/85 text-lg mb-6 leading-relaxed">{post.excerpt}</p>
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-primary-foreground/70 text-sm">
               <span className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                {formatDate(post.published_at || post.created_at)}
+                <span className="w-7 h-7 rounded-full bg-secondary/20 flex items-center justify-center text-secondary text-xs font-bold">
+                  {(post.author_name || "E").charAt(0).toUpperCase()}
+                </span>
+                <span>By <strong className="text-primary-foreground">{post.author_name}</strong></span>
               </span>
-              <span className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                {post.read_time}
+              <span className="flex items-center gap-1.5">
+                <Calendar className="h-3.5 w-3.5" /> {formatDate(post.published_at || post.created_at)}
               </span>
-              <span className="text-primary-foreground/50">
-                By {post.author_name}
+              <span className="flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5" /> {post.read_time}
               </span>
             </div>
-
-            {/* Tags */}
-            {post.tags && post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-4">
-                {post.tags.map(tag => (
-                  <Link 
-                    key={tag}
-                    to={`/blog?tag=${encodeURIComponent(tag)}`}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-foreground/10 text-primary-foreground/80 text-xs hover:bg-primary-foreground/20 transition-colors"
-                  >
-                    <Tag className="h-3 w-3" />
-                    {tag}
-                  </Link>
-                ))}
-              </div>
-            )}
           </motion.div>
         </div>
       </section>
 
-      {/* Content + Sidebar */}
-      <section className="py-10 bg-background">
+      {/* Article + sidebar grid */}
+      <section className="py-8 lg:py-12 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-8 lg:gap-12 items-start max-w-7xl mx-auto">
 
             {/* ── Left: Article content ── */}
-            <div>
-              {/* Featured image sits at the top of the content column */}
+            <article className="min-w-0">
+              {/* Top toolbar — social share + save for later */}
+              <div className="mb-6 pb-5 border-b border-border">
+                <BlogSocialToolbar
+                  url={`/blog/${slug}`}
+                  title={post.title}
+                  slug={slug || ""}
+                  excerpt={post.excerpt}
+                />
+              </div>
+
+              {/* Featured image */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="mb-8"
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="mb-8 -mx-2 sm:mx-0"
               >
                 <img
                   src={post.image_url}
                   alt={post.title}
-                  className="w-full rounded-2xl shadow-lg aspect-[16/9] object-cover"
+                  className="w-full rounded-2xl shadow-xl aspect-[16/9] object-cover"
                 />
               </motion.div>
 
+              {/* Article body — width constrained for comfortable reading */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+                className="max-w-[720px]"
               >
                 {post.content ? (
                   <div
-                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(contentWithIds, { ADD_ATTR: ["style"] }) }}
-                    className="blog-content [&_h1]:text-3xl [&_h1]:font-bold [&_h1]:text-foreground [&_h1]:mt-10 [&_h1]:mb-5 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-foreground [&_h3]:mt-7 [&_h3]:mb-3 [&_p]:text-foreground/80 [&_p]:leading-[1.85] [&_p]:mb-5 [&_p]:text-[1.02em] [&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-5 [&_ul]:space-y-2 [&_ul_li]:text-foreground/80 [&_ul_li]:leading-relaxed [&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-5 [&_ol]:space-y-2 [&_ol_li]:text-foreground/80 [&_ol_li]:leading-relaxed [&_blockquote]:border-l-4 [&_blockquote]:border-primary [&_blockquote]:bg-primary/5 [&_blockquote]:pl-6 [&_blockquote]:py-3 [&_blockquote]:my-6 [&_blockquote]:italic [&_blockquote]:text-foreground/90 [&_blockquote]:rounded-r-lg [&_a]:text-primary [&_a]:underline [&_a]:decoration-primary/40 [&_a]:underline-offset-4 hover:[&_a]:decoration-primary [&_img]:rounded-xl [&_img]:my-8 [&_img]:shadow-lg [&_img]:max-w-full [&_strong]:text-foreground [&_strong]:font-bold [&_hr]:my-10 [&_hr]:border-0 [&_hr]:h-px [&_hr]:bg-gradient-to-r [&_hr]:from-transparent [&_hr]:via-primary/40 [&_hr]:to-transparent"
+                    className="blog-content"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(contentWithIds, {
+                        ADD_ATTR: ["style", "class"],
+                        ADD_TAGS: ["aside"],
+                      }),
+                    }}
                   />
                 ) : (
                   <p className="text-muted-foreground">{post.excerpt}</p>
                 )}
               </motion.div>
 
-              {/* Share */}
-              <div className="mt-12 pt-8 border-t border-border">
-                <h3 className="font-semibold text-foreground mb-3">Share this article</h3>
-                <div className="flex gap-3 flex-wrap">
-                  <Button variant="outline" size="sm" onClick={() => handleShare('facebook')} className="gap-2">
-                    <Facebook className="h-4 w-4" /> Facebook
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => handleShare('twitter')} className="gap-2">
-                    <Twitter className="h-4 w-4" /> Twitter
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => handleShare('copy')} className="gap-2">
-                    <Share2 className="h-4 w-4" /> Copy Link
-                  </Button>
+              {/* Tags row at the bottom */}
+              {post.tags && post.tags.length > 0 && (
+                <div className="mt-10 pt-6 border-t border-border">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Tag className="h-3.5 w-3.5 text-muted-foreground" />
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Topics</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map(tag => (
+                      <Link
+                        key={tag}
+                        to={`/blog?tag=${encodeURIComponent(tag)}`}
+                        className="inline-flex items-center px-3 py-1 rounded-full bg-muted text-foreground/80 text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                      >
+                        {tag}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
+              )}
 
-            {/* ── Right: Sticky Sidebar ── */}
-            <aside className="space-y-6 lg:sticky lg:top-24">
+              {/* Bottom share toolbar — for readers who scrolled */}
+              <div className="mt-8 pt-6 border-t border-border">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">Found this useful? Share it</p>
+                <BlogSocialToolbar
+                  url={`/blog/${slug}`}
+                  title={post.title}
+                  slug={slug || ""}
+                  excerpt={post.excerpt}
+                />
+              </div>
+            </article>
+
+            {/* ── Right: Sidebar (sticky on desktop) ── */}
+            <aside className="space-y-6 lg:sticky lg:top-24 self-start">
 
               {/* 1. Table of Contents */}
               {tocItems.length > 0 && (
@@ -393,7 +409,7 @@ const BlogDetail = () => {
                     <List className="h-4 w-4 text-primary" />
                     <h3 className="font-bold text-foreground text-sm uppercase tracking-wide">In This Article</h3>
                   </div>
-                  <ul className="space-y-2">
+                  <ul className="space-y-1.5 max-h-[420px] overflow-y-auto">
                     {tocItems.map((item) => (
                       <li key={item.id}>
                         <a
@@ -402,7 +418,7 @@ const BlogDetail = () => {
                             e.preventDefault();
                             document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
                           }}
-                          className="text-sm text-muted-foreground hover:text-primary transition-colors leading-snug block py-1 border-l-2 border-transparent hover:border-primary pl-3"
+                          className="text-sm text-muted-foreground hover:text-primary transition-colors leading-snug block py-1.5 border-l-2 border-transparent hover:border-primary pl-3"
                         >
                           {item.text}
                         </a>
@@ -412,42 +428,24 @@ const BlogDetail = () => {
                 </div>
               )}
 
-              {/* 2. Services CTA — contextualized to article category */}
-              {(() => {
-                const cta = getCategoryCTA(post.category, post.title, post.slug);
-                return (
-                  <div className="bg-gradient-to-br from-[#6B46C1] to-[#44337A] rounded-2xl p-5 text-white">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Sparkles className="h-4 w-4 text-secondary" />
-                      <span className="text-secondary text-xs font-bold uppercase tracking-wide">VibeLink Event</span>
-                    </div>
-                    <h3 className="font-bold text-base mb-2 leading-snug">{cta.heading}</h3>
-                    <p className="text-white/70 text-sm mb-4 leading-relaxed">{cta.pitch}</p>
-                    <Button asChild size="sm" className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold gap-2">
-                      <Link to={cta.url}>
-                        {cta.buttonText} <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
-                    </Button>
-                  </div>
-                );
-              })()}
-
-              {/* 3. Related Articles */}
+              {/* 2. Related articles (Trending Reads style) */}
               {relatedPosts.length > 0 && (
                 <div className="bg-card border border-border rounded-2xl p-5">
-                  <h3 className="font-bold text-foreground text-sm uppercase tracking-wide mb-4">Related Articles</h3>
+                  <h3 className="font-bold text-foreground text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+                    <span className="w-1 h-4 bg-secondary rounded-full" /> Trending in {post.category}
+                  </h3>
                   <div className="space-y-4">
                     {relatedPosts.map((rp) => (
-                      <Link key={rp.id} to={`/blog/${rp.slug}`} className="group flex gap-3 hover:opacity-80 transition-opacity">
+                      <Link key={rp.id} to={`/blog/${rp.slug}`} className="group flex gap-3 hover:opacity-90 transition-opacity">
                         <img
                           src={rp.image_url}
                           alt={rp.title}
                           className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
                           onError={(e) => { (e.target as HTMLImageElement).src = '/blog/adinkra-symbols-ghana.jpg'; }}
                         />
-                        <div className="min-w-0">
-                          <p className="text-xs font-semibold text-primary mb-1">{rp.category}</p>
-                          <p className="text-sm font-medium text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[10px] font-bold text-primary uppercase tracking-wide mb-0.5">{rp.category}</p>
+                          <p className="text-sm font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">
                             {rp.title}
                           </p>
                           <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
@@ -459,6 +457,32 @@ const BlogDetail = () => {
                   </div>
                 </div>
               )}
+
+              {/* 3. Ad slot #1 */}
+              <BlogAdSlot size="300x250" />
+
+              {/* 4. Contextual VibeLink CTA */}
+              {(() => {
+                const cta = getCategoryCTA(post.category, post.title, post.slug);
+                return (
+                  <div className="bg-gradient-to-br from-[#6B46C1] to-[#44337A] rounded-2xl p-5 text-white">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sparkles className="h-4 w-4 text-secondary" />
+                      <span className="text-secondary text-xs font-bold uppercase tracking-wide">VibeLink Event</span>
+                    </div>
+                    <h3 className="font-bold text-base mb-2 leading-snug">{cta.heading}</h3>
+                    <p className="text-white/75 text-sm mb-4 leading-relaxed">{cta.pitch}</p>
+                    <Button asChild size="sm" className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold gap-2">
+                      <Link to={cta.url}>
+                        {cta.buttonText} <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </Button>
+                  </div>
+                );
+              })()}
+
+              {/* 5. Ad slot #2 */}
+              <BlogAdSlot size="300x250" />
 
             </aside>
           </div>
