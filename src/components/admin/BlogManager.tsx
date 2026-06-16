@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { BlogBulkImport } from "./BlogBulkImport";
 import { BlogBulkSchedule } from "./BlogBulkSchedule";
+import { BlogImageUpload } from "./BlogImageUpload";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -280,8 +281,11 @@ function PostForm({ post, onSave, onCancel }: { post: Partial<BlogPost>; onSave:
         {/* Image */}
         <div className="bg-card border border-border rounded-xl p-4 space-y-2">
           <h3 className="text-sm font-semibold">Featured Image</h3>
-          <Input value={form.image_url} onChange={e => set("image_url", e.target.value)} placeholder="https://images.unsplash.com/..." className="text-xs" />
-          {form.image_url && <img src={form.image_url} alt="" className="w-full aspect-video object-cover rounded-lg border border-border" />}
+          <BlogImageUpload
+            value={form.image_url || ""}
+            onChange={(url) => set("image_url", url)}
+            slug={form.slug}
+          />
         </div>
 
         {/* Excerpt */}
