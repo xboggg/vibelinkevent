@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { BlogBulkImport } from "./BlogBulkImport";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -385,9 +386,12 @@ export function BlogManager() {
           <h2 className="text-2xl font-bold">Blog Manager</h2>
           <p className="text-muted-foreground text-sm mt-1">{posts.length} articles · {posts.filter(p => p.published).length} published · {posts.filter(p => p.featured).length} featured</p>
         </div>
-        <Button onClick={() => { setEditPost(null); setView("create"); }} className="gap-2">
-          <PlusCircle className="h-4 w-4" /> New Article
-        </Button>
+        <div className="flex items-center gap-2">
+          <BlogBulkImport onComplete={fetchPosts} />
+          <Button onClick={() => { setEditPost(null); setView("create"); }} className="gap-2">
+            <PlusCircle className="h-4 w-4" /> New Article
+          </Button>
+        </div>
       </div>
 
       <div className="relative">
