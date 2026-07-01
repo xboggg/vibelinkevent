@@ -1,0 +1,425 @@
+<!doctype html>
+<!--
+  DEMO 3 — KENTE CODEX
+  Bold Ghanaian geometric. Each section framed by Adinkra symbols + woven kente strips.
+  Subject: Togbe Wenya VII (1939–2026), Ewe Paramount Chief.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>In Loving Memory — Togbe Wenya VII (1939–2026)</title>
+<meta name="theme-color" content="#0f0a06">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,700;6..96,800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --ink:#0f0a06; --night:#1a120c;
+    --gold:#d4af37; --gold-bright:#f0c854; --gold-deep:#8a6a23;
+    --crimson:#a3171c; --crimson-deep:#5a0d10;
+    --emerald:#0a6a3a; --ivory:#f7efdc;
+    --kente-blk:#1a120c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--ivory);line-height:1.65;
+    -webkit-font-smoothing:antialiased;min-height:100vh}
+  body.locked{overflow:hidden;height:100vh}
+  ::selection{background:var(--gold);color:var(--ink)}
+  img,svg{max-width:100%;display:block}
+
+  /* KENTE STRIP — repeating geometric pattern as section divider */
+  .kente-strip{height:20px;background:
+    repeating-linear-gradient(90deg,
+      var(--crimson) 0 24px, var(--gold) 24px 32px, var(--emerald) 32px 56px, var(--ink) 56px 64px,
+      var(--gold) 64px 72px, var(--crimson) 72px 96px, var(--ink) 96px 104px, var(--gold-bright) 104px 128px);
+    border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);position:relative;z-index:6}
+
+  /* SPLASH — Adinkra Sankofa drawn line by line, then kente weaves across */
+  .splash{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;transition:opacity 1.4s,visibility 1.4s;cursor:pointer;overflow:hidden}
+  .splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+  .adinkra{width:200px;height:200px;opacity:0;animation:adinkraIn 1.5s .5s forwards}
+  .adinkra svg{width:100%;height:100%}
+  .adinkra path,.adinkra circle{stroke:var(--gold-bright);stroke-width:3;fill:none;
+    stroke-dasharray:1000;stroke-dashoffset:1000;animation:trace 3s 1s forwards ease-out}
+  @keyframes adinkraIn{to{opacity:1}}
+  @keyframes trace{to{stroke-dashoffset:0}}
+  .splash-strip{position:absolute;top:50%;left:-10%;width:120%;height:60px;
+    background:repeating-linear-gradient(90deg,var(--crimson) 0 30px,var(--gold) 30px 40px,
+      var(--emerald) 40px 70px,var(--ink) 70px 80px);
+    transform:translateY(-50%) scaleX(0);transform-origin:left center;
+    animation:weaveIn 1.5s 3.5s forwards cubic-bezier(.6,0,.3,1);opacity:.85;mix-blend-mode:screen}
+  @keyframes weaveIn{to{transform:translateY(-50%) scaleX(1)}}
+  .splash-name{font-family:'Bodoni Moda',serif;font-weight:700;color:var(--gold-bright);
+    text-align:center;margin-top:2.4rem;opacity:0;animation:adinkraIn 1.4s 4.5s forwards}
+  .splash-name .pre{display:block;font-family:'Inter',sans-serif;font-weight:300;font-size:.85rem;letter-spacing:.5em;color:var(--ivory);text-transform:uppercase;margin-bottom:.7rem;opacity:.7}
+  .splash-name .core{font-size:clamp(1.8rem,5vw,2.8rem);letter-spacing:.06em;line-height:1.2}
+  .splash-name .years{display:block;color:var(--gold);font-family:'Inter',sans-serif;font-weight:400;font-size:.9rem;letter-spacing:.4em;margin-top:1rem}
+  .splash-cue{position:absolute;bottom:30px;font-size:.7rem;letter-spacing:.45em;color:var(--gold);text-transform:uppercase;opacity:0;animation:adinkraIn 1s 5.6s forwards}
+
+  /* HERO */
+  .hero{position:relative;padding:6rem 2rem 4rem;text-align:center;
+    background:linear-gradient(180deg,#000,var(--ink));overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;
+    background-image:radial-gradient(circle at 50% 40%, rgba(212,175,55,.08), transparent 50%),
+    repeating-linear-gradient(45deg, transparent 0 30px, rgba(212,175,55,.02) 30px 31px);pointer-events:none}
+  .hero-frame{max-width:780px;margin:0 auto;position:relative;z-index:1}
+  .hero-banner{display:inline-block;padding:.4rem 1.6rem;border:1px solid var(--gold);
+    color:var(--gold-bright);font-size:.65rem;letter-spacing:.5em;text-transform:uppercase;margin-bottom:2rem;background:rgba(15,10,6,.5)}
+  .hero-title{font-family:'Bodoni Moda',serif;font-weight:800;color:var(--ivory);
+    font-size:clamp(2.4rem,7vw,4.5rem);line-height:1.05;letter-spacing:.02em;margin-bottom:.5rem}
+  .hero-roman{font-family:'Bodoni Moda',serif;font-weight:400;color:var(--gold);
+    font-size:clamp(1.6rem,4vw,2.4rem);font-style:italic;margin-bottom:1rem}
+  .hero-portrait-wrap{margin:2.5rem auto;width:240px;height:240px;position:relative;padding:8px;
+    background:conic-gradient(from 0deg,var(--crimson),var(--gold),var(--emerald),var(--crimson));border-radius:50%}
+  .hero-portrait{width:100%;height:100%;border-radius:50%;background:var(--ink);overflow:hidden;border:3px solid var(--ink)}
+  .hero-portrait img{width:100%;height:100%;object-fit:cover}
+  .hero-years-block{display:inline-block;padding:.7rem 2rem;
+    border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);
+    font-family:'Bodoni Moda',serif;font-weight:500;color:var(--gold-bright);
+    font-size:1.2rem;letter-spacing:.5em;margin:1rem 0}
+  .hero-titles{margin-top:1.4rem;color:var(--ivory);opacity:.8;font-size:1rem;font-style:italic}
+  .countdown{display:flex;justify-content:center;gap:.5rem;margin-top:2rem;flex-wrap:wrap}
+  .cd-cell{min-width:74px;padding:.7rem .4rem;background:var(--night);border:1px solid var(--gold);text-align:center}
+  .cd-num{display:block;font-family:'Bodoni Moda',serif;font-weight:700;font-size:1.5rem;color:var(--gold-bright);line-height:1}
+  .cd-lbl{display:block;font-family:'Inter',sans-serif;font-size:.6rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-top:.4rem;font-weight:600}
+
+  /* CONTENT */
+  section.chapter{padding:5rem 2rem;position:relative}
+  .container{max-width:1100px;margin:0 auto}
+  .chapter-head{text-align:center;margin-bottom:3rem;position:relative}
+  .chapter-symbol{width:60px;height:60px;margin:0 auto 1rem;color:var(--gold);opacity:.9}
+  .chapter-symbol svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2}
+  .eyebrow{font-size:.7rem;letter-spacing:.6em;color:var(--gold);text-transform:uppercase;margin-bottom:.6rem}
+  .chapter-title{font-family:'Bodoni Moda',serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.8rem);
+    color:var(--ivory);letter-spacing:.02em;line-height:1.15}
+  .chapter-title em{font-style:italic;color:var(--gold);font-weight:400}
+
+  /* BIO — panels like kente strips stacked */
+  .panels{display:grid;grid-template-columns:1fr;gap:0;border:2px solid var(--gold)}
+  @media(min-width:780px){.panels{grid-template-columns:1fr 1fr 1fr}}
+  .panel{padding:2rem 1.6rem;border-right:1px solid var(--gold);background:var(--night);position:relative}
+  .panel:last-child{border-right:none}
+  @media(max-width:780px){.panel{border-right:none;border-bottom:1px solid var(--gold)}.panel:last-child{border-bottom:none}}
+  .panel .pn{font-family:'Bodoni Moda',serif;font-weight:700;font-size:3rem;color:var(--gold);line-height:1;margin-bottom:.6rem}
+  .panel h3{font-family:'Bodoni Moda',serif;color:var(--ivory);font-size:1.2rem;margin-bottom:.8rem;font-weight:500}
+  .panel p{color:var(--ivory);opacity:.78;font-size:.98rem;line-height:1.75}
+
+  /* PROGRAMME — symbol-led cards */
+  .prog-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+  @media(min-width:780px){.prog-grid{grid-template-columns:repeat(2,1fr)}}
+  .pcard{padding:1.6rem;background:var(--night);border:1px solid var(--gold);position:relative;overflow:hidden}
+  .pcard::before{content:'';position:absolute;top:0;left:0;width:100%;height:4px;
+    background:linear-gradient(90deg,var(--crimson),var(--gold),var(--emerald),var(--gold),var(--crimson))}
+  .pcard .pdate{font-family:'Inter',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:.6rem;margin-top:.5rem}
+  .pcard h4{font-family:'Bodoni Moda',serif;color:var(--ivory);font-size:1.3rem;margin-bottom:.5rem;font-weight:600}
+  .pcard p{color:var(--ivory);opacity:.7;font-size:.95rem}
+  .pcard .symbol{position:absolute;top:1.2rem;right:1.2rem;width:36px;height:36px;color:var(--gold);opacity:.5}
+
+  /* GALLERY */
+  .kgal{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:140px;gap:6px}
+  @media(max-width:900px){.kgal{grid-template-columns:repeat(3,1fr);grid-auto-rows:120px}}
+  @media(max-width:560px){.kgal{grid-template-columns:repeat(2,1fr);grid-auto-rows:160px}}
+  .kgal img{width:100%;height:100%;object-fit:cover;filter:contrast(1.05) saturate(1.1);transition:filter .3s,transform .8s}
+  .kgal img:hover{filter:contrast(1) saturate(1.3);transform:scale(1.04)}
+  .kgal-tile:nth-child(1){grid-column:span 2;grid-row:span 2}
+  .kgal-tile:nth-child(5){grid-row:span 2}
+  .kgal-tile{overflow:hidden;position:relative;border:2px solid var(--gold)}
+
+  /* TRIBUTES */
+  .trib-form{max-width:600px;margin:0 auto 2rem;padding:1.8rem;background:var(--night);border:2px solid var(--gold)}
+  .trib-form input,.trib-form textarea{width:100%;padding:.8rem 1rem;margin-bottom:.9rem;background:#000;
+    border:1px solid var(--gold-deep);color:var(--ivory);font-family:'Inter',sans-serif;font-size:.95rem}
+  .trib-form textarea{min-height:90px;resize:vertical}
+  .trib-form button{width:100%;padding:.9rem;background:var(--crimson);color:var(--gold-bright);border:1px solid var(--gold);font-family:'Inter',sans-serif;font-weight:600;letter-spacing:.3em;font-size:.8rem;cursor:pointer;text-transform:uppercase}
+  .trib-list{max-width:920px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:1rem}
+  @media(min-width:680px){.trib-list{grid-template-columns:1fr 1fr}}
+  .trib-c{padding:1.3rem 1.4rem;background:var(--night);border-left:6px solid var(--gold);position:relative}
+  .trib-c::after{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;
+    background:repeating-linear-gradient(0deg,var(--crimson) 0 6px,var(--gold) 6px 12px,var(--emerald) 12px 18px,var(--gold) 18px 24px)}
+  .trib-c .m{color:var(--ivory);font-style:italic;line-height:1.7;margin-bottom:.7rem;font-size:.98rem}
+  .trib-c .w{font-family:'Bodoni Moda',serif;color:var(--gold-bright);font-size:.92rem;letter-spacing:.1em}
+
+  /* CONTACTS */
+  .fc-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;max-width:980px;margin:0 auto}
+  .fc-card{display:flex;align-items:center;gap:1rem;padding:1.3rem;border:2px solid var(--gold);
+    background:var(--night);text-decoration:none;color:inherit;transition:all .3s}
+  .fc-card:hover{background:var(--crimson-deep)}
+  .fc-icon{width:46px;height:46px;border-radius:0;background:var(--crimson);color:var(--gold-bright);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .fc-role{font-size:.65rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:.2rem}
+  .fc-name{font-family:'Bodoni Moda',serif;color:var(--ivory);font-size:1rem;margin-bottom:.2rem;font-weight:500}
+  .fc-num{color:var(--gold-bright);font-size:.9rem}
+
+  /* LOCATION + ATTIRE */
+  .attire-band{margin:2.5rem auto 0;max-width:560px;text-align:center;padding:1.6rem;
+    background:linear-gradient(90deg,var(--crimson) 0 33%,var(--ink) 33% 66%,var(--emerald) 66%);border:2px solid var(--gold)}
+  .attire-band h4{color:var(--ivory);letter-spacing:.5em;font-size:.7rem;text-transform:uppercase;margin-bottom:.5rem}
+  .attire-band .at{font-family:'Bodoni Moda',serif;color:var(--gold-bright);font-size:1.4rem;letter-spacing:.3em;font-weight:600}
+  .loc-card{max-width:880px;margin:0 auto;border:2px solid var(--gold);overflow:hidden}
+  .loc-card iframe{width:100%;height:300px;border:0;display:block;filter:grayscale(.4) brightness(.85)}
+  .loc-details{padding:1.5rem;background:var(--night);text-align:center}
+  .loc-name{font-family:'Bodoni Moda',serif;color:var(--gold-bright);font-size:1.2rem;font-weight:600;margin-bottom:.4rem}
+  .loc-addr{color:var(--ivory);opacity:.7;margin-bottom:1rem}
+  .loc-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;background:var(--crimson);color:var(--gold-bright);border:1px solid var(--gold);font-weight:600;letter-spacing:.2em;font-size:.78rem;text-decoration:none;text-transform:uppercase}
+
+  /* FOOTER */
+  footer{padding:4rem 2rem;background:#000;text-align:center;border-top:2px solid var(--gold);position:relative}
+  .foot-italic{font-family:'Bodoni Moda',serif;font-style:italic;color:var(--gold-bright);font-size:2.2rem;margin-bottom:.7rem}
+  .foot-name{font-family:'Bodoni Moda',serif;color:var(--ivory);letter-spacing:.2em;font-size:1rem;font-weight:600}
+  .foot-years{color:var(--gold);letter-spacing:.5em;font-size:.85rem;margin:.5rem 0 1.4rem}
+  .foot-verse{max-width:520px;margin:0 auto 1.5rem;color:var(--ivory);opacity:.75;font-style:italic;font-size:.95rem;line-height:1.7}
+  .credit{padding-top:1.4rem;border-top:1px solid var(--gold-deep);color:var(--gold);font-size:.65rem;letter-spacing:.3em;text-transform:uppercase}
+  .share-fab{position:fixed;bottom:1.5rem;right:1.5rem;z-index:80;width:54px;height:54px;border-radius:0;background:#25D366;color:#fff;border:2px solid var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem}
+  .audio-toggle{position:fixed;top:1.3rem;right:1.3rem;z-index:80;width:44px;height:44px;border-radius:0;background:var(--night);border:1px solid var(--gold);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body class="locked">
+
+<!-- SPLASH: Sankofa Adinkra (bird looking back) -->
+<div class="splash" id="splash">
+  <div class="adinkra">
+    <svg viewBox="0 0 100 100">
+      <!-- Stylised Sankofa bird -->
+      <path d="M50 12 C 26 12, 12 32, 12 50 C 12 72, 30 88, 50 88 C 70 88, 88 72, 88 50 C 88 32, 74 12, 50 12 Z"/>
+      <path d="M30 50 Q 50 30, 70 50 Q 50 70, 30 50 Z"/>
+      <circle cx="50" cy="50" r="6"/>
+      <path d="M50 30 L 50 70"/>
+      <path d="M30 50 L 70 50"/>
+    </svg>
+  </div>
+  <div class="splash-strip"></div>
+  <div class="splash-name">
+    <span class="pre">In Loving Memory of</span>
+    <span class="core">TOGBE WENYA VII</span>
+    <span class="years">1939 &nbsp;—&nbsp; 2026</span>
+  </div>
+  <div class="splash-cue">Tap the symbol to enter</div>
+</div>
+
+<audio id="bg" loop preload="none"><source src="https://cdn.pixabay.com/audio/2022/10/30/audio_347111d654.mp3" type="audio/mpeg"></audio>
+<button class="audio-toggle" id="audioBtn"><i class="fas fa-music" id="audioIcon"></i></button>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-frame">
+    <div class="hero-banner">A King has Fallen</div>
+    <div class="hero-roman">Togbe Wenya VII</div>
+    <h1 class="hero-title">FIA OF AGAVE</h1>
+    <div class="hero-portrait-wrap"><div class="hero-portrait"><img src="https://i.pravatar.cc/600?img=60" alt=""></div></div>
+    <div class="hero-years-block">1939 &nbsp;—&nbsp; 2026</div>
+    <div class="hero-titles">Paramount Chief &middot; Custodian of the Stool &middot; Husband to Three Queens</div>
+    <div class="countdown">
+      <div class="cd-cell"><span class="cd-num" data-cd="d">--</span><span class="cd-lbl">Days</span></div>
+      <div class="cd-cell"><span class="cd-num" data-cd="h">--</span><span class="cd-lbl">Hours</span></div>
+      <div class="cd-cell"><span class="cd-num" data-cd="m">--</span><span class="cd-lbl">Min</span></div>
+      <div class="cd-cell"><span class="cd-num" data-cd="s">--</span><span class="cd-lbl">Sec</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="kente-strip"></div>
+
+<!-- BIO -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="chapter-symbol">
+        <svg viewBox="0 0 60 60"><path d="M30 5 L 50 30 L 30 55 L 10 30 Z"/><circle cx="30" cy="30" r="8"/></svg>
+      </div>
+      <div class="eyebrow">The Three Pillars of His Reign</div>
+      <h2 class="chapter-title">His <em>Life</em></h2>
+    </div>
+    <div class="panels">
+      <div class="panel">
+        <div class="pn">I</div>
+        <h3>The Scholar</h3>
+        <p>Born in Agave-Afedume in 1939, Togbe Wenya VII trained as a teacher at Akatsi Training College, then read history at Legon. His thesis on pre-colonial Ewe kingdoms is still cited today.</p>
+      </div>
+      <div class="panel">
+        <div class="pn">II</div>
+        <h3>The King</h3>
+        <p>Enstooled in 1981 after his uncle's passing, he ruled for forty-five years with calm authority. He brought electricity to seventeen villages, built three schools, and ended a sixty-year land dispute with neighbouring Ave.</p>
+      </div>
+      <div class="panel">
+        <div class="pn">III</div>
+        <h3>The Father</h3>
+        <p>To his eleven children — and the dozens of others he helped raise — he was simply <em>Tata</em>. He insisted every child finish secondary school. None disobeyed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="kente-strip"></div>
+
+<!-- PROGRAMME -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="chapter-symbol">
+        <svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="22"/><path d="M30 8 L 30 52 M 8 30 L 52 30"/></svg>
+      </div>
+      <div class="eyebrow">The Final Rites</div>
+      <h2 class="chapter-title">Funeral <em>Programme</em></h2>
+    </div>
+    <div class="prog-grid">
+      <div class="pcard">
+        <div class="symbol"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="14"/><path d="M18 8 L18 28 M 8 18 L 28 18"/></svg></div>
+        <div class="pdate">THU 1 APR 2027 &middot; 6PM</div>
+        <h4>One-Week Observation</h4>
+        <p>Family gathering at Wenya Palace, Agave-Afedume.</p>
+      </div>
+      <div class="pcard">
+        <div class="symbol"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18 L18 6 L30 18 L18 30 Z"/></svg></div>
+        <div class="pdate">FRI 16 APR 2027 &middot; 8PM</div>
+        <h4>Wake-Keeping</h4>
+        <p>Traditional drumming &amp; warrior dance &middot; Palace forecourt.</p>
+      </div>
+      <div class="pcard">
+        <div class="symbol"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 4 L24 14 L34 16 L26 24 L28 34 L18 28 L8 34 L10 24 L2 16 L12 14 Z"/></svg></div>
+        <div class="pdate">SAT 17 APR 2027 &middot; 5AM</div>
+        <h4>Filing Past &amp; Burial</h4>
+        <p>Filing past from 5am. Burial 11am at Royal Mausoleum.</p>
+      </div>
+      <div class="pcard">
+        <div class="symbol"><svg viewBox="0 0 36 36" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="10"/><circle cx="18" cy="18" r="4"/></svg></div>
+        <div class="pdate">SUN 18 APR 2027</div>
+        <h4>Thanksgiving</h4>
+        <p>EP Church, Agave &middot; followed by family reception.</p>
+      </div>
+    </div>
+    <div class="attire-band">
+      <h4>Attire</h4>
+      <div class="at">RED &middot; BLACK</div>
+    </div>
+  </div>
+</section>
+
+<div class="kente-strip"></div>
+
+<!-- GALLERY -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="chapter-symbol">
+        <svg viewBox="0 0 60 60"><rect x="6" y="6" width="48" height="48"/><circle cx="30" cy="30" r="10"/></svg>
+      </div>
+      <div class="eyebrow">Royal Portraits</div>
+      <h2 class="chapter-title">A King in <em>Pictures</em></h2>
+    </div>
+    <div class="kgal">
+      <div class="kgal-tile"><img src="https://picsum.photos/seed/wenya1/800/800"></div>
+      <div class="kgal-tile"><img src="https://picsum.photos/seed/wenya2/400/400"></div>
+      <div class="kgal-tile"><img src="https://picsum.photos/seed/wenya3/400/400"></div>
+      <div class="kgal-tile"><img src="https://picsum.photos/seed/wenya4/400/400"></div>
+      <div class="kgal-tile"><img src="https://picsum.photos/seed/wenya5/400/800"></div>
+      <div class="kgal-tile"><img src="https://picsum.photos/seed/wenya6/400/400"></div>
+      <div class="kgal-tile"><img src="https://picsum.photos/seed/wenya7/400/400"></div>
+      <div class="kgal-tile"><img src="https://picsum.photos/seed/wenya8/400/400"></div>
+    </div>
+  </div>
+</section>
+
+<div class="kente-strip"></div>
+
+<!-- TRIBUTES -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="chapter-symbol">
+        <svg viewBox="0 0 60 60"><path d="M30 8 Q 50 20, 50 38 Q 50 50, 30 52 Q 10 50, 10 38 Q 10 20, 30 8 Z"/></svg>
+      </div>
+      <div class="eyebrow">From His Subjects</div>
+      <h2 class="chapter-title">Royal <em>Tributes</em></h2>
+    </div>
+    <form class="trib-form" onsubmit="event.preventDefault();this.querySelector('button').textContent='Thank you'">
+      <input type="text" placeholder="Your full name" required>
+      <input type="text" placeholder="Town or relationship">
+      <textarea placeholder="Words for the king…" required></textarea>
+      <button>Send My Tribute</button>
+    </form>
+    <div class="trib-list">
+      <div class="trib-c"><div class="m">"Togbe ended the dispute over our land with a single judgment. We have farmed in peace ever since."</div><div class="w">— Chief of Ave-Dakpa</div></div>
+      <div class="trib-c"><div class="m">"He paid my school fees in 1989 when my father had none. I am now a doctor in Tema. A father indeed."</div><div class="w">— Dr. Mawutor</div></div>
+      <div class="trib-c"><div class="m">"The drums know. The river knows. The hills of Agave know. A king has fallen."</div><div class="w">— Linguist of the Stool</div></div>
+      <div class="trib-c"><div class="m">"Papa, you taught me a queen's quiet is stronger than a king's shout. I will reign with that wisdom."</div><div class="w">— Mama Akpe, eldest daughter</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="kente-strip"></div>
+
+<!-- CONTACTS -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="chapter-symbol">
+        <svg viewBox="0 0 60 60"><path d="M10 50 L 30 10 L 50 50 Z"/></svg>
+      </div>
+      <div class="eyebrow">RSVP &middot; Enquiries</div>
+      <h2 class="chapter-title">The Royal <em>House</em></h2>
+    </div>
+    <div class="fc-row">
+      <a class="fc-card" href="tel:+233244112266"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Eldest Son</div><div class="fc-name">Togbe-Vi Mawutor</div><div class="fc-num">+233 244 112 266</div></div></a>
+      <a class="fc-card" href="tel:+233205776655"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Linguist</div><div class="fc-name">Tsiame Korku</div><div class="fc-num">+233 205 776 655</div></div></a>
+      <a class="fc-card" href="tel:+447712998877"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Daughter &middot; UK</div><div class="fc-name">Princess Akpe</div><div class="fc-num">+44 7712 998 877</div></div></a>
+    </div>
+  </div>
+</section>
+
+<div class="kente-strip"></div>
+
+<!-- LOCATION -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="chapter-symbol"><svg viewBox="0 0 60 60"><path d="M30 8 C 18 8, 12 18, 12 28 C 12 42, 30 54, 30 54 C 30 54, 48 42, 48 28 C 48 18, 42 8, 30 8 Z"/></svg></div>
+      <div class="eyebrow">The Palace</div>
+      <h2 class="chapter-title">Where We <em>Gather</em></h2>
+    </div>
+    <div class="loc-card">
+      <iframe src="https://maps.google.com/maps?q=Agave%20Volta%20Region%20Ghana&z=12&output=embed"></iframe>
+      <div class="loc-details">
+        <div class="loc-name">Wenya Royal Palace</div>
+        <div class="loc-addr">Agave-Afedume, Ketu North Municipal, Volta Region</div>
+        <a class="loc-cta" href="https://maps.google.com/?q=Agave+Volta" target="_blank"><i class="fas fa-directions"></i> Open in Maps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="kente-strip"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-italic">Hede Nyuie</div>
+  <div class="foot-name">TOGBE WENYA VII</div>
+  <div class="foot-years">1939 &mdash; 2026</div>
+  <p class="foot-verse">"A king does not die. He returns to the council of ancestors and watches his people from the great river bank."</p>
+  <div class="credit">Designed by VibeLink Event &middot; Kente Codex template</div>
+</footer>
+
+<button class="share-fab" onclick="const t='In loving memory of Togbe Wenya VII (1939-2026). '+location.href;window.open('https://wa.me/?text='+encodeURIComponent(t))"><i class="fab fa-whatsapp"></i></button>
+
+<script>
+  document.getElementById('splash').addEventListener('click',()=>{
+    document.getElementById('splash').classList.add('gone');
+    document.body.classList.remove('locked');
+    if(!audioOn) tryAudio();
+  });
+  const audio=document.getElementById('bg');audio.volume=.3;let audioOn=false;
+  function tryAudio(){audio.play().then(()=>{audioOn=true;document.getElementById('audioIcon').className='fas fa-volume-up'}).catch(()=>{})}
+  document.getElementById('audioBtn').addEventListener('click',()=>{if(audioOn){audio.pause();audioOn=false;document.getElementById('audioIcon').className='fas fa-music'}else tryAudio()});
+  const target=new Date('2027-04-17T05:00:00').getTime();
+  function tickCD(){const now=Date.now();let diff=Math.max(0,target-now);
+    document.querySelectorAll('[data-cd="d"]').forEach(el=>el.textContent=String(Math.floor(diff/86400000)).padStart(3,'0'));
+    document.querySelectorAll('[data-cd="h"]').forEach(el=>el.textContent=String(Math.floor(diff/3600000)%24).padStart(2,'0'));
+    document.querySelectorAll('[data-cd="m"]').forEach(el=>el.textContent=String(Math.floor(diff/60000)%60).padStart(2,'0'));
+    document.querySelectorAll('[data-cd="s"]').forEach(el=>el.textContent=String(Math.floor(diff/1000)%60).padStart(2,'0'));}
+  tickCD();setInterval(tickCD,1000);
+</script>
+</body>
+</html>

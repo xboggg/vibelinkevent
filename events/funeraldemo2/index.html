@@ -1,0 +1,401 @@
+<!doctype html>
+<!--
+  DEMO 2 — THE RIVER  (v2 — clicks fixed, countdown added)
+  Horizontal-scroll journey using snap-scroll + arrow navigation. No wheel hijacking.
+  Subject: Madam Esi Mansa Dapaah (1955–2026), fisherwoman matriarch of Elmina.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>In Loving Memory — Madam Esi Mansa Dapaah (1955–2026)</title>
+<meta name="theme-color" content="#0a2540">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --abyss:#031824; --deep:#0a2540; --teal:#13556a; --foam:#a8d5e2;
+    --sand:#f1e5cb; --paper:#f8f0d8; --ink:#0a1f2e;
+    --gold:#c89a4f; --gold-bright:#e4b770; --coral:#d96b4a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  body{font-family:'Fraunces',serif;background:var(--deep);color:var(--paper);
+    line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+  body.locked{overflow:hidden;height:100vh}
+  ::selection{background:var(--coral);color:var(--paper)}
+  img{max-width:100%;display:block}
+  button{font-family:inherit}
+
+  /* WATER background */
+  .water-bg{position:fixed;inset:0;z-index:0;background:
+    linear-gradient(180deg,var(--abyss) 0%, var(--deep) 40%, var(--teal) 100%);overflow:hidden;pointer-events:none}
+  .wave{position:absolute;left:-10%;width:120%;height:200px;opacity:.5;
+    background-image:radial-gradient(ellipse at center, rgba(168,213,226,.3) 0%, transparent 70%);
+    border-radius:50%;animation:flow 18s linear infinite;pointer-events:none}
+  .wave.w1{bottom:0%;animation-duration:14s}
+  .wave.w2{bottom:15%;opacity:.3;animation-duration:22s;animation-direction:reverse}
+  .wave.w3{bottom:30%;opacity:.2;animation-duration:30s}
+  @keyframes flow{0%{transform:translateX(-5%)}50%{transform:translateX(5%)}100%{transform:translateX(-5%)}}
+
+  /* SPLASH */
+  .splash{position:fixed;inset:0;background:linear-gradient(180deg,var(--abyss),var(--teal));
+    z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    transition:opacity 1.2s,visibility 1.2s;cursor:pointer;overflow:hidden}
+  .splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+  .splash svg{width:260px;height:140px;opacity:0;animation:fadeIn 1.8s .3s forwards}
+  .splash-name{font-family:'Fraunces',serif;font-style:italic;font-weight:300;
+    font-size:clamp(1.4rem,4vw,2.4rem);color:var(--foam);letter-spacing:.04em;text-align:center;
+    opacity:0;animation:fadeIn 1.2s 2s forwards;margin-top:1.5rem;line-height:1.4}
+  .splash-name strong{display:block;color:var(--paper);font-weight:500;font-size:1.1em;letter-spacing:.12em;margin-top:.4rem}
+  .splash-name small{display:block;font-family:'Caveat',cursive;font-size:.8em;color:var(--gold);margin-top:1rem;letter-spacing:.05em}
+  .splash-cue{position:absolute;bottom:30px;font-family:'Inter',sans-serif;font-size:.7rem;
+    letter-spacing:.45em;color:var(--foam);opacity:0;animation:fadeIn 1s 3.2s forwards;text-transform:uppercase}
+  @keyframes fadeIn{to{opacity:1}}
+
+  /* RIVER CARRIAGE — snap-scroll horizontal carousel on desktop, vertical on mobile */
+  .river-wrap{position:relative;z-index:5}
+
+  /* DESKTOP: horizontal scroll inside the wrap */
+  @media(min-width:761px){
+    .river-wrap{height:100vh;overflow:hidden}
+    .river{height:100vh;display:flex;overflow-x:auto;overflow-y:hidden;
+      scroll-snap-type:x mandatory;scroll-behavior:smooth;
+      scrollbar-width:thin;scrollbar-color:var(--gold) rgba(0,0,0,.3)}
+    .river::-webkit-scrollbar{height:8px;background:rgba(0,0,0,.3)}
+    .river::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
+    .bend{flex:0 0 100vw;height:100vh;scroll-snap-align:start;padding:5rem 2rem 3rem;
+      display:flex;flex-direction:column;justify-content:center;position:relative;overflow-y:auto}
+    .nav-arrow{position:fixed;top:50%;transform:translateY(-50%);z-index:60;width:54px;height:54px;
+      border-radius:50%;background:rgba(3,24,36,.85);border:2px solid var(--gold);color:var(--gold-bright);
+      cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+      backdrop-filter:blur(8px);transition:all .3s}
+    .nav-arrow:hover:not(:disabled){background:var(--gold);color:var(--abyss);transform:translateY(-50%) scale(1.08)}
+    .nav-arrow:disabled{opacity:.3;cursor:not-allowed}
+    .nav-arrow.prev{left:1.5rem}
+    .nav-arrow.next{right:1.5rem}
+    .nav-dots{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:60;
+      display:flex;gap:.6rem;background:rgba(3,24,36,.6);padding:.6rem 1rem;border-radius:30px;
+      backdrop-filter:blur(8px);border:1px solid rgba(200,154,79,.3)}
+    .nav-dot{width:10px;height:10px;border-radius:50%;background:rgba(168,213,226,.3);border:none;cursor:pointer;padding:0;transition:all .25s}
+    .nav-dot:hover{background:rgba(168,213,226,.6)}
+    .nav-dot.active{background:var(--gold-bright);width:28px;border-radius:5px}
+  }
+
+  /* MOBILE: vertical scroll, no arrows */
+  @media(max-width:760px){
+    .river{display:flex;flex-direction:column}
+    .bend{width:100%;min-height:auto;padding:4rem 1.2rem 3rem;position:relative}
+    .nav-arrow,.nav-dots{display:none}
+  }
+
+  .bend-num{position:absolute;top:1.5rem;left:1.5rem;font-family:'Fraunces',serif;font-style:italic;
+    font-size:.9rem;color:var(--gold);letter-spacing:.2em;z-index:2}
+  .bend-num strong{font-size:2rem;color:var(--paper);display:block;font-style:normal}
+  .bend-inner{max-width:780px;width:100%;margin:0 auto;position:relative}
+
+  .eyebrow{font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.5em;color:var(--gold);
+    text-transform:uppercase;margin-bottom:1rem}
+  .title{font-family:'Fraunces',serif;font-weight:300;font-style:italic;
+    font-size:clamp(2rem,5vw,3.4rem);color:var(--paper);line-height:1.15;margin-bottom:1.4rem}
+  .title em{font-style:normal;font-weight:500;color:var(--gold)}
+
+  /* BEND 1 — Arrival */
+  .arrival-photo{width:180px;height:180px;margin:1.5rem auto;border-radius:50%;
+    border:3px solid var(--gold);box-shadow:0 0 40px rgba(200,154,79,.4);overflow:hidden}
+  .arrival-photo img{width:100%;height:100%;object-fit:cover}
+  .arrival-years{font-family:'Caveat',cursive;font-size:2.6rem;color:var(--gold);letter-spacing:.05em;margin:1rem 0;text-align:center}
+  .arrival-meta{text-align:center;color:var(--foam);font-size:1.05rem;font-style:italic}
+
+  /* COUNTDOWN */
+  .countdown{display:flex;justify-content:center;gap:.6rem;margin-top:2rem;flex-wrap:wrap}
+  .cd-cell{min-width:72px;padding:.7rem .4rem;background:rgba(0,0,0,.35);border:1px solid rgba(200,154,79,.4);text-align:center;border-radius:4px}
+  .cd-num{display:block;font-family:'Fraunces',serif;font-weight:500;font-size:1.5rem;color:var(--gold-bright);line-height:1}
+  .cd-lbl{display:block;font-family:'Inter',sans-serif;font-size:.6rem;letter-spacing:.3em;color:var(--foam);text-transform:uppercase;margin-top:.3rem;font-weight:500}
+  .cd-caption{text-align:center;margin-top:.8rem;font-family:'Caveat',cursive;color:var(--gold);font-size:1.1rem}
+
+  /* BEND 2 — Story */
+  .story p{color:var(--paper);font-size:1.1rem;line-height:1.85;margin-bottom:1.1rem;max-width:640px}
+  .story p:first-letter{font-family:'Fraunces',serif;font-size:3.4rem;color:var(--gold);float:left;line-height:1;margin:.2rem .5rem 0 0;font-weight:600}
+
+  /* BEND 3 — Programme */
+  .prog{display:grid;grid-template-columns:1fr;gap:.9rem}
+  @media(min-width:680px){.prog{grid-template-columns:1fr 1fr}}
+  .prog-card{padding:1.3rem;background:rgba(248,240,216,.08);border-left:3px solid var(--gold);backdrop-filter:blur(4px)}
+  .prog-date{font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.3em;color:var(--gold);margin-bottom:.4rem;text-transform:uppercase;font-weight:500}
+  .prog-title{font-family:'Fraunces',serif;font-weight:500;color:var(--paper);font-size:1.2rem;margin-bottom:.4rem}
+  .prog-where{color:var(--foam);font-size:.95rem;font-style:italic}
+  .attire-strip{margin-top:1.5rem;text-align:center;color:var(--gold);font-family:'Inter',sans-serif;font-size:.78rem;letter-spacing:.4em;text-transform:uppercase;font-weight:500}
+
+  /* BEND 4 — Polaroid gallery */
+  .polaroids{position:relative;height:55vh;min-height:340px}
+  .pol{position:absolute;width:160px;background:var(--sand);padding:8px 8px 24px;
+    box-shadow:0 8px 22px rgba(0,0,0,.4);transform-origin:center;
+    animation:floatPol 6s ease-in-out infinite}
+  .pol img{width:100%;height:140px;object-fit:cover;display:block}
+  .pol .cap{font-family:'Caveat',cursive;color:var(--ink);text-align:center;padding-top:6px;font-size:1rem}
+  @keyframes floatPol{0%,100%{transform:translateY(0) rotate(var(--r))}50%{transform:translateY(-12px) rotate(var(--r))}}
+  .pol:nth-child(1){--r:-8deg;top:5%;left:5%;animation-delay:0s}
+  .pol:nth-child(2){--r:5deg;top:15%;left:30%;animation-delay:1s}
+  .pol:nth-child(3){--r:-3deg;top:8%;right:25%;animation-delay:2s}
+  .pol:nth-child(4){--r:7deg;top:40%;left:12%;animation-delay:.5s}
+  .pol:nth-child(5){--r:-6deg;top:48%;right:15%;animation-delay:1.5s}
+  .pol:nth-child(6){--r:4deg;top:55%;left:38%;animation-delay:2.5s}
+  @media(max-width:680px){.polaroids{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:1rem}.pol{position:relative;width:100%;top:auto!important;left:auto!important;right:auto!important;transform:none!important;animation:none}}
+
+  /* BEND 5 — Tributes */
+  .trib-form{padding:1.5rem;background:rgba(0,0,0,.3);border:1px solid var(--gold);margin-bottom:1.5rem;max-width:520px}
+  .trib-form input,.trib-form textarea{width:100%;padding:.7rem .9rem;margin-bottom:.7rem;background:rgba(3,24,36,.5);border:1px solid rgba(168,213,226,.2);color:var(--paper);font-family:'Fraunces',serif;font-size:1rem}
+  .trib-form textarea{min-height:70px;resize:vertical}
+  .trib-form button{width:100%;padding:.8rem;background:var(--coral);color:var(--paper);border:none;font-family:'Inter',sans-serif;letter-spacing:.25em;font-size:.8rem;cursor:pointer;text-transform:uppercase}
+  .ripple-list{display:grid;grid-template-columns:1fr;gap:.8rem;max-width:560px}
+  .ripple{padding:.9rem 1.1rem;background:rgba(168,213,226,.08);border-radius:0 16px 16px 16px;border:1px solid rgba(168,213,226,.2)}
+  .ripple .msg{color:var(--paper);font-style:italic;font-size:.98rem;line-height:1.55}
+  .ripple .who{margin-top:.4rem;color:var(--gold);font-family:'Caveat',cursive;font-size:1rem}
+
+  /* BEND 6 — Contacts */
+  .contacts{display:grid;grid-template-columns:1fr;gap:.8rem;max-width:520px}
+  .c-card{display:flex;align-items:center;gap:1rem;padding:1.1rem;background:rgba(248,240,216,.08);border:1px solid rgba(200,154,79,.3);text-decoration:none;color:inherit;transition:all .3s}
+  .c-card:hover{border-color:var(--gold);background:rgba(248,240,216,.14)}
+  .c-card i{color:var(--gold);font-size:1.2rem;flex-shrink:0}
+  .c-card .who{font-family:'Fraunces',serif;color:var(--paper);font-size:1rem;font-weight:500}
+  .c-card .rel{font-size:.75rem;color:var(--foam);letter-spacing:.15em;text-transform:uppercase}
+  .c-card .num{color:var(--gold);margin-left:auto;font-family:'Inter',sans-serif;font-size:.92rem}
+
+  /* BEND 7 — Closing */
+  .closing{text-align:center;color:var(--paper)}
+  .closing-italic{font-family:'Caveat',cursive;font-size:clamp(2.4rem,6vw,4rem);color:var(--gold);margin-bottom:.5rem}
+  .closing-name{font-family:'Fraunces',serif;letter-spacing:.2em;font-size:1.05rem;margin-bottom:.4rem}
+  .closing-years{color:var(--gold);letter-spacing:.5em;font-family:'Inter',sans-serif;font-size:.85rem;margin-bottom:2rem}
+  .verse{max-width:480px;margin:0 auto 1.5rem;font-style:italic;color:var(--foam);font-size:1rem;line-height:1.7}
+  .credit{font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:.3em;color:rgba(168,213,226,.5);text-transform:uppercase;margin-top:2rem}
+  .share-btn{display:inline-flex;align-items:center;gap:.6rem;padding:.8rem 1.6rem;background:#25D366;color:#fff;border:none;text-decoration:none;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:500;margin-top:1rem;cursor:pointer}
+
+  .audio-toggle{position:fixed;top:1.3rem;right:1.3rem;z-index:80;width:44px;height:44px;border-radius:50%;background:rgba(3,24,36,.85);border:1px solid var(--gold);color:var(--gold);cursor:pointer;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body class="locked">
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <svg viewBox="0 0 260 140">
+    <path d="M0 90 Q 65 60, 130 90 T 260 90" fill="none" stroke="#a8d5e2" stroke-width="2" opacity=".5"/>
+    <path d="M0 110 Q 65 80, 130 110 T 260 110" fill="none" stroke="#c89a4f" stroke-width="2"/>
+    <path d="M0 70 Q 65 40, 130 70 T 260 70" fill="none" stroke="#a8d5e2" stroke-width="1" opacity=".3"/>
+  </svg>
+  <div class="splash-name">
+    in loving memory of
+    <strong>MADAM ESI MANSA DAPAAH</strong>
+    <small>her life flowed like the Pra</small>
+  </div>
+  <div class="splash-cue">Tap to enter the river</div>
+</div>
+
+<div class="water-bg">
+  <div class="wave w3"></div><div class="wave w2"></div><div class="wave w1"></div>
+</div>
+
+<audio id="bg" loop preload="none"><source src="https://cdn.pixabay.com/audio/2022/10/30/audio_347111d654.mp3" type="audio/mpeg"></audio>
+<button class="audio-toggle" id="audioBtn"><i class="fas fa-music" id="audioIcon"></i></button>
+
+<!-- NAV ARROWS (desktop only via CSS) -->
+<button class="nav-arrow prev" id="navPrev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+<button class="nav-arrow next" id="navNext" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+<div class="nav-dots" id="navDots"></div>
+
+<div class="river-wrap">
+<div class="river" id="river">
+
+  <!-- BEND 1 — Arrival -->
+  <section class="bend">
+    <div class="bend-num"><strong>I</strong>Arrival</div>
+    <div class="bend-inner" style="text-align:center">
+      <div class="eyebrow">In Loving Memory of</div>
+      <h1 class="title"><em>Madam Esi Mansa</em><br>Dapaah</h1>
+      <div class="arrival-photo"><img src="https://i.pravatar.cc/600?img=49" alt=""></div>
+      <div class="arrival-years">1955 — 2026</div>
+      <p class="arrival-meta">"Queen of the Elmina Shore" &middot; Mother of nine &middot; Sister to all</p>
+      <div class="countdown" aria-label="Time until burial">
+        <div class="cd-cell"><span class="cd-num" data-cd="d">--</span><span class="cd-lbl">Days</span></div>
+        <div class="cd-cell"><span class="cd-num" data-cd="h">--</span><span class="cd-lbl">Hours</span></div>
+        <div class="cd-cell"><span class="cd-num" data-cd="m">--</span><span class="cd-lbl">Min</span></div>
+        <div class="cd-cell"><span class="cd-num" data-cd="s">--</span><span class="cd-lbl">Sec</span></div>
+      </div>
+      <div class="cd-caption">until the river embraces her</div>
+    </div>
+  </section>
+
+  <!-- BEND 2 — Story -->
+  <section class="bend">
+    <div class="bend-num"><strong>II</strong>The Story</div>
+    <div class="bend-inner story">
+      <div class="eyebrow">A Life on the Water</div>
+      <h2 class="title">She sold fish before the <em>sun rose</em></h2>
+      <p>For forty-two years, Esi Mansa Dapaah walked the same path from her stall at Elmina market to the canoe landing — bargaining, blessing, scolding, feeding. Every fisherman in town owed her money at least once, and every fisherman in town paid her back.</p>
+      <p>She raised nine children and three orphans. None went without. Her stall became a chapel, a courtroom, and a soup kitchen by turns. When she retired in 2018, the Chief Fisherman declared a half-day of mourning — she was that essential.</p>
+    </div>
+  </section>
+
+  <!-- BEND 3 — Programme -->
+  <section class="bend">
+    <div class="bend-num"><strong>III</strong>The Gathering</div>
+    <div class="bend-inner">
+      <div class="eyebrow">Final Voyage</div>
+      <h2 class="title">Programme of <em>events</em></h2>
+      <div class="prog">
+        <div class="prog-card"><div class="prog-date">FRI 16 APR 2027 &middot; 8PM</div><div class="prog-title">Wake-Keeping</div><div class="prog-where">Methodist Church Hall, Elmina</div></div>
+        <div class="prog-card"><div class="prog-date">SAT 17 APR 2027 &middot; 7AM</div><div class="prog-title">Lying in State</div><div class="prog-where">Dapaah Family House, No. 14 Beach Rd</div></div>
+        <div class="prog-card"><div class="prog-date">SAT 17 APR 2027 &middot; 10AM</div><div class="prog-title">Burial Service</div><div class="prog-where">St. Anthony Methodist, Elmina</div></div>
+        <div class="prog-card"><div class="prog-date">SUN 18 APR 2027</div><div class="prog-title">Thanksgiving</div><div class="prog-where">Family House &middot; 2pm reception</div></div>
+      </div>
+      <div class="attire-strip">Attire &middot; White &amp; Sea Blue</div>
+    </div>
+  </section>
+
+  <!-- BEND 4 — Polaroid gallery -->
+  <section class="bend">
+    <div class="bend-num"><strong>IV</strong>Memories</div>
+    <div class="bend-inner">
+      <div class="eyebrow" style="text-align:center">A Life in Pictures</div>
+      <h2 class="title" style="text-align:center"><em>Floating</em> moments</h2>
+      <div class="polaroids">
+        <div class="pol"><img src="https://picsum.photos/seed/esi1/300/240"><div class="cap">Market Day, '89</div></div>
+        <div class="pol"><img src="https://picsum.photos/seed/esi2/300/240"><div class="cap">The Boys</div></div>
+        <div class="pol"><img src="https://picsum.photos/seed/esi3/300/240"><div class="cap">Sunday Best</div></div>
+        <div class="pol"><img src="https://picsum.photos/seed/esi4/300/240"><div class="cap">Granddaughter</div></div>
+        <div class="pol"><img src="https://picsum.photos/seed/esi5/300/240"><div class="cap">'08 Anniversary</div></div>
+        <div class="pol"><img src="https://picsum.photos/seed/esi6/300/240"><div class="cap">Last Christmas</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEND 5 — Tributes -->
+  <section class="bend">
+    <div class="bend-num"><strong>V</strong>Tributes</div>
+    <div class="bend-inner">
+      <div class="eyebrow">Send a Ripple</div>
+      <h2 class="title">Leave a <em>tribute</em></h2>
+      <form class="trib-form" onsubmit="event.preventDefault();this.querySelector('button').textContent='Thank you'">
+        <input type="text" placeholder="Your name" required>
+        <textarea placeholder="A memory or a blessing…" required></textarea>
+        <button>Send Tribute</button>
+      </form>
+      <div class="ripple-list">
+        <div class="ripple"><div class="msg">"Auntie Esi never let me leave her stall hungry. She was every Elmina child's other mother."</div><div class="who">— Abena, customer for 30 years</div></div>
+        <div class="ripple"><div class="msg">"My mother. My anchor. The shore that always knew where I had been."</div><div class="who">— Kwesi, eldest son</div></div>
+        <div class="ripple"><div class="msg">"She lent me 200 cedis in 1996 and never asked again. I will repay her with my prayers."</div><div class="who">— Old Man Mensa, fisherman</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEND 6 — Contacts -->
+  <section class="bend">
+    <div class="bend-num"><strong>VI</strong>Family</div>
+    <div class="bend-inner">
+      <div class="eyebrow">RSVP &middot; Enquiries</div>
+      <h2 class="title">Speak to <em>family</em></h2>
+      <div class="contacts">
+        <a class="c-card" href="tel:+233244001122"><i class="fas fa-phone"></i><div><div class="who">Kwesi Dapaah</div><div class="rel">Eldest Son</div></div><span class="num">0244 001 122</span></a>
+        <a class="c-card" href="tel:+233205334455"><i class="fas fa-phone"></i><div><div class="who">Adwoa Dapaah</div><div class="rel">Eldest Daughter</div></div><span class="num">0205 334 455</span></a>
+        <a class="c-card" href="tel:+233276778899"><i class="fas fa-phone"></i><div><div class="who">Chief Fisherman</div><div class="rel">Elmina &middot; Family Friend</div></div><span class="num">0276 778 899</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEND 7 — Closing -->
+  <section class="bend">
+    <div class="bend-num"><strong>VII</strong>The Sea</div>
+    <div class="bend-inner closing">
+      <div class="closing-italic">Da Yie, Mama Esi</div>
+      <div class="closing-name">MADAM ESI MANSA DAPAAH</div>
+      <div class="closing-years">1955 &mdash; 2026</div>
+      <p class="verse">"The sea heard its name and turned. The river answered. And she walked home through the foam."</p>
+      <button class="share-btn" type="button" onclick="const t='In loving memory of Madam Esi Mansa Dapaah (1955-2026). '+location.href;window.open('https://wa.me/?text='+encodeURIComponent(t))"><i class="fab fa-whatsapp"></i> Share on WhatsApp</button>
+      <div class="credit">Designed by VibeLink Event &middot; The River template</div>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script>
+/* Splash */
+document.getElementById('splash').addEventListener('click',()=>{
+  document.getElementById('splash').classList.add('gone');
+  document.body.classList.remove('locked');
+  if(!audioOn) tryAudio();
+});
+
+/* Audio */
+const audio=document.getElementById('bg');audio.volume=0.25;let audioOn=false;
+function tryAudio(){audio.play().then(()=>{audioOn=true;document.getElementById('audioIcon').className='fas fa-volume-up'}).catch(()=>{})}
+document.getElementById('audioBtn').addEventListener('click',()=>{
+  if(audioOn){audio.pause();audioOn=false;document.getElementById('audioIcon').className='fas fa-music'}
+  else tryAudio();
+});
+
+/* COUNTDOWN — 17 Apr 2027 burial */
+const target=new Date('2027-04-17T07:00:00').getTime();
+function tickCD(){
+  const now=Date.now();let diff=Math.max(0,target-now);
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor((diff/3600000)%24);
+  const m=Math.floor((diff/60000)%60);
+  const s=Math.floor((diff/1000)%60);
+  document.querySelectorAll('[data-cd="d"]').forEach(el=>el.textContent=String(d).padStart(3,'0'));
+  document.querySelectorAll('[data-cd="h"]').forEach(el=>el.textContent=String(h).padStart(2,'0'));
+  document.querySelectorAll('[data-cd="m"]').forEach(el=>el.textContent=String(m).padStart(2,'0'));
+  document.querySelectorAll('[data-cd="s"]').forEach(el=>el.textContent=String(s).padStart(2,'0'));
+}
+tickCD();setInterval(tickCD,1000);
+
+/* NAV — desktop horizontal arrows + dots */
+const river=document.getElementById('river');
+const bends=river.querySelectorAll('.bend');
+const isDesktop=()=>window.matchMedia('(min-width:761px)').matches;
+
+/* Build dots */
+const dotsWrap=document.getElementById('navDots');
+let current=0;
+bends.forEach((_,i)=>{
+  const b=document.createElement('button');
+  b.className='nav-dot'+(i===0?' active':'');
+  b.setAttribute('aria-label','Go to bend '+(i+1));
+  b.addEventListener('click',()=>goTo(i));
+  dotsWrap.appendChild(b);
+});
+
+function goTo(i){
+  if(!isDesktop()){bends[i].scrollIntoView({behavior:'smooth'});return}
+  current=Math.max(0,Math.min(bends.length-1,i));
+  river.scrollTo({left:current*window.innerWidth,behavior:'smooth'});
+  updateNav();
+}
+function updateNav(){
+  document.getElementById('navPrev').disabled=current===0;
+  document.getElementById('navNext').disabled=current===bends.length-1;
+  dotsWrap.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===current));
+}
+document.getElementById('navPrev').addEventListener('click',()=>goTo(current-1));
+document.getElementById('navNext').addEventListener('click',()=>goTo(current+1));
+
+/* Update current from scroll position */
+river.addEventListener('scroll',()=>{
+  if(!isDesktop())return;
+  const idx=Math.round(river.scrollLeft/window.innerWidth);
+  if(idx!==current){current=idx;updateNav()}
+},{passive:true});
+
+/* Keyboard nav on desktop */
+document.addEventListener('keydown',e=>{
+  if(!isDesktop())return;
+  if(e.key==='ArrowLeft')goTo(current-1);
+  if(e.key==='ArrowRight')goTo(current+1);
+});
+
+updateNav();
+</script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!doctype html>
+<!--
+  DEMO 10 — THE FAMILY TREE
+  An animated genealogical tree as the centerpiece. Each leaf = a family member or memory.
+  Visitors can add their own leaf with a tribute.
+  Subject: Naa Lamiley Quarshie (1925–2026), centenarian matriarch — 101 years, 6 children, 32 grandchildren, 87 great-grands.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tree of Naa Lamiley — In Loving Memory (1925–2026)</title>
+<meta name="theme-color" content="#1d2a1e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&family=Allura&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --ink:#1d2a1e; --bark:#3a2a1a; --bark-2:#5a3e22;
+    --leaf-dark:#3e5a3a; --leaf:#7ba167; --leaf-light:#a6c498;
+    --bloom:#e8c267; --bloom-deep:#b89942;
+    --cream:#f4ecd8; --cream-2:#e6dcc0;
+    --rose:#c97a6a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  html{scroll-behavior:smooth}
+  body{font-family:'Cormorant Garamond',serif;background:var(--cream);color:var(--ink);
+    line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh;
+    background-image:radial-gradient(ellipse at top,rgba(166,196,152,.2),transparent 60%)}
+  body.locked{overflow:hidden;height:100vh}
+  ::selection{background:var(--leaf);color:var(--cream)}
+  img{max-width:100%;display:block}
+
+  /* SPLASH — single seed grows into a tree */
+  .splash{position:fixed;inset:0;background:linear-gradient(180deg,#e8dfc4 0%,#c4b890 100%);
+    z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    transition:opacity 1.8s,visibility 1.8s;cursor:pointer;overflow:hidden}
+  .splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+  .seed-svg{width:260px;height:300px;opacity:0;animation:seedIn 1s .2s forwards}
+  @keyframes seedIn{to{opacity:1}}
+  .seed-svg .seed{fill:var(--bark)}
+  .seed-svg .trunk{stroke:var(--bark);stroke-width:6;fill:none;stroke-linecap:round;
+    stroke-dasharray:200;stroke-dashoffset:200;animation:growLine 2s 1s forwards ease-out}
+  .seed-svg .branch{stroke:var(--bark-2);stroke-width:3;fill:none;stroke-linecap:round;
+    stroke-dasharray:120;stroke-dashoffset:120;animation:growLine 1.5s 2.6s forwards ease-out}
+  .seed-svg .branch.b2{animation-delay:2.9s}
+  .seed-svg .branch.b3{animation-delay:3.2s}
+  .seed-svg .leaf{fill:var(--leaf);opacity:0;animation:leafPop .6s forwards}
+  .seed-svg .leaf.l1{animation-delay:3.8s}
+  .seed-svg .leaf.l2{animation-delay:3.95s}
+  .seed-svg .leaf.l3{animation-delay:4.1s}
+  .seed-svg .leaf.l4{animation-delay:4.25s}
+  .seed-svg .leaf.l5{animation-delay:4.4s}
+  .seed-svg .leaf.l6{animation-delay:4.55s}
+  @keyframes growLine{to{stroke-dashoffset:0}}
+  @keyframes leafPop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+  .splash-words{text-align:center;opacity:0;animation:seedIn 1.4s 4.5s forwards;margin-top:1.5rem}
+  .splash-words .pre{font-family:'Allura',cursive;color:var(--bark-2);font-size:1.6rem;margin-bottom:.4rem}
+  .splash-words .name{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--ink);font-size:clamp(1.6rem,4vw,2.3rem);letter-spacing:.08em;line-height:1.3}
+  .splash-words .years{font-family:'Cormorant Garamond',serif;color:var(--bloom-deep);letter-spacing:.5em;font-size:.95rem;margin-top:.7rem}
+  .splash-cue{position:absolute;bottom:30px;font-family:'Inter',sans-serif;font-size:.72rem;letter-spacing:.4em;color:var(--bark);text-transform:uppercase;opacity:0;animation:seedIn 1s 5.6s forwards}
+
+  /* HERO */
+  .hero{position:relative;padding:5rem 1.5rem 4rem;text-align:center}
+  .hero-script{font-family:'Allura',cursive;color:var(--bloom-deep);font-size:3rem;line-height:1;margin-bottom:.4rem}
+  .hero-name{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(2.2rem,5.5vw,3.4rem);color:var(--ink);letter-spacing:.06em;line-height:1.2;margin-bottom:.4rem}
+  .hero-role{font-style:italic;color:var(--leaf-dark);font-size:1.05rem;letter-spacing:.05em;margin-bottom:1.6rem}
+  .hero-101{display:inline-block;padding:.6rem 1.4rem;background:var(--bloom);color:var(--bark);font-family:'Cormorant Garamond',serif;font-weight:600;letter-spacing:.4em;font-size:1.2rem;border-radius:2px;margin-bottom:1.5rem}
+  .hero-portrait{margin:1rem auto;width:220px;height:220px;border-radius:50%;
+    padding:8px;background:radial-gradient(circle,var(--bloom),var(--bloom-deep));
+    box-shadow:0 10px 30px rgba(58,42,26,.3)}
+  .hero-portrait img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid var(--cream)}
+  .hero-years{display:inline-block;font-family:'Cormorant Garamond',serif;color:var(--bark);letter-spacing:.5em;font-size:1.1rem;padding:.6rem 1.8rem;border-top:1px solid var(--bark);border-bottom:1px solid var(--bark);margin-top:1rem}
+
+  /* SECTIONS */
+  section.chapter{padding:5rem 1.5rem;position:relative}
+  .container{max-width:1100px;margin:0 auto}
+  .chapter-head{text-align:center;margin-bottom:3rem}
+  .eyebrow{font-family:'Inter',sans-serif;font-size:.72rem;letter-spacing:.5em;color:var(--bloom-deep);text-transform:uppercase;font-weight:500;margin-bottom:.5rem}
+  .chapter-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(1.8rem,4vw,2.6rem);color:var(--ink);letter-spacing:.04em}
+  .chapter-title em{font-family:'Allura',cursive;color:var(--bloom-deep);font-style:normal;font-size:1.4em;letter-spacing:0}
+
+  /* BIO + LIFE STATS */
+  .bio{max-width:780px;margin:0 auto;padding:3rem 2.5rem;background:#fff;border:1px solid var(--leaf-light);box-shadow:0 10px 30px rgba(30,42,30,.12);position:relative}
+  @media(max-width:600px){.bio{padding:2rem 1.4rem}}
+  .bio p{font-size:1.08rem;line-height:1.85;color:var(--ink);margin-bottom:1.2rem}
+  .bio p:first-of-type::first-letter{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:4rem;color:var(--leaf-dark);float:left;line-height:.9;margin:.2rem .6rem 0 0}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:2rem;padding-top:2rem;border-top:2px solid var(--leaf-light)}
+  @media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}}
+  .stat{text-align:center}
+  .stat-num{font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--leaf-dark);font-size:2.4rem;line-height:1}
+  .stat-lbl{font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.25em;color:var(--bark-2);text-transform:uppercase;margin-top:.4rem;font-weight:500}
+
+  /* THE TREE — main feature */
+  .tree-stage{max-width:1100px;margin:0 auto;padding:2rem 0;position:relative;min-height:560px}
+  .tree-svg{width:100%;height:auto;display:block;max-height:600px}
+  .tree-svg .trunk-main{fill:url(#barkGrad);stroke:var(--bark);stroke-width:1}
+  .tree-svg .branch-line{stroke:var(--bark-2);stroke-width:4;fill:none;stroke-linecap:round}
+  .tree-svg .branch-line.thin{stroke-width:2.5}
+  .tree-svg .leaf-clust{transform-origin:center;transition:transform .3s}
+  .tree-svg .leaf-clust:hover{transform:scale(1.15);cursor:pointer}
+  .tree-svg .leaf-clust circle{transition:fill .3s}
+  .tree-svg text{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:11px;fill:var(--cream)}
+
+  .leaf-list{margin-top:2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.7rem;max-width:920px;margin-left:auto;margin-right:auto}
+  .leaf-card{display:flex;align-items:center;gap:.6rem;padding:.6rem .8rem;background:#fff;border:1px solid var(--leaf-light);border-radius:24px;font-size:.85rem}
+  .leaf-dot{width:10px;height:10px;border-radius:50%;background:var(--leaf);flex-shrink:0}
+  .leaf-dot.bloom{background:var(--bloom)}
+  .leaf-dot.rose{background:var(--rose)}
+  .leaf-name{color:var(--ink);font-weight:500}
+  .leaf-rel{color:var(--bark-2);font-size:.72rem;letter-spacing:.05em}
+
+  /* PROGRAMME */
+  .vine-events{max-width:780px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:1rem}
+  .vine-row{display:flex;align-items:flex-start;gap:1rem;padding:1.4rem;background:#fff;border-left:5px solid var(--bloom);box-shadow:0 4px 12px rgba(30,42,30,.08)}
+  .vine-icon{width:48px;height:48px;border-radius:50%;background:var(--leaf);color:var(--cream);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem}
+  .vine-when{font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.25em;color:var(--bloom-deep);text-transform:uppercase;font-weight:600;margin-bottom:.3rem}
+  .vine-what{font-family:'Cormorant Garamond',serif;color:var(--ink);font-size:1.2rem;font-weight:500;margin-bottom:.3rem}
+  .vine-where{color:var(--bark-2);font-size:.9rem;font-style:italic}
+
+  /* GALLERY */
+  .pic-grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem}
+  @media(max-width:900px){.pic-grid{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:540px){.pic-grid{grid-template-columns:repeat(2,1fr)}}
+  .pic{overflow:hidden;border:5px solid #fff;box-shadow:0 4px 12px rgba(30,42,30,.15);transition:transform .4s}
+  .pic:hover{transform:scale(1.04)}
+  .pic img{width:100%;height:200px;object-fit:cover;filter:saturate(1.05)}
+
+  /* TRIBUTES — leaves to add */
+  .add-leaf{max-width:580px;margin:0 auto 2rem;padding:1.8rem;background:linear-gradient(135deg,#fff,#f4ecd8);border:2px dashed var(--leaf);text-align:center}
+  .add-leaf h3{font-family:'Cormorant Garamond',serif;color:var(--leaf-dark);font-size:1.4rem;margin-bottom:.5rem;font-weight:600}
+  .add-leaf p{color:var(--bark-2);font-size:.95rem;margin-bottom:1rem;font-style:italic}
+  .add-leaf input,.add-leaf textarea{width:100%;padding:.7rem .9rem;margin-bottom:.7rem;background:var(--cream);border:1px solid var(--leaf-light);font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--ink)}
+  .add-leaf textarea{min-height:60px;resize:vertical}
+  .add-leaf button{padding:.8rem 1.6rem;background:var(--leaf-dark);color:var(--cream);border:none;font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.25em;font-size:.85rem;cursor:pointer;text-transform:uppercase;border-radius:24px}
+  .add-leaf button i{margin-right:.4rem}
+
+  .echoes{max-width:920px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:1rem}
+  @media(min-width:680px){.echoes{grid-template-columns:1fr 1fr}}
+  .echo{padding:1.3rem 1.5rem;background:#fff;border-radius:18px;border:1px solid var(--leaf-light);position:relative;box-shadow:0 4px 12px rgba(30,42,30,.08)}
+  .echo::before{content:'';position:absolute;left:-8px;top:20px;width:16px;height:16px;background:var(--leaf);border-radius:50%;border:3px solid var(--cream)}
+  .echo-msg{color:var(--ink);font-style:italic;font-size:1rem;line-height:1.7;margin-bottom:.6rem;padding-left:.6rem}
+  .echo-who{font-family:'Allura',cursive;color:var(--bloom-deep);font-size:1.4rem;text-align:right}
+
+  /* CONTACTS */
+  .fc-grid{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+  .fc-card{display:flex;align-items:center;gap:1rem;padding:1.2rem;background:#fff;border:1px solid var(--leaf-light);text-decoration:none;color:inherit;transition:all .3s;border-radius:6px;box-shadow:0 4px 10px rgba(30,42,30,.08)}
+  .fc-card:hover{transform:translateY(-2px);border-color:var(--leaf)}
+  .fc-icon{width:48px;height:48px;border-radius:50%;background:var(--leaf);color:var(--cream);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .fc-role{font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:.3em;color:var(--bloom-deep);text-transform:uppercase;font-weight:600;margin-bottom:.2rem}
+  .fc-name{font-family:'Cormorant Garamond',serif;color:var(--ink);font-size:1.05rem;font-weight:500;margin-bottom:.2rem}
+  .fc-num{color:var(--leaf-dark);font-size:.9rem}
+
+  /* ATTIRE + LOCATION */
+  .attire{margin:2.5rem auto 0;max-width:520px;text-align:center;padding:1.5rem;background:var(--bloom);border-radius:8px}
+  .attire h4{font-family:'Inter',sans-serif;color:var(--bark);letter-spacing:.5em;font-size:.7rem;text-transform:uppercase;font-weight:600;margin-bottom:.5rem}
+  .attire .at{font-family:'Cormorant Garamond',serif;color:var(--bark);font-size:1.3rem;letter-spacing:.3em;font-weight:600}
+  .loc-card{max-width:880px;margin:0 auto;border:1px solid var(--leaf-light);overflow:hidden;background:#fff;border-radius:8px}
+  .loc-card iframe{width:100%;height:280px;border:0;display:block}
+  .loc-details{padding:1.4rem;text-align:center}
+  .loc-name{font-family:'Cormorant Garamond',serif;color:var(--leaf-dark);letter-spacing:.15em;font-size:1.2rem;font-weight:600;margin-bottom:.3rem}
+  .loc-addr{color:var(--bark-2);margin-bottom:1rem}
+  .loc-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;background:var(--leaf-dark);color:var(--cream);font-family:'Inter',sans-serif;letter-spacing:.2em;font-size:.78rem;text-decoration:none;text-transform:uppercase;font-weight:500;border-radius:24px}
+
+  /* FOOTER */
+  footer{padding:5rem 1.5rem 2.5rem;background:linear-gradient(180deg,var(--leaf-dark),var(--ink));color:var(--cream);text-align:center}
+  .foot-script{font-family:'Allura',cursive;color:var(--bloom);font-size:2.8rem;margin-bottom:.5rem}
+  .foot-name{font-family:'Cormorant Garamond',serif;color:var(--cream);letter-spacing:.2em;font-size:1.05rem;font-weight:600;margin-bottom:.4rem}
+  .foot-years{color:var(--bloom);letter-spacing:.5em;font-family:'Cormorant Garamond',serif;font-size:.9rem;margin-bottom:1.4rem}
+  .foot-verse{max-width:540px;margin:0 auto 1.5rem;color:var(--leaf-light);font-style:italic;font-size:1.05rem;line-height:1.7}
+  .credit{padding-top:1.4rem;border-top:1px solid rgba(244,236,216,.2);color:var(--leaf-light);font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;font-family:'Inter',sans-serif}
+  .share-fab{position:fixed;bottom:1.5rem;right:1.5rem;z-index:80;width:54px;height:54px;border-radius:50%;background:#25D366;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+  .audio-toggle{position:fixed;top:1.3rem;right:1.3rem;z-index:80;width:44px;height:44px;border-radius:50%;background:#fff;border:1px solid var(--leaf-dark);color:var(--leaf-dark);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,.15)}
+  .countdown{display:flex;justify-content:center;gap:.55rem;margin-top:2rem;flex-wrap:wrap}
+  .cd-cell{min-width:72px;padding:.7rem .4rem;background:#fff;border:1px solid var(--leaf-light);border-radius:8px;text-align:center;box-shadow:0 4px 10px rgba(30,42,30,.08)}
+  .cd-num{display:block;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.6rem;color:var(--leaf-dark);line-height:1}
+  .cd-lbl{display:block;font-family:'Inter',sans-serif;font-size:.6rem;letter-spacing:.3em;color:var(--bloom-deep);text-transform:uppercase;margin-top:.4rem;font-weight:600}
+</style>
+</head>
+<body class="locked">
+
+<div class="splash" id="splash">
+  <svg class="seed-svg" viewBox="0 0 260 300">
+    <!-- Seed (initially visible) -->
+    <ellipse class="seed" cx="130" cy="280" rx="14" ry="10"/>
+    <!-- Trunk -->
+    <path class="trunk" d="M130 280 Q 130 200, 130 140"/>
+    <!-- Branches -->
+    <path class="branch" d="M130 200 Q 100 170, 70 140"/>
+    <path class="branch b2" d="M130 180 Q 160 150, 190 130"/>
+    <path class="branch b3" d="M130 150 Q 130 120, 130 90"/>
+    <!-- Leaves -->
+    <g class="leaf l1"><circle cx="70" cy="135" r="14" fill="#7ba167"/></g>
+    <g class="leaf l2"><circle cx="55" cy="120" r="11" fill="#7ba167"/></g>
+    <g class="leaf l3"><circle cx="190" cy="125" r="14" fill="#7ba167"/></g>
+    <g class="leaf l4"><circle cx="205" cy="110" r="11" fill="#7ba167"/></g>
+    <g class="leaf l5"><circle cx="130" cy="85" r="16" fill="#7ba167"/></g>
+    <g class="leaf l6"><circle cx="115" cy="75" r="10" fill="#e8c267"/></g>
+  </svg>
+  <div class="splash-words">
+    <div class="pre">In loving memory of</div>
+    <div class="name">NAA LAMILEY QUARSHIE</div>
+    <div class="years">1925 &middot; 2026</div>
+  </div>
+  <div class="splash-cue">Tap to see her tree</div>
+</div>
+
+<audio id="bg" loop preload="none"><source src="https://cdn.pixabay.com/audio/2022/10/30/audio_347111d654.mp3" type="audio/mpeg"></audio>
+<button class="audio-toggle" id="audioBtn"><i class="fas fa-music" id="audioIcon"></i></button>
+
+<header class="hero">
+  <div class="hero-script">In loving memory of</div>
+  <h1 class="hero-name">Naa Lamiley Quarshie</h1>
+  <div class="hero-role">Matriarch &middot; Mother of Six &middot; The Tree They All Grew From</div>
+  <div class="hero-101">101 YEARS</div>
+  <div class="hero-portrait"><img src="https://i.pravatar.cc/600?img=45" alt=""></div>
+  <div class="hero-years">1925 &middot; 2026</div>
+  <div class="countdown">
+    <div class="cd-cell"><span class="cd-num" data-cd="d">--</span><span class="cd-lbl">Days</span></div>
+    <div class="cd-cell"><span class="cd-num" data-cd="h">--</span><span class="cd-lbl">Hours</span></div>
+    <div class="cd-cell"><span class="cd-num" data-cd="m">--</span><span class="cd-lbl">Min</span></div>
+    <div class="cd-cell"><span class="cd-num" data-cd="s">--</span><span class="cd-lbl">Sec</span></div>
+  </div>
+</header>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head"><div class="eyebrow">A Century-and-One</div><h2 class="chapter-title">Her <em>life</em></h2></div>
+    <article class="bio">
+      <p>Naa Lamiley Quarshie was born in 1925 in a one-room hut in Teshie, the daughter of a fisherman who never came home from a Saturday voyage and a mother who raised four children alone selling salt. She married Mr. Quarshie in 1944, raised six children, buried two of them, and lived long enough to see her great-great-grandson take his first steps.</p>
+      <p>She baked bread on a coal pot until she was 96. She knew every neighbour by name on her street and the streets of three streets behind it. When the colonial government built the road past her house in 1957, she stood at the edge of it and watched the Queen's car drive by. She voted in every election since independence. She told her great-grandchildren the names of all six Presidents she had outlived.</p>
+      <p>She is survived by her four remaining children, <strong>32 grandchildren</strong>, <strong>87 great-grandchildren</strong>, and 11 great-great-grandchildren — at last count.</p>
+      <div class="stats">
+        <div class="stat"><div class="stat-num">101</div><div class="stat-lbl">Years</div></div>
+        <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">Children</div></div>
+        <div class="stat"><div class="stat-num">32</div><div class="stat-lbl">Grandchildren</div></div>
+        <div class="stat"><div class="stat-num">87+</div><div class="stat-lbl">Great-grands</div></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- THE TREE — visualisation -->
+<section class="chapter" style="background:linear-gradient(180deg,transparent,rgba(166,196,152,.15))">
+  <div class="container">
+    <div class="chapter-head"><div class="eyebrow">Her Living Legacy</div><h2 class="chapter-title">The <em>family</em> tree</h2><p style="color:var(--bark-2);font-style:italic;margin-top:.6rem">Six children. Thirty-two grandchildren. Eighty-seven great-grandchildren. One root.</p></div>
+    <div class="tree-stage">
+      <svg class="tree-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="barkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#5a3e22"/>
+            <stop offset="100%" stop-color="#3a2a1a"/>
+          </linearGradient>
+        </defs>
+        <!-- Trunk -->
+        <path class="trunk-main" d="M480 560 Q 478 400, 490 280 Q 502 200, 510 140 L 540 140 Q 548 200, 540 280 Q 528 400, 530 560 Z"/>
+        <!-- Root label -->
+        <circle cx="505" cy="565" r="22" fill="#e8c267" stroke="#b89942" stroke-width="2"/>
+        <text x="505" y="569" text-anchor="middle" fill="#3a2a1a" font-weight="600">NAA</text>
+        <!-- Main branches (6 children) -->
+        <path class="branch-line" d="M500 280 Q 350 240, 200 200"/>
+        <path class="branch-line" d="M500 280 Q 370 280, 220 290"/>
+        <path class="branch-line" d="M500 280 Q 400 220, 340 130"/>
+        <path class="branch-line" d="M520 280 Q 620 220, 680 130"/>
+        <path class="branch-line" d="M520 280 Q 650 280, 800 290"/>
+        <path class="branch-line" d="M520 280 Q 680 240, 820 200"/>
+        <!-- 6 child leaves -->
+        <g class="leaf-clust"><circle cx="200" cy="200" r="32" fill="#7ba167"/><text x="200" y="204" text-anchor="middle">KOFI</text></g>
+        <g class="leaf-clust"><circle cx="220" cy="290" r="32" fill="#7ba167"/><text x="220" y="294" text-anchor="middle">ADWOA</text></g>
+        <g class="leaf-clust"><circle cx="340" cy="130" r="32" fill="#7ba167"/><text x="340" y="134" text-anchor="middle">YAW</text></g>
+        <g class="leaf-clust"><circle cx="680" cy="130" r="32" fill="#7ba167"/><text x="680" y="134" text-anchor="middle">ESI</text></g>
+        <g class="leaf-clust"><circle cx="800" cy="290" r="32" fill="#7ba167"/><text x="800" y="294" text-anchor="middle">KOJO</text></g>
+        <g class="leaf-clust"><circle cx="820" cy="200" r="32" fill="#7ba167"/><text x="820" y="204" text-anchor="middle">AMA</text></g>
+        <!-- Many small grandchild leaves (decoration) -->
+        <g class="leaf-clust"><circle cx="130" cy="160" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="155" cy="180" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="170" cy="240" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="150" cy="290" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="175" cy="330" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="285" cy="100" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="310" cy="85" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="370" cy="90" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="395" cy="110" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="620" cy="85" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="645" cy="100" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="710" cy="90" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="735" cy="105" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="775" cy="245" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="850" cy="270" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="870" cy="220" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="845" cy="175" r="10" fill="#a6c498"/></g>
+        <g class="leaf-clust"><circle cx="815" cy="165" r="10" fill="#a6c498"/></g>
+        <!-- A few gold blooms (great-grand notables) -->
+        <g class="leaf-clust"><circle cx="100" cy="220" r="9" fill="#e8c267"/></g>
+        <g class="leaf-clust"><circle cx="265" cy="65" r="9" fill="#e8c267"/></g>
+        <g class="leaf-clust"><circle cx="600" cy="65" r="9" fill="#e8c267"/></g>
+        <g class="leaf-clust"><circle cx="900" cy="160" r="9" fill="#e8c267"/></g>
+        <g class="leaf-clust"><circle cx="910" cy="280" r="9" fill="#c97a6a"/></g>
+        <g class="leaf-clust"><circle cx="110" cy="280" r="9" fill="#c97a6a"/></g>
+      </svg>
+    </div>
+    <div class="leaf-list">
+      <div class="leaf-card"><span class="leaf-dot"></span><div><div class="leaf-name">Children</div><div class="leaf-rel">6 in total &middot; 4 surviving</div></div></div>
+      <div class="leaf-card"><span class="leaf-dot"></span><div><div class="leaf-name">Grandchildren</div><div class="leaf-rel">32</div></div></div>
+      <div class="leaf-card"><span class="leaf-dot bloom"></span><div><div class="leaf-name">Great-grands</div><div class="leaf-rel">87+ &middot; gold blooms</div></div></div>
+      <div class="leaf-card"><span class="leaf-dot rose"></span><div><div class="leaf-name">Great-great-grands</div><div class="leaf-rel">11 &middot; rose blooms</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head"><div class="eyebrow">The Final Gathering</div><h2 class="chapter-title">Funeral <em>arrangements</em></h2></div>
+    <div class="vine-events">
+      <div class="vine-row"><div class="vine-icon"><i class="fas fa-moon"></i></div><div><div class="vine-when">FRI 16 APR 2027 &middot; 7PM</div><div class="vine-what">Family Vigil</div><div class="vine-where">Quarshie Family House, 12 Old Road, Teshie</div></div></div>
+      <div class="vine-row"><div class="vine-icon"><i class="fas fa-sun"></i></div><div><div class="vine-when">SAT 17 APR 2027 &middot; 6AM</div><div class="vine-what">Lying in State</div><div class="vine-where">Same address &middot; viewing till 10am</div></div></div>
+      <div class="vine-row"><div class="vine-icon"><i class="fas fa-cross"></i></div><div><div class="vine-when">SAT 17 APR 2027 &middot; 10:30AM</div><div class="vine-what">Burial Service</div><div class="vine-where">Tabernacle Methodist Church, Teshie</div></div></div>
+      <div class="vine-row"><div class="vine-icon"><i class="fas fa-dove"></i></div><div><div class="vine-when">SAT 17 APR 2027 &middot; 1PM</div><div class="vine-what">Interment</div><div class="vine-where">Teshie Family Plot &middot; alongside her husband</div></div></div>
+      <div class="vine-row"><div class="vine-icon"><i class="fas fa-hands-praying"></i></div><div><div class="vine-when">SUN 18 APR 2027 &middot; 10AM</div><div class="vine-what">Thanksgiving Service</div><div class="vine-where">Tabernacle Methodist &middot; reception follows</div></div></div>
+    </div>
+    <div class="attire"><h4>Attire</h4><div class="at">WHITE &middot; PURPLE</div></div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head"><div class="eyebrow">A Hundred-Year Album</div><h2 class="chapter-title">In <em>pictures</em></h2></div>
+    <div class="pic-grid">
+      <div class="pic"><img src="https://picsum.photos/seed/lamiley1/400/400"></div>
+      <div class="pic"><img src="https://picsum.photos/seed/lamiley2/400/400"></div>
+      <div class="pic"><img src="https://picsum.photos/seed/lamiley3/400/400"></div>
+      <div class="pic"><img src="https://picsum.photos/seed/lamiley4/400/400"></div>
+      <div class="pic"><img src="https://picsum.photos/seed/lamiley5/400/400"></div>
+      <div class="pic"><img src="https://picsum.photos/seed/lamiley6/400/400"></div>
+      <div class="pic"><img src="https://picsum.photos/seed/lamiley7/400/400"></div>
+      <div class="pic"><img src="https://picsum.photos/seed/lamiley8/400/400"></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" style="background:linear-gradient(180deg,transparent,rgba(232,194,103,.1))">
+  <div class="container">
+    <div class="chapter-head"><div class="eyebrow">Add Yourself to Her Tree</div><h2 class="chapter-title">Hang a <em>leaf</em></h2></div>
+    <div class="add-leaf">
+      <h3>🍃 Hang a leaf on Naa's tree</h3>
+      <p>Tell us your name, your tie to her family, and a memory.</p>
+      <form onsubmit="event.preventDefault();this.querySelector('button').textContent='🍃 Leaf hung'">
+        <input type="text" placeholder="Your name" required>
+        <input type="text" placeholder="Your tie (e.g. grand-niece, neighbour, friend)">
+        <textarea placeholder="A short memory or blessing…" required></textarea>
+        <button><i class="fas fa-leaf"></i> Hang my leaf</button>
+      </form>
+    </div>
+    <div class="echoes">
+      <div class="echo"><div class="echo-msg">"Grandma told me the names of all of her children's middle names, her grandparents' grandparents, and where the burial place is for each one. A walking history."</div><div class="echo-who">Adwoa Quarshie</div></div>
+      <div class="echo"><div class="echo-msg">"She baked me bread every Saturday for thirty years. I was not her family. But she made me feel like one."</div><div class="echo-who">Mr. Mensah, neighbour</div></div>
+      <div class="echo"><div class="echo-msg">"My great-great-grandmother. I am ten. She held my hand. I will tell my children about her."</div><div class="echo-who">Little Yaw</div></div>
+      <div class="echo"><div class="echo-msg">"She was the last of her generation in our family. With her, an era closes."</div><div class="echo-who">Prof. Quarshie, son</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head"><div class="eyebrow">RSVP &middot; Enquiries</div><h2 class="chapter-title">Speak to <em>family</em></h2></div>
+    <div class="fc-grid">
+      <a class="fc-card" href="tel:+233244778899"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Eldest Surviving Son</div><div class="fc-name">Prof. Kojo Quarshie</div><div class="fc-num">+233 244 778 899</div></div></a>
+      <a class="fc-card" href="tel:+233205112266"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Daughter</div><div class="fc-name">Mad. Adwoa Quarshie</div><div class="fc-num">+233 205 112 266</div></div></a>
+      <a class="fc-card" href="tel:+233277443388"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Family Linguist</div><div class="fc-name">Nii Boi Mensah</div><div class="fc-num">+233 277 443 388</div></div></a>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head"><div class="eyebrow">Where to come</div><h2 class="chapter-title">Tabernacle <em>Methodist</em></h2></div>
+    <div class="loc-card">
+      <iframe src="https://maps.google.com/maps?q=Teshie%20Accra&z=14&output=embed"></iframe>
+      <div class="loc-details">
+        <div class="loc-name">Tabernacle Methodist Church</div>
+        <div class="loc-addr">Teshie, Greater Accra</div>
+        <a class="loc-cta" href="https://maps.google.com/?q=Teshie+Accra" target="_blank"><i class="fas fa-directions"></i> Open in Maps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-script">Da Yie, Grandma</div>
+  <div class="foot-name">NAA LAMILEY QUARSHIE</div>
+  <div class="foot-years">1925 &mdash; 2026</div>
+  <p class="foot-verse">"The roots ran deep, the branches ran far. Every leaf that ever turned in the wind belongs to her tree."</p>
+  <div class="credit">Designed by VibeLink Event &middot; "The Family Tree" template</div>
+</footer>
+
+<button class="share-fab" onclick="const t='In loving memory of Naa Lamiley Quarshie (1925-2026), 101 years. '+location.href;window.open('https://wa.me/?text='+encodeURIComponent(t))"><i class="fab fa-whatsapp"></i></button>
+
+<script>
+  document.getElementById('splash').addEventListener('click',()=>{
+    document.getElementById('splash').classList.add('gone');
+    document.body.classList.remove('locked');
+    if(!audioOn) tryAudio();
+  });
+  const audio=document.getElementById('bg');audio.volume=.25;let audioOn=false;
+  function tryAudio(){audio.play().then(()=>{audioOn=true;document.getElementById('audioIcon').className='fas fa-volume-up'}).catch(()=>{})}
+  document.getElementById('audioBtn').addEventListener('click',()=>{if(audioOn){audio.pause();audioOn=false;document.getElementById('audioIcon').className='fas fa-music'}else tryAudio()});
+  const target=new Date('2027-04-17T10:30:00').getTime();
+  function tickCD(){const now=Date.now();let diff=Math.max(0,target-now);
+    document.querySelectorAll('[data-cd="d"]').forEach(el=>el.textContent=String(Math.floor(diff/86400000)).padStart(3,'0'));
+    document.querySelectorAll('[data-cd="h"]').forEach(el=>el.textContent=String(Math.floor(diff/3600000)%24).padStart(2,'0'));
+    document.querySelectorAll('[data-cd="m"]').forEach(el=>el.textContent=String(Math.floor(diff/60000)%60).padStart(2,'0'));
+    document.querySelectorAll('[data-cd="s"]').forEach(el=>el.textContent=String(Math.floor(diff/1000)%60).padStart(2,'0'));}
+  tickCD();setInterval(tickCD,1000);
+</script>
+</body>
+</html>

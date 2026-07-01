@@ -1,0 +1,372 @@
+<!doctype html>
+<!--
+  DEMO 7 — ETERNAL GARDEN
+  Botanical watercolor. Tributes grow as flowers in a virtual garden.
+  Subject: Mrs Akua Sika Adomako (1968–2026), botanist and beloved school teacher.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Garden of Akua — In Loving Memory (1968–2026)</title>
+<meta name="theme-color" content="#f5f1e8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Quicksand:wght@300;400;500;600&family=Petit+Formal+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --paper:#f5f1e8; --paper-2:#ede5d0;
+    --sage:#5e7a52; --sage-deep:#3d5236; --sage-light:#a0b39a;
+    --blush:#e8a8a0; --blush-deep:#c47a72;
+    --gold:#c9a35a; --ink:#3a3128;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  html{scroll-behavior:smooth}
+  body{font-family:'Quicksand',sans-serif;background:var(--paper);color:var(--ink);
+    line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh;
+    background-image:radial-gradient(ellipse at top left,rgba(160,179,154,.15),transparent 60%),radial-gradient(ellipse at bottom right,rgba(232,168,160,.1),transparent 60%)}
+  body.locked{overflow:hidden;height:100vh}
+  ::selection{background:var(--blush);color:var(--ink)}
+  img{max-width:100%;display:block}
+
+  /* SPLASH — dewdrop fades into a garden */
+  .splash{position:fixed;inset:0;background:radial-gradient(ellipse at center,#f5f1e8,#d8d0bd);
+    z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    transition:opacity 1.6s,visibility 1.6s;cursor:pointer;overflow:hidden}
+  .splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+  .dew{width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.9),rgba(160,179,154,.3) 60%,transparent 80%);
+    box-shadow:0 8px 24px rgba(94,122,82,.3);opacity:0;animation:dewIn 1.8s .3s forwards cubic-bezier(.5,1.5,.5,1)}
+  @keyframes dewIn{0%{opacity:0;transform:scale(.3)}100%{opacity:1;transform:scale(1)}}
+  .splash-leaves{position:absolute;width:100%;height:100%;pointer-events:none;overflow:hidden}
+  .leaf{position:absolute;font-size:24px;color:var(--sage);opacity:0;
+    animation:leafIn 2s 1.4s forwards}
+  @keyframes leafIn{to{opacity:.6}}
+  .leaf:nth-child(1){top:20%;left:15%;animation-delay:1.4s;transform:rotate(-20deg)}
+  .leaf:nth-child(2){top:30%;right:18%;animation-delay:1.6s;transform:rotate(30deg)}
+  .leaf:nth-child(3){bottom:25%;left:20%;animation-delay:1.8s;transform:rotate(15deg)}
+  .leaf:nth-child(4){bottom:30%;right:22%;animation-delay:2s;transform:rotate(-25deg)}
+  .leaf:nth-child(5){top:50%;left:8%;animation-delay:2.2s;transform:rotate(45deg)}
+  .leaf:nth-child(6){top:55%;right:10%;animation-delay:2.4s;transform:rotate(-40deg)}
+  .splash-words{margin-top:2rem;text-align:center;opacity:0;animation:dewIn 1.4s 2.4s forwards}
+  .splash-words .pre{font-family:'Petit Formal Script',cursive;font-size:1.5rem;color:var(--sage-deep);margin-bottom:.4rem}
+  .splash-words .name{font-family:'Italiana',serif;font-size:clamp(1.8rem,4.5vw,2.6rem);color:var(--ink);letter-spacing:.1em;line-height:1.3}
+  .splash-words .years{font-family:'Quicksand',sans-serif;font-size:.85rem;color:var(--blush-deep);letter-spacing:.4em;margin-top:.6rem;font-weight:500}
+  .splash-cue{position:absolute;bottom:30px;font-family:'Quicksand',sans-serif;font-size:.72rem;letter-spacing:.4em;color:var(--sage-deep);text-transform:uppercase;opacity:0;animation:dewIn 1s 3.4s forwards}
+
+  /* DECORATIVE BOTANICALS — fixed background */
+  .botanical{position:fixed;pointer-events:none;z-index:1;opacity:.5}
+  .botanical svg{display:block}
+  .botanical.b1{top:0;left:0;width:240px}
+  .botanical.b2{bottom:0;right:0;width:280px;transform:rotate(180deg)}
+
+  /* HERO */
+  .hero{position:relative;z-index:2;padding:5rem 1.5rem 4rem;text-align:center}
+  .hero-frame{max-width:760px;margin:0 auto}
+  .hero-script{font-family:'Petit Formal Script',cursive;color:var(--sage-deep);font-size:2.4rem;line-height:1;margin-bottom:.6rem}
+  .hero-name{font-family:'Italiana',serif;font-size:clamp(2.2rem,6vw,3.4rem);color:var(--ink);letter-spacing:.08em;line-height:1.25;margin-bottom:.7rem}
+  .hero-role{font-style:italic;color:var(--sage);font-size:1.05rem;margin-bottom:1rem}
+  .hero-portrait{margin:2rem auto;width:200px;height:200px;border-radius:50%;
+    padding:6px;background:linear-gradient(135deg,var(--blush),var(--sage-light));
+    box-shadow:0 8px 30px rgba(94,122,82,.2)}
+  .hero-portrait img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid var(--paper)}
+  .hero-years{display:inline-block;font-family:'Italiana',serif;color:var(--blush-deep);
+    letter-spacing:.4em;font-size:1.1rem;padding:.5rem 1.6rem;border-top:1px solid var(--sage-light);border-bottom:1px solid var(--sage-light)}
+
+  /* SECTIONS */
+  section.chapter{padding:5rem 1.5rem;position:relative;z-index:2}
+  .container{max-width:1100px;margin:0 auto}
+  .chapter-head{text-align:center;margin-bottom:3rem}
+  .eyebrow{font-family:'Quicksand',sans-serif;font-size:.72rem;letter-spacing:.45em;color:var(--blush-deep);text-transform:uppercase;margin-bottom:.5rem;font-weight:500}
+  .chapter-title{font-family:'Italiana',serif;font-size:clamp(1.8rem,4vw,2.6rem);color:var(--ink);letter-spacing:.06em}
+  .chapter-title em{font-family:'Petit Formal Script',cursive;color:var(--sage-deep);font-size:1.3em;font-style:normal}
+  .leaf-sep{margin:1rem auto;display:flex;align-items:center;justify-content:center;gap:1rem;max-width:200px;color:var(--sage)}
+  .leaf-sep .line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--sage),transparent)}
+
+  /* BIO — soft card */
+  .bio{max-width:780px;margin:0 auto;padding:3rem 2.5rem;background:rgba(255,255,255,.4);
+    border:1px solid var(--sage-light);border-radius:0;position:relative;backdrop-filter:blur(2px)}
+  @media(max-width:600px){.bio{padding:2rem 1.4rem}}
+  .bio::before,.bio::after{content:'';position:absolute;width:60px;height:60px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><path d='M30 8 C 15 8, 8 25, 8 30 C 8 35, 15 52, 30 52 C 45 52, 52 35, 52 30 C 52 25, 45 8, 30 8 Z' fill='none' stroke='%235e7a52' stroke-width='1.5'/><path d='M30 8 Q 30 30, 30 52 M 8 30 Q 30 30, 52 30' stroke='%235e7a52' stroke-width='1' fill='none'/></svg>")}
+  .bio::before{top:-1px;left:-1px}
+  .bio::after{bottom:-1px;right:-1px;transform:rotate(180deg)}
+  .bio p{color:var(--ink);font-size:1.08rem;line-height:1.85;margin-bottom:1.2rem}
+  .bio p:first-of-type::first-letter{font-family:'Italiana',serif;font-size:3.5rem;color:var(--sage-deep);float:left;line-height:.9;margin:.2rem .5rem 0 0}
+  .bio strong{color:var(--blush-deep);font-weight:500}
+
+  /* PROGRAMME — vine-like timeline */
+  .vine{position:relative;max-width:720px;margin:0 auto;padding-left:50px}
+  .vine::before{content:'';position:absolute;left:24px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--sage) 10%,var(--sage) 90%,transparent)}
+  .vine-event{position:relative;padding:1.2rem 0 1.2rem 30px;margin-bottom:1rem}
+  .vine-event::before{content:'';position:absolute;left:-30px;top:1.4rem;width:24px;height:24px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2 Q 14 8, 12 12 Q 10 8, 12 2 Z M 12 6 Q 6 10, 6 14 Q 12 14, 12 12 Z M 12 6 Q 18 10, 18 14 Q 12 14, 12 12 Z' fill='%23e8a8a0' stroke='%23c47a72' stroke-width='.5'/></svg>")}
+  .vine-event .when{font-family:'Quicksand',sans-serif;font-size:.72rem;letter-spacing:.3em;color:var(--blush-deep);text-transform:uppercase;font-weight:500;margin-bottom:.3rem}
+  .vine-event h4{font-family:'Italiana',serif;color:var(--ink);font-size:1.2rem;letter-spacing:.06em;margin-bottom:.3rem}
+  .vine-event p{color:var(--sage-deep);font-size:.95rem;font-style:italic}
+
+  /* GALLERY — masonry with watercolor frames */
+  .gal{column-count:3;column-gap:1rem;max-width:1000px;margin:0 auto}
+  @media(max-width:800px){.gal{column-count:2}}
+  @media(max-width:480px){.gal{column-count:1}}
+  .gal-tile{margin:0 0 1rem 0;break-inside:avoid;padding:8px;background:#fff;box-shadow:0 4px 14px rgba(94,122,82,.15);transform:rotate(0);transition:transform .4s}
+  .gal-tile:nth-child(odd){transform:rotate(-1deg)}
+  .gal-tile:nth-child(even){transform:rotate(1deg)}
+  .gal-tile:hover{transform:rotate(0) scale(1.02)}
+  .gal-tile img{width:100%;height:auto;display:block;filter:saturate(1.1)}
+  .gal-tile .cap{font-family:'Petit Formal Script',cursive;font-size:1.1rem;color:var(--sage-deep);text-align:center;padding:.6rem 0 .2rem}
+
+  /* TRIBUTES — virtual garden where each tribute = a flower */
+  .garden{position:relative;max-width:920px;margin:0 auto;min-height:400px;
+    background:linear-gradient(180deg,rgba(160,179,154,.1) 0%,rgba(160,179,154,.25) 70%,rgba(94,122,82,.4) 100%);
+    border-radius:0 0 50% 50%/0 0 15% 15%;padding:2rem 1.5rem 3rem;overflow:hidden}
+  .garden::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(180deg,transparent,rgba(94,122,82,.5))}
+  .flowers{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:1.5rem;position:relative;z-index:1}
+  .flower{display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;animation:bloom .8s forwards;opacity:0}
+  @keyframes bloom{0%{opacity:0;transform:translateY(20px) scale(.6)}100%{opacity:1;transform:translateY(0) scale(1)}}
+  .flower:nth-child(1){animation-delay:.1s}
+  .flower:nth-child(2){animation-delay:.3s}
+  .flower:nth-child(3){animation-delay:.5s}
+  .flower:nth-child(4){animation-delay:.7s}
+  .flower:nth-child(5){animation-delay:.9s}
+  .flower:nth-child(6){animation-delay:1.1s}
+  .flower:nth-child(7){animation-delay:1.3s}
+  .flower:nth-child(8){animation-delay:1.5s}
+  .flower-bloom{width:54px;height:54px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#ffd6cf,var(--blush) 50%,var(--blush-deep));
+    box-shadow:0 4px 10px rgba(196,122,114,.3);position:relative}
+  .flower-bloom::before,.flower-bloom::after{content:'';position:absolute;width:30px;height:30px;border-radius:50%;background:rgba(255,200,190,.7)}
+  .flower-bloom::before{top:-8px;left:50%;transform:translateX(-50%)}
+  .flower-bloom::after{bottom:-8px;left:50%;transform:translateX(-50%)}
+  .flower-bloom .pollen{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:14px;height:14px;background:var(--gold);border-radius:50%}
+  .flower-stem{width:3px;height:36px;background:var(--sage);margin-top:-2px}
+  .flower-name{font-family:'Petit Formal Script',cursive;color:var(--sage-deep);font-size:1rem;margin-top:.4rem;line-height:1.1}
+  .flower-msg{font-size:.7rem;color:var(--ink);opacity:.75;margin-top:.2rem;font-style:italic;line-height:1.3;max-width:120px}
+
+  /* alternative flower colors */
+  .flower:nth-child(3n) .flower-bloom{background:radial-gradient(circle at 35% 35%,#fff0c8,var(--gold) 50%,#a8842a)}
+  .flower:nth-child(3n) .flower-bloom::before,.flower:nth-child(3n) .flower-bloom::after{background:rgba(255,230,160,.6)}
+  .flower:nth-child(4n) .flower-bloom{background:radial-gradient(circle at 35% 35%,#fff,#e8e0d0 50%,#b8a890)}
+  .flower:nth-child(4n) .flower-bloom::before,.flower:nth-child(4n) .flower-bloom::after{background:rgba(255,255,255,.7)}
+
+  .plant-form{max-width:480px;margin:2rem auto 0;padding:1.4rem;background:rgba(255,255,255,.7);border:1px solid var(--sage-light);border-radius:0}
+  .plant-form input,.plant-form textarea{width:100%;padding:.7rem .9rem;margin-bottom:.7rem;background:var(--paper);border:1px solid var(--sage-light);font-family:'Quicksand',sans-serif;font-size:.95rem;color:var(--ink)}
+  .plant-form button{width:100%;padding:.8rem;background:var(--sage-deep);color:var(--paper);border:none;font-family:'Quicksand',sans-serif;font-weight:500;letter-spacing:.2em;font-size:.85rem;cursor:pointer;text-transform:uppercase}
+
+  /* CONTACTS */
+  .fc-grid{max-width:920px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+  .fc-card{display:flex;align-items:center;gap:1rem;padding:1.2rem;background:rgba(255,255,255,.5);border:1px solid var(--sage-light);text-decoration:none;color:inherit;transition:all .3s}
+  .fc-card:hover{background:rgba(255,255,255,.8);border-color:var(--sage)}
+  .fc-icon{width:46px;height:46px;border-radius:50%;background:var(--sage);color:var(--paper);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .fc-role{font-family:'Quicksand',sans-serif;font-size:.65rem;letter-spacing:.3em;color:var(--blush-deep);text-transform:uppercase;font-weight:500;margin-bottom:.2rem}
+  .fc-name{font-family:'Italiana',serif;color:var(--ink);font-size:1rem;letter-spacing:.05em;margin-bottom:.2rem}
+  .fc-num{color:var(--sage-deep);font-size:.9rem}
+
+  /* LOCATION + ATTIRE */
+  .attire{margin:2.5rem auto 0;max-width:520px;text-align:center;padding:1.5rem;background:rgba(232,168,160,.15);border:1px dashed var(--blush-deep)}
+  .attire h4{font-family:'Quicksand',sans-serif;color:var(--blush-deep);letter-spacing:.5em;font-size:.7rem;text-transform:uppercase;margin-bottom:.5rem;font-weight:500}
+  .attire .at{font-family:'Italiana',serif;color:var(--ink);font-size:1.3rem;letter-spacing:.3em}
+  .loc-card{max-width:880px;margin:0 auto;border:1px solid var(--sage-light);overflow:hidden;background:#fff}
+  .loc-card iframe{width:100%;height:280px;border:0;display:block;filter:saturate(.9) hue-rotate(-20deg)}
+  .loc-details{padding:1.4rem;text-align:center}
+  .loc-name{font-family:'Italiana',serif;color:var(--sage-deep);letter-spacing:.15em;font-size:1.2rem;margin-bottom:.3rem}
+  .loc-addr{color:var(--ink);opacity:.7;margin-bottom:1rem}
+  .loc-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;border:1px solid var(--sage);color:var(--sage-deep);font-family:'Quicksand',sans-serif;letter-spacing:.2em;font-size:.78rem;text-decoration:none;text-transform:uppercase;font-weight:500}
+
+  /* FOOTER */
+  footer{padding:4rem 1.5rem 2rem;background:linear-gradient(180deg,var(--paper-2),var(--paper));text-align:center;border-top:1px solid var(--sage-light);position:relative;z-index:2}
+  .foot-italic{font-family:'Petit Formal Script',cursive;color:var(--blush-deep);font-size:2.4rem;margin-bottom:.6rem}
+  .foot-name{font-family:'Italiana',serif;color:var(--ink);letter-spacing:.2em;font-size:1rem}
+  .foot-years{color:var(--sage-deep);letter-spacing:.5em;font-family:'Italiana',serif;font-size:.85rem;margin:.5rem 0 1.4rem}
+  .foot-verse{max-width:520px;margin:0 auto 1.5rem;color:var(--ink);opacity:.75;font-style:italic;font-size:1rem;line-height:1.7}
+  .credit{padding-top:1.4rem;border-top:1px solid var(--sage-light);color:var(--sage);font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;font-family:'Quicksand',sans-serif}
+  .share-fab{position:fixed;bottom:1.5rem;right:1.5rem;z-index:80;width:54px;height:54px;border-radius:50%;background:#25D366;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 14px rgba(37,211,102,.4)}
+  .audio-toggle{position:fixed;top:1.3rem;right:1.3rem;z-index:80;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.8);border:1px solid var(--sage);color:var(--sage-deep);cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+  .countdown{display:flex;justify-content:center;gap:.55rem;margin-top:2rem;flex-wrap:wrap}
+  .cd-cell{min-width:72px;padding:.7rem .4rem;background:rgba(255,255,255,.6);border:1px solid var(--sage-light);text-align:center;border-radius:6px}
+  .cd-num{display:block;font-family:'Italiana',serif;font-size:1.6rem;color:var(--sage-deep);line-height:1}
+  .cd-lbl{display:block;font-family:'Quicksand',sans-serif;font-size:.6rem;letter-spacing:.25em;color:var(--blush-deep);text-transform:uppercase;margin-top:.4rem;font-weight:600}
+</style>
+</head>
+<body class="locked">
+
+<div class="splash" id="splash">
+  <div class="dew"></div>
+  <div class="splash-leaves">
+    <div class="leaf"><i class="fas fa-leaf"></i></div>
+    <div class="leaf"><i class="fas fa-leaf"></i></div>
+    <div class="leaf"><i class="fas fa-leaf"></i></div>
+    <div class="leaf"><i class="fas fa-leaf"></i></div>
+    <div class="leaf"><i class="fas fa-seedling"></i></div>
+    <div class="leaf"><i class="fas fa-seedling"></i></div>
+  </div>
+  <div class="splash-words">
+    <div class="pre">in loving memory of</div>
+    <div class="name">MRS. AKUA SIKA ADOMAKO</div>
+    <div class="years">1968 &middot; 2026</div>
+  </div>
+  <div class="splash-cue">Tap to enter the garden</div>
+</div>
+
+<div class="botanical b1"><svg viewBox="0 0 240 240"><path d="M120 0 Q 80 40, 60 80 Q 50 100, 70 110 Q 100 90, 120 60 Z" fill="#5e7a52" opacity=".15"/><path d="M120 0 Q 160 30, 180 70 Q 190 95, 170 100 Q 140 80, 120 50 Z" fill="#5e7a52" opacity=".15"/><circle cx="120" cy="120" r="20" fill="#e8a8a0" opacity=".4"/></svg></div>
+<div class="botanical b2"><svg viewBox="0 0 280 280"><path d="M140 0 Q 100 50, 80 100 Q 70 130, 100 140 Q 130 110, 140 70 Z" fill="#5e7a52" opacity=".12"/><circle cx="140" cy="160" r="25" fill="#c9a35a" opacity=".35"/></svg></div>
+
+<audio id="bg" loop preload="none"><source src="https://cdn.pixabay.com/audio/2022/10/30/audio_347111d654.mp3" type="audio/mpeg"></audio>
+<button class="audio-toggle" id="audioBtn"><i class="fas fa-music" id="audioIcon"></i></button>
+
+<header class="hero">
+  <div class="hero-frame">
+    <div class="hero-script">In loving memory of</div>
+    <h1 class="hero-name">Mrs. Akua Sika Adomako</h1>
+    <div class="hero-role">Botanist &middot; Teacher of three generations &middot; Mother &middot; Friend to all that grew</div>
+    <div class="hero-portrait"><img src="https://i.pravatar.cc/600?img=47" alt=""></div>
+    <div class="hero-years">1968 &middot; 2026</div>
+    <div class="countdown">
+      <div class="cd-cell"><span class="cd-num" data-cd="d">--</span><span class="cd-lbl">Days</span></div>
+      <div class="cd-cell"><span class="cd-num" data-cd="h">--</span><span class="cd-lbl">Hours</span></div>
+      <div class="cd-cell"><span class="cd-num" data-cd="m">--</span><span class="cd-lbl">Min</span></div>
+      <div class="cd-cell"><span class="cd-num" data-cd="s">--</span><span class="cd-lbl">Sec</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">Her Life</div>
+      <h2 class="chapter-title">A woman who <em>planted</em></h2>
+      <div class="leaf-sep"><span class="line"></span><i class="fas fa-seedling"></i><span class="line"></span></div>
+    </div>
+    <div class="bio">
+      <p>Akua Sika Adomako began her career at Achimota Botanic Gardens in 1991 as a junior researcher. She left in 2008 to become biology teacher at her old school, Wesley Girls', because she believed teaching was the longer way to change the world — and the slower way of all the good ways.</p>
+      <p>For seventeen years she walked the same path between two greenhouses, one classroom, and a generation of girls who learned to love trees because she did. She named over <strong>two hundred</strong> indigenous plant specimens in the school's herbarium. <strong>Three hundred and twelve</strong> of her former students are now in the sciences.</p>
+      <p>She leaves behind her husband <strong>Mr. Yaw Adomako</strong>, two daughters <strong>Sika and Maame</strong>, and a garden in Cantonments that she tended every Saturday morning without fail.</p>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">The Final Tending</div>
+      <h2 class="chapter-title">Funeral <em>arrangements</em></h2>
+      <div class="leaf-sep"><span class="line"></span><i class="fas fa-leaf"></i><span class="line"></span></div>
+    </div>
+    <div class="vine">
+      <div class="vine-event"><div class="when">FRI 16 APR 2027 &middot; 6PM</div><h4>Wake-Keeping</h4><p>Wesley Girls' High School Hall, Cape Coast.</p></div>
+      <div class="vine-event"><div class="when">SAT 17 APR 2027 &middot; 7AM</div><h4>Lying in State</h4><p>Adomako Family Home, Cantonments.</p></div>
+      <div class="vine-event"><div class="when">SAT 17 APR 2027 &middot; 10AM</div><h4>Burial Service</h4><p>Christ the King Parish, Cantonments.</p></div>
+      <div class="vine-event"><div class="when">SAT 17 APR 2027 &middot; 1PM</div><h4>Interment</h4><p>Awudome Cemetery &middot; under the flame tree she loved.</p></div>
+      <div class="vine-event"><div class="when">SUN 18 APR 2027 &middot; 10AM</div><h4>Thanksgiving &amp; Garden Planting</h4><p>Family + students &middot; plant a tree in her honour.</p></div>
+    </div>
+    <div class="attire">
+      <h4>Attire</h4>
+      <div class="at">SAGE &middot; WHITE</div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">From the Album</div>
+      <h2 class="chapter-title">A life in <em>pictures</em></h2>
+      <div class="leaf-sep"><span class="line"></span><i class="fas fa-camera"></i><span class="line"></span></div>
+    </div>
+    <div class="gal">
+      <div class="gal-tile"><img src="https://picsum.photos/seed/akua1/600/700"><div class="cap">~ Her greenhouse ~</div></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/akua2/600/500"><div class="cap">~ Form 5, '08 ~</div></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/akua3/600/800"><div class="cap">~ With Sika ~</div></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/akua4/600/600"><div class="cap">~ The flame tree ~</div></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/akua5/600/700"><div class="cap">~ 50th birthday ~</div></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/akua6/600/650"><div class="cap">~ Awards night ~</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">Plant a memory in her garden</div>
+      <h2 class="chapter-title">The <em>garden</em> grows</h2>
+      <div class="leaf-sep"><span class="line"></span><i class="fas fa-spa"></i><span class="line"></span></div>
+    </div>
+    <div class="garden">
+      <div class="flowers">
+        <div class="flower"><div class="flower-bloom"><div class="pollen"></div></div><div class="flower-stem"></div><div class="flower-name">Sika</div><div class="flower-msg">"Mama showed me names of leaves before letters."</div></div>
+        <div class="flower"><div class="flower-bloom"><div class="pollen"></div></div><div class="flower-stem"></div><div class="flower-name">Maame</div><div class="flower-msg">"You taught me to listen to plants."</div></div>
+        <div class="flower"><div class="flower-bloom"><div class="pollen"></div></div><div class="flower-stem"></div><div class="flower-name">Yaw</div><div class="flower-msg">"My wife. My quiet morning. My garden."</div></div>
+        <div class="flower"><div class="flower-bloom"><div class="pollen"></div></div><div class="flower-stem"></div><div class="flower-name">Ms. Otoo</div><div class="flower-msg">"Best teacher Wesley Girls' ever had."</div></div>
+        <div class="flower"><div class="flower-bloom"><div class="pollen"></div></div><div class="flower-stem"></div><div class="flower-name">Adwoa</div><div class="flower-msg">"Form 3, 2010. I am now a botanist."</div></div>
+        <div class="flower"><div class="flower-bloom"><div class="pollen"></div></div><div class="flower-stem"></div><div class="flower-name">Aunty K</div><div class="flower-msg">"My sister. My quietest love."</div></div>
+        <div class="flower"><div class="flower-bloom"><div class="pollen"></div></div><div class="flower-stem"></div><div class="flower-name">The Achimota Team</div><div class="flower-msg">"You named our specimens. We honour you."</div></div>
+        <div class="flower"><div class="flower-bloom"><div class="pollen"></div></div><div class="flower-stem"></div><div class="flower-name">Class of '12</div><div class="flower-msg">"We loved you, Madam Akua."</div></div>
+      </div>
+      <form class="plant-form" onsubmit="event.preventDefault();this.querySelector('button').textContent='🌷 Planted'">
+        <input type="text" placeholder="Your name" required>
+        <textarea placeholder="A memory or short blessing (max 80 chars)" maxlength="80" required></textarea>
+        <button>🌱 Plant a flower in her garden</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">RSVP &middot; Enquiries</div>
+      <h2 class="chapter-title">Speak to <em>family</em></h2>
+      <div class="leaf-sep"><span class="line"></span><i class="fas fa-phone"></i><span class="line"></span></div>
+    </div>
+    <div class="fc-grid">
+      <a class="fc-card" href="tel:+233244334455"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Husband</div><div class="fc-name">Mr. Yaw Adomako</div><div class="fc-num">+233 244 334 455</div></div></a>
+      <a class="fc-card" href="tel:+233205667788"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Daughter</div><div class="fc-name">Sika Adomako</div><div class="fc-num">+233 205 667 788</div></div></a>
+      <a class="fc-card" href="tel:+233276112233"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">School Rep</div><div class="fc-name">Ms. Otoo &middot; Wesley Girls'</div><div class="fc-num">+233 276 112 233</div></div></a>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head"><div class="eyebrow">The Church</div><h2 class="chapter-title">Where we <em>gather</em></h2></div>
+    <div class="loc-card">
+      <iframe src="https://maps.google.com/maps?q=Cantonments%20Accra&z=14&output=embed"></iframe>
+      <div class="loc-details">
+        <div class="loc-name">Christ the King Parish</div>
+        <div class="loc-addr">Cantonments, Accra</div>
+        <a class="loc-cta" href="https://maps.google.com/?q=Cantonments+Accra" target="_blank"><i class="fas fa-directions"></i> Open in Maps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-italic">Da Yie, Auntie Akua</div>
+  <div class="foot-name">MRS. AKUA SIKA ADOMAKO</div>
+  <div class="foot-years">1968 &mdash; 2026</div>
+  <p class="foot-verse">"She planted gardens. She planted girls. She planted seeds of every kind. We who remain are her harvest."</p>
+  <div class="credit">Designed by VibeLink Event &middot; "Eternal Garden" template</div>
+</footer>
+
+<button class="share-fab" onclick="const t='In loving memory of Mrs Akua Sika Adomako (1968-2026). '+location.href;window.open('https://wa.me/?text='+encodeURIComponent(t))"><i class="fab fa-whatsapp"></i></button>
+
+<script>
+  document.getElementById('splash').addEventListener('click',()=>{
+    document.getElementById('splash').classList.add('gone');
+    document.body.classList.remove('locked');
+    if(!audioOn) tryAudio();
+  });
+  const audio=document.getElementById('bg');audio.volume=.25;let audioOn=false;
+  function tryAudio(){audio.play().then(()=>{audioOn=true;document.getElementById('audioIcon').className='fas fa-volume-up'}).catch(()=>{})}
+  document.getElementById('audioBtn').addEventListener('click',()=>{if(audioOn){audio.pause();audioOn=false;document.getElementById('audioIcon').className='fas fa-music'}else tryAudio()});
+  const target=new Date('2027-04-17T10:00:00').getTime();
+  function tickCD(){const now=Date.now();let diff=Math.max(0,target-now);
+    document.querySelectorAll('[data-cd="d"]').forEach(el=>el.textContent=String(Math.floor(diff/86400000)).padStart(3,'0'));
+    document.querySelectorAll('[data-cd="h"]').forEach(el=>el.textContent=String(Math.floor(diff/3600000)%24).padStart(2,'0'));
+    document.querySelectorAll('[data-cd="m"]').forEach(el=>el.textContent=String(Math.floor(diff/60000)%60).padStart(2,'0'));
+    document.querySelectorAll('[data-cd="s"]').forEach(el=>el.textContent=String(Math.floor(diff/1000)%60).padStart(2,'0'));}
+  tickCD();setInterval(tickCD,1000);
+</script>
+</body>
+</html>

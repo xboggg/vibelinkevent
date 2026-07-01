@@ -1,0 +1,434 @@
+<!doctype html>
+<!--
+  DEMO 1 — CATHEDRAL OF STARS
+  Cosmic memorial. Deep navy + warm gold. Constellation forms the name.
+  Subject: Nana Kwame Boakye Ofori (1948–2026), Chief of Akrofuom, amateur astronomer.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>In Loving Memory — Nana Kwame Boakye Ofori (1948–2026)</title>
+<meta name="theme-color" content="#03050f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --void:#03050f; --deep:#070b1f; --indigo:#0e1438;
+    --gold:#d9b65a; --gold-bright:#f5dd92; --gold-deep:#7a5e1f;
+    --ivory:#efe7d4; --smoke:rgba(239,231,212,.6); --line:rgba(217,182,90,.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Cormorant Garamond',serif;background:var(--void);color:var(--ivory);
+    line-height:1.65;-webkit-font-smoothing:antialiased;min-height:100vh;
+  }
+  ::selection{background:var(--gold);color:var(--void)}
+  img,iframe,svg{max-width:100%;display:block}
+  body.locked{overflow:hidden;height:100vh}
+
+  /* ===== STARFIELD (always-on) ===== */
+  .starfield{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+    radial-gradient(ellipse at 20% 10%, rgba(217,182,90,.08), transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(14,20,56,.6), transparent 60%),
+    var(--void);}
+  .star{position:fixed;width:2px;height:2px;border-radius:50%;background:#fff;
+    box-shadow:0 0 6px #fff;animation:twinkle 4s ease-in-out infinite;z-index:1;pointer-events:none}
+  @keyframes twinkle{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+
+  /* ===== SPLASH ===== */
+  .splash{position:fixed;inset:0;background:radial-gradient(circle at center, var(--deep), #000);
+    z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transition:opacity 1.4s, visibility 1.4s;cursor:pointer}
+  .splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+  .constellation{position:relative;width:300px;height:160px;margin-bottom:2rem}
+  .constellation svg{width:100%;height:100%;overflow:visible}
+  .constellation circle{fill:var(--gold-bright);filter:drop-shadow(0 0 8px var(--gold-bright));
+    opacity:0;animation:starAppear 2.4s forwards ease-out}
+  .constellation line{stroke:rgba(245,221,146,.5);stroke-width:1;stroke-dasharray:200;
+    stroke-dashoffset:200;animation:drawLine 1.6s 2s forwards ease-out}
+  @keyframes starAppear{to{opacity:1}}
+  @keyframes drawLine{to{stroke-dashoffset:0}}
+  .splash-name{font-family:'Cinzel',serif;font-size:clamp(1.4rem,4vw,2.2rem);letter-spacing:.2em;
+    color:var(--ivory);opacity:0;animation:fadeUp 1.4s 3.4s forwards ease-out;text-align:center;line-height:1.4}
+  .splash-name small{display:block;font-size:.55em;color:var(--gold);letter-spacing:.4em;margin-top:.6rem}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .splash-cue{position:absolute;bottom:40px;font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.4em;
+    color:var(--gold);opacity:0;animation:fadeUp 1s 4.5s forwards ease-out;text-transform:uppercase}
+
+  /* ===== HERO ===== */
+  .hero{position:relative;z-index:5;min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:5rem 1.5rem;text-align:center}
+  .hero-frame{max-width:780px;position:relative}
+  .hero-overline{font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.6em;color:var(--gold);
+    text-transform:uppercase;margin-bottom:1.4rem}
+  .hero-overline::before,.hero-overline::after{content:'';display:inline-block;width:36px;height:1px;
+    background:var(--gold);margin:0 .8rem;vertical-align:middle}
+  .hero-italic{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.1rem,2vw,1.4rem);
+    color:var(--gold-bright);margin-bottom:.4rem;letter-spacing:.04em}
+  .hero-name{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(2rem,5.5vw,3.6rem);
+    color:var(--ivory);letter-spacing:.12em;line-height:1.2;margin-bottom:1rem}
+  .hero-name span{display:block;font-size:.82em;color:var(--gold-bright);margin-top:.4rem}
+  .hero-portrait{width:170px;height:170px;border-radius:50%;margin:2rem auto 1.5rem;
+    padding:5px;background:linear-gradient(135deg, var(--gold-bright), var(--gold-deep));
+    box-shadow:0 0 50px rgba(217,182,90,.3)}
+  .hero-portrait img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid var(--void)}
+  .hero-years{display:inline-block;padding:.6rem 1.6rem;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    font-family:'Cinzel',serif;color:var(--gold-bright);letter-spacing:.5em;font-size:1.1rem;margin-top:1rem}
+  .hero-lineage{font-style:italic;color:var(--smoke);margin-top:1.4rem;font-size:1.05rem}
+  .countdown{display:flex;justify-content:center;gap:.7rem;margin-top:2rem;flex-wrap:wrap}
+  .cd-cell{min-width:70px;padding:.7rem .4rem;background:rgba(14,20,56,.5);border:1px solid var(--line)}
+  .cd-num{font-family:'Cinzel',serif;font-size:1.5rem;color:var(--gold-bright);font-weight:600}
+  .cd-lbl{font-family:'Inter',sans-serif;font-size:.6rem;letter-spacing:.3em;color:var(--smoke);text-transform:uppercase;margin-top:.3rem}
+
+  /* ===== AUDIO ===== */
+  .audio-toggle{position:fixed;top:1.3rem;right:1.3rem;z-index:80;width:44px;height:44px;border-radius:50%;
+    background:rgba(7,11,31,.85);border:1px solid var(--gold);color:var(--gold-bright);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;font-size:.95rem;backdrop-filter:blur(8px)}
+
+  /* ===== SECTIONS ===== */
+  section.chapter{position:relative;z-index:5;padding:5rem 1.5rem}
+  .container{max-width:1100px;margin:0 auto}
+  .chapter-head{text-align:center;margin-bottom:3rem}
+  .eyebrow{font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.6em;color:var(--gold);
+    text-transform:uppercase;margin-bottom:.7rem}
+  .chapter-title{font-family:'Cinzel',serif;font-weight:500;font-size:clamp(1.6rem,3.6vw,2.4rem);
+    color:var(--ivory);letter-spacing:.12em;text-transform:uppercase}
+  .ornament{display:flex;align-items:center;justify-content:center;gap:1rem;margin:1rem auto 0;max-width:220px;color:var(--gold)}
+  .ornament .line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+  /* ===== BIO ===== */
+  .bio-grid{display:grid;grid-template-columns:1fr;gap:2rem;padding:2.4rem;border:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(7,11,31,.5),rgba(3,5,15,.7))}
+  @media(min-width:760px){.bio-grid{grid-template-columns:1.6fr 1fr;gap:3rem}}
+  .bio-text p{color:var(--smoke);font-size:1.08rem;line-height:1.85;margin-bottom:1.1rem}
+  .bio-text strong{color:var(--gold-bright);font-weight:500}
+  .bio-side h4{font-family:'Cinzel',serif;color:var(--gold);letter-spacing:.3em;font-size:.78rem;
+    text-transform:uppercase;margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--line)}
+  .bio-side ul{list-style:none}
+  .bio-side ul li{padding:.55rem 0;display:flex;justify-content:space-between;gap:1rem;font-size:.95rem;border-bottom:1px dashed var(--line)}
+  .bio-side ul li span:last-child{color:var(--gold-bright);font-family:'Cinzel',serif;letter-spacing:.08em;font-size:.85rem}
+
+  /* ===== PROGRAMME (arc timeline like a sky arc) ===== */
+  .arc-timeline{position:relative;padding:2rem 0}
+  .arc-timeline::before{content:'';position:absolute;top:30px;left:5%;right:5%;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);border-radius:50%}
+  .arc-events{display:grid;grid-template-columns:1fr;gap:1.4rem;position:relative}
+  @media(min-width:900px){.arc-events{grid-template-columns:repeat(4,1fr);gap:.8rem}}
+  .arc-event{padding:1.4rem 1.2rem;background:rgba(14,20,56,.4);border:1px solid var(--line);text-align:center;position:relative}
+  .arc-event::before{content:'';position:absolute;top:-7px;left:50%;transform:translateX(-50%);
+    width:14px;height:14px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold-bright)}
+  .arc-event .date{font-family:'Cinzel',serif;color:var(--gold-bright);letter-spacing:.2em;font-size:.78rem;margin-bottom:.5rem;margin-top:.6rem}
+  .arc-event h4{font-family:'Cinzel',serif;color:var(--ivory);font-size:1rem;letter-spacing:.08em;margin-bottom:.5rem}
+  .arc-event p{color:var(--smoke);font-size:.9rem;line-height:1.55}
+
+  /* ===== GALLERY ===== */
+  .gal-grid{column-count:3;column-gap:1rem;max-width:1100px;margin:0 auto}
+  @media(max-width:900px){.gal-grid{column-count:2}}
+  @media(max-width:500px){.gal-grid{column-count:1}}
+  .gal-tile{margin:0 0 1rem 0;break-inside:avoid;border:1px solid var(--line);overflow:hidden;position:relative}
+  .gal-tile img{width:100%;height:auto;display:block;transition:transform .8s, filter .5s;filter:brightness(.85) saturate(.9)}
+  .gal-tile:hover img{transform:scale(1.05);filter:brightness(1) saturate(1)}
+
+  /* ===== TRIBUTES ===== */
+  .trib-form{max-width:600px;margin:0 auto 2.5rem;padding:2rem;border:1px solid var(--line);background:rgba(7,11,31,.5)}
+  .trib-form input,.trib-form textarea{width:100%;padding:.85rem 1rem;margin-bottom:1rem;background:rgba(3,5,15,.6);
+    border:1px solid var(--line);color:var(--ivory);font-family:'Cormorant Garamond',serif;font-size:1rem}
+  .trib-form input:focus,.trib-form textarea:focus{outline:none;border-color:var(--gold)}
+  .trib-form textarea{min-height:90px;resize:vertical}
+  .trib-submit{width:100%;padding:.9rem;background:linear-gradient(135deg,var(--indigo),var(--deep));
+    border:1px solid var(--gold);color:var(--gold-bright);font-family:'Cinzel',serif;letter-spacing:.3em;
+    font-size:.82rem;cursor:pointer;text-transform:uppercase}
+  .trib-grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:1rem}
+  @media(min-width:680px){.trib-grid{grid-template-columns:1fr 1fr}}
+  .trib-card{padding:1.3rem;border:1px solid var(--line);background:rgba(14,20,56,.4);position:relative}
+  .trib-card::before{content:'\201C';position:absolute;top:-12px;left:14px;font-family:'Cinzel',serif;font-size:3rem;color:var(--gold);line-height:1}
+  .trib-msg{color:var(--ivory);font-style:italic;line-height:1.7;margin-bottom:.8rem;padding-left:1rem}
+  .trib-author{color:var(--gold-bright);font-family:'Cinzel',serif;letter-spacing:.2em;font-size:.78rem;text-align:right}
+
+  /* ===== CONTACTS ===== */
+  .fc-grid{max-width:980px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+  .fc-card{display:flex;align-items:center;gap:1rem;padding:1.2rem;border:1px solid var(--line);
+    background:rgba(14,20,56,.4);text-decoration:none;color:inherit;transition:all .35s}
+  .fc-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .fc-icon{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--deep));
+    border:1px solid var(--gold);color:var(--gold-bright);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .fc-role{font-family:'Inter',sans-serif;font-size:.65rem;letter-spacing:.3em;color:var(--smoke);text-transform:uppercase;margin-bottom:.2rem}
+  .fc-name{font-family:'Cinzel',serif;color:var(--ivory);letter-spacing:.1em;font-size:.95rem;margin-bottom:.2rem}
+  .fc-num{color:var(--gold-bright);font-family:'Inter',sans-serif;font-size:.9rem}
+
+  /* ===== ATTIRE ===== */
+  .attire{margin:3rem auto 0;max-width:520px;text-align:center;padding:1.6rem;background:linear-gradient(135deg,var(--indigo),var(--deep));border:1px solid var(--gold)}
+  .attire h4{font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.5em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:.6rem}
+  .attire-text{font-family:'Cinzel',serif;letter-spacing:.4em;font-size:1rem;color:var(--ivory)}
+  .swatches{display:flex;justify-content:center;gap:.8rem;margin-top:.9rem}
+  .sw{width:28px;height:28px;border-radius:50%;border:2px solid var(--gold-bright)}
+
+  /* ===== LOCATION ===== */
+  .loc-card{max-width:880px;margin:0 auto;border:1px solid var(--line);background:rgba(7,11,31,.5);overflow:hidden}
+  .loc-card iframe{width:100%;height:300px;border:0;display:block;filter:grayscale(.5) brightness(.7) hue-rotate(200deg)}
+  .loc-details{padding:1.6rem;text-align:center}
+  .loc-name{font-family:'Cinzel',serif;color:var(--gold-bright);letter-spacing:.2em;font-size:1.1rem;margin-bottom:.4rem}
+  .loc-addr{color:var(--smoke);margin-bottom:1rem}
+  .loc-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;border:1px solid var(--gold);
+    color:var(--gold-bright);font-family:'Cinzel',serif;letter-spacing:.2em;font-size:.78rem;text-decoration:none;text-transform:uppercase}
+
+  /* ===== FOOTER ===== */
+  footer{padding:4rem 1.5rem 2rem;background:#000;text-align:center;border-top:1px solid var(--line);position:relative;z-index:5}
+  .foot-italic{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold-bright);font-size:1.8rem;margin-bottom:.6rem}
+  .foot-name{font-family:'Cinzel',serif;color:var(--ivory);letter-spacing:.2em;font-size:1rem}
+  .foot-years{color:var(--gold);letter-spacing:.5em;font-family:'Cinzel',serif;font-size:.85rem;margin:.4rem 0 1.4rem}
+  .foot-verse{max-width:520px;margin:0 auto 1.5rem;color:var(--smoke);font-style:italic;font-size:.95rem;line-height:1.7}
+  .foot-credit{margin-top:1.6rem;padding-top:1.2rem;border-top:1px solid var(--line);color:var(--smoke);font-family:'Inter',sans-serif;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase}
+  .foot-credit a{color:var(--gold-bright);text-decoration:none}
+
+  .share-fab{position:fixed;bottom:1.5rem;right:1.5rem;z-index:80;width:54px;height:54px;border-radius:50%;
+    background:#25D366;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 18px rgba(37,211,102,.5)}
+</style>
+</head>
+<body class="locked">
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="constellation">
+    <svg viewBox="0 0 300 160" preserveAspectRatio="xMidYMid meet">
+      <!-- "Ofori" constellation: 7 stars + connecting lines forming a sweeping shape -->
+      <line x1="40" y1="50" x2="90" y2="30" style="animation-delay:2s"/>
+      <line x1="90" y1="30" x2="150" y2="60" style="animation-delay:2.2s"/>
+      <line x1="150" y1="60" x2="200" y2="40" style="animation-delay:2.4s"/>
+      <line x1="200" y1="40" x2="240" y2="80" style="animation-delay:2.6s"/>
+      <line x1="150" y1="60" x2="170" y2="120" style="animation-delay:2.8s"/>
+      <line x1="170" y1="120" x2="110" y2="130" style="animation-delay:3.0s"/>
+      <circle cx="40" cy="50" r="3.5" style="animation-delay:.2s"/>
+      <circle cx="90" cy="30" r="4" style="animation-delay:.6s"/>
+      <circle cx="150" cy="60" r="5" style="animation-delay:1.0s"/>
+      <circle cx="200" cy="40" r="3.5" style="animation-delay:1.4s"/>
+      <circle cx="240" cy="80" r="4" style="animation-delay:1.7s"/>
+      <circle cx="170" cy="120" r="3" style="animation-delay:2.0s"/>
+      <circle cx="110" cy="130" r="3.5" style="animation-delay:2.3s"/>
+    </svg>
+  </div>
+  <div class="splash-name">
+    NANA KWAME BOAKYE OFORI
+    <small>1948 &nbsp;&mdash;&nbsp; 2026</small>
+  </div>
+  <div class="splash-cue">Tap the night to enter</div>
+</div>
+
+<!-- BACKGROUND STARFIELD -->
+<div class="starfield"></div>
+
+<!-- AUDIO -->
+<audio id="bg" loop preload="none"><source src="https://cdn.pixabay.com/audio/2022/10/30/audio_347111d654.mp3" type="audio/mpeg"></audio>
+<button class="audio-toggle" id="audioBtn" aria-label="Music"><i class="fas fa-music" id="audioIcon"></i></button>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-frame">
+    <div class="hero-overline">Transition</div>
+    <div class="hero-italic">In Loving Memory of</div>
+    <h1 class="hero-name">Nana Kwame<span>Boakye Ofori</span></h1>
+    <div class="hero-portrait"><img src="https://i.pravatar.cc/600?img=68" alt="Portrait"></div>
+    <div class="hero-years">1948 &nbsp;&mdash;&nbsp; 2026</div>
+    <p class="hero-lineage">Omanhene of Akrofuom &middot; Astronomer &middot; Father of Five</p>
+    <div class="countdown" id="cd">
+      <div class="cd-cell"><div class="cd-num" id="cdD">--</div><div class="cd-lbl">Days</div></div>
+      <div class="cd-cell"><div class="cd-num" id="cdH">--</div><div class="cd-lbl">Hours</div></div>
+      <div class="cd-cell"><div class="cd-num" id="cdM">--</div><div class="cd-lbl">Min</div></div>
+      <div class="cd-cell"><div class="cd-num" id="cdS">--</div><div class="cd-lbl">Sec</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- BIO -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">A Life Beneath the Heavens</div>
+      <h2 class="chapter-title">His Journey</h2>
+      <div class="ornament"><span class="line"></span><i class="fas fa-star"></i><span class="line"></span></div>
+    </div>
+    <div class="bio-grid">
+      <div class="bio-text">
+        <p><strong>Nana Kwame Boakye Ofori</strong> ruled the people of Akrofuom for thirty-one years with a quiet, listening kind of leadership. He read the night sky like other men read the Bible — and never tired of telling his grandchildren which star was which.</p>
+        <p>Trained as a surveyor before he was enstooled, he founded the Akrofuom Astronomy Club in 1979 — a small group of teachers and pupils who would gather on the football pitch on moonless nights to watch the planets rise.</p>
+        <p>He leaves behind his wife of 52 years, <strong>Madam Comfort Adoma</strong>, five children, fourteen grandchildren, and an entire town that knew where to find him on a clear night.</p>
+        <p><em>"The stars do not die,"</em> he often said. <em>"They only travel further than we can see."</em></p>
+      </div>
+      <aside class="bio-side">
+        <h4>At a Glance</h4>
+        <ul>
+          <li><span>Born</span><span>14 Aug 1948</span></li>
+          <li><span>Called Home</span><span>02 Mar 2026</span></li>
+          <li><span>Age</span><span>77 Years</span></li>
+          <li><span>Enstooled</span><span>1995</span></li>
+          <li><span>Wife</span><span>Madam Adoma</span></li>
+          <li><span>Children</span><span>Five</span></li>
+        </ul>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMME -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">The Final Procession</div>
+      <h2 class="chapter-title">Funeral Programme</h2>
+      <div class="ornament"><span class="line"></span><i class="fas fa-moon"></i><span class="line"></span></div>
+    </div>
+    <div class="arc-timeline">
+      <div class="arc-events">
+        <div class="arc-event"><div class="date">FRI 16 APR 2027</div><h4>Pre-Burial Vigil</h4><p>An all-night gathering of song and remembrance under the stars.</p></div>
+        <div class="arc-event"><div class="date">SAT 17 APR 2027 &middot; 6AM</div><h4>Lying in State</h4><p>Viewing at the Akrofuom Palace forecourt.</p></div>
+        <div class="arc-event"><div class="date">SAT 17 APR 2027 &middot; 10AM</div><h4>Burial Service</h4><p>Presbyterian Church, Akrofuom.</p></div>
+        <div class="arc-event"><div class="date">SUN 18 APR 2027</div><h4>Thanksgiving</h4><p>Family service followed by reception.</p></div>
+      </div>
+    </div>
+    <div class="attire">
+      <h4>Attire</h4>
+      <div class="attire-text">BLACK &amp; BLUE</div>
+      <div class="swatches"><span class="sw" style="background:#000"></span><span class="sw" style="background:#0e1438"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">Moments in Time</div>
+      <h2 class="chapter-title">A Life in Pictures</h2>
+      <div class="ornament"><span class="line"></span><i class="fas fa-images"></i><span class="line"></span></div>
+    </div>
+    <div class="gal-grid">
+      <div class="gal-tile"><img src="https://picsum.photos/seed/ofori1/600/800" alt=""></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/ofori2/600/500" alt=""></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/ofori3/600/700" alt=""></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/ofori4/600/600" alt=""></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/ofori5/600/900" alt=""></div>
+      <div class="gal-tile"><img src="https://picsum.photos/seed/ofori6/600/650" alt=""></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRIBUTES -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">Words from those who loved him</div>
+      <h2 class="chapter-title">Tributes</h2>
+      <div class="ornament"><span class="line"></span><i class="fas fa-feather"></i><span class="line"></span></div>
+    </div>
+    <form class="trib-form">
+      <input type="text" placeholder="Your full name" required>
+      <input type="text" placeholder="Relationship (cousin, friend, student…)">
+      <textarea placeholder="Share a memory or a star you'd dedicate to him…" required></textarea>
+      <button class="trib-submit">Send My Tribute</button>
+    </form>
+    <div class="trib-grid">
+      <div class="trib-card"><p class="trib-msg">Nana taught me to find Orion the same week he taught me to read. I never see the night sky without seeing him.</p><div class="trib-author">— Yaw Boakye, grandson</div></div>
+      <div class="trib-card"><p class="trib-msg">A chief who ruled with whispers, not shouts. The town will be quieter without him.</p><div class="trib-author">— Hon. K. Bediako, MP</div></div>
+      <div class="trib-card"><p class="trib-msg">He gave me my first telescope at seventeen. I am now an astrophysicist in Toronto. Da yie, Nana.</p><div class="trib-author">— Dr. Akua Sika, niece</div></div>
+      <div class="trib-card"><p class="trib-msg">My husband. My friend. My constellation. Until the morning, Kwame.</p><div class="trib-author">— Mad. Comfort Adoma, wife</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">RSVP &middot; Enquiries</div>
+      <h2 class="chapter-title">Speak to Family</h2>
+      <div class="ornament"><span class="line"></span><i class="fas fa-phone"></i><span class="line"></span></div>
+    </div>
+    <div class="fc-grid">
+      <a class="fc-card" href="tel:+233244112233"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Eldest Son</div><div class="fc-name">Kofi Boakye-Ofori</div><div class="fc-num">+233 244 112 233</div></div></a>
+      <a class="fc-card" href="tel:+233205556677"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Linguist</div><div class="fc-name">Opanin K. Sarpong</div><div class="fc-num">+233 205 556 677</div></div></a>
+      <a class="fc-card" href="tel:+447712345678"><span class="fc-icon"><i class="fas fa-phone"></i></span><div><div class="fc-role">Daughter &middot; UK</div><div class="fc-name">Akosua Boakye</div><div class="fc-num">+44 7712 345 678</div></div></a>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="chapter">
+  <div class="container">
+    <div class="chapter-head">
+      <div class="eyebrow">Where We Gather</div>
+      <h2 class="chapter-title">Akrofuom Palace</h2>
+      <div class="ornament"><span class="line"></span><i class="fas fa-location-dot"></i><span class="line"></span></div>
+    </div>
+    <div class="loc-card">
+      <iframe src="https://maps.google.com/maps?q=Akrofuom%20Ashanti%20Region&z=14&output=embed" loading="lazy"></iframe>
+      <div class="loc-details">
+        <div class="loc-name">Akrofuom Palace Forecourt</div>
+        <div class="loc-addr">Akrofuom, Adansi South District, Ashanti Region</div>
+        <a class="loc-cta" href="https://maps.google.com/?q=Akrofuom+Ashanti" target="_blank"><i class="fas fa-directions"></i> Open in Maps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-italic">Da Yie</div>
+  <div class="foot-name">NANA KWAME BOAKYE OFORI</div>
+  <div class="foot-years">1948 &mdash; 2026</div>
+  <p class="foot-verse">"The stars in their courses fought… and the heavens declare His glory."<br><small style="color:var(--gold)">— Judges 5:20 / Psalm 19:1</small></p>
+  <div class="foot-credit">Designed by <a href="#">VibeLink Event</a> &middot; Cathedral of Stars template</div>
+</footer>
+
+<!-- SHARE -->
+<button class="share-fab" id="share" aria-label="Share"><i class="fab fa-whatsapp"></i></button>
+
+<script>
+/* Splash dismiss */
+document.getElementById('splash').addEventListener('click', () => {
+  document.getElementById('splash').classList.add('gone');
+  document.body.classList.remove('locked');
+  if (!audioOn) tryAudio();
+});
+
+/* Audio */
+const audio = document.getElementById('bg'); audio.volume = 0.3;
+let audioOn = false;
+function tryAudio(){ audio.play().then(()=>{audioOn=true;document.getElementById('audioIcon').className='fas fa-volume-up'}).catch(()=>{});}
+document.getElementById('audioBtn').addEventListener('click',()=>{
+  if(audioOn){audio.pause();audioOn=false;document.getElementById('audioIcon').className='fas fa-music'}
+  else tryAudio();
+});
+
+/* Random twinkling stars */
+for (let i=0; i<80; i++){
+  const s=document.createElement('div'); s.className='star';
+  s.style.left=Math.random()*100+'vw'; s.style.top=Math.random()*100+'vh';
+  s.style.animationDelay=Math.random()*4+'s';
+  s.style.opacity=Math.random()*.8+.2;
+  document.body.appendChild(s);
+}
+
+/* Countdown to 17 Apr 2027 6AM */
+const target = new Date('2027-04-17T06:00:00').getTime();
+function tick(){
+  const now=Date.now(); let diff=Math.max(0,target-now);
+  document.getElementById('cdD').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cdH').textContent=String(Math.floor(diff/3600000)%24).padStart(2,'0');
+  document.getElementById('cdM').textContent=String(Math.floor(diff/60000)%60).padStart(2,'0');
+  document.getElementById('cdS').textContent=String(Math.floor(diff/1000)%60).padStart(2,'0');
+}
+tick(); setInterval(tick,1000);
+
+/* Share */
+document.getElementById('share').addEventListener('click',()=>{
+  const t='In Loving Memory of Nana Kwame Boakye Ofori (1948–2026). '+location.href;
+  window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank');
+});
+</script>
+</body>
+</html>

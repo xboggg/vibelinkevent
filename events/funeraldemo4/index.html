@@ -1,0 +1,287 @@
+<!doctype html>
+<!--
+  DEMO 4 — LETTER FROM A LOVED ONE
+  The entire site is a personal letter, typewriter aesthetic, sepia paper, wax seal.
+  Subject: Pastor Daniel Owusu-Ansah (1951–2026).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter from Pastor Daniel — In Loving Memory (1951–2026)</title>
+<meta name="theme-color" content="#3d2817">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Caveat:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root{
+    --paper:#f3e9d2; --paper-shadow:#e0d3b3; --aged:#d6c499;
+    --sepia:#5b3a1a; --sepia-dark:#3d2817; --sepia-light:#8b6843;
+    --wax:#8a1f1f; --wax-glow:#c44c4c;
+    --ink:#2a1a08;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  html{scroll-behavior:smooth}
+  body{font-family:'Cormorant Garamond',serif;background:var(--sepia-dark);color:var(--ink);
+    line-height:1.7;-webkit-font-smoothing:antialiased;min-height:100vh;
+    background-image:radial-gradient(ellipse at center,rgba(91,58,26,.3),var(--sepia-dark))}
+  body.locked{overflow:hidden;height:100vh}
+  ::selection{background:var(--wax);color:var(--paper)}
+  img{max-width:100%;display:block}
+
+  /* SPLASH — Wax seal */
+  .splash{position:fixed;inset:0;background:radial-gradient(ellipse at center,var(--sepia) 0%,#000 100%);
+    z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    transition:opacity 1.4s,visibility 1.4s;cursor:pointer;overflow:hidden}
+  .splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+  .seal{width:160px;height:160px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#d44747,var(--wax) 50%,#5a0d10 100%);
+    box-shadow:0 8px 24px rgba(0,0,0,.6),inset 0 4px 12px rgba(255,180,180,.3),inset 0 -8px 16px rgba(0,0,0,.4);
+    display:flex;align-items:center;justify-content:center;position:relative;
+    opacity:0;animation:sealIn 1.2s .3s forwards cubic-bezier(.5,1.8,.5,1)}
+  @keyframes sealIn{0%{opacity:0;transform:scale(.3) rotate(-30deg)}60%{opacity:1;transform:scale(1.1) rotate(5deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+  .seal::before{content:'';position:absolute;inset:8px;border-radius:50%;border:2px dashed rgba(255,200,200,.4)}
+  .seal-mono{font-family:'Cormorant Garamond',serif;font-size:3.4rem;font-weight:600;color:#f6c8c8;
+    text-shadow:0 2px 4px rgba(0,0,0,.4);font-style:italic;position:relative;z-index:1}
+  .splash-words{margin-top:2rem;text-align:center;color:var(--aged);opacity:0;animation:fadeUp 1.4s 1.4s forwards}
+  .splash-words .small{font-family:'Special Elite',monospace;font-size:.85rem;letter-spacing:.3em;margin-bottom:.7rem;text-transform:uppercase}
+  .splash-words .lg{font-family:'Caveat',cursive;font-size:2.2rem;color:var(--paper);font-weight:600}
+  .splash-cue{position:absolute;bottom:30px;font-family:'Special Elite',monospace;font-size:.75rem;color:var(--aged);
+    letter-spacing:.3em;text-transform:uppercase;opacity:0;animation:fadeUp 1s 2.4s forwards}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  /* PAPER PAGE */
+  .page{max-width:780px;margin:3rem auto;padding:4rem 3.5rem;background:var(--paper);
+    background-image:
+      repeating-linear-gradient(transparent 0 28px,rgba(91,58,26,.04) 28px 29px),
+      radial-gradient(ellipse at top right,rgba(91,58,26,.08),transparent 60%);
+    box-shadow:0 30px 60px rgba(0,0,0,.7),inset 0 0 80px rgba(91,58,26,.1);
+    position:relative;border-radius:2px;
+    /* slight paper deckle */
+    clip-path:polygon(0 .5%,100% 0,100% 99.7%,.5% 100%);
+  }
+  @media(max-width:760px){.page{margin:1.5rem auto;padding:2.5rem 1.6rem}}
+  .page::before{content:'';position:absolute;top:0;left:30px;right:30px;height:6px;
+    background:repeating-linear-gradient(90deg,transparent 0 6px,rgba(91,58,26,.15) 6px 8px)}
+  .page::after{content:'';position:absolute;bottom:1rem;left:30px;right:30px;height:1px;background:rgba(91,58,26,.2)}
+
+  /* HEADER OF LETTER */
+  .letterhead{text-align:center;margin-bottom:2.5rem;padding-bottom:1.5rem;
+    border-bottom:1px solid rgba(91,58,26,.3)}
+  .letterhead-icon{font-size:1.6rem;color:var(--wax);margin-bottom:.7rem}
+  .letterhead h1{font-family:'Caveat',cursive;font-size:clamp(2rem,5vw,3rem);color:var(--sepia-dark);font-weight:700;line-height:1.2;margin-bottom:.5rem}
+  .letterhead .sub{font-family:'Special Elite',monospace;font-size:.8rem;letter-spacing:.3em;color:var(--sepia-light);text-transform:uppercase}
+  .letterhead .years{font-family:'Caveat',cursive;font-size:1.8rem;color:var(--wax);margin-top:.6rem;letter-spacing:.05em}
+
+  .portrait-frame{width:160px;height:200px;margin:1.5rem auto;padding:6px;background:#fff;
+    box-shadow:0 6px 14px rgba(0,0,0,.3);transform:rotate(-2deg);transition:transform .4s}
+  .portrait-frame:hover{transform:rotate(0)}
+  .portrait-frame img{width:100%;height:100%;object-fit:cover;filter:sepia(.3) contrast(1.05)}
+  .portrait-cap{font-family:'Caveat',cursive;text-align:center;font-size:1.1rem;color:var(--sepia);margin-top:.5rem}
+
+  .salutation{font-family:'Caveat',cursive;font-size:2.4rem;color:var(--sepia-dark);font-weight:600;margin-bottom:1.6rem;line-height:1}
+
+  /* TYPEWRITER PARAGRAPHS */
+  .letter-body p,.letter-body .typed{font-family:'Special Elite',monospace;font-size:1.05rem;
+    line-height:2;color:var(--ink);margin-bottom:1.5rem;text-align:justify}
+  .letter-body p .hl{background:rgba(138,31,31,.12);padding:0 4px}
+
+  .signature{margin-top:3rem;text-align:right}
+  .signature .sg{font-family:'Caveat',cursive;font-size:2.6rem;color:var(--sepia-dark);font-weight:600;display:inline-block;transform:rotate(-3deg);border-bottom:1px solid var(--sepia-light);padding-bottom:.2rem;margin-bottom:.4rem}
+  .signature .role{font-family:'Special Elite',monospace;font-size:.85rem;color:var(--sepia-light);letter-spacing:.15em;text-transform:uppercase}
+
+  /* PROGRAMME — listed as if on letterhead */
+  .schedule{margin:3rem 0;padding:1.5rem 1.8rem;background:rgba(214,196,153,.4);
+    border-left:4px solid var(--wax);border-top:1px solid rgba(91,58,26,.2);border-bottom:1px solid rgba(91,58,26,.2)}
+  .schedule h3{font-family:'Caveat',cursive;color:var(--sepia-dark);font-size:1.6rem;margin-bottom:1rem;font-weight:600}
+  .schedule ul{list-style:none}
+  .schedule ul li{font-family:'Special Elite',monospace;color:var(--ink);font-size:.92rem;padding:.6rem 0;
+    border-bottom:1px dashed rgba(91,58,26,.25);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;line-height:1.5}
+  .schedule ul li:last-child{border-bottom:none}
+  .schedule ul li .date{color:var(--wax);font-weight:bold;text-transform:uppercase;letter-spacing:.1em;font-size:.75rem;flex-shrink:0;min-width:170px}
+  .schedule ul li .ev{flex:1}
+
+  /* PHOTO STRIP — like attached snapshots */
+  .clip{margin:2.5rem 0;display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+  @media(min-width:600px){.clip{grid-template-columns:repeat(3,1fr)}}
+  .clip-pic{background:#fff;padding:6px;box-shadow:0 5px 14px rgba(0,0,0,.3)}
+  .clip-pic:nth-child(odd){transform:rotate(-1.5deg)}
+  .clip-pic:nth-child(even){transform:rotate(1.2deg)}
+  .clip-pic img{width:100%;height:140px;object-fit:cover;filter:sepia(.4) contrast(1.05)}
+  .clip-pic .cap{font-family:'Caveat',cursive;font-size:.95rem;color:var(--sepia);text-align:center;padding-top:6px}
+
+  /* TRIBUTES — postscript style */
+  .ps-form{margin:2rem 0;padding:1.5rem;background:rgba(214,196,153,.3);border:1px dashed var(--sepia-light)}
+  .ps-form label{display:block;font-family:'Special Elite',monospace;font-size:.75rem;color:var(--sepia);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.4rem;margin-top:.7rem}
+  .ps-form input,.ps-form textarea{width:100%;padding:.6rem .8rem;background:var(--paper);
+    border:1px solid var(--sepia-light);color:var(--ink);font-family:'Special Elite',monospace;font-size:.9rem;line-height:1.7}
+  .ps-form textarea{min-height:80px;resize:vertical;background-image:repeating-linear-gradient(transparent 0 24px,rgba(91,58,26,.15) 24px 25px);background-attachment:local}
+  .ps-form button{margin-top:1rem;padding:.7rem 1.6rem;background:var(--wax);color:var(--paper);border:none;
+    font-family:'Special Elite',monospace;font-size:.85rem;letter-spacing:.15em;cursor:pointer;text-transform:uppercase}
+
+  .ps-list{margin:2rem 0;display:flex;flex-direction:column;gap:1.4rem}
+  .ps-item{padding:1.2rem 1.5rem;background:rgba(255,255,255,.5);border-left:3px solid var(--wax)}
+  .ps-item .pp{font-family:'Special Elite',monospace;font-size:.7rem;letter-spacing:.2em;color:var(--wax);text-transform:uppercase;margin-bottom:.4rem}
+  .ps-item .pm{font-family:'Caveat',cursive;font-size:1.25rem;color:var(--ink);line-height:1.5;margin-bottom:.4rem}
+  .ps-item .pw{font-family:'Special Elite',monospace;font-size:.78rem;color:var(--sepia);text-align:right;letter-spacing:.1em}
+
+  /* CONTACTS — calling card style */
+  .cards{display:grid;grid-template-columns:1fr;gap:1rem;margin:2rem 0}
+  @media(min-width:560px){.cards{grid-template-columns:1fr 1fr 1fr}}
+  .ccard{background:#fff;padding:1.2rem;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.15);position:relative;border:1px solid rgba(91,58,26,.2);text-decoration:none;color:inherit}
+  .ccard::before{content:'';position:absolute;top:6px;left:6px;right:6px;bottom:6px;border:1px solid rgba(91,58,26,.2);pointer-events:none}
+  .ccard .role{font-family:'Special Elite',monospace;font-size:.65rem;letter-spacing:.3em;color:var(--wax);text-transform:uppercase;margin-bottom:.4rem;margin-top:.3rem}
+  .ccard .name{font-family:'Caveat',cursive;font-size:1.3rem;color:var(--sepia-dark);font-weight:600;margin-bottom:.4rem}
+  .ccard .num{font-family:'Special Elite',monospace;color:var(--sepia);font-size:.82rem}
+
+  /* MAP */
+  .pin{margin:2rem 0;padding:1.5rem;background:rgba(214,196,153,.4);border:1px dashed var(--sepia-light);text-align:center}
+  .pin h3{font-family:'Caveat',cursive;color:var(--sepia-dark);font-size:1.6rem;margin-bottom:.6rem;font-weight:600}
+  .pin .addr{font-family:'Special Elite',monospace;color:var(--sepia);margin-bottom:1rem;font-size:.9rem}
+  .pin iframe{width:100%;height:240px;border:0;display:block;filter:sepia(.5) contrast(1.1)}
+
+  /* WHATSAPP / FOOTER */
+  .stamp{display:inline-block;padding:.5rem 1rem;background:var(--wax);color:var(--paper);font-family:'Special Elite',monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;transform:rotate(-4deg);box-shadow:0 4px 8px rgba(0,0,0,.3);margin-top:1rem}
+  .closure{margin-top:3rem;padding-top:2rem;border-top:1px dashed rgba(91,58,26,.4);text-align:center;font-family:'Special Elite',monospace;font-size:.78rem;letter-spacing:.2em;color:var(--sepia);text-transform:uppercase}
+  .closure a{color:var(--wax);text-decoration:none}
+  .share-fab{position:fixed;bottom:1.5rem;right:1.5rem;z-index:80;width:54px;height:54px;border-radius:50%;background:#25D366;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 18px rgba(0,0,0,.4)}
+  .audio-toggle{position:fixed;top:1.3rem;right:1.3rem;z-index:80;width:44px;height:44px;border-radius:50%;background:var(--paper);border:1px solid var(--sepia);color:var(--sepia);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 8px rgba(0,0,0,.3)}
+  .countdown{display:flex;justify-content:center;gap:.5rem;margin:1.5rem 0}
+  .cd-cell{min-width:64px;padding:.6rem .3rem;background:rgba(214,196,153,.4);border:1px dashed var(--sepia-light);text-align:center}
+  .cd-num{display:block;font-family:'Special Elite',monospace;font-size:1.3rem;color:var(--sepia-dark);line-height:1;font-weight:bold}
+  .cd-lbl{display:block;font-family:'Special Elite',monospace;font-size:.55rem;letter-spacing:.25em;color:var(--sepia);text-transform:uppercase;margin-top:.3rem}
+</style>
+</head>
+<body class="locked">
+
+<div class="splash" id="splash">
+  <div class="seal"><div class="seal-mono">D</div></div>
+  <div class="splash-words">
+    <div class="small">A Letter Awaits</div>
+    <div class="lg">From Pastor Daniel</div>
+  </div>
+  <div class="splash-cue">Break the seal</div>
+</div>
+
+<audio id="bg" loop preload="none"><source src="https://cdn.pixabay.com/audio/2022/10/30/audio_347111d654.mp3" type="audio/mpeg"></audio>
+<button class="audio-toggle" id="audioBtn"><i class="fas fa-music" id="audioIcon"></i></button>
+
+<article class="page">
+
+  <div class="letterhead">
+    <div class="letterhead-icon"><i class="fas fa-feather"></i></div>
+    <h1>A Letter to My Family</h1>
+    <div class="sub">In Loving Memory of</div>
+    <div class="years">Pastor Daniel Owusu-Ansah</div>
+    <div class="sub" style="margin-top:.5rem">1951 — 2026</div>
+  </div>
+
+  <div class="portrait-frame"><img src="https://i.pravatar.cc/600?img=15" alt=""></div>
+  <div class="portrait-cap">Papa, on his 70th birthday</div>
+
+  <div class="letter-body">
+
+    <p class="salutation">To my dearest family,</p>
+
+    <p>If you are reading this, then the Lord has called me home. <span class="hl">Do not weep too long.</span> I have lived a full life — three decades preaching at Calvary, four children grown into the people I prayed for, and your mother by my side for forty-six years. What more could a man ask for?</p>
+
+    <p>I want to tell you what I would have said over Sunday lunch if I had been given one more visit. So I asked my friend Kofi to type this letter, and to share it with you on this page.</p>
+
+    <p>To <span class="hl">Adwoa</span> — keep teaching. The classroom is your pulpit. To <span class="hl">Kwame</span> — be patient with your children the way I tried to be with you. To <span class="hl">Esi and Yaw</span> — look after your mother. She gave up her dreams so you could chase yours.</p>
+
+    <div class="schedule">
+      <h3>~ The arrangements for me ~</h3>
+      <ul>
+        <li><span class="date">FRI 16 APR 2027 · 7PM</span><span class="ev">Wake-keeping at Calvary Pentecost Church, Suame</span></li>
+        <li><span class="date">SAT 17 APR 2027 · 8AM</span><span class="ev">Burial Service · Calvary Pentecost Church</span></li>
+        <li><span class="date">SAT 17 APR 2027 · 12PM</span><span class="ev">Interment · Tafo Cemetery</span></li>
+        <li><span class="date">SUN 18 APR 2027 · 10AM</span><span class="ev">Thanksgiving · Calvary Pentecost Church</span></li>
+        <li><span class="date">ATTIRE</span><span class="ev">White &amp; Black · No flowers; donate to the Calvary scholarship fund instead</span></li>
+      </ul>
+    </div>
+
+    <div class="countdown">
+      <div class="cd-cell"><span class="cd-num" data-cd="d">--</span><span class="cd-lbl">Days</span></div>
+      <div class="cd-cell"><span class="cd-num" data-cd="h">--</span><span class="cd-lbl">Hrs</span></div>
+      <div class="cd-cell"><span class="cd-num" data-cd="m">--</span><span class="cd-lbl">Min</span></div>
+      <div class="cd-cell"><span class="cd-num" data-cd="s">--</span><span class="cd-lbl">Sec</span></div>
+    </div>
+
+    <p>The photos on this page are some of my favourites. I had Kofi pull them from the shoebox under my desk. Look at how young we all were.</p>
+
+    <div class="clip">
+      <div class="clip-pic"><img src="https://picsum.photos/seed/papa1/400/300"><div class="cap">My ordination, '74</div></div>
+      <div class="clip-pic"><img src="https://picsum.photos/seed/papa2/400/300"><div class="cap">Mama &amp; me, '78</div></div>
+      <div class="clip-pic"><img src="https://picsum.photos/seed/papa3/400/300"><div class="cap">All four of you</div></div>
+      <div class="clip-pic"><img src="https://picsum.photos/seed/papa4/400/300"><div class="cap">Yaw's graduation</div></div>
+      <div class="clip-pic"><img src="https://picsum.photos/seed/papa5/400/300"><div class="cap">70th birthday</div></div>
+      <div class="clip-pic"><img src="https://picsum.photos/seed/papa6/400/300"><div class="cap">Last Christmas</div></div>
+    </div>
+
+    <p>And here, my dear friends, my dear congregation — there will be space below for your own words. Tell my family what I meant to you, if I meant anything at all. Tell them a story I never told them. <span class="hl">A pastor's family rarely gets to see what he meant to his flock.</span> Let them see now.</p>
+
+    <div class="ps-form" onsubmit="event.preventDefault()">
+      <label>YOUR NAME</label><input type="text" placeholder="e.g. Sister Mary Boateng">
+      <label>WHAT WAS PAPA TO YOU?</label><input type="text" placeholder="e.g. He baptised my daughter">
+      <label>YOUR WORDS</label><textarea placeholder="Write here as if writing to the family directly…"></textarea>
+      <button onclick="this.textContent='Sent with love'">Send the Family a Note</button>
+    </div>
+
+    <div class="ps-list">
+      <div class="ps-item"><div class="pp">P.S. from a Friend</div><div class="pm">"Pastor Dan married my wife and me in 1989. He counselled us through hard years and held our babies at their dedications. I owe him my marriage."</div><div class="pw">— Brother K. Asante</div></div>
+      <div class="ps-item"><div class="pp">P.S. from a Stranger</div><div class="pm">"I came to Calvary in 2014 broken. Pastor preached as if he was speaking directly to me. I am now an elder there because of him."</div><div class="pw">— A Convert</div></div>
+      <div class="ps-item"><div class="pp">P.S. from his Choirmaster</div><div class="pm">"He sang baritone. Off-key, but loud. I will not replace him."</div><div class="pw">— Director Ofori</div></div>
+    </div>
+
+    <p>One more thing. If you want to reach the family during this time, here are the people to call:</p>
+
+    <div class="cards">
+      <a class="ccard" href="tel:+233244778899"><div class="role">Eldest Son</div><div class="name">Kwame Owusu-Ansah</div><div class="num">+233 244 778 899</div></a>
+      <a class="ccard" href="tel:+233205112233"><div class="role">Daughter</div><div class="name">Adwoa Owusu-Ansah</div><div class="num">+233 205 112 233</div></a>
+      <a class="ccard" href="tel:+233276445566"><div class="role">Church Elder</div><div class="name">Bro. Kofi Sarpong</div><div class="num">+233 276 445 566</div></a>
+    </div>
+
+    <div class="pin">
+      <h3>~ where to find us ~</h3>
+      <div class="addr">CALVARY PENTECOST CHURCH<br>OPPOSITE SUAME POLICE STATION, KUMASI</div>
+      <iframe src="https://maps.google.com/maps?q=Suame%20Kumasi&z=13&output=embed" loading="lazy"></iframe>
+    </div>
+
+    <p>That is all. Be kind to each other. Pray every day. <span class="hl">Da yie, my loves.</span> I will see you when you get here.</p>
+
+    <div class="signature">
+      <div class="sg">Pastor Daniel</div>
+      <div class="role">— transcribed by his friend Kofi —</div>
+    </div>
+
+    <div style="text-align:center"><span class="stamp">DELIVERED</span></div>
+
+    <div class="closure">
+      Designed by <a href="#">VibeLink Event</a> &middot; "Letter from a Loved One" template
+    </div>
+  </div>
+</article>
+
+<button class="share-fab" onclick="const t='A letter from the late Pastor Daniel Owusu-Ansah (1951-2026). '+location.href;window.open('https://wa.me/?text='+encodeURIComponent(t))"><i class="fab fa-whatsapp"></i></button>
+
+<script>
+  document.getElementById('splash').addEventListener('click',()=>{
+    document.getElementById('splash').classList.add('gone');
+    document.body.classList.remove('locked');
+    if(!audioOn) tryAudio();
+  });
+  const audio=document.getElementById('bg');audio.volume=.25;let audioOn=false;
+  function tryAudio(){audio.play().then(()=>{audioOn=true;document.getElementById('audioIcon').className='fas fa-volume-up'}).catch(()=>{})}
+  document.getElementById('audioBtn').addEventListener('click',()=>{if(audioOn){audio.pause();audioOn=false;document.getElementById('audioIcon').className='fas fa-music'}else tryAudio()});
+  const target=new Date('2027-04-17T08:00:00').getTime();
+  function tickCD(){const now=Date.now();let diff=Math.max(0,target-now);
+    document.querySelectorAll('[data-cd="d"]').forEach(el=>el.textContent=String(Math.floor(diff/86400000)).padStart(3,'0'));
+    document.querySelectorAll('[data-cd="h"]').forEach(el=>el.textContent=String(Math.floor(diff/3600000)%24).padStart(2,'0'));
+    document.querySelectorAll('[data-cd="m"]').forEach(el=>el.textContent=String(Math.floor(diff/60000)%60).padStart(2,'0'));
+    document.querySelectorAll('[data-cd="s"]').forEach(el=>el.textContent=String(Math.floor(diff/1000)%60).padStart(2,'0'));}
+  tickCD();setInterval(tickCD,1000);
+</script>
+</body>
+</html>
