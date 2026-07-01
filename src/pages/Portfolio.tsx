@@ -11,6 +11,7 @@ import { portfolioItems, categories, slugToCategoryMap } from "@/data/portfolioI
 const categoryStyles: Record<string, { active: string; inactive: string; dot: string }> = {
   All:           { active: "bg-[#6B46C1] text-white",         inactive: "bg-purple-50 text-purple-700 hover:bg-purple-100",    dot: "bg-purple-400" },
   Weddings:      { active: "bg-rose-500 text-white",           inactive: "bg-rose-50 text-rose-600 hover:bg-rose-100",          dot: "bg-rose-400" },
+  Engagements:   { active: "bg-yellow-600 text-white",         inactive: "bg-yellow-50 text-yellow-700 hover:bg-yellow-100",    dot: "bg-yellow-500" },
   Funerals:      { active: "bg-slate-700 text-white",          inactive: "bg-slate-100 text-slate-600 hover:bg-slate-200",      dot: "bg-slate-400" },
   Naming:        { active: "bg-sky-500 text-white",            inactive: "bg-sky-50 text-sky-600 hover:bg-sky-100",             dot: "bg-sky-400" },
   Anniversaries: { active: "bg-amber-500 text-white",          inactive: "bg-amber-50 text-amber-600 hover:bg-amber-100",       dot: "bg-amber-400" },

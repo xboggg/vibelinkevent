@@ -218,7 +218,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 18,
     title: "Frank & Hannah — Traditional Engagement",
-    type: "Anniversaries",
+    type: "Engagements",
     description: "An elegant Ghanaian engagement invitation for Frank & Hannah — 16 April 2027. Solemn gold-and-ivory palette centred on the Adinkra symbol Osrane ne Nsoromma (The Moon and the Star) — the traditional emblem of love and faithfulness in marriage.",
     image: "/frankhannah-portfolio.jpg",
     thumbnail: "/frankhannah-portfolio-thumb.jpg",
@@ -239,10 +239,11 @@ export const portfolioItems: PortfolioItem[] = [
   },
 ];
 
-export const categories = ["All", "Weddings", "Funerals", "Church", "Naming", "Birthdays", "Anniversaries", "Graduations", "Corporate", "Other"];
+export const categories = ["All", "Weddings", "Engagements", "Funerals", "Church", "Naming", "Birthdays", "Anniversaries", "Graduations", "Corporate", "Other"];
 
 export const slugToCategoryMap: Record<string, string> = {
   wedding: "Weddings",
+  engagement: "Engagements",
   funeral: "Funerals",
   naming: "Naming",
   anniversary: "Anniversaries",
