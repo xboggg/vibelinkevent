@@ -215,6 +215,28 @@ export const portfolioItems: PortfolioItem[] = [
     imagePosition: "top",
     demoLabel: "Open Memorial",
   },
+  {
+    id: 18,
+    title: "Frank & Hannah — Traditional Engagement",
+    type: "Anniversaries",
+    description: "An elegant Ghanaian engagement invitation for Frank & Hannah — 16 April 2027. Solemn gold-and-ivory palette centred on the Adinkra symbol Osrane ne Nsoromma (The Moon and the Star) — the traditional emblem of love and faithfulness in marriage.",
+    image: "/frankhannah-portfolio.jpg",
+    thumbnail: "/frankhannah-portfolio-thumb.jpg",
+    demoUrl: "https://frankhannah.vibelinkevent.com/",
+    slug: "frank-hannah-engagement",
+    features: [
+      "Adinkra moon-and-star splash animation",
+      "Live countdown to 16 April 2027",
+      "Traditional 5-step programme",
+      "Landmark-first directions (near Christ Ambassador School)",
+      "RSVP form with side selector + guest count",
+      "Wishes wall as a paginated carousel",
+      "Family admin panel with CSV exports",
+      "Custom gold-on-ivory OG share card",
+    ],
+    imagePosition: "top",
+    demoLabel: "Open Invitation",
+  },
 ];
 
 export const categories = ["All", "Weddings", "Funerals", "Church", "Naming", "Birthdays", "Anniversaries", "Graduations", "Corporate", "Other"];
