@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { BlogBulkImport } from "./BlogBulkImport";
 import { BlogBulkSchedule } from "./BlogBulkSchedule";
 import { BlogImageUpload } from "./BlogImageUpload";
+import { BlogBulkImageManager } from "./BlogBulkImageManager";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -439,6 +440,7 @@ export function BlogManager() {
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <BlogBulkImport onComplete={fetchPosts} />
+          <BlogBulkImageManager onComplete={fetchPosts} />
           <BlogBulkSchedule posts={posts} onComplete={fetchPosts} />
           <Button onClick={() => { setEditPost(null); setView("create"); }} className="gap-2">
             <PlusCircle className="h-4 w-4" /> New Article

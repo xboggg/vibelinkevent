@@ -19,9 +19,9 @@ const homePageServices = [
 const Index = () => {
   return (
     <Layout>
-      <SEO 
-        title="VibeLink Event | Digital Event Invitations for Weddings, Funerals & More"
-        description="Ghana's premier digital invitation service. Create stunning interactive invitations for weddings, funerals, naming ceremonies, graduations & corporate events. Share via WhatsApp!"
+      <SEO
+        title="Digital Event Invitations in Ghana | VibeLink Event"
+        description="VibeLink builds interactive digital invitations for Ghanaian weddings, funerals, outdoorings, birthdays and corporate events. Share by link, track RSVPs."
         canonical="/"
         jsonLd={createServiceSchema(homePageServices)}
       />
