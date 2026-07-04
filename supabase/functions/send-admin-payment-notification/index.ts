@@ -1,11 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
-
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
 interface AdminPaymentNotificationRequest {
@@ -21,7 +20,10 @@ interface AdminPaymentNotificationRequest {
   paymentMethod?: string;
 }
 
-const ADMIN_EMAIL = "hello@vibelinkevent.com";
+// Send directly to Edmund's Gmail; avoids Namecheap-forwarding SPF bounce
+// that killed the other admin-notification functions before we fixed them.
+const ADMIN_EMAIL = "vibelinkevent@gmail.com";
+const FROM_ADDRESS = "VibeLink Event <orders@vibelinkevent.com>";
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -29,6 +31,16 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    const resendKey = Deno.env.get("VL_RESEND_API_KEY") ?? Deno.env.get("RESEND_API_KEY");
+    if (!resendKey) {
+      console.error("VL_RESEND_API_KEY is not set");
+      return new Response(
+        JSON.stringify({ error: "Email service is not configured (missing VL_RESEND_API_KEY)." }),
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    const resend = new Resend(resendKey);
+
     const data: AdminPaymentNotificationRequest = await req.json();
     console.log("Sending admin payment notification:", data);
 
@@ -154,13 +166,17 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "VibeLink Notifications <notifications@vibelinkevent.com>",
+      from: FROM_ADDRESS,
       to: [ADMIN_EMAIL],
       subject: `💰 ${isDeposit ? 'Deposit' : 'Balance'} Received: GHS ${data.amountPaid.toLocaleString()} - ${data.eventTitle}`,
       html: emailHtml,
     });
 
-    console.log("Admin payment notification sent successfully:", emailResponse);
+    if ((emailResponse as { error?: unknown })?.error) {
+      console.error("Admin payment email FAILED:", (emailResponse as { error: unknown }).error);
+    } else {
+      console.log("Admin payment email sent, id:", (emailResponse as { data?: { id?: string } })?.data?.id);
+    }
 
     return new Response(JSON.stringify({ success: true, data: emailResponse }), {
       status: 200,
