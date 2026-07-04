@@ -275,7 +275,7 @@ export const ContactStep = ({
             </Label>
             <Input
               id="phone"
-              placeholder="024 XXX XXXX"
+              placeholder="024 XXX XXXX or +49 157..."
               value={formData.phone}
               onChange={(e) => {
                 updateFormData({ phone: e.target.value });

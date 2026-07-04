@@ -201,6 +201,10 @@ export const colorPalettes: ColorPalette[] = [
   { id: "teal-coral", name: "Teal & Coral", colors: ["#0D9488", "#FECACA", "#F97316", "#134E4A"], mood: "Fresh & Playful" },
   { id: "dusty-rose", name: "Dusty Rose", colors: ["#BE8A7C", "#FFF5F5", "#D4A5A5", "#8B5A5A"], mood: "Vintage & Delicate" },
   { id: "forest-gold", name: "Forest & Gold", colors: ["#14532D", "#FBBF24", "#F0FDF4", "#166534"], mood: "Nature & Luxury" },
+  { id: "sage-terracotta", name: "Sage & Terracotta", colors: ["#87A96B", "#C67B5C", "#F5F0E8", "#4A5D3A"], mood: "Earthy & Modern" },
+  { id: "champagne-cream", name: "Champagne & Cream", colors: ["#F7E7CE", "#FFFDD0", "#D4B896", "#8B7355"], mood: "Subtle & Refined" },
+  { id: "sapphire-navy", name: "Sapphire Navy", colors: ["#0F172A", "#C0C0C0", "#E0F2FE", "#1E293B"], mood: "Deep & Formal" },
+  { id: "rose-gold-glam", name: "Rose Gold Glam", colors: ["#B76E79", "#F8BBD0", "#FFF5E1", "#8B4A5A"], mood: "Modern & Chic" },
   { id: "custom", name: "Custom Colors", colors: ["#6B46C1", "#D4AF37", "#1a1a2e", "#FFFFFF"], mood: "Choose your own" },
 ];
 
@@ -213,6 +217,10 @@ export const stylePreferences: StylePreference[] = [
   { id: "playful", name: "Playful", description: "Bright colors, fun elements, energetic design" },
   { id: "rustic", name: "Rustic", description: "Natural textures, earthy tones, organic feel" },
   { id: "cultural", name: "Cultural/Afrocentric", description: "Kente patterns, African motifs, heritage-inspired" },
+  { id: "vintage", name: "Vintage", description: "Retro elegance, sepia tones, timeless nostalgia" },
+  { id: "bohemian", name: "Bohemian", description: "Free-spirited florals, watercolour, whimsical charm" },
+  { id: "art-deco", name: "Art Deco", description: "Geometric patterns, Gatsby-era glamour, symmetry" },
+  { id: "executive", name: "Corporate Executive", description: "Polished, businesslike, boardroom-ready" },
 ];
 
 export interface OrderFormData {
