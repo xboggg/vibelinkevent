@@ -182,6 +182,44 @@ export function CustomerSurveys() {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
   };
 
+  const handlePublishAsTestimonial = async (survey: Survey) => {
+    const resp = survey.survey_responses?.[0];
+    if (!resp || !resp.allow_testimonial) return;
+    try {
+      // Try to enrich with event_type from the order (if this survey is linked).
+      let eventType = "Wedding";
+      if (survey.order_id) {
+        const { data: order } = await supabase
+          .from("orders")
+          .select("event_type")
+          .eq("id", survey.order_id)
+          .maybeSingle();
+        if (order?.event_type) {
+          eventType =
+            order.event_type.charAt(0).toUpperCase() + order.event_type.slice(1);
+        }
+      }
+      const quote = resp.feedback_text?.trim();
+      if (!quote) {
+        toast.error("This survey has no feedback text to publish.");
+        return;
+      }
+      const { error } = await supabase.from("testimonials").insert({
+        client_name: survey.customer_name,
+        event_type: eventType,
+        content: quote,
+        rating: resp.overall_rating,
+        is_featured: true,
+      } as never);
+      if (error) throw error;
+      toast.success(`Published "${survey.customer_name}" as testimonial`);
+    } catch (e) {
+      toast.error(
+        `Publish failed: ${e instanceof Error ? e.message : "unknown"}`
+      );
+    }
+  };
+
   const handleOrderSelect = (orderId: string) => {
     const order = orders.find(o => o.id === orderId);
     if (order) {
@@ -584,10 +622,19 @@ export function CustomerSurveys() {
               )}
 
               {selectedSurvey.survey_responses[0].allow_testimonial && (
-                <Badge className="bg-green-500">
-                  <ThumbsUp className="h-3 w-3 mr-1" />
-                  Allowed as testimonial
-                </Badge>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge className="bg-green-500">
+                    <ThumbsUp className="h-3 w-3 mr-1" />
+                    Allowed as testimonial
+                  </Badge>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handlePublishAsTestimonial(selectedSurvey)}
+                  >
+                    Publish as Testimonial
+                  </Button>
+                </div>
               )}
 
               <p className="text-xs text-muted-foreground">
