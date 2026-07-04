@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -5,44 +6,58 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { usePageTracking } from "@/hooks/usePageTracking";
-import Index from "./pages/Index";
-import Services from "./pages/Services";
-import Portfolio from "./pages/Portfolio";
-import PortfolioDetail from "./pages/PortfolioDetail";
-import Templates from "./pages/Templates";
-import TemplateDetail from "./pages/TemplateDetail";
-import HowItWorks from "./pages/HowItWorks";
-import Pricing from "./pages/Pricing";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import GetStarted from "./pages/GetStarted";
-import ThankYou from "./pages/ThankYou";
-import Blog from "./pages/Blog";
-import BlogDetail from "./pages/BlogDetail";
-import NotFound from "./pages/NotFound";
-import Admin from "./pages/Admin";
-import AdminAuth from "./pages/AdminAuth";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import RefundPolicy from "./pages/RefundPolicy";
-import CookiePolicy from "./pages/CookiePolicy";
-import TrackOrder from "./pages/TrackOrder";
-import OrderDetails from "./pages/OrderDetails";
-import CustomerPortal from "./pages/CustomerPortal";
-import Survey from "./pages/Survey";
-import InvoiceView from "./pages/InvoiceView";
-import ResetPassword from "./pages/ResetPassword";
-import FAQ from "./pages/FAQ";
-import BookConsultation from "./pages/BookConsultation";
-import Referral from "./pages/Referral";
-import WeddingInvitations from "./pages/events/WeddingInvitations";
-import FuneralPrograms from "./pages/events/FuneralPrograms";
-import NamingCeremony from "./pages/events/NamingCeremony";
-import GraduationInvitations from "./pages/events/GraduationInvitations";
-import BirthdayInvitations from "./pages/events/BirthdayInvitations";
-import ChurchEvents from "./pages/events/ChurchEvents";
-import CorporateEvents from "./pages/events/CorporateEvents";
+import { Loader2 } from "lucide-react";
 import { ScrollToTop } from "@/components/ScrollToTop";
+
+// Index page is eager-loaded because it's the most common entry point
+// and prerendered — lazy would defeat the prerender warmup.
+import Index from "./pages/Index";
+
+// Every other route is code-split so the initial bundle only ships what
+// the current URL needs. Admin gets its own big chunk (Tiptap + heavy
+// admin panels) instead of loading with every visitor.
+const Services = lazy(() => import("./pages/Services"));
+const Portfolio = lazy(() => import("./pages/Portfolio"));
+const PortfolioDetail = lazy(() => import("./pages/PortfolioDetail"));
+const Templates = lazy(() => import("./pages/Templates"));
+const TemplateDetail = lazy(() => import("./pages/TemplateDetail"));
+const HowItWorks = lazy(() => import("./pages/HowItWorks"));
+const Pricing = lazy(() => import("./pages/Pricing"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const GetStarted = lazy(() => import("./pages/GetStarted"));
+const ThankYou = lazy(() => import("./pages/ThankYou"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogDetail = lazy(() => import("./pages/BlogDetail"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Admin = lazy(() => import("./pages/Admin"));
+const AdminAuth = lazy(() => import("./pages/AdminAuth"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+const TrackOrder = lazy(() => import("./pages/TrackOrder"));
+const OrderDetails = lazy(() => import("./pages/OrderDetails"));
+const CustomerPortal = lazy(() => import("./pages/CustomerPortal"));
+const Survey = lazy(() => import("./pages/Survey"));
+const InvoiceView = lazy(() => import("./pages/InvoiceView"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const BookConsultation = lazy(() => import("./pages/BookConsultation"));
+const Referral = lazy(() => import("./pages/Referral"));
+const WeddingInvitations = lazy(() => import("./pages/events/WeddingInvitations"));
+const FuneralPrograms = lazy(() => import("./pages/events/FuneralPrograms"));
+const NamingCeremony = lazy(() => import("./pages/events/NamingCeremony"));
+const GraduationInvitations = lazy(() => import("./pages/events/GraduationInvitations"));
+const BirthdayInvitations = lazy(() => import("./pages/events/BirthdayInvitations"));
+const ChurchEvents = lazy(() => import("./pages/events/ChurchEvents"));
+const CorporateEvents = lazy(() => import("./pages/events/CorporateEvents"));
+
+const RouteFallback = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <Loader2 className="h-6 w-6 animate-spin text-primary" />
+  </div>
+);
 
 const queryClient = new QueryClient();
 
@@ -61,6 +76,7 @@ const App = () => (
         <BrowserRouter>
           <ScrollToTop />
           <PageTracker>
+            <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/services" element={<Services />} />
@@ -102,6 +118,7 @@ const App = () => (
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            </Suspense>
           </PageTracker>
         </BrowserRouter>
       </TooltipProvider>
