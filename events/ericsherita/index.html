@@ -691,6 +691,140 @@
     .detail-card{padding:1.6rem 1.2rem}
     .detail-title{font-size:1.2rem}
   }
+
+  /* ========== TEASER MODE (Save-the-Date public view) ========== */
+  body.teaser-mode header.hero,
+  body.teaser-mode section.chapter,
+  body.teaser-mode footer,
+  body.teaser-mode .share-fab{display:none !important}
+
+  .teaser-panel{
+    display:none;
+    position:fixed;inset:0;z-index:50;
+    align-items:center;justify-content:center;
+    padding:2rem 1.2rem;
+    opacity:0;
+    transition:opacity 1.2s ease .3s;
+    overflow-y:auto;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(165,180,144,.20), transparent 45%),
+      radial-gradient(circle at 85% 90%, rgba(201,162,74,.14), transparent 45%),
+      var(--ivory);
+  }
+  body.teaser-mode .teaser-panel{display:flex}
+  .teaser-panel.visible{opacity:1}
+
+  .teaser-card{
+    background:linear-gradient(180deg, #fff 0%, #faf8ed 100%);
+    border:1px solid var(--line-gold);
+    padding:2.8rem 2.2rem;
+    max-width:500px;width:100%;
+    text-align:center;position:relative;
+    box-shadow:0 8px 40px rgba(90,107,76,.12);
+    margin:auto;
+  }
+  .teaser-card::before,.teaser-card::after{
+    content:'';position:absolute;width:44px;height:44px;
+    border:1px solid var(--gold-bright);
+  }
+  .teaser-card::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .teaser-card::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+
+  .teaser-flourish{display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:1.2rem}
+  .teaser-flourish .fl-line{flex:1;max-width:70px;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent)}
+  .teaser-flourish svg{width:22px;height:22px;fill:var(--gold)}
+
+  .teaser-overline{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.5em;color:var(--gold-deep);text-transform:uppercase;margin-bottom:.9rem;font-weight:500}
+  .teaser-italic{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);font-size:1rem;margin-bottom:.2rem}
+
+  .teaser-names{
+    font-family:'Great Vibes',cursive;font-weight:400;
+    font-size:clamp(3.2rem, 8vw, 4.4rem);
+    color:var(--sage-deep);line-height:1;margin-bottom:.9rem;letter-spacing:.01em;
+  }
+  .teaser-amp{
+    display:inline-block;font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--gold);font-size:.55em;vertical-align:middle;margin:0 .2rem;font-weight:500;
+  }
+
+  .teaser-date{
+    font-family:'Cinzel',serif;color:var(--sage-deep);
+    font-size:.92rem;letter-spacing:.32em;padding:.55rem 0;
+    border-top:1px solid var(--line-gold);border-bottom:1px solid var(--line-gold);
+    display:inline-block;padding-left:1.2rem;padding-right:.8rem;
+    margin:.2rem 0 .5rem;font-weight:500;
+  }
+  .teaser-venue{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--text-soft);font-size:1rem;margin-bottom:1.3rem;
+  }
+
+  .teaser-countdown{display:flex;justify-content:center;gap:.45rem;margin:.2rem 0 1.4rem;flex-wrap:wrap}
+  .teaser-cd-box{
+    min-width:60px;padding:.65rem .3rem;
+    background:rgba(125,142,109,.08);
+    border:1px solid var(--line-gold);
+    text-align:center;border-radius:2px;
+  }
+  .teaser-cd-num{
+    font-family:'Cormorant Garamond',serif;font-size:1.5rem;
+    color:var(--sage-deep);font-weight:600;line-height:1;
+  }
+  .teaser-cd-label{
+    font-family:'Cinzel',serif;font-size:.54rem;letter-spacing:.28em;
+    color:var(--gold-deep);text-transform:uppercase;margin-top:.4rem;font-weight:500;
+  }
+
+  .teaser-follow{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--text-muted);font-size:1rem;
+    margin:1.2rem 0 1.2rem;padding-top:1.2rem;
+    border-top:1px solid rgba(201,162,74,.2);
+  }
+
+  .teaser-cals{display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.4rem}
+  .teaser-cal-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+    padding:.72rem 1rem;
+    font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.22em;
+    text-decoration:none;text-transform:uppercase;font-weight:500;
+    background:#fff;border:1px solid var(--line-gold);color:var(--sage-deep);
+    border-radius:99px;transition:all .3s;
+  }
+  .teaser-cal-btn:hover{
+    transform:translateY(-2px);background:var(--sage);color:#fff;
+    border-color:var(--sage-deep);box-shadow:0 4px 12px rgba(90,107,76,.2);
+  }
+  .teaser-cal-btn i{color:var(--gold-deep);font-size:.85rem}
+  .teaser-cal-btn:hover i{color:#fff}
+
+  .teaser-share{
+    display:inline-flex;align-items:center;gap:.55rem;
+    color:var(--text-muted);font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-size:.95rem;text-decoration:none;
+    padding-top:1rem;border-top:1px solid rgba(201,162,74,.15);
+    cursor:pointer;background:none;border-top:1px solid rgba(201,162,74,.15);
+    border-left:0;border-right:0;border-bottom:0;transition:color .3s;
+    margin:0 auto;padding:1rem 0 0;
+  }
+  .teaser-share:hover{color:var(--sage-deep)}
+  .teaser-share i{color:#25D366;font-size:1.05rem}
+
+  @media(max-width:640px){
+    .teaser-card{padding:2rem 1.3rem}
+    .teaser-flourish svg{width:19px;height:19px}
+    .teaser-overline{font-size:.6rem;letter-spacing:.36em}
+    .teaser-italic{font-size:.9rem}
+    .teaser-names{font-size:2.9rem;margin-bottom:.6rem}
+    .teaser-date{font-size:.78rem;letter-spacing:.24em;padding-left:.9rem;padding-right:.5rem}
+    .teaser-venue{font-size:.9rem;margin-bottom:1rem}
+    .teaser-cd-box{min-width:52px;padding:.55rem .2rem}
+    .teaser-cd-num{font-size:1.2rem}
+    .teaser-cd-label{font-size:.48rem;letter-spacing:.22em}
+    .teaser-follow{font-size:.9rem;margin:1rem 0}
+    .teaser-cal-btn{padding:.7rem .9rem;font-size:.6rem;letter-spacing:.18em}
+    .teaser-share{font-size:.9rem}
+  }
 </style>
 </head>
 <body class="locked">
@@ -719,6 +853,35 @@
 <button class="audio-toggle" id="audioToggle" aria-label="Toggle music">
   <i class="fas fa-music" id="audioIcon"></i>
 </button>
+
+<!-- ========== TEASER PANEL (Save-the-Date public view) ========== -->
+<div class="teaser-panel" id="teaserPanel" aria-live="polite">
+  <div class="teaser-card">
+    <div class="teaser-flourish" aria-hidden="true">
+      <span class="fl-line"></span>
+      <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
+      <span class="fl-line"></span>
+    </div>
+    <div class="teaser-overline">Save The Date</div>
+    <div class="teaser-italic">for the wedding of</div>
+    <h1 class="teaser-names">Eric <span class="teaser-amp">&amp;</span> Sherita</h1>
+    <div class="teaser-date">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
+    <div class="teaser-venue">North Brunswick, New Jersey</div>
+    <div class="teaser-countdown" aria-label="Countdown to the wedding">
+      <div class="teaser-cd-box"><div class="teaser-cd-num" id="tcdDays">--</div><div class="teaser-cd-label">Days</div></div>
+      <div class="teaser-cd-box"><div class="teaser-cd-num" id="tcdHours">--</div><div class="teaser-cd-label">Hours</div></div>
+      <div class="teaser-cd-box"><div class="teaser-cd-num" id="tcdMin">--</div><div class="teaser-cd-label">Minutes</div></div>
+      <div class="teaser-cd-box"><div class="teaser-cd-num" id="tcdSec">--</div><div class="teaser-cd-label">Seconds</div></div>
+    </div>
+    <div class="teaser-follow">A full invitation will follow.<br>For now &mdash; block the day.</div>
+    <div class="teaser-cals">
+      <a class="teaser-cal-btn" id="tcalGoogle" href="#" target="_blank" rel="noopener"><i class="fab fa-google"></i> Google Calendar</a>
+      <a class="teaser-cal-btn" id="tcalApple" href="#" download="ericsherita-wedding.ics"><i class="fab fa-apple"></i> Apple Calendar</a>
+      <a class="teaser-cal-btn" id="tcalOutlook" href="#" download="ericsherita-wedding.ics"><i class="fas fa-envelope"></i> Outlook / Other</a>
+    </div>
+    <button class="teaser-share" id="teaserShare"><i class="fab fa-whatsapp"></i> Share with family &amp; friends</button>
+  </div>
+</div>
 
 <!-- ========== HERO ========== -->
 <header class="hero">
@@ -1022,6 +1185,18 @@
 </button>
 
 <script>
+/* ============ MODE GATE ============
+   Default (no query param) → Save-the-Date teaser only.
+   Add ?invite=honour to the URL to reveal the full invitation.
+   To flip the site public later: set FORCE_FULL = true below, or remove this block.
+======================================= */
+const FORCE_FULL = false;
+const _params = new URLSearchParams(window.location.search);
+const isFullInvite = FORCE_FULL || _params.get('invite') === 'honour';
+if (!isFullInvite){
+  document.body.classList.add('teaser-mode');
+}
+
 /* Splash — tap to enter */
 document.getElementById('splash').addEventListener('click', () => {
   const s = document.getElementById('splash');
@@ -1029,6 +1204,10 @@ document.getElementById('splash').addEventListener('click', () => {
   document.body.classList.remove('locked');
   if (!audioOn) tryStartAudio();
   setTimeout(() => s.remove(), 1400);
+  if (!isFullInvite){
+    const t = document.getElementById('teaserPanel');
+    if (t){ requestAnimationFrame(() => t.classList.add('visible')); }
+  }
 });
 
 /* Floating gold particles + leaves */
@@ -1068,10 +1247,18 @@ function updateCountdown(){
   const h = Math.floor((diff / 3600000) % 24);
   const m = Math.floor((diff / 60000) % 60);
   const s = Math.floor((diff / 1000) % 60);
-  document.getElementById('cdDays').textContent = String(d).padStart(2,'0');
-  document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
-  document.getElementById('cdMin').textContent = String(m).padStart(2,'0');
-  document.getElementById('cdSec').textContent = String(s).padStart(2,'0');
+  const dd = String(d).padStart(2,'0');
+  const hh = String(h).padStart(2,'0');
+  const mm = String(m).padStart(2,'0');
+  const ss = String(s).padStart(2,'0');
+  const setBoth = (heroId, teaserId, val) => {
+    const a = document.getElementById(heroId);    if (a) a.textContent = val;
+    const b = document.getElementById(teaserId);  if (b) b.textContent = val;
+  };
+  setBoth('cdDays',  'tcdDays',  dd);
+  setBoth('cdHours', 'tcdHours', hh);
+  setBoth('cdMin',   'tcdMin',   mm);
+  setBoth('cdSec',   'tcdSec',   ss);
 }
 updateCountdown();
 setInterval(updateCountdown, 1000);
@@ -1100,7 +1287,9 @@ if ('IntersectionObserver' in window){
     + '&dates=' + startUTC + '/' + endUTC
     + '&details=' + encodeURIComponent(desc)
     + '&location=' + encodeURIComponent(loc);
-  document.getElementById('calGoogle').href = gcal;
+  ['calGoogle','tcalGoogle'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.href = gcal;
+  });
 
   // Apple / Outlook: generate an ICS file and let the browser download it
   const ics = [
@@ -1117,8 +1306,19 @@ if ('IntersectionObserver' in window){
   ].join('\r\n');
   const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
   const url = URL.createObjectURL(blob);
-  document.getElementById('calApple').href = url;
-  document.getElementById('calOutlook').href = url;
+  ['calApple','tcalApple','calOutlook','tcalOutlook'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.href = url;
+  });
+})();
+
+/* ============ TEASER SHARE ============ */
+(function(){
+  const btn = document.getElementById('teaserShare');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const text = `Save the Date — Eric & Sherita are getting married on Saturday, 28 November 2026 at 12PM in New Jersey. ${window.location.origin}/`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  });
 })();
 
 /* ============ RSVP ============ */
