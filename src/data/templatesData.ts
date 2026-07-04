@@ -570,5 +570,5 @@ export const addonsByCategory = (): Record<AddonCategory, Addon[]> => {
   return out;
 };
 
-// WhatsApp number that receives orders.
-export const ORDER_WHATSAPP = "+233245817973";
+// WhatsApp number that receives orders (primary support line).
+export const ORDER_WHATSAPP = "+4915757178561";
