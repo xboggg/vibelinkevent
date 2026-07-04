@@ -237,6 +237,29 @@ export const portfolioItems: PortfolioItem[] = [
     imagePosition: "top",
     demoLabel: "Open Invitation",
   },
+  {
+    id: 19,
+    title: "Eric & Sherita — Save the Date",
+    type: "Weddings",
+    description: "An editorial Save-the-Date for Eric & Sherita's wedding on 28 November 2026 in New Jersey. Sage-green, ivory and warm-gold palette taken from the paper card; splash of gold rings on ivory lace opens into a golden-hour full-bleed hero, live countdown, one-tap add-to-calendar, RSVP with ceremony/reception split, and a paginated wishes wall.",
+    image: "/ericsherita-portfolio.jpg",
+    thumbnail: "/ericsherita-portfolio-thumb.jpg",
+    demoUrl: "https://ericsherita.vibelinkevent.com/",
+    slug: "eric-sherita-save-the-date",
+    features: [
+      "Cinematic splash (hands + rings on lace)",
+      "Full-bleed golden-hour hero with Ken Burns",
+      "Live countdown to 28 Nov 2026",
+      "One-tap Add-to-Calendar (Google, Apple, Outlook)",
+      "RSVP with ceremony/reception opt-in + guest count",
+      "Paginated wishes wall (swipeable carousel)",
+      "Officiant + family coordinator contact cards",
+      "Family admin panel with CSV exports",
+      "Custom sage-and-gold OG share card",
+    ],
+    imagePosition: "top",
+    demoLabel: "Open Invitation",
+  },
 ];
 
 export const categories = ["All", "Weddings", "Engagements", "Funerals", "Church", "Naming", "Birthdays", "Anniversaries", "Graduations", "Corporate", "Other"];

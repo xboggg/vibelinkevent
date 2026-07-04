@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Eric &amp; Sherita — Save the Date · 28 November 2026</title>
+<meta name="description" content="Save the date. Eric &amp; Sherita are getting married — Saturday, 28 November 2026 at 12PM, New Jersey. Full invitation follows." />
+<meta property="og:title" content="Eric &amp; Sherita — Save the Date · 28 November 2026" />
+<meta property="og:description" content="A joining of two hearts. Saturday, 28 November 2026 · 12PM · New Jersey." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://ericsherita.vibelinkevent.com/" />
+<meta property="og:site_name" content="Eric &amp; Sherita — Save the Date" />
+<meta property="og:image" content="https://ericsherita.vibelinkevent.com/og-image.jpg" />
+<meta property="og:image:secure_url" content="https://ericsherita.vibelinkevent.com/og-image.jpg" />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://ericsherita.vibelinkevent.com/og-image.jpg" />
+<meta name="theme-color" content="#f5f2e8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  :root{
+    --ivory:#f5f2e8;
+    --ivory-warm:#f0eddd;
+    --sage:#7d8e6d;
+    --sage-deep:#5a6b4c;
+    --sage-soft:#a5b490;
+    --sage-mist:#c6d4b3;
+    --gold:#c9a24a;
+    --gold-bright:#d4b464;
+    --gold-deep:#8a6a23;
+    --text:#2a2e26;
+    --text-soft:#4a4f43;
+    --text-muted:#7a7f70;
+    --line:rgba(90,107,76,.15);
+    --line-strong:rgba(90,107,76,.32);
+    --line-gold:rgba(201,162,74,.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Cormorant Garamond', serif;
+    background:var(--ivory);
+    color:var(--text);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    -webkit-text-size-adjust:100%;
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(165,180,144,.15), transparent 45%),
+      radial-gradient(circle at 85% 90%, rgba(201,162,74,.10), transparent 45%);
+  }
+  body.locked{overflow:hidden;height:100vh}
+  img,iframe,svg,video{max-width:100%;display:block}
+  ::selection{background:var(--sage);color:var(--ivory)}
+
+  /* ========== SPLASH ========== */
+  .splash{
+    position:fixed;inset:0;z-index:9999;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;background:#2a2e26;padding:2rem;
+    transition:opacity 1.4s ease, visibility 1.4s ease;
+  }
+  .splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+  .splash-bg{
+    position:absolute;inset:0;z-index:0;
+    background-image:url('splash-medium.jpg');
+    background-size:cover;background-position:center;
+    animation:splashZoom 12s ease-out forwards;
+    will-change:transform;
+  }
+  @media(min-width:1201px){.splash-bg{background-image:url('splash.jpg')}}
+  @media(max-width:640px){.splash-bg{background-image:url('splash-mobile.jpg')}}
+  @keyframes splashZoom{
+    0%{transform:scale(1.14)}
+    100%{transform:scale(1)}
+  }
+  .splash-bg::after{
+    content:'';position:absolute;inset:0;
+    background:
+      radial-gradient(ellipse at center, rgba(42,46,38,.15) 0%, rgba(42,46,38,.55) 55%, rgba(42,46,38,.88) 100%);
+  }
+
+  .splash-content{
+    position:relative;z-index:5;
+    width:100%;max-width:520px;
+    margin:0 auto;
+    padding:3rem 2.4rem;
+    text-align:center;color:var(--ivory);
+    background:rgba(245,242,232,.06);
+    border:1px solid rgba(201,162,74,.5);
+    backdrop-filter:blur(8px);
+    opacity:0;
+    animation:splashCard 1.4s .4s forwards cubic-bezier(.2,.8,.3,1);
+  }
+  @keyframes splashCard{
+    0%{opacity:0;transform:translateY(30px) scale(.96)}
+    100%{opacity:1;transform:translateY(0) scale(1)}
+  }
+  .splash-content::before,.splash-content::after{
+    content:'';position:absolute;width:44px;height:44px;
+    border:1px solid var(--gold-bright);
+  }
+  .splash-content::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .splash-content::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+
+  .splash-flourish{
+    display:flex;align-items:center;justify-content:center;gap:.9rem;
+    margin-bottom:1.4rem;
+  }
+  .splash-flourish .fl-line{
+    flex:1;max-width:80px;height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+  }
+  .splash-flourish svg{width:26px;height:26px;fill:var(--gold-bright)}
+  .splash-overline{
+    font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.5em;
+    color:var(--gold-bright);text-transform:uppercase;margin-bottom:1rem;
+    text-shadow:0 2px 10px rgba(0,0,0,.4);
+  }
+  .splash-names{
+    font-family:'Great Vibes',cursive;font-weight:400;
+    font-size:clamp(3.8rem, 8vw, 5.6rem);
+    color:var(--ivory);line-height:1;letter-spacing:.01em;margin:.2rem 0;
+    text-shadow:0 3px 20px rgba(0,0,0,.55);
+  }
+  .splash-amp{
+    display:inline-block;font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-weight:500;color:var(--gold-bright);
+    font-size:.55em;vertical-align:middle;margin:0 .2rem;
+  }
+  .splash-date{
+    font-family:'Cinzel',serif;font-size:.95rem;
+    color:var(--ivory);letter-spacing:.4em;
+    margin:1rem 0 .8rem;padding:.7rem 0;
+    display:inline-block;padding-left:1.4rem;padding-right:1rem;
+    border-top:1px solid rgba(212,180,100,.5);
+    border-bottom:1px solid rgba(212,180,100,.5);
+    text-shadow:0 2px 10px rgba(0,0,0,.4);
+  }
+  .splash-venue{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:#e8e3d0;font-size:1rem;letter-spacing:.04em;
+    margin-bottom:1.4rem;
+    text-shadow:0 2px 10px rgba(0,0,0,.4);
+  }
+  .splash-tap{
+    display:inline-flex;align-items:center;
+    font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.4em;
+    color:#fff;background:linear-gradient(135deg, var(--sage-soft), var(--sage));
+    border:1px solid var(--sage-deep);border-radius:99px;
+    padding:.85rem 1.8rem;cursor:pointer;text-transform:uppercase;
+    box-shadow:0 4px 14px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.15);
+    transition:all .3s;font-weight:500;
+    animation:tapPulse 2.4s 2s ease-in-out infinite;
+  }
+  .splash-tap:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.35)}
+  .splash-tap i{margin-right:.6rem;color:#fff}
+  @keyframes tapPulse{
+    0%,100%{box-shadow:0 4px 14px rgba(0,0,0,.25), 0 0 0 0 rgba(201,162,74,.6)}
+    50%{box-shadow:0 4px 14px rgba(0,0,0,.35), 0 0 0 14px rgba(201,162,74,0)}
+  }
+  @media(max-width:640px){
+    .splash-content{padding:2rem 1.4rem}
+    .splash-flourish svg{width:22px;height:22px}
+    .splash-overline{font-size:.6rem;letter-spacing:.32em}
+    .splash-date{font-size:.82rem;letter-spacing:.3em}
+    .splash-venue{font-size:.9rem}
+  }
+
+  /* ========== AUDIO ========== */
+  .audio-toggle{
+    position:fixed;top:1.2rem;right:1.2rem;z-index:80;
+    width:44px;height:44px;border-radius:50%;
+    background:rgba(245,242,232,.9);backdrop-filter:blur(8px);
+    border:1px solid var(--gold);color:var(--sage-deep);
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-size:.95rem;transition:all .35s ease;
+    box-shadow:0 4px 14px rgba(90,107,76,.2);
+  }
+  .audio-toggle:hover{background:var(--sage);color:#fff}
+  .audio-toggle.playing{animation:audioPulse 3s ease-in-out infinite}
+  @keyframes audioPulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(201,162,74,.4)}
+    50%{box-shadow:0 0 0 10px rgba(201,162,74,0)}
+  }
+
+  /* ========== FLOATING PARTICLES ========== */
+  .particle{
+    position:fixed;pointer-events:none;z-index:1;opacity:0;
+    animation:particleFloat 16s linear infinite;
+  }
+  .particle.gold{
+    width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle, var(--gold-bright), transparent 70%);
+  }
+  .particle.leaf{
+    width:14px;height:14px;color:var(--sage-soft);opacity:.5;
+  }
+  @keyframes particleFloat{
+    0%{transform:translateY(105vh) translateX(0) rotate(0);opacity:0}
+    12%{opacity:.7}
+    50%{transform:translateY(50vh) translateX(30px) rotate(180deg)}
+    100%{transform:translateY(-10vh) translateX(-20px) rotate(360deg);opacity:0}
+  }
+
+  /* ========== HERO ========== */
+  .hero{
+    min-height:100vh;
+    min-height:100svh;
+    min-height:100dvh;
+    padding:5rem 2rem 3rem;
+    display:flex;align-items:center;justify-content:flex-end;
+    position:relative;overflow:hidden;background:#2a2e26;
+  }
+  .hero-bg{
+    position:absolute;inset:0;z-index:0;
+    background-image:url('hero-medium.jpg');
+    background-size:cover;background-position:center 35%;
+    animation:heroBreath 22s ease-in-out infinite;
+    will-change:transform;
+  }
+  @media(min-width:1201px){.hero-bg{background-image:url('hero.jpg')}}
+  @media(max-width:640px){.hero-bg{background-image:url('hero-mobile.jpg')}}
+  @keyframes heroBreath{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.05)}
+  }
+  .hero-bg::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(90,107,76,.1) 40%,
+      rgba(42,46,38,.65) 68%,
+      rgba(42,46,38,.85) 100%
+    );
+  }
+  .hero-content{
+    position:relative;z-index:2;
+    max-width:520px;width:100%;
+    text-align:center;color:var(--ivory);
+    margin-right:1rem;
+  }
+  @media(max-width:1200px){
+    .hero{padding:5rem 1.5rem 3rem}
+    .hero-content{margin-right:0;max-width:480px}
+    .hero-bg{background-position:30% center}
+  }
+  @media(max-width:900px){
+    .hero{justify-content:center;align-items:flex-end;padding:2rem 1.5rem 3rem}
+    .hero-bg{background-position:40% 22%}
+    .hero-bg::after{
+      background:linear-gradient(
+        180deg,
+        rgba(42,46,38,0) 0%,
+        rgba(42,46,38,.1) 30%,
+        rgba(42,46,38,.55) 55%,
+        rgba(42,46,38,.9) 78%
+      );
+    }
+    .hero-content{max-width:100%}
+  }
+  @media(max-width:640px){
+    .hero{padding:1.5rem 1.2rem 2.5rem}
+    .hero-bg{background-position:40% 18%}
+  }
+  .hero-flourish{
+    display:flex;align-items:center;justify-content:center;gap:.9rem;
+    margin-bottom:1.4rem;
+  }
+  .hero-flourish .fl-line{flex:1;max-width:70px;height:1px;background:linear-gradient(90deg, transparent, var(--gold-bright), transparent)}
+  .hero-flourish svg{width:24px;height:24px;fill:var(--gold-bright);filter:drop-shadow(0 2px 8px rgba(201,162,74,.4))}
+  .hero-overline{
+    font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.55em;
+    color:var(--gold-bright);text-transform:uppercase;margin-bottom:1rem;
+    text-shadow:0 2px 10px rgba(0,0,0,.4);
+  }
+  .hero-italic{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:#e8e3d0;font-size:1.1rem;letter-spacing:.02em;
+    margin-bottom:.8rem;
+    text-shadow:0 2px 8px rgba(0,0,0,.4);
+  }
+  .hero-names{
+    font-family:'Great Vibes',cursive;font-weight:400;
+    font-size:clamp(4.2rem, 10vw, 7rem);
+    color:var(--ivory);line-height:1;letter-spacing:.01em;
+    margin-bottom:1rem;
+    text-shadow:0 3px 24px rgba(0,0,0,.5), 0 0 40px rgba(201,162,74,.15);
+  }
+  .hero-amp{
+    display:inline-block;font-family:'Cormorant Garamond',serif;
+    font-style:italic;font-weight:500;color:var(--gold-bright);
+    font-size:.5em;vertical-align:middle;margin:0 .2rem;
+  }
+  .hero-date{
+    font-family:'Cinzel',serif;color:var(--gold-bright);
+    font-size:clamp(1rem, 2vw, 1.15rem);
+    letter-spacing:.4em;padding:.8rem 0;
+    border-top:1px solid rgba(212,180,100,.5);
+    border-bottom:1px solid rgba(212,180,100,.5);
+    display:inline-block;padding-left:1.5rem;padding-right:1rem;
+    margin:.4rem 0;font-weight:500;
+    text-shadow:0 2px 8px rgba(0,0,0,.4);
+  }
+  .hero-venue{
+    font-family:'Cormorant Garamond',serif;color:#e8e3d0;
+    font-size:1rem;font-style:italic;letter-spacing:.03em;margin-top:.6rem;
+    text-shadow:0 2px 8px rgba(0,0,0,.4);
+  }
+
+  /* ========== COUNTDOWN ========== */
+  .countdown{
+    margin:2rem auto 0;display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap;
+  }
+  .cd-box{
+    min-width:76px;padding:.9rem .4rem;
+    background:rgba(42,46,38,.35);
+    border:1px solid rgba(212,180,100,.4);
+    backdrop-filter:blur(6px);
+    text-align:center;border-radius:2px;
+  }
+  .cd-num{
+    font-family:'Cormorant Garamond',serif;font-size:1.9rem;
+    color:var(--gold-bright);font-weight:600;line-height:1;
+    text-shadow:0 2px 8px rgba(0,0,0,.4);
+  }
+  .cd-label{
+    font-family:'Cinzel',sans-serif;font-size:.6rem;letter-spacing:.3em;
+    color:#e8e3d0;text-transform:uppercase;margin-top:.5rem;
+  }
+  @media(max-width:640px){
+    .hero-names{font-size:clamp(3rem, 12vw, 4.4rem);margin-bottom:.6rem}
+    .hero-flourish svg{width:20px;height:20px}
+    .hero-overline{font-size:.6rem;letter-spacing:.35em}
+    .hero-italic{font-size:.95rem;margin-bottom:.4rem}
+    .hero-date{font-size:.85rem;letter-spacing:.28em;padding-left:1rem;padding-right:.5rem}
+    .hero-venue{font-size:.9rem}
+    .countdown{gap:.4rem;margin-top:1.4rem}
+    .cd-box{min-width:60px;padding:.65rem .25rem}
+    .cd-num{font-size:1.35rem}
+    .cd-label{font-size:.5rem;letter-spacing:.22em;margin-top:.35rem}
+  }
+  @media(max-width:380px){
+    .hero-names{font-size:2.8rem}
+    .countdown{gap:.3rem}
+    .cd-box{min-width:52px;padding:.55rem .15rem}
+    .cd-num{font-size:1.1rem}
+  }
+
+  /* ========== SHARED SECTION ========== */
+  section.chapter{padding:5rem 1.5rem;position:relative;z-index:3}
+  .container{max-width:1080px;margin:0 auto}
+  .chapter-head{text-align:center;margin-bottom:2.8rem}
+  .chapter-eyebrow{
+    font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.6em;
+    color:var(--gold-deep);text-transform:uppercase;margin-bottom:.9rem;
+  }
+  .chapter-title{
+    font-family:'Cormorant Garamond',serif;font-weight:500;
+    font-size:clamp(1.8rem, 4vw, 2.6rem);
+    color:var(--sage-deep);letter-spacing:.02em;line-height:1.25;
+  }
+  .chapter-title em{
+    font-family:'Great Vibes',cursive;font-style:normal;
+    color:var(--gold);font-weight:400;
+    font-size:1.5em;line-height:.8;
+    display:inline-block;margin:0 .1em;
+  }
+  .ornament{
+    display:flex;align-items:center;justify-content:center;gap:1rem;
+    margin:1.2rem auto 0;color:var(--gold);max-width:220px;
+  }
+  .ornament .line{flex:1;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent)}
+  .ornament svg{width:24px;height:24px;fill:var(--gold)}
+
+  /* ========== SAVE THE DATE INTRO ========== */
+  .invite-section{background:linear-gradient(180deg, transparent, rgba(198,212,179,.25) 100%)}
+  .invite-body{
+    max-width:720px;margin:0 auto;text-align:center;
+    font-family:'Cormorant Garamond',serif;font-size:1.15rem;
+    color:var(--text-soft);line-height:1.9;font-style:italic;
+    padding:0 1rem;
+  }
+  .invite-body p{margin-bottom:1.2rem}
+  .invite-body strong{color:var(--sage-deep);font-style:normal;font-weight:500}
+  .invite-quote::before,.invite-quote::after{
+    color:var(--gold);font-family:'Cormorant Garamond',serif;
+    font-size:2.2rem;line-height:0;opacity:.6;font-weight:600;
+    vertical-align:sub;
+  }
+  .invite-quote::before{content:'\201C';margin-right:.3rem}
+  .invite-quote::after{content:'\201D';margin-left:.3rem}
+
+  /* ========== ADD TO CALENDAR ========== */
+  .cal-section{background:var(--ivory-warm);padding-top:3.5rem;padding-bottom:3.5rem}
+  .cal-buttons{
+    display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;
+    max-width:820px;margin:0 auto;
+  }
+  .cal-btn{
+    display:inline-flex;align-items:center;gap:.7rem;
+    padding:.95rem 1.6rem;
+    font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.24em;
+    text-decoration:none;text-transform:uppercase;font-weight:500;
+    background:#fff;border:1px solid var(--line-gold);color:var(--sage-deep);
+    transition:all .3s;border-radius:99px;
+    box-shadow:0 4px 14px rgba(90,107,76,.08);
+  }
+  .cal-btn:hover{
+    transform:translateY(-2px);
+    background:var(--sage);color:#fff;border-color:var(--sage-deep);
+    box-shadow:0 8px 22px rgba(90,107,76,.2);
+  }
+  .cal-btn i{font-size:1rem;color:var(--gold-deep)}
+  .cal-btn:hover i{color:#fff}
+
+  /* ========== DETAILS (Venue Teasers) ========== */
+  .details-section{background:var(--ivory)}
+  .details-grid{
+    display:grid;gap:1.4rem;max-width:920px;margin:0 auto;
+    grid-template-columns:1fr 1fr;
+  }
+  @media(max-width:720px){.details-grid{grid-template-columns:1fr}}
+  .detail-card{
+    background:#fff;padding:2rem 1.6rem;
+    border:1px solid var(--line-strong);border-radius:3px;
+    position:relative;text-align:center;
+    box-shadow:0 6px 20px rgba(90,107,76,.08);
+    transition:all .35s;
+  }
+  .detail-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(90,107,76,.16)}
+  .detail-card::before,.detail-card::after{
+    content:'';position:absolute;width:28px;height:28px;
+    border:1px solid var(--gold);
+  }
+  .detail-card::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .detail-card::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+  .detail-icon{
+    width:52px;height:52px;border-radius:50%;
+    background:linear-gradient(135deg, var(--sage-soft), var(--sage));
+    color:#fff;display:flex;align-items:center;justify-content:center;
+    margin:0 auto 1rem;font-size:1.1rem;
+    box-shadow:0 4px 12px rgba(90,107,76,.25);
+  }
+  .detail-tag{
+    font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.4em;
+    color:var(--gold-deep);text-transform:uppercase;margin-bottom:.7rem;font-weight:500;
+  }
+  .detail-title{
+    font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;
+    color:var(--sage-deep);margin-bottom:.4rem;line-height:1.3;
+  }
+  .detail-body{
+    color:var(--text-soft);font-size:1rem;line-height:1.65;font-style:italic;
+    margin-bottom:.4rem;
+  }
+  .detail-time{
+    font-family:'Cinzel',serif;color:var(--gold-deep);
+    letter-spacing:.25em;font-size:.85rem;margin-top:.6rem;font-weight:500;
+  }
+  .detail-note{
+    color:var(--text-muted);font-size:.9rem;font-style:italic;
+    margin-top:1rem;padding-top:.8rem;border-top:1px dashed var(--line);
+  }
+
+  /* ========== RSVP ========== */
+  .rsvp-section{background:linear-gradient(180deg, var(--ivory), rgba(198,212,179,.35))}
+  .rsvp-form-wrap{
+    max-width:640px;margin:0 auto;
+    background:#fff;padding:2.6rem 2rem;
+    border:1px solid var(--line-strong);border-radius:3px;
+    box-shadow:0 8px 30px rgba(90,107,76,.1);
+    position:relative;
+  }
+  .rsvp-form-wrap::before,.rsvp-form-wrap::after{
+    content:'';position:absolute;width:34px;height:34px;
+    border:1px solid var(--gold);
+  }
+  .rsvp-form-wrap::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .rsvp-form-wrap::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+  .rsvp-intro{
+    text-align:center;color:var(--text-muted);font-style:italic;
+    font-size:1.02rem;margin-bottom:1.6rem;line-height:1.7;
+  }
+  .rsvp-form-wrap label{
+    display:block;font-family:'Cinzel',serif;font-size:.66rem;
+    letter-spacing:.28em;color:var(--sage-deep);text-transform:uppercase;
+    margin-bottom:.4rem;font-weight:500;
+  }
+  .rsvp-form-wrap input,.rsvp-form-wrap textarea,.rsvp-form-wrap select{
+    width:100%;padding:.85rem 1rem;margin-bottom:1.1rem;
+    background:var(--ivory);border:1px solid var(--line);
+    color:var(--text);font-family:'Cormorant Garamond',serif;font-size:1.02rem;
+    transition:all .3s;border-radius:2px;
+    -webkit-appearance:none;appearance:none;
+  }
+  .rsvp-form-wrap select{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'><path fill='%235a6b4c' d='M6 7L0 0h12z'/></svg>");
+    background-repeat:no-repeat;background-position:right 1rem center;
+    padding-right:2.4rem;cursor:pointer;
+  }
+  .rsvp-form-wrap input:focus,.rsvp-form-wrap textarea:focus,.rsvp-form-wrap select:focus{
+    outline:none;border-color:var(--sage);
+    box-shadow:0 0 0 3px rgba(125,142,109,.18);
+  }
+  .rsvp-form-wrap textarea{min-height:90px;resize:vertical;font-family:'Cormorant Garamond',serif}
+  .rsvp-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:520px){.rsvp-row{grid-template-columns:1fr;gap:0}}
+
+  .attending-toggle{
+    display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.1rem;
+  }
+  .attending-toggle input[type=radio]{display:none}
+  .attending-toggle label{
+    display:flex;align-items:center;justify-content:center;gap:.5rem;
+    padding:.9rem 1rem;margin:0;text-align:center;cursor:pointer;
+    border:1px solid var(--line-strong);border-radius:2px;
+    font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;
+    color:var(--text-muted);background:var(--ivory);
+    transition:all .3s;text-transform:uppercase;
+  }
+  .attending-toggle input[type=radio]:checked + label{
+    background:var(--sage);color:#fff;border-color:var(--sage-deep);
+    box-shadow:0 3px 10px rgba(90,107,76,.25);
+  }
+  .attending-toggle .yes-label i{color:#3b7a3b}
+  .attending-toggle .no-label i{color:#b23030}
+  .attending-toggle input[type=radio]:checked + label i{color:#fff}
+
+  .attending-fields{display:none}
+  .attending-fields.show{display:block;animation:fieldsIn .35s ease}
+  @keyframes fieldsIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+  .rsvp-submit{
+    width:100%;padding:1rem;
+    background:linear-gradient(135deg, var(--sage-soft), var(--sage));
+    border:1px solid var(--sage-deep);color:#fff;
+    font-family:'Cinzel',serif;letter-spacing:.35em;font-size:.85rem;
+    cursor:pointer;text-transform:uppercase;transition:all .3s;
+    border-radius:2px;font-weight:500;
+    box-shadow:0 4px 14px rgba(90,107,76,.2);
+  }
+  .rsvp-submit:hover{background:var(--sage-deep);transform:translateY(-2px);box-shadow:0 6px 20px rgba(90,107,76,.3)}
+  .rsvp-count{
+    text-align:center;margin-top:1.4rem;
+    color:var(--text-muted);font-style:italic;font-size:.95rem;
+  }
+  .rsvp-count strong{color:var(--sage-deep);font-family:'Cormorant Garamond',serif;font-size:1.15em}
+
+  /* ========== WISHES WALL ========== */
+  .wish-section{background:linear-gradient(180deg, rgba(198,212,179,.25), var(--ivory))}
+  .wish-form-wrap{
+    max-width:640px;margin:0 auto 2.4rem;padding:1.6rem 1.4rem;
+    background:#fff;border:1px solid var(--line);border-radius:3px;
+  }
+  .wish-form-wrap input,.wish-form-wrap textarea{
+    width:100%;padding:.75rem .9rem;margin-bottom:.9rem;
+    background:var(--ivory);border:1px solid var(--line);
+    font-family:'Cormorant Garamond',serif;font-size:1rem;
+    color:var(--text);border-radius:2px;
+  }
+  .wish-form-wrap input:focus,.wish-form-wrap textarea:focus{outline:none;border-color:var(--sage)}
+  .wish-submit{
+    padding:.75rem 1.6rem;background:var(--sage-deep);color:#fff;
+    border:none;font-family:'Cinzel',serif;font-size:.72rem;
+    letter-spacing:.28em;text-transform:uppercase;cursor:pointer;
+    transition:all .3s;border-radius:2px;
+  }
+  .wish-submit:hover{background:var(--sage)}
+  .wish-carousel{max-width:1080px;margin:0 auto;position:relative}
+  .wish-viewport{overflow:hidden;position:relative}
+  .wish-track{display:flex;width:100%;transition:transform .55s cubic-bezier(.4,0,.2,1);will-change:transform}
+  .wish-slide{
+    flex:0 0 100%;min-width:0;
+    display:grid;gap:1.1rem;padding:.5rem;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+  }
+  @media(max-width:1024px){.wish-slide{grid-template-columns:repeat(2, minmax(0, 1fr))}}
+  @media(max-width:640px){.wish-slide{grid-template-columns:1fr}}
+  .wish-card{
+    padding:1.4rem 1.2rem;background:#fff;
+    border:1px solid var(--line-strong);border-radius:3px;
+    position:relative;min-height:170px;
+    display:flex;flex-direction:column;
+    box-shadow:0 4px 14px rgba(90,107,76,.08);
+  }
+  .wish-card::before{
+    content:'\201C';position:absolute;top:-8px;left:14px;
+    font-family:'Cormorant Garamond',serif;font-size:3rem;color:var(--gold);
+    line-height:1;font-weight:600;
+  }
+  .wish-msg{color:var(--text-soft);font-style:italic;font-size:1rem;line-height:1.7;margin-bottom:.9rem;padding-left:.9rem;flex:1}
+  .wish-author{color:var(--sage-deep);font-family:'Cinzel',serif;letter-spacing:.16em;font-size:.72rem;text-align:right;font-weight:500}
+  .wish-empty{text-align:center;padding:2.4rem;grid-column:1/-1;color:var(--text-muted);font-style:italic}
+  .wish-nav{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:1.4rem}
+  .wish-arrow{
+    width:42px;height:42px;border-radius:50%;
+    background:#fff;border:1px solid var(--gold);
+    color:var(--sage-deep);font-size:1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:all .3s;
+  }
+  .wish-arrow:hover:not(:disabled){background:var(--sage);color:#fff;transform:scale(1.06)}
+  .wish-arrow:disabled{opacity:.3;cursor:not-allowed}
+  .wish-dots{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center}
+  .wish-dot{width:9px;height:9px;border-radius:50%;background:rgba(90,107,76,.25);border:none;cursor:pointer;transition:all .25s;padding:0}
+  .wish-dot.active{background:var(--sage-deep);transform:scale(1.3)}
+  .wish-counter{text-align:center;font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.3em;color:var(--text-muted);text-transform:uppercase;margin-bottom:1.2rem}
+  .wish-counter strong{color:var(--sage-deep)}
+
+  /* ========== OFFICIANT + RSVP CONTACT ========== */
+  .contact-section{background:var(--ivory);padding-bottom:6rem}
+  .contact-intro{
+    text-align:center;max-width:640px;margin:0 auto 2.4rem;
+    color:var(--text-soft);font-style:italic;font-size:1.08rem;line-height:1.7;padding:0 1rem;
+  }
+  .contact-grid{
+    max-width:900px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:1.6rem;
+  }
+  .contact-card{
+    position:relative;padding:2rem 1.8rem 1.6rem;
+    background:linear-gradient(180deg, #fff 0%, #faf8ed 100%);
+    border:1px solid var(--line-gold);text-align:center;
+    box-shadow:0 6px 22px rgba(90,107,76,.08);
+    transition:all .4s cubic-bezier(.2,.8,.3,1);
+  }
+  .contact-card:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 14px 40px rgba(90,107,76,.18)}
+  .contact-card::before,.contact-card::after{content:'';position:absolute;width:32px;height:32px;border:1px solid var(--gold);transition:all .4s}
+  .contact-card::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .contact-card::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+  .contact-card:hover::before,.contact-card:hover::after{width:42px;height:42px;border-color:var(--gold-bright)}
+  .contact-flourish{display:flex;align-items:center;justify-content:center;gap:.7rem;margin-bottom:1.2rem;color:var(--gold)}
+  .contact-flourish .fl-line{flex:1;max-width:60px;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent)}
+  .contact-flourish svg{width:22px;height:22px;fill:var(--gold-deep)}
+  .contact-role{font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.42em;color:var(--gold-deep);text-transform:uppercase;margin-bottom:.7rem;font-weight:500}
+  .contact-name{font-family:'Cormorant Garamond',serif;color:var(--sage-deep);letter-spacing:.02em;font-size:1.45rem;font-weight:600;margin-bottom:.3rem;line-height:1.2}
+  .contact-num{color:var(--gold-deep);font-family:'Inter',sans-serif;font-size:1.02rem;letter-spacing:.15em;font-weight:400;margin-bottom:1.4rem}
+  .contact-actions{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1rem;padding-top:1.2rem;border-top:1px solid rgba(201,162,74,.2)}
+  .contact-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem .8rem;font-family:'Cinzel',serif;font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;font-weight:500;border-radius:99px;transition:all .3s;cursor:pointer}
+  .contact-btn.call{background:linear-gradient(135deg, var(--sage-soft), var(--sage));color:#fff;border:1px solid var(--sage-deep);box-shadow:0 2px 8px rgba(90,107,76,.25)}
+  .contact-btn.call:hover{background:var(--sage-deep);box-shadow:0 4px 14px rgba(90,107,76,.4);transform:translateY(-1px)}
+  .contact-btn.wa{background:#25D366;color:#fff;border:1px solid #128C7E;box-shadow:0 2px 8px rgba(37,211,102,.35)}
+  .contact-btn.wa:hover{background:#128C7E;box-shadow:0 4px 14px rgba(37,211,102,.55);transform:translateY(-1px)}
+  .contact-btn i{font-size:.85rem}
+
+  /* ========== SHARE FAB ========== */
+  .share-fab{position:fixed;bottom:1.4rem;right:1.4rem;z-index:80;width:54px;height:54px;border-radius:50%;background:#25D366;color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 20px rgba(37,211,102,.5);transition:all .35s ease}
+  .share-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(37,211,102,.7)}
+
+  /* ========== FOOTER ========== */
+  footer{
+    padding:4rem 1.5rem 2.2rem;text-align:center;
+    background:linear-gradient(180deg, var(--ivory), rgba(198,212,179,.35));
+    border-top:1px solid var(--line);position:relative;z-index:3;
+  }
+  .foot-flourish{display:flex;align-items:center;justify-content:center;gap:.9rem;margin-bottom:1rem;max-width:280px;margin-left:auto;margin-right:auto}
+  .foot-flourish .fl-line{flex:1;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent)}
+  .foot-flourish svg{width:22px;height:22px;fill:var(--gold)}
+  .foot-names{font-family:'Great Vibes',cursive;color:var(--sage-deep);font-size:3.6rem;line-height:1;margin-bottom:.4rem}
+  .foot-amp{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:.5em;font-weight:500;display:inline-block;vertical-align:middle;margin:0 .2rem}
+  .foot-date{font-family:'Cinzel',serif;color:var(--gold-deep);letter-spacing:.5em;font-size:.85rem;margin-bottom:1.6rem}
+  .foot-verse{max-width:520px;margin:0 auto 2rem;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-soft);font-size:.98rem;line-height:1.7}
+  .foot-cite{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.4em;color:var(--sage-deep);text-transform:uppercase;margin-top:.6rem}
+  .foot-strict{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold-deep);font-size:1rem;letter-spacing:.03em;margin-bottom:1.4rem}
+  .foot-credit{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--line);color:var(--text-muted);font-family:'Inter',sans-serif;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase}
+  .foot-credit a{color:var(--sage-deep);text-decoration:none}
+
+  /* reveal */
+  .reveal{opacity:1;transform:none;transition:opacity .9s ease, transform .9s ease}
+  .js-reveal-active .reveal:not(.in){opacity:0;transform:translateY(20px)}
+  .js-reveal-active .reveal.in{opacity:1;transform:translateY(0)}
+
+  @media(max-width:640px){
+    section.chapter{padding:3.6rem 1rem}
+    .invite-body{font-size:1.05rem;line-height:1.85}
+    .cal-section{padding:2.5rem 1rem}
+    .cal-btn{padding:.85rem 1.2rem;font-size:.68rem;letter-spacing:.2em}
+    .rsvp-form-wrap{padding:1.8rem 1.2rem}
+    .contact-name{font-size:1.35rem}
+    .contact-num{font-size:.95rem;letter-spacing:.12em}
+    .contact-btn{font-size:.6rem;letter-spacing:.2em;padding:.7rem .5rem}
+    .share-fab{width:48px;height:48px;font-size:1.3rem}
+    .foot-names{font-size:2.6rem}
+    footer{padding:3rem 1rem 4.5rem}
+    .detail-card{padding:1.6rem 1.2rem}
+    .detail-title{font-size:1.2rem}
+  }
+</style>
+</head>
+<body class="locked">
+
+<!-- ========== SPLASH ========== -->
+<div class="splash" id="splash" aria-hidden="false">
+  <div class="splash-bg" role="img" aria-label="Elegant hands with gold wedding bands resting on ivory lace and sage green fabric"></div>
+  <div class="splash-content">
+    <div class="splash-flourish" aria-hidden="true">
+      <span class="fl-line"></span>
+      <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
+      <span class="fl-line"></span>
+    </div>
+    <div class="splash-overline">Save The Date</div>
+    <h1 class="splash-names">Eric <span class="splash-amp">&amp;</span> Sherita</h1>
+    <div class="splash-date">28 &middot; 11 &middot; 2026</div>
+    <div class="splash-venue">A wedding in the making &middot; New Jersey</div>
+    <button class="splash-tap"><i class="fas fa-hand-point-up"></i>Tap to enter</button>
+  </div>
+</div>
+
+<!-- ========== AUDIO ========== -->
+<audio id="bgAudio" loop preload="none">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+<button class="audio-toggle" id="audioToggle" aria-label="Toggle music">
+  <i class="fas fa-music" id="audioIcon"></i>
+</button>
+
+<!-- ========== HERO ========== -->
+<header class="hero">
+  <div class="hero-bg" role="img" aria-label="Bride and groom walking hand in hand through a soft golden-hour garden path"></div>
+  <div class="hero-content">
+    <div class="hero-flourish" aria-hidden="true">
+      <span class="fl-line"></span>
+      <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
+      <span class="fl-line"></span>
+    </div>
+    <div class="hero-overline">Save The Date</div>
+    <div class="hero-italic">for the wedding of</div>
+    <h1 class="hero-names">Eric <span class="hero-amp">&amp;</span> Sherita</h1>
+    <div class="hero-date">SAT &middot; 28 NOV 2026</div>
+    <div class="hero-venue"><strong style="color:var(--gold-bright);font-family:'Cinzel',serif;letter-spacing:.15em;font-style:normal">12PM</strong> &middot; North Brunswick, New Jersey</div>
+    <div class="countdown" id="countdown" aria-label="Countdown to the wedding">
+      <div class="cd-box"><div class="cd-num" id="cdDays">--</div><div class="cd-label">Days</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdHours">--</div><div class="cd-label">Hours</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdMin">--</div><div class="cd-label">Minutes</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdSec">--</div><div class="cd-label">Seconds</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ========== INVITATION ========== -->
+<section class="chapter invite-section">
+  <div class="container">
+    <div class="chapter-head reveal">
+      <div class="chapter-eyebrow">A joining of two hearts</div>
+      <h2 class="chapter-title">Two Souls, <em>One Journey</em></h2>
+      <div class="ornament">
+        <span class="line"></span>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3" fill="var(--ivory)"/></svg>
+        <span class="line"></span>
+      </div>
+    </div>
+    <div class="invite-body reveal">
+      <p class="invite-quote">
+        By the grace of the Almighty and with the blessing of our families,
+        we invite you to save the date &mdash;
+        <strong>Eric &amp; Sherita</strong> are getting married on
+        <strong>Saturday, 28<sup>th</sup> November 2026</strong>.
+      </p>
+      <p>
+        A full invitation will follow. For now &mdash; block the day,
+        add it to your calendar, and let your prayers walk with us.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ADD TO CALENDAR ========== -->
+<section class="chapter cal-section">
+  <div class="container">
+    <div class="chapter-head reveal">
+      <div class="chapter-eyebrow">Block the day</div>
+      <h2 class="chapter-title">Add to Your <em>Calendar</em></h2>
+      <div class="ornament">
+        <span class="line"></span>
+        <svg viewBox="0 0 24 24"><path d="M7 3 H17 V5 H21 V21 H3 V5 H7 Z M9 1 V5 M15 1 V5" fill="none" stroke="var(--gold)" stroke-width="1.5"/></svg>
+        <span class="line"></span>
+      </div>
+    </div>
+    <div class="cal-buttons reveal">
+      <a class="cal-btn" id="calGoogle" href="#" target="_blank" rel="noopener">
+        <i class="fab fa-google"></i> Google Calendar
+      </a>
+      <a class="cal-btn" id="calApple" href="ericsherita-wedding.ics" download>
+        <i class="fab fa-apple"></i> Apple Calendar
+      </a>
+      <a class="cal-btn" id="calOutlook" href="ericsherita-wedding.ics" download>
+        <i class="fas fa-envelope"></i> Outlook / Other
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== DETAILS ========== -->
+<section class="chapter details-section">
+  <div class="container">
+    <div class="chapter-head reveal">
+      <div class="chapter-eyebrow">The Day</div>
+      <h2 class="chapter-title">Ceremony &amp; <em>Reception</em></h2>
+      <div class="ornament">
+        <span class="line"></span>
+        <svg viewBox="0 0 24 24"><path d="M12 2 C8 2 5 5 5 9 C5 14 12 22 12 22 C12 22 19 14 19 9 C19 5 16 2 12 2 Z M12 12 C10.34 12 9 10.66 9 9 C9 7.34 10.34 6 12 6 C13.66 6 15 7.34 15 9 C15 10.66 13.66 12 12 12 Z"/></svg>
+        <span class="line"></span>
+      </div>
+    </div>
+    <div class="details-grid reveal">
+      <div class="detail-card">
+        <div class="detail-icon"><i class="fas fa-church"></i></div>
+        <div class="detail-tag">Ceremony</div>
+        <div class="detail-title">Potter's Love<br>Assemble of God</div>
+        <div class="detail-body">1210 Cozzens Ln<br>North Brunswick Township, NJ 08902</div>
+        <div class="detail-time">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
+      </div>
+      <div class="detail-card">
+        <div class="detail-icon"><i class="fas fa-champagne-glasses"></i></div>
+        <div class="detail-tag">Reception</div>
+        <div class="detail-title">The Sapphire<br>Grand</div>
+        <div class="detail-body">800 Rahway Ave<br>Woodbridge, NJ 07095</div>
+        <div class="detail-time">SAT &middot; 28 NOV 2026 &middot; 5PM</div>
+      </div>
+    </div>
+    <p class="invite-body reveal" style="margin-top:2.4rem;font-size:1rem">
+      Full addresses, directions, dress code, and further details will follow
+      with the formal invitation.
+    </p>
+  </div>
+</section>
+
+<!-- ========== RSVP ========== -->
+<section class="chapter rsvp-section">
+  <div class="container">
+    <div class="chapter-head reveal">
+      <div class="chapter-eyebrow">Kindly Confirm</div>
+      <h2 class="chapter-title">Save Your <em>RSVP</em></h2>
+      <div class="ornament">
+        <span class="line"></span>
+        <svg viewBox="0 0 24 24"><path d="M4 6 L12 13 L20 6 L20 18 L4 18 Z" fill="none" stroke="var(--gold)" stroke-width="1.5"/></svg>
+        <span class="line"></span>
+      </div>
+    </div>
+    <form class="rsvp-form-wrap reveal" id="rsvpForm">
+      <p class="rsvp-intro">RSVPs are open early. Let us know if you'll be joining us &mdash; and we'll make sure a seat is saved for you.</p>
+
+      <label for="rsvpName">Your full name</label>
+      <input type="text" id="rsvpName" placeholder="e.g. Mr. Kwame Boateng" maxlength="60" required />
+
+      <div class="rsvp-row">
+        <div>
+          <label for="rsvpEmail">Email</label>
+          <input type="email" id="rsvpEmail" placeholder="you@example.com" maxlength="100" required />
+        </div>
+        <div>
+          <label for="rsvpPhone">Phone (optional)</label>
+          <input type="tel" id="rsvpPhone" placeholder="+1 732 000 0000" maxlength="25" inputmode="tel" />
+        </div>
+      </div>
+
+      <label>Will you be attending?</label>
+      <div class="attending-toggle">
+        <input type="radio" name="attending" id="att-yes" value="yes" checked>
+        <label for="att-yes" class="yes-label"><i class="fas fa-check"></i> Joyfully Yes</label>
+        <input type="radio" name="attending" id="att-no" value="no">
+        <label for="att-no" class="no-label"><i class="fas fa-times"></i> Sadly No</label>
+      </div>
+
+      <div class="attending-fields show" id="attFields">
+        <div class="rsvp-row">
+          <div>
+            <label for="rsvpGuests">Number of guests</label>
+            <select id="rsvpGuests">
+              <option value="1">Just me (1)</option>
+              <option value="2">2 people</option>
+              <option value="3">3 people</option>
+              <option value="4">4 people</option>
+              <option value="5">5 people</option>
+              <option value="6">6+ people</option>
+            </select>
+          </div>
+          <div>
+            <label for="rsvpSide">Whose side (optional)</label>
+            <select id="rsvpSide">
+              <option value="">— Choose —</option>
+              <option value="Bride">Bride's (Sherita)</option>
+              <option value="Groom">Groom's (Eric)</option>
+              <option value="Both">A friend to both</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Which parts will you attend?</label>
+        <div class="attending-toggle">
+          <input type="checkbox" name="ceremony" id="ceremony" checked style="display:none">
+          <label for="ceremony" id="ceremonyLabel" class="yes-label"><i class="fas fa-church"></i> Ceremony (12PM)</label>
+          <input type="checkbox" name="reception" id="reception" checked style="display:none">
+          <label for="reception" id="receptionLabel" class="yes-label"><i class="fas fa-champagne-glasses"></i> Reception (5PM)</label>
+        </div>
+      </div>
+
+      <label for="rsvpNote">A short note (optional)</label>
+      <textarea id="rsvpNote" placeholder="Dietary requirements, well wishes, anything else…" maxlength="300"></textarea>
+
+      <button type="submit" class="rsvp-submit">Send My RSVP</button>
+      <div class="rsvp-count" id="rsvpCount">Be one of the first to confirm.</div>
+    </form>
+  </div>
+</section>
+
+<!-- ========== WISHES WALL ========== -->
+<section class="chapter wish-section">
+  <div class="container">
+    <div class="chapter-head reveal">
+      <div class="chapter-eyebrow">A Word From You</div>
+      <h2 class="chapter-title">Wishes &amp; <em>Blessings</em></h2>
+      <div class="ornament">
+        <span class="line"></span>
+        <svg viewBox="0 0 24 24"><path d="M12 21 C6 15 3 12 3 8 A5 5 0 0 1 12 5 A5 5 0 0 1 21 8 C21 12 18 15 12 21 Z"/></svg>
+        <span class="line"></span>
+      </div>
+    </div>
+
+    <div class="wish-form-wrap reveal">
+      <input type="text" id="wishName" placeholder="Your name" maxlength="60" />
+      <textarea id="wishMsg" placeholder="Share a wish, a blessing, or a prayer for Eric &amp; Sherita…" maxlength="300"></textarea>
+      <button class="wish-submit" id="wishSubmit">Send My Wish</button>
+    </div>
+
+    <div class="wish-carousel" id="wishCarousel" hidden>
+      <div class="wish-counter">
+        <strong id="wishCount">0</strong> wishes &middot; page <strong id="wishPage">1</strong> of <strong id="wishPages">1</strong>
+      </div>
+      <div class="wish-viewport" id="wishViewport">
+        <div class="wish-track" id="wishTrack"></div>
+      </div>
+      <div class="wish-nav">
+        <button class="wish-arrow" id="wishPrev" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+        <div class="wish-dots" id="wishDots"></div>
+        <button class="wish-arrow" id="wishNext" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<section class="chapter contact-section">
+  <div class="container">
+    <div class="chapter-head reveal">
+      <div class="chapter-eyebrow">For Enquiries</div>
+      <h2 class="chapter-title">Speak to <em>Us</em></h2>
+      <div class="ornament">
+        <span class="line"></span>
+        <svg viewBox="0 0 24 24"><path d="M22 16.92 V21 C22 21.55 21.55 22 21 22 C11.61 22 4 14.39 4 5 C4 4.45 4.45 4 5 4 H9.08 C9.63 4 10.08 4.45 10.08 5 C10.08 6.43 10.32 7.81 10.77 9.09 L8.83 11.03 C10.07 13.47 12.07 15.47 14.51 16.71 L16.45 14.77 C17.73 15.22 19.11 15.46 20.54 15.46 C21.09 15.46 21.54 15.91 21.54 16.46 L22 16.92 Z"/></svg>
+        <span class="line"></span>
+      </div>
+    </div>
+
+    <p class="contact-intro reveal">
+      For directions, RSVP questions, or anything else about the day
+      &mdash; please don't hesitate to reach out to us.
+    </p>
+
+    <div class="contact-grid reveal">
+      <div class="contact-card">
+        <div class="contact-flourish" aria-hidden="true">
+          <span class="fl-line"></span>
+          <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
+          <span class="fl-line"></span>
+        </div>
+        <div class="contact-role">Officiating Pastor</div>
+        <div class="contact-name">Pastor Williams Obeng</div>
+        <div class="contact-num">+1 732 794 0000</div>
+        <div class="contact-actions">
+          <a href="tel:+17327940000" class="contact-btn call"><i class="fas fa-phone"></i> Call</a>
+          <a href="https://wa.me/17327940000?text=Hello%20Pastor%20Williams%2C%20regarding%20Eric%20%26%20Sherita%27s%20wedding..." target="_blank" rel="noopener" class="contact-btn wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-flourish" aria-hidden="true">
+          <span class="fl-line"></span>
+          <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
+          <span class="fl-line"></span>
+        </div>
+        <div class="contact-role">RSVP &amp; Enquiries</div>
+        <div class="contact-name">Family Coordinator</div>
+        <div class="contact-num">+1 732 794 0000</div>
+        <div class="contact-actions">
+          <a href="tel:+17327940000" class="contact-btn call"><i class="fas fa-phone"></i> Call</a>
+          <a href="https://wa.me/17327940000?text=Hello%2C%20regarding%20Eric%20%26%20Sherita%27s%20wedding..." target="_blank" rel="noopener" class="contact-btn wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="foot-flourish" aria-hidden="true">
+    <span class="fl-line"></span>
+    <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
+    <span class="fl-line"></span>
+  </div>
+  <div class="foot-names">Eric <span class="foot-amp">&amp;</span> Sherita</div>
+  <div class="foot-date">SAT &middot; 28 NOV 2026</div>
+  <div class="foot-strict">Strictly by invitation</div>
+  <div class="foot-verse">
+    &ldquo;Two are better than one; because they have a good reward for their labour.
+    For if they fall, the one will lift up his fellow.&rdquo;
+    <div class="foot-cite">Ecclesiastes 4 : 9-10</div>
+  </div>
+  <div class="foot-credit">
+    Designed by <a href="https://vibelinkevent.com" target="_blank" rel="noopener">VibeLink Event</a>
+  </div>
+</footer>
+
+<!-- ========== SHARE ========== -->
+<button class="share-fab" id="shareFab" aria-label="Share on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</button>
+
+<script>
+/* Splash — tap to enter */
+document.getElementById('splash').addEventListener('click', () => {
+  const s = document.getElementById('splash');
+  s.classList.add('gone');
+  document.body.classList.remove('locked');
+  if (!audioOn) tryStartAudio();
+  setTimeout(() => s.remove(), 1400);
+});
+
+/* Floating gold particles + leaves */
+for (let i = 0; i < 14; i++){
+  const p = document.createElement('div');
+  p.className = 'particle gold';
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.animationDuration = (12 + Math.random() * 10) + 's';
+  p.style.animationDelay = (Math.random() * 8) + 's';
+  document.body.appendChild(p);
+}
+
+/* Audio */
+const audio = document.getElementById('bgAudio');
+const audioToggle = document.getElementById('audioToggle');
+const audioIcon = document.getElementById('audioIcon');
+audio.volume = 0.30;
+let audioOn = false;
+function tryStartAudio(){
+  audio.play().then(() => {
+    audioOn = true;
+    audioIcon.className = 'fas fa-volume-up';
+    audioToggle.classList.add('playing');
+  }).catch(() => {});
+}
+audioToggle.addEventListener('click', () => {
+  if (audioOn){ audio.pause(); audioOn = false; audioIcon.className = 'fas fa-volume-mute'; audioToggle.classList.remove('playing'); }
+  else tryStartAudio();
+});
+
+/* Countdown to 28 Nov 2026 12:00 US Eastern (17:00 UTC) */
+const targetDate = new Date('2026-11-28T17:00:00+00:00').getTime();
+function updateCountdown(){
+  const now = Date.now();
+  let diff = Math.max(0, targetDate - now);
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff / 3600000) % 24);
+  const m = Math.floor((diff / 60000) % 60);
+  const s = Math.floor((diff / 1000) % 60);
+  document.getElementById('cdDays').textContent = String(d).padStart(2,'0');
+  document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cdMin').textContent = String(m).padStart(2,'0');
+  document.getElementById('cdSec').textContent = String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* Reveal on scroll */
+if ('IntersectionObserver' in window){
+  document.documentElement.classList.add('js-reveal-active');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.05, rootMargin: '0px 0px -3% 0px' });
+  document.querySelectorAll('.reveal').forEach(r => io.observe(r));
+  window.addEventListener('load', () => setTimeout(() => document.documentElement.classList.remove('js-reveal-active'), 3000));
+}
+
+/* ============ ADD TO CALENDAR ============ */
+(function(){
+  const title = 'Eric & Sherita — Wedding';
+  const startUTC = '20261128T170000Z'; // 12PM ET = 17:00 UTC
+  const endUTC   = '20261128T230000Z'; // ceremony + reception buffer
+  const desc = "The wedding of Eric & Sherita. Ceremony: Potter's Love Assemble of God, North Brunswick NJ (12PM). Reception: The Sapphire Grand, Woodbridge NJ (5PM). Full details: https://ericsherita.vibelinkevent.com";
+  const loc  = "Potter's Love Assemble of God, 1210 Cozzens Ln, North Brunswick Township, NJ 08902";
+
+  // Google Calendar link
+  const gcal = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+    + '&text=' + encodeURIComponent(title)
+    + '&dates=' + startUTC + '/' + endUTC
+    + '&details=' + encodeURIComponent(desc)
+    + '&location=' + encodeURIComponent(loc);
+  document.getElementById('calGoogle').href = gcal;
+
+  // Apple / Outlook: generate an ICS file and let the browser download it
+  const ics = [
+    'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//VibeLink//EricSherita//EN',
+    'BEGIN:VEVENT',
+    'UID:ericsherita-2026-11-28@vibelinkevent.com',
+    'DTSTAMP:20260704T000000Z',
+    'DTSTART:' + startUTC,
+    'DTEND:' + endUTC,
+    'SUMMARY:' + title,
+    'DESCRIPTION:' + desc.replace(/\n/g,'\\n'),
+    'LOCATION:' + loc,
+    'END:VEVENT','END:VCALENDAR'
+  ].join('\r\n');
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  document.getElementById('calApple').href = url;
+  document.getElementById('calOutlook').href = url;
+})();
+
+/* ============ RSVP ============ */
+const API_RSVP  = 'api/rsvp.php';
+const API_WISH  = 'api/wishes.php';
+
+async function refreshRsvpCount(){
+  try {
+    const r = await fetch(API_RSVP, { cache: 'no-store' });
+    if (!r.ok) return;
+    const j = await r.json();
+    const el = document.getElementById('rsvpCount');
+    if (j.count > 0){
+      el.innerHTML = `<strong>${j.accept}</strong> ${j.accept === 1 ? 'guest has' : 'guests have'} said yes &middot; <strong>${j.guests}</strong> ${j.guests === 1 ? 'person' : 'people'} expected`;
+    }
+  } catch(e){}
+}
+
+/* Toggle attending fields on Yes/No */
+document.querySelectorAll('input[name="attending"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('attFields').classList.toggle('show', r.value === 'yes' && r.checked);
+  });
+});
+
+/* Ceremony/reception toggle labels */
+['ceremony','reception'].forEach(id => {
+  const cb = document.getElementById(id);
+  const lab = document.getElementById(id + 'Label');
+  const update = () => lab.style.background = cb.checked ? 'var(--sage)' : 'var(--ivory)';
+  update();
+  lab.addEventListener('click', e => { e.preventDefault(); cb.checked = !cb.checked;
+    lab.style.background = cb.checked ? 'var(--sage)' : 'var(--ivory)';
+    lab.style.color = cb.checked ? '#fff' : 'var(--text-muted)';
+  });
+});
+
+document.getElementById('rsvpForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const attending = document.querySelector('input[name="attending"]:checked').value;
+  const payload = {
+    name:      document.getElementById('rsvpName').value.trim(),
+    email:     document.getElementById('rsvpEmail').value.trim(),
+    phone:     document.getElementById('rsvpPhone').value.trim(),
+    attending,
+    guests:    parseInt(document.getElementById('rsvpGuests').value, 10) || 1,
+    side:      document.getElementById('rsvpSide').value,
+    ceremony:  document.getElementById('ceremony').checked ? 'yes' : 'no',
+    reception: document.getElementById('reception').checked ? 'yes' : 'no',
+    note:      document.getElementById('rsvpNote').value.trim(),
+  };
+  if (!payload.name) return;
+  const btn = e.target.querySelector('.rsvp-submit');
+  const oldText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    const r = await fetch(API_RSVP, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || 'Could not send.');
+    e.target.reset();
+    document.getElementById('att-yes').checked = true;
+    document.getElementById('attFields').classList.add('show');
+    btn.textContent = attending === 'yes' ? 'Thank you — see you on 28 Nov!' : 'Thank you — you\'ll be missed.';
+    refreshRsvpCount();
+    setTimeout(() => btn.textContent = oldText, 3400);
+  } catch(err){
+    alert(err.message || 'Could not send RSVP.');
+    btn.textContent = oldText;
+  } finally { btn.disabled = false; }
+});
+refreshRsvpCount();
+setInterval(refreshRsvpCount, 45000);
+
+/* ============ WISHES CAROUSEL ============ */
+const wishState = { items: [], total: 0, page: 0, cardsPerSlide: 3 };
+function cardsPerSlideForViewport(){
+  const w = window.innerWidth;
+  if (w <= 640) return 1;
+  if (w <= 1024) return 2;
+  return 3;
+}
+function wishCardMarkup(c){
+  return `<div class="wish-card"><p class="wish-msg">${escapeHtml(c.msg)}</p><div class="wish-author">&mdash; ${escapeHtml(c.name)}</div></div>`;
+}
+function buildWishSlides(){
+  const track = document.getElementById('wishTrack');
+  const carousel = document.getElementById('wishCarousel');
+  const items = wishState.items;
+  carousel.hidden = items.length === 0;
+  if (items.length === 0){ track.innerHTML = ''; return; }
+  const per = wishState.cardsPerSlide;
+  const slidesCount = Math.ceil(items.length / per);
+  const slides = [];
+  for (let i = 0; i < slidesCount; i++){
+    const chunk = items.slice(i * per, (i + 1) * per).map(wishCardMarkup).join('');
+    slides.push(`<div class="wish-slide">${chunk}</div>`);
+  }
+  track.innerHTML = slides.join('');
+  if (wishState.page >= slidesCount) wishState.page = Math.max(0, slidesCount - 1);
+  document.getElementById('wishCount').textContent = wishState.total;
+  document.getElementById('wishPages').textContent = slidesCount;
+  const dots = document.getElementById('wishDots');
+  dots.innerHTML = '';
+  for (let i = 0; i < slidesCount; i++){
+    const b = document.createElement('button');
+    b.className = 'wish-dot' + (i === wishState.page ? ' active' : '');
+    b.setAttribute('aria-label', `Page ${i + 1}`);
+    b.addEventListener('click', () => goToWishSlide(i));
+    dots.appendChild(b);
+  }
+  applyWishTransform();
+}
+function applyWishTransform(){
+  document.getElementById('wishTrack').style.transform = `translateX(-${wishState.page * 100}%)`;
+  document.querySelectorAll('.wish-dot').forEach((d, i) => d.classList.toggle('active', i === wishState.page));
+  document.getElementById('wishPage').textContent = wishState.page + 1;
+  const total = document.querySelectorAll('.wish-slide').length;
+  document.getElementById('wishPrev').disabled = wishState.page === 0;
+  document.getElementById('wishNext').disabled = wishState.page >= total - 1;
+}
+function goToWishSlide(i){
+  const total = document.querySelectorAll('.wish-slide').length;
+  if (i < 0 || i >= total) return;
+  wishState.page = i;
+  applyWishTransform();
+}
+async function refreshWishes(){
+  try {
+    const r = await fetch(API_WISH, { cache: 'no-store' });
+    if (!r.ok) return;
+    const j = await r.json();
+    wishState.items = j.items || [];
+    wishState.total = j.count || 0;
+    wishState.cardsPerSlide = cardsPerSlideForViewport();
+    buildWishSlides();
+  } catch(e){}
+}
+document.getElementById('wishSubmit').addEventListener('click', async () => {
+  const name = document.getElementById('wishName').value.trim();
+  const msg  = document.getElementById('wishMsg').value.trim();
+  if (!name || !msg){ alert('Please enter your name and a message.'); return; }
+  const btn = document.getElementById('wishSubmit');
+  const oldText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  try {
+    const r = await fetch(API_WISH, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name, msg }) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || 'Could not send.');
+    document.getElementById('wishName').value = '';
+    document.getElementById('wishMsg').value = '';
+    btn.textContent = 'Thank you — God bless!';
+    refreshWishes();
+    setTimeout(() => btn.textContent = oldText, 2800);
+  } catch(err){ alert(err.message || 'Could not send wish.'); btn.textContent = oldText;
+  } finally { btn.disabled = false; }
+});
+document.getElementById('wishPrev').addEventListener('click', () => goToWishSlide(wishState.page - 1));
+document.getElementById('wishNext').addEventListener('click', () => goToWishSlide(wishState.page + 1));
+(function(){
+  const vp = document.getElementById('wishViewport');
+  let startX = null;
+  vp.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  vp.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) goToWishSlide(wishState.page + (dx < 0 ? 1 : -1));
+    startX = null;
+  }, { passive: true });
+})();
+let wishResizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(wishResizeTimer);
+  wishResizeTimer = setTimeout(() => {
+    const newPer = cardsPerSlideForViewport();
+    if (newPer !== wishState.cardsPerSlide){ wishState.cardsPerSlide = newPer; buildWishSlides(); }
+  }, 180);
+});
+refreshWishes();
+setInterval(refreshWishes, 45000);
+
+/* WhatsApp share */
+document.getElementById('shareFab').addEventListener('click', () => {
+  const text = `Save the Date — Eric & Sherita are getting married on Saturday, 28 November 2026 at 12PM in New Jersey. More details, RSVP and well-wishes: ${window.location.href}`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+});
+
+/* utils */
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+</script>
+</body>
+</html>
