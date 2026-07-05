@@ -154,7 +154,7 @@ const FloatingParticles = () => {
     </div>
   );
 };
-import heroWedding from "@/assets/hero-celebration.jpg";
+import heroWedding from "@/assets/hero-wedding.jpg";
 import heroNaming from "@/assets/hero-naming.jpg";
 import heroFuneral from "@/assets/hero-funeral.jpg";
 import heroGraduation from "@/assets/hero-graduation.jpg";
@@ -172,6 +172,7 @@ const slides = [
   {
     image: heroWedding,
     alt: "Ghanaian wedding celebration",
+    objectPos: "center 25%",
     headline: "Your Event,",
     highlight: "Elevated.",
     subline: "Stop sending JPEGs.",
@@ -180,6 +181,7 @@ const slides = [
   {
     image: heroNaming,
     alt: "Ghanaian naming ceremony",
+    objectPos: "center 40%",
     headline: "Welcome Your",
     highlight: "Little One",
     subline: "Not a JPEG — a living invitation.",
@@ -188,6 +190,7 @@ const slides = [
   {
     image: heroFuneral,
     alt: "Dignified funeral ceremony",
+    objectPos: "center 35%",
     headline: "Honor Their",
     highlight: "Legacy",
     subline: "A dignified tribute, not a PDF.",
@@ -196,6 +199,7 @@ const slides = [
   {
     image: heroGraduation,
     alt: "Graduation celebration",
+    objectPos: "center 30%",
     headline: "Celebrate Your",
     highlight: "Achievement",
     subline: "Make it interactive, not just a card.",
@@ -204,6 +208,7 @@ const slides = [
   {
     image: heroBirthday,
     alt: "Birthday party celebration",
+    objectPos: "center 30%",
     headline: "Make Your",
     highlight: "Birthday",
     subline: "More than a WhatsApp flyer.",
@@ -212,6 +217,7 @@ const slides = [
   {
     image: heroChurch,
     alt: "Church event",
+    objectPos: "center 30%",
     headline: "Invite Your",
     highlight: "Congregation",
     subline: "Interactive, not just a bulletin.",
@@ -220,6 +226,7 @@ const slides = [
   {
     image: heroCorporate,
     alt: "Corporate event",
+    objectPos: "center",
     headline: "Elevate Your",
     highlight: "Brand Events",
     subline: "Professional, not plain.",
@@ -305,6 +312,7 @@ export function HeroSection() {
             src={slides[previousSlide].image}
             alt={slides[previousSlide].alt}
             className="w-full h-full object-cover"
+            style={{ objectPosition: slides[previousSlide].objectPos }}
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-purple-dark/70" />
@@ -321,6 +329,7 @@ export function HeroSection() {
             src={slides[currentSlide].image}
             alt={slides[currentSlide].alt}
             className="w-full h-full object-cover"
+            style={{ objectPosition: slides[currentSlide].objectPos }}
             loading="eager"
             fetchPriority="high"
             onLoad={() => handleImageLoad(currentSlide)}
