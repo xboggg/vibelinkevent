@@ -1,5 +1,5 @@
 import { EventPageTemplate } from "@/components/EventPageTemplate";
-import heroImg from "@/assets/hero-celebration.jpg";
+import heroImg from "@/assets/hero-wedding.jpg";
 
 export default function WeddingInvitations() {
   return <EventPageTemplate config={{
