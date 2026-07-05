@@ -399,16 +399,16 @@ const Services = () => {
 
                     <div className="flex flex-wrap gap-3 pt-2">
                       {eventPageMap[service.slug] && (
-                        <Button asChild variant="default" size="default">
+                        <Button asChild variant="default" size="default" className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-md hover:shadow-lg transition-all">
                           <Link to={eventPageMap[service.slug]}>
                             Explore {service.title} →
                           </Link>
                         </Button>
                       )}
-                      <Button asChild variant="outline" size="default">
+                      <Button asChild size="default" className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-500/90 hover:to-pink-500/90 text-white shadow-md hover:shadow-lg transition-all">
                         <Link to={`/portfolio?type=${service.slug}`}>See Examples</Link>
                       </Button>
-                      <Button asChild variant="ghost" size="default">
+                      <Button asChild size="default" className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-400/90 hover:to-orange-500/90 text-white shadow-md hover:shadow-lg transition-all">
                         <Link to="/get-started">Get Quote</Link>
                       </Button>
                     </div>
