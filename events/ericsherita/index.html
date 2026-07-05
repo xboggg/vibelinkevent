@@ -58,119 +58,14 @@
   img,iframe,svg,video{max-width:100%;display:block}
   ::selection{background:var(--sage);color:var(--ivory)}
 
-  /* ========== SPLASH ========== */
-  .splash{
+  /* ========== SPLASH (v8 envelope+card in iframe) ========== */
+  #splashFrame{
     position:fixed;inset:0;z-index:9999;
-    display:flex;align-items:center;justify-content:center;
-    overflow:hidden;background:#2a2e26;padding:2rem;
+    width:100%;height:100%;border:0;
+    background:#0a0603;
     transition:opacity 1.4s ease, visibility 1.4s ease;
   }
-  .splash.gone{opacity:0;visibility:hidden;pointer-events:none}
-  .splash-bg{
-    position:absolute;inset:0;z-index:0;
-    background-image:url('splash-medium.jpg');
-    background-size:cover;background-position:center;
-    animation:splashZoom 12s ease-out forwards;
-    will-change:transform;
-  }
-  @media(min-width:1201px){.splash-bg{background-image:url('splash.jpg')}}
-  @media(max-width:640px){.splash-bg{background-image:url('splash-mobile.jpg')}}
-  @keyframes splashZoom{
-    0%{transform:scale(1.14)}
-    100%{transform:scale(1)}
-  }
-  .splash-bg::after{
-    content:'';position:absolute;inset:0;
-    background:
-      radial-gradient(ellipse at center, rgba(42,46,38,.15) 0%, rgba(42,46,38,.55) 55%, rgba(42,46,38,.88) 100%);
-  }
-
-  .splash-content{
-    position:relative;z-index:5;
-    width:100%;max-width:520px;
-    margin:0 auto;
-    padding:3rem 2.4rem;
-    text-align:center;color:var(--ivory);
-    background:rgba(245,242,232,.06);
-    border:1px solid rgba(201,162,74,.5);
-    backdrop-filter:blur(8px);
-    opacity:0;
-    animation:splashCard 1.4s .4s forwards cubic-bezier(.2,.8,.3,1);
-  }
-  @keyframes splashCard{
-    0%{opacity:0;transform:translateY(30px) scale(.96)}
-    100%{opacity:1;transform:translateY(0) scale(1)}
-  }
-  .splash-content::before,.splash-content::after{
-    content:'';position:absolute;width:44px;height:44px;
-    border:1px solid var(--gold-bright);
-  }
-  .splash-content::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
-  .splash-content::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
-
-  .splash-flourish{
-    display:flex;align-items:center;justify-content:center;gap:.9rem;
-    margin-bottom:1.4rem;
-  }
-  .splash-flourish .fl-line{
-    flex:1;max-width:80px;height:1px;
-    background:linear-gradient(90deg, transparent, var(--gold-bright), transparent);
-  }
-  .splash-flourish svg{width:26px;height:26px;fill:var(--gold-bright)}
-  .splash-overline{
-    font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.5em;
-    color:var(--gold-bright);text-transform:uppercase;margin-bottom:1rem;
-    text-shadow:0 2px 10px rgba(0,0,0,.4);
-  }
-  .splash-names{
-    font-family:'Great Vibes',cursive;font-weight:400;
-    font-size:clamp(3.8rem, 8vw, 5.6rem);
-    color:var(--ivory);line-height:1;letter-spacing:.01em;margin:.2rem 0;
-    text-shadow:0 3px 20px rgba(0,0,0,.55);
-  }
-  .splash-amp{
-    display:inline-block;font-family:'Cormorant Garamond',serif;
-    font-style:italic;font-weight:500;color:var(--gold-bright);
-    font-size:.55em;vertical-align:middle;margin:0 .2rem;
-  }
-  .splash-date{
-    font-family:'Cinzel',serif;font-size:.95rem;
-    color:var(--ivory);letter-spacing:.4em;
-    margin:1rem 0 .8rem;padding:.7rem 0;
-    display:inline-block;padding-left:1.4rem;padding-right:1rem;
-    border-top:1px solid rgba(212,180,100,.5);
-    border-bottom:1px solid rgba(212,180,100,.5);
-    text-shadow:0 2px 10px rgba(0,0,0,.4);
-  }
-  .splash-venue{
-    font-family:'Cormorant Garamond',serif;font-style:italic;
-    color:#e8e3d0;font-size:1rem;letter-spacing:.04em;
-    margin-bottom:1.4rem;
-    text-shadow:0 2px 10px rgba(0,0,0,.4);
-  }
-  .splash-tap{
-    display:inline-flex;align-items:center;
-    font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.4em;
-    color:#fff;background:linear-gradient(135deg, var(--sage-soft), var(--sage));
-    border:1px solid var(--sage-deep);border-radius:99px;
-    padding:.85rem 1.8rem;cursor:pointer;text-transform:uppercase;
-    box-shadow:0 4px 14px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.15);
-    transition:all .3s;font-weight:500;
-    animation:tapPulse 2.4s 2s ease-in-out infinite;
-  }
-  .splash-tap:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.35)}
-  .splash-tap i{margin-right:.6rem;color:#fff}
-  @keyframes tapPulse{
-    0%,100%{box-shadow:0 4px 14px rgba(0,0,0,.25), 0 0 0 0 rgba(201,162,74,.6)}
-    50%{box-shadow:0 4px 14px rgba(0,0,0,.35), 0 0 0 14px rgba(201,162,74,0)}
-  }
-  @media(max-width:640px){
-    .splash-content{padding:2rem 1.4rem}
-    .splash-flourish svg{width:22px;height:22px}
-    .splash-overline{font-size:.6rem;letter-spacing:.32em}
-    .splash-date{font-size:.82rem;letter-spacing:.3em}
-    .splash-venue{font-size:.9rem}
-  }
+  #splashFrame.gone{opacity:0;visibility:hidden;pointer-events:none}
 
   /* ========== AUDIO ========== */
   .audio-toggle{
@@ -829,22 +724,8 @@
 </head>
 <body class="locked">
 
-<!-- ========== SPLASH ========== -->
-<div class="splash" id="splash" aria-hidden="false">
-  <div class="splash-bg" role="img" aria-label="Elegant hands with gold wedding bands resting on ivory lace and sage green fabric"></div>
-  <div class="splash-content">
-    <div class="splash-flourish" aria-hidden="true">
-      <span class="fl-line"></span>
-      <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
-      <span class="fl-line"></span>
-    </div>
-    <div class="splash-overline">Save The Date</div>
-    <h1 class="splash-names">Eric <span class="splash-amp">&amp;</span> Sherita</h1>
-    <div class="splash-date">28 &middot; 11 &middot; 2026</div>
-    <div class="splash-venue">A wedding in the making &middot; New Jersey</div>
-    <button class="splash-tap"><i class="fas fa-hand-point-up"></i>Tap to enter</button>
-  </div>
-</div>
+<!-- ========== SPLASH — v8 envelope + card (iframe) ========== -->
+<iframe id="splashFrame" src="splash.html" title="Eric &amp; Sherita — Save the Date"></iframe>
 
 <!-- ========== AUDIO ========== -->
 <audio id="bgAudio" loop preload="none">
@@ -1197,9 +1078,11 @@ if (!isFullInvite){
   document.body.classList.add('teaser-mode');
 }
 
-/* Splash — tap to enter */
-document.getElementById('splash').addEventListener('click', () => {
-  const s = document.getElementById('splash');
+/* Splash iframe (v8 envelope) posts { type: 'splash-done' } when the user taps the card. */
+window.addEventListener('message', e => {
+  if (!e.data || e.data.type !== 'splash-done') return;
+  const s = document.getElementById('splashFrame');
+  if (!s) return;
   s.classList.add('gone');
   document.body.classList.remove('locked');
   if (!audioOn) tryStartAudio();

@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="robots" content="noindex, nofollow" />
-<title>Concept 1 · Premium v8 — Envelope + Card + Dove — Eric &amp; Sherita</title>
+<title>Eric &amp; Sherita — Save the Date</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet" />
@@ -685,9 +685,6 @@
 </head>
 <body>
 
-<a href="index.html" class="back" aria-label="Back to gallery"><i class="fas fa-arrow-left"></i></a>
-<div class="label"><b>01 &middot; v8</b> Envelope + Card</div>
-
 <div class="petal-field" id="petalField"></div>
 
 <div class="dove">
@@ -824,15 +821,6 @@
 
 <div class="tap-first" id="tapFirst"><i class="fas fa-hand-point-up"></i> Tap the wax seal</div>
 <div class="below-cta" id="belowCta">Tap the card to continue</div>
-
-<div class="exit-overlay" id="exit">
-  <div class="exit-content">
-    <div class="exit-eyebrow">Splash concept &middot; premium v6</div>
-    <div class="exit-title">Envelope <span class="a">&amp;</span> Card</div>
-    <div class="exit-note">In the real site, this transition lands the guest on either the Save-the-Date teaser or the full invitation, depending on the URL.</div>
-    <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> Back to concepts</a>
-  </div>
-</div>
 
 <script>
 /* ============ AUDIO ============ */
@@ -1069,21 +1057,22 @@ function openEnvelope(){
 wax.addEventListener('click', e => { e.stopPropagation(); e.preventDefault(); openEnvelope(); });
 wax.addEventListener('touchend', e => { e.stopPropagation(); e.preventDefault(); openEnvelope(); }, { passive: false });
 
-/* Card tap → exit */
-card.addEventListener('click', e => {
-  if (!card.classList.contains('emerge')) return;
-  e.stopPropagation();
-  stopAmbient();
-  document.getElementById('exit').classList.add('on');
-});
-
-/* Background tap after card lands also exits */
-document.body.addEventListener('click', e => {
-  if (e.target.closest('.back') || e.target.closest('.exit-overlay') || e.target.closest('#wax') || e.target.closest('#card')) return;
+/* Card tap → tell the parent frame we're done, the parent handles the transition */
+function finishSplash(){
   if (!opened) return;
   if (!card.classList.contains('emerge')) return;
   stopAmbient();
-  document.getElementById('exit').classList.add('on');
+  try{
+    window.parent && window.parent.postMessage({ type: 'splash-done' }, '*');
+  }catch(e){}
+}
+card.addEventListener('click', e => {
+  e.stopPropagation();
+  finishSplash();
+});
+document.body.addEventListener('click', e => {
+  if (e.target.closest('#wax') || e.target.closest('#card')) return;
+  finishSplash();
 });
 </script>
 

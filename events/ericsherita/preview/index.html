@@ -350,7 +350,7 @@
     </div>
   </a>
 
-  <a class="concept" href="envelope-v7.html" style="grid-column:1 / -1;border:2px solid var(--gold-bright);box-shadow:0 8px 30px rgba(201,162,74,.55);background:linear-gradient(180deg, #fff 0%, #faf8ed 100%)">
+  <a class="concept" href="envelope-v8.html" style="grid-column:1 / -1;border:2px solid var(--gold-bright);box-shadow:0 8px 30px rgba(201,162,74,.6);background:linear-gradient(180deg, #fff 0%, #faf8ed 100%)">
     <div class="preview-hero ph-envelope" style="height:260px;background:linear-gradient(180deg, #4a2e1c 0%, #150a03 100%);position:relative;overflow:hidden">
       <div class="env" style="background:linear-gradient(180deg, #f7efdd, #f0e6cc);width:170px;height:110px;box-shadow:0 20px 34px rgba(0,0,0,.65);position:relative;z-index:2">
         <div class="wax" style="background:radial-gradient(circle at 30% 25%, #c8d5b3, #7d8e6d 45%, #4a5a3e 100%);box-shadow:0 5px 12px rgba(0,0,0,.55),inset 0 -5px 10px rgba(0,0,0,.4),inset 0 3px 4px rgba(255,255,255,.25);width:52px;height:52px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#f5f2e8;font-family:'Great Vibes',cursive;font-size:1.4rem;text-shadow:0 -1px 0 rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.2)"><span>E&amp;S</span></div>
@@ -363,13 +363,34 @@
       <div style="position:absolute;top:75%;right:22%;color:#a5b490;font-size:.85rem;opacity:.5;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
     </div>
     <div class="concept-body">
-      <div class="concept-num" style="color:var(--gold-bright)">Concept 1 &middot; Premium v7 &middot; RECOMMENDED</div>
-      <div class="concept-title">The Envelope Opens <span style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:.75em;font-weight:400">&mdash; eucalyptus corners + dove fix</span></div>
+      <div class="concept-num" style="color:var(--gold-bright)">Concept 1 &middot; Premium v8 &middot; RECOMMENDED</div>
+      <div class="concept-title">The Envelope Opens <span style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:.75em;font-weight:400">&mdash; final polish</span></div>
       <div class="concept-desc">
-        <strong>Three real fixes over v6:</strong> (1) The tiny gold-squiggle corner ornaments are gone. In their place: <strong>hand-drawn eucalyptus flourishes</strong> in each corner &mdash; sage stems curving inward with alternating leaves + gold bud accents. Matches the top sprig, ties into the falling petals, feels genuinely wedding-native. (2) <strong>The dove no longer hides behind the card on mobile</strong> &mdash; orbit widened to the full viewport (~90vh) and z-index raised above the card, so the dove now flies around the outside of the whole scene at all times. (3) <strong>Dove wing now visibly flaps</strong> &mdash; the flap SVG path is rendered on top of the body (not underneath), so you can see the wing move. Also slightly bigger and with a soft warm glow.
+        <strong>Three real fixes over v7:</strong> (1) <strong>Dove now flies the full viewport</strong> &mdash; rewrote the broken nested-rotation orbit into a single manual keyframe path that traces a wide oval around the whole screen (32s loop, flips direction at halfway). No more stuck-at-top dove. (2) <strong>Envelope stays visible</strong> after the card emerges &mdash; softly blurred and at 70% opacity, still readable as background context (not vanished into black). (3) <strong>Corner ornaments simplified</strong> &mdash; single delicate leaf with curving stem and gold-bud tip per corner, instead of the heavy multi-leaf cluster. Frames the card without competing with the text.
       </div>
-      <div class="concept-meta"><span class="tag rich">Premium v7</span><span class="tag">Eucalyptus corners</span><span class="tag">Full-viewport dove</span><span class="tag">Flapping wing</span><span class="tag long">tap&ndash;driven</span></div>
-      <div class="concept-cta">Watch v7 <i class="fas fa-arrow-right"></i></div>
+      <div class="concept-meta"><span class="tag rich">Premium v8</span><span class="tag">Fixed dove orbit</span><span class="tag">Envelope stays</span><span class="tag">Simple leaves</span><span class="tag long">tap&ndash;driven</span></div>
+      <div class="concept-cta">Watch v8 <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="envelope-v7.html" style="opacity:.85">
+    <div class="preview-hero ph-envelope" style="height:260px;background:linear-gradient(180deg, #4a2e1c 0%, #150a03 100%);position:relative;overflow:hidden">
+      <div class="env" style="background:linear-gradient(180deg, #f7efdd, #f0e6cc);width:170px;height:110px;box-shadow:0 20px 34px rgba(0,0,0,.65);position:relative;z-index:2">
+        <div class="wax" style="background:radial-gradient(circle at 30% 25%, #c8d5b3, #7d8e6d 45%, #4a5a3e 100%);box-shadow:0 5px 12px rgba(0,0,0,.55),inset 0 -5px 10px rgba(0,0,0,.4),inset 0 3px 4px rgba(255,255,255,.25);width:52px;height:52px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#f5f2e8;font-family:'Great Vibes',cursive;font-size:1.4rem;text-shadow:0 -1px 0 rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.2)"><span>E&amp;S</span></div>
+      </div>
+      <div style="position:absolute;top:6%;right:12%;color:#fff;font-size:2rem;opacity:.9;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5)) drop-shadow(0 0 6px rgba(255,240,200,.4))">
+        <i class="fas fa-dove"></i>
+      </div>
+      <div style="position:absolute;top:20%;left:14%;color:#a5b490;font-size:.9rem;opacity:.7;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:50%;left:8%;color:#a5b490;font-size:.8rem;opacity:.6;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:75%;right:22%;color:#a5b490;font-size:.85rem;opacity:.5;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 1 &middot; v7 <span style="color:var(--text-muted);font-weight:400">(compare)</span></div>
+      <div class="concept-title">Envelope v7</div>
+      <div class="concept-desc">Eucalyptus corner clusters were too busy on real mobile, dove got stuck at the top-center (broken orbit), and the envelope disappeared entirely. All three fixed in v8.</div>
+      <div class="concept-meta"><span class="tag rich">v7</span><span class="tag">Broken orbit</span><span class="tag long">tap&ndash;driven</span></div>
+      <div class="concept-cta">Compare <i class="fas fa-arrow-right"></i></div>
     </div>
   </a>
 
