@@ -701,6 +701,7 @@ const Services = () => {
           <div className="flex flex-wrap justify-center gap-3">
             {[
               { label: "💍 Weddings", href: "/wedding-invitations" },
+              { label: "💎 Engagement", href: "/engagement-invitations" },
               { label: "🕊️ Funerals", href: "/funeral-programs" },
               { label: "👶 Naming Ceremony", href: "/naming-ceremony" },
               { label: "🎓 Graduation", href: "/graduation" },
