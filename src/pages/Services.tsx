@@ -40,7 +40,7 @@ import {
 import weddingImg from "@/assets/service-wedding.jpg";
 import engagementImg from "@/assets/hero-engagement.jpg";
 import funeralImg from "@/assets/hero-funeral.jpg";
-import namingImg from "@/assets/hero-naming.png";
+import namingImg from "@/assets/hero-naming.jpg";
 import anniversaryImg from "@/assets/service-anniversary.jpg";
 import graduationImg from "@/assets/hero-graduation.jpg";
 import corporateImg from "@/assets/hero-corporate.jpg";

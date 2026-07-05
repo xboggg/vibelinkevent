@@ -1,5 +1,5 @@
 import { EventPageTemplate } from "@/components/EventPageTemplate";
-import heroImg from "@/assets/hero-naming.png";
+import heroImg from "@/assets/hero-naming.jpg";
 
 export default function NamingCeremony() {
   return <EventPageTemplate config={{
