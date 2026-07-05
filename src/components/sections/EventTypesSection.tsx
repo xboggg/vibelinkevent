@@ -9,6 +9,7 @@ const eventTypes = [
     title: "Weddings",
     desc: "Traditional & white wedding",
     slug: "wedding",
+    href: "/wedding-invitations",
     color: "bg-rose-50 text-rose-600 border-rose-100",
     hover: "hover:bg-rose-500 hover:text-white hover:border-rose-500",
     iconBg: "bg-rose-100 group-hover:bg-rose-400",
@@ -18,6 +19,7 @@ const eventTypes = [
     title: "Engagements",
     desc: "Customary & knocking ceremonies",
     slug: "engagement",
+    href: "/engagement-invitations",
     color: "bg-yellow-50 text-yellow-700 border-yellow-100",
     hover: "hover:bg-yellow-600 hover:text-white hover:border-yellow-600",
     iconBg: "bg-yellow-100 group-hover:bg-yellow-500",
@@ -27,6 +29,7 @@ const eventTypes = [
     title: "Funerals",
     desc: "Dignified memorial programs",
     slug: "funeral",
+    href: "/funeral-programs",
     color: "bg-slate-50 text-slate-600 border-slate-200",
     hover: "hover:bg-slate-700 hover:text-white hover:border-slate-700",
     iconBg: "bg-slate-200 group-hover:bg-slate-500",
@@ -36,6 +39,7 @@ const eventTypes = [
     title: "Church Events",
     desc: "Harvest, thanksgiving & more",
     slug: "church",
+    href: "/church-events",
     color: "bg-violet-50 text-violet-600 border-violet-100",
     hover: "hover:bg-violet-600 hover:text-white hover:border-violet-600",
     iconBg: "bg-violet-100 group-hover:bg-violet-400",
@@ -45,6 +49,7 @@ const eventTypes = [
     title: "Naming Ceremonies",
     desc: "Outdooring & christenings",
     slug: "naming",
+    href: "/naming-ceremony",
     color: "bg-sky-50 text-sky-600 border-sky-100",
     hover: "hover:bg-sky-500 hover:text-white hover:border-sky-500",
     iconBg: "bg-sky-100 group-hover:bg-sky-400",
@@ -54,6 +59,7 @@ const eventTypes = [
     title: "Birthdays",
     desc: "Milestones worth celebrating",
     slug: "birthday",
+    href: "/birthday",
     color: "bg-pink-50 text-pink-600 border-pink-100",
     hover: "hover:bg-pink-500 hover:text-white hover:border-pink-500",
     iconBg: "bg-pink-100 group-hover:bg-pink-400",
@@ -63,6 +69,7 @@ const eventTypes = [
     title: "Anniversaries",
     desc: "Couples & institutions",
     slug: "anniversary",
+    href: "/anniversary-invitations",
     color: "bg-amber-50 text-amber-600 border-amber-100",
     hover: "hover:bg-amber-500 hover:text-white hover:border-amber-500",
     iconBg: "bg-amber-100 group-hover:bg-amber-400",
@@ -72,6 +79,7 @@ const eventTypes = [
     title: "Graduations",
     desc: "Academic achievements",
     slug: "graduation",
+    href: "/graduation",
     color: "bg-emerald-50 text-emerald-600 border-emerald-100",
     hover: "hover:bg-emerald-600 hover:text-white hover:border-emerald-600",
     iconBg: "bg-emerald-100 group-hover:bg-emerald-400",
@@ -81,6 +89,7 @@ const eventTypes = [
     title: "Corporate Events",
     desc: "Conferences & launches",
     slug: "corporate",
+    href: "/corporate-events",
     color: "bg-blue-50 text-blue-700 border-blue-100",
     hover: "hover:bg-blue-700 hover:text-white hover:border-blue-700",
     iconBg: "bg-blue-100 group-hover:bg-blue-500",
@@ -127,7 +136,7 @@ export function EventTypesSection() {
               transition={{ duration: 0.4, delay: i * 0.06 }}
             >
               <Link
-                to={`/services`}
+                to={event.href}
                 className={`group flex flex-col items-center text-center p-4 rounded-2xl border transition-all duration-300 cursor-pointer ${event.color} ${event.hover}`}
               >
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-3 transition-colors duration-300 ${event.iconBg}`}>
