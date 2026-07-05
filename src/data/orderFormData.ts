@@ -1,12 +1,14 @@
-import { 
-  Heart, 
-  Church, 
-  GraduationCap, 
-  Cake, 
-  Baby, 
-  Building2, 
+import {
+  Heart,
+  Church,
+  GraduationCap,
+  Cake,
+  Baby,
+  Building2,
   PartyPopper,
-  Flower2
+  Flower2,
+  Gem,
+  MoreHorizontal
 } from "lucide-react";
 
 export interface EventType {
@@ -51,14 +53,18 @@ export interface StylePreference {
 }
 
 export const eventTypes: EventType[] = [
+  // Row 1 — celebrations & unions
   { id: "wedding", name: "Wedding", icon: Heart, description: "Celebrate your love story" },
-  { id: "funeral", name: "Funeral", icon: Flower2, description: "Honor a life well-lived" },
-  { id: "graduation", name: "Graduation", icon: GraduationCap, description: "Celebrate achievements" },
+  { id: "engagement", name: "Engagement", icon: Gem, description: "Customary marriage & knocking" },
+  { id: "anniversary", name: "Anniversary", icon: PartyPopper, description: "Milestone celebrations" },
   { id: "birthday", name: "Birthday", icon: Cake, description: "Make birthdays special" },
   { id: "naming", name: "Naming Ceremony", icon: Baby, description: "Welcome new life" },
-  { id: "corporate", name: "Corporate Event", icon: Building2, description: "Professional gatherings" },
-  { id: "anniversary", name: "Anniversary", icon: PartyPopper, description: "Milestone celebrations" },
+  // Row 2 — memorial, faith, professional, other
+  { id: "funeral", name: "Funeral", icon: Flower2, description: "Honor a life well-lived" },
   { id: "church", name: "Church Event", icon: Church, description: "Faith-based gatherings" },
+  { id: "graduation", name: "Graduation", icon: GraduationCap, description: "Celebrate achievements" },
+  { id: "corporate", name: "Corporate Event", icon: Building2, description: "Professional gatherings" },
+  { id: "other", name: "Other / Custom", icon: MoreHorizontal, description: "Tell us your event" },
 ];
 
 export const packages: Package[] = [
