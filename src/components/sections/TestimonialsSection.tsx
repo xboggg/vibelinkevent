@@ -161,10 +161,10 @@ export function TestimonialsSection() {
           </AnimatedHeading>
         </motion.div>
 
-        {/* Testimonials Grid */}
-        <motion.div 
+        {/* Testimonials — horizontal snap-scroll on mobile, grid on md+ */}
+        <motion.div
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+          className="flex md:grid md:grid-cols-3 gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none -mx-4 md:mx-0 px-4 md:px-0 pb-4 md:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           variants={containerVariants}
           initial="hidden"
           animate={isGridInView ? "visible" : "hidden"}
@@ -173,7 +173,7 @@ export function TestimonialsSection() {
             <motion.div
               key={testimonial.id}
               variants={itemVariants}
-              className="relative p-6 lg:p-8 rounded-2xl bg-card border border-border hover:border-secondary/30 hover:shadow-lg transition-all duration-300"
+              className="relative p-6 lg:p-8 rounded-2xl bg-card border border-border hover:border-secondary/30 hover:shadow-lg transition-all duration-300 min-w-[85%] shrink-0 snap-start md:min-w-0 md:shrink"
             >
               {/* Quote Icon */}
               <Quote className="absolute top-6 right-6 h-8 w-8 text-secondary/20" />
