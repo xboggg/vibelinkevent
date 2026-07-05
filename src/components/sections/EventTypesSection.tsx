@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Heart, Users, Baby, Star, GraduationCap, Radio, Building, Cake, ArrowRight } from "lucide-react";
+import { Heart, Gem, Users, Baby, Star, GraduationCap, Radio, Building, Cake, ArrowRight } from "lucide-react";
 import { useRef } from "react";
 
 const eventTypes = [
@@ -12,6 +12,15 @@ const eventTypes = [
     color: "bg-rose-50 text-rose-600 border-rose-100",
     hover: "hover:bg-rose-500 hover:text-white hover:border-rose-500",
     iconBg: "bg-rose-100 group-hover:bg-rose-400",
+  },
+  {
+    icon: Gem,
+    title: "Engagements",
+    desc: "Customary & knocking ceremonies",
+    slug: "engagement",
+    color: "bg-yellow-50 text-yellow-700 border-yellow-100",
+    hover: "hover:bg-yellow-600 hover:text-white hover:border-yellow-600",
+    iconBg: "bg-yellow-100 group-hover:bg-yellow-500",
   },
   {
     icon: Users,
@@ -108,7 +117,7 @@ export function EventTypesSection() {
         {/* Cards */}
         <motion.div
           ref={ref}
-          className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-3"
         >
           {eventTypes.map((event, i) => (
             <motion.div
