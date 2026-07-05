@@ -155,7 +155,7 @@ const FloatingParticles = () => {
   );
 };
 import heroWedding from "@/assets/hero-celebration.jpg";
-import heroNaming from "@/assets/hero-naming.jpg";
+import heroNaming from "@/assets/hero-naming.png";
 import heroFuneral from "@/assets/hero-funeral.jpg";
 import heroGraduation from "@/assets/hero-graduation.jpg";
 import heroBirthday from "@/assets/hero-birthday.jpg";
