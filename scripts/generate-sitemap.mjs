@@ -27,6 +27,7 @@ const STATIC_ROUTES = [
   { path: "/pricing", priority: 0.9, changefreq: "monthly" },
   { path: "/get-started", priority: 0.95, changefreq: "monthly" },
   { path: "/wedding-invitations", priority: 0.9, changefreq: "monthly" },
+  { path: "/engagement-invitations", priority: 0.9, changefreq: "monthly" },
   { path: "/funeral-programs", priority: 0.9, changefreq: "monthly" },
   { path: "/naming-ceremony", priority: 0.9, changefreq: "monthly" },
   { path: "/church-events", priority: 0.85, changefreq: "monthly" },

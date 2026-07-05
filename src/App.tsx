@@ -46,6 +46,7 @@ const FAQ = lazy(() => import("./pages/FAQ"));
 const BookConsultation = lazy(() => import("./pages/BookConsultation"));
 const Referral = lazy(() => import("./pages/Referral"));
 const WeddingInvitations = lazy(() => import("./pages/events/WeddingInvitations"));
+const EngagementInvitations = lazy(() => import("./pages/events/EngagementInvitations"));
 const FuneralPrograms = lazy(() => import("./pages/events/FuneralPrograms"));
 const NamingCeremony = lazy(() => import("./pages/events/NamingCeremony"));
 const GraduationInvitations = lazy(() => import("./pages/events/GraduationInvitations"));
@@ -93,6 +94,7 @@ const App = () => (
               <Route path="/ref/:code" element={<Referral />} />
               <Route path="/referral" element={<Referral />} />
               <Route path="/wedding-invitations" element={<WeddingInvitations />} />
+              <Route path="/engagement-invitations" element={<EngagementInvitations />} />
               <Route path="/funeral-programs" element={<FuneralPrograms />} />
               <Route path="/naming-ceremony" element={<NamingCeremony />} />
               <Route path="/graduation" element={<GraduationInvitations />} />
