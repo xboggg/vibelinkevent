@@ -6,6 +6,7 @@ import { CTASection } from "@/components/sections/CTASection";
 import SEO, { createServiceSchema, createBreadcrumbSchema } from "@/components/SEO";
 import {
   Heart,
+  Gem,
   Users,
   Baby,
   Cake,
@@ -37,6 +38,7 @@ import {
 } from "lucide-react";
 
 import weddingImg from "@/assets/service-wedding.jpg";
+import engagementImg from "@/assets/hero-engagement.jpg";
 import funeralImg from "@/assets/hero-funeral.jpg";
 import namingImg from "@/assets/hero-naming.jpg";
 import anniversaryImg from "@/assets/service-anniversary.jpg";
@@ -47,6 +49,7 @@ import birthdayImg from "@/assets/hero-birthday.jpg";
 
 const eventPageMap: Record<string, string> = {
   wedding: "/wedding-invitations",
+  engagement: "/engagement-invitations",
   funeral: "/funeral-programs",
   church: "/church-events",
   naming: "/naming-ceremony",
@@ -72,6 +75,22 @@ const services = [
     slug: "wedding",
     image: weddingImg,
     stats: { created: "500+", satisfaction: "98%", label: "Weddings Created" },
+  },
+  {
+    icon: Gem,
+    title: "Engagement / Customary Marriage",
+    description: "Dignified digital invitations for the knocking, customary marriage and engagement ceremony — where two families become one.",
+    features: [
+      { name: "Adinkra symbol design", desc: "Sankofa, Gye Nyame, Osrane ne Nsoromma" },
+      { name: "Kente-inspired palette", desc: "Colours that honour both families" },
+      { name: "Full family list", desc: "Elders, spokespersons, family heads" },
+      { name: "Dress code display", desc: "Colour of the day, cloth pattern" },
+      { name: "MoMo dowry contributions", desc: "Diaspora family contributes digitally" },
+      { name: "Livestream + RSVP", desc: "Family abroad watches live" }
+    ],
+    slug: "engagement",
+    image: engagementImg,
+    stats: { created: "180+", satisfaction: "98%", label: "Families Joined" },
   },
   {
     icon: Users,
