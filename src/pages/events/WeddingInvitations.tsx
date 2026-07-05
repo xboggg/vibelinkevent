@@ -14,6 +14,7 @@ export default function WeddingInvitations() {
     heroDescription: "VibeLink creates a live, interactive wedding invitation with RSVP tracking, countdown timers, photo galleries, wish walls and more — shared in one beautiful link, impressive on every screen.",
     heroImage: heroImg,
     heroImageAlt: "Ghanaian wedding celebration",
+    heroImageObjectPos: "center 25%",
     blob1Color: "linear-gradient(135deg,#c084fc,#a855f7)",
     blob2Color: "linear-gradient(135deg,#D4AF37,#fbbf24)",
     blob3Color: "linear-gradient(135deg,#f472b6,#ec4899)",

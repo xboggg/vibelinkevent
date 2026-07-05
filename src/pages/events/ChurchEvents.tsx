@@ -14,6 +14,7 @@ export default function ChurchEvents() {
     heroDescription: "Digital invitations for church services, conventions, crusades and special events — with full programme, RSVP, livestream for members abroad, and a prayer wall. Everything in one powerful link.",
     heroImage: heroImg,
     heroImageAlt: "Church event in Ghana",
+    heroImageObjectPos: "center 30%",
     blob1Color: "linear-gradient(135deg,#7c3aed,#5b21b6)",
     blob2Color: "linear-gradient(135deg,#D4AF37,#c0a030)",
     blob3Color: "linear-gradient(135deg,#a78bfa,#8b5cf6)",

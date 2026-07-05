@@ -14,6 +14,7 @@ export default function BirthdayInvitations() {
     heroDescription: "A live, interactive birthday or anniversary invitation with countdown, RSVP, gallery and a wish wall. Your guests will remember it long after the party — and so will you.",
     heroImage: heroImg,
     heroImageAlt: "Birthday celebration in Ghana",
+    heroImageObjectPos: "center 30%",
     blob1Color: "linear-gradient(135deg,#f97316,#ea580c)",
     blob2Color: "linear-gradient(135deg,#D4AF37,#fbbf24)",
     blob3Color: "linear-gradient(135deg,#fb923c,#f97316)",

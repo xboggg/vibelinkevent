@@ -37,6 +37,7 @@ export interface EventPageConfig {
   heroDescription: string;
   heroImage: string;
   heroImageAlt: string;
+  heroImageObjectPos?: string;
   // Colors — watercolour blobs
   blob1Color: string;
   blob2Color: string;
@@ -135,7 +136,9 @@ export function EventPageTemplate({ config }: Props) {
             <div className="relative w-full max-w-2xl mx-auto mb-8 rounded-3xl overflow-hidden shadow-2xl"
               style={{ boxShadow: `0 30px 80px ${config.blob1Color.replace("linear-gradient(135deg,", "").split(",")[0]}40` }}>
               <img src={config.heroImage} alt={config.heroImageAlt}
-                className="w-full h-64 md:h-80 object-cover object-center" loading="eager" />
+                className="w-full h-64 md:h-80 object-cover"
+                style={{ objectPosition: config.heroImageObjectPos ?? "center" }}
+                loading="eager" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
             </div>
 

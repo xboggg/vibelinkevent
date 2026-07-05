@@ -14,6 +14,7 @@ export default function NamingCeremony() {
     heroDescription: "Share the joy of new life with a digital naming ceremony invitation. RSVP tracking, well-wishing wall, gallery, countdown and venue maps — all in one beautiful link your family will love.",
     heroImage: heroImg,
     heroImageAlt: "Ghanaian naming ceremony celebration",
+    heroImageObjectPos: "center 40%",
     blob1Color: "linear-gradient(135deg,#4ade80,#16a34a)",
     blob2Color: "linear-gradient(135deg,#fbbf24,#D4AF37)",
     blob3Color: "linear-gradient(135deg,#86efac,#4ade80)",
