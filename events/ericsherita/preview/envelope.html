@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Concept 1: The Envelope Opens — Eric &amp; Sherita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  :root{
+    --ivory:#f5f2e8; --paper:#faf6ea; --paper-shadow:#e8e0c9;
+    --sage:#7d8e6d; --sage-deep:#5a6b4c; --sage-dark:#3d4a32;
+    --gold:#c9a24a; --gold-bright:#d4b464; --gold-deep:#8a6a23;
+    --wax-a:#8f9d7b; --wax-b:#5a6b4c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{
+    font-family:'Cormorant Garamond',serif;
+    background:
+      radial-gradient(ellipse at center, #ede4c8 0%, #c9bd97 55%, #7d7154 100%);
+    display:flex;align-items:center;justify-content:center;
+    padding:2rem 1.5rem;
+    -webkit-font-smoothing:antialiased;
+    cursor:pointer;
+    position:relative;overflow:hidden;
+    perspective:1400px;
+  }
+
+  .back{
+    position:fixed;top:1rem;left:1rem;z-index:100;
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(245,242,232,.85);
+    border:1px solid var(--gold);color:var(--sage-deep);
+    display:flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:.95rem;
+    transition:all .3s;
+  }
+  .back:hover{background:#fff;transform:scale(1.05)}
+  .label{
+    position:fixed;top:1.1rem;right:1rem;z-index:100;
+    font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.4em;
+    color:rgba(58,44,20,.55);text-transform:uppercase;
+  }
+  .label b{color:var(--sage-deep);font-weight:500}
+
+  .stage{
+    position:relative;width:100%;max-width:560px;
+    aspect-ratio:1.3/1;max-height:78vh;
+    display:flex;align-items:center;justify-content:center;
+    transform-style:preserve-3d;
+  }
+
+  /* Envelope */
+  .env{
+    position:relative;width:88%;aspect-ratio:1.55/1;max-width:460px;
+    background:linear-gradient(180deg, var(--paper) 0%, var(--paper-shadow) 100%);
+    box-shadow:
+      0 30px 60px rgba(0,0,0,.35),
+      0 4px 12px rgba(0,0,0,.15),
+      inset 0 0 40px rgba(139,109,58,.08);
+    border:1px solid rgba(139,109,58,.15);
+    transform-style:preserve-3d;
+    transform:rotateX(0);
+  }
+
+  /* Envelope flap - triangle that opens */
+  .flap{
+    position:absolute;top:0;left:0;width:100%;height:66%;
+    background:linear-gradient(180deg, #faf6ea 0%, #ede2c3 100%);
+    clip-path:polygon(0 0, 100% 0, 50% 100%);
+    transform-origin:top;transform:rotateX(0);
+    transition:transform 1.6s cubic-bezier(.4,0,.2,1);
+    box-shadow:inset 0 -20px 30px rgba(139,109,58,.08);
+    z-index:5;
+  }
+  .flap.open{transform:rotateX(-170deg)}
+
+  /* Wax seal (front, on flap) */
+  .wax{
+    position:absolute;top:38%;left:50%;
+    transform:translate(-50%,-50%);
+    width:80px;height:80px;border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 25%, #a8b591 0%, var(--sage) 40%, var(--sage-dark) 100%);
+    box-shadow:
+      0 4px 12px rgba(0,0,0,.4),
+      inset 0 -6px 12px rgba(0,0,0,.35),
+      inset 0 3px 6px rgba(255,255,255,.2);
+    z-index:8;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cinzel',serif;font-weight:700;font-size:1.15rem;
+    color:var(--ivory);letter-spacing:.03em;
+    text-shadow:0 -1px 1px rgba(0,0,0,.4);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .wax::before{
+    content:'';position:absolute;inset:6px;border-radius:50%;
+    border:1px dashed rgba(245,242,232,.35);
+  }
+  .wax.crack{
+    animation:waxCrack .5s ease-out forwards;
+  }
+  @keyframes waxCrack{
+    0%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+    30%{transform:translate(-50%,-50%) scale(1.15)}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}
+  }
+
+  /* Wax particles on crack */
+  .particle{
+    position:absolute;top:38%;left:50%;
+    width:6px;height:6px;background:var(--sage-dark);
+    border-radius:50%;
+    opacity:0;pointer-events:none;
+    z-index:9;
+  }
+  .particle.pop{
+    animation:particlePop 1s ease-out forwards;
+  }
+  @keyframes particlePop{
+    0%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+    100%{opacity:0;transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.4)}
+  }
+
+  /* Envelope body */
+  .env-body{
+    position:absolute;bottom:0;left:0;width:100%;height:100%;
+    background:linear-gradient(180deg, transparent 60%, var(--paper-shadow) 100%);
+    z-index:2;
+  }
+
+  /* Card that slides out */
+  .card{
+    position:absolute;top:50%;left:50%;
+    width:82%;height:132%;
+    background:linear-gradient(180deg, #fefcf5 0%, var(--paper) 100%);
+    box-shadow:
+      0 20px 40px rgba(0,0,0,.25),
+      0 0 0 1px rgba(139,109,58,.15);
+    padding:2.2rem 1.6rem;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    transform:translate(-50%,-50%) translateY(0) scale(.6);
+    opacity:0;
+    z-index:3;
+    transition:transform 2s cubic-bezier(.2,.8,.3,1), opacity 1.4s ease;
+    overflow:hidden;
+  }
+  .card::after{
+    content:'';position:absolute;inset:8px;
+    border:1px solid rgba(139,109,58,.18);
+    pointer-events:none;
+  }
+  .card.slide{
+    transform:translate(-50%,-50%) translateY(-32%) scale(1);
+    opacity:1;
+  }
+
+  .card-flourish{display:flex;align-items:center;justify-content:center;gap:.7rem;margin-bottom:.9rem;color:var(--gold-deep)}
+  .card-flourish .fl{width:44px;height:1px;background:linear-gradient(90deg, transparent, var(--gold-deep), transparent)}
+  .card-flourish svg{width:16px;height:16px;fill:var(--gold-deep)}
+
+  .card-overline{
+    font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.5em;
+    color:var(--gold-deep);text-transform:uppercase;font-weight:500;
+    margin-bottom:.8rem;
+  }
+  .card-italic{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--sage-deep);font-size:.9rem;margin-bottom:.2rem;
+  }
+  .card-names{
+    font-family:'Great Vibes',cursive;
+    font-size:clamp(2.4rem, 6vw, 3.2rem);
+    color:var(--sage-deep);line-height:1;margin:.2rem 0 .7rem;
+  }
+  .card-names .amp{
+    display:inline-block;font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--gold-deep);font-size:.6em;vertical-align:middle;margin:0 .1rem;font-weight:500;
+  }
+  .card-date{
+    font-family:'Cinzel',serif;color:var(--sage-deep);
+    font-size:.72rem;letter-spacing:.32em;padding:.4rem 0;
+    border-top:1px solid var(--gold-deep);border-bottom:1px solid var(--gold-deep);
+    display:inline-block;padding-left:.9rem;padding-right:.5rem;
+    font-weight:500;
+  }
+
+  .cta-hint{
+    position:absolute;bottom:2rem;left:0;right:0;
+    text-align:center;
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:rgba(58,44,20,.75);font-size:1rem;
+    letter-spacing:.05em;
+    opacity:0;transition:opacity 1.4s ease;
+  }
+  .cta-hint.in{opacity:1;animation:hintPulse 3s ease-in-out infinite 1s}
+  @keyframes hintPulse{0%,100%{opacity:.75}50%{opacity:1}}
+  .cta-hint i{color:var(--sage-deep);margin-right:.5rem}
+
+  .tap-first{
+    position:absolute;bottom:2rem;left:0;right:0;
+    text-align:center;
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:rgba(58,44,20,.75);font-size:1.05rem;
+    letter-spacing:.05em;
+    animation:hintPulse 2.4s ease-in-out infinite;
+  }
+  .tap-first.gone{opacity:0;transition:opacity .5s ease}
+  .tap-first i{color:var(--sage-deep);margin-right:.5rem}
+
+  .exit-overlay{
+    position:fixed;inset:0;background:var(--ivory);
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:2rem;
+    opacity:0;pointer-events:none;
+    transition:opacity 1.2s ease;z-index:200;
+  }
+  .exit-overlay.on{opacity:1;pointer-events:auto}
+  .exit-content{max-width:400px}
+  .exit-eyebrow{
+    font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.5em;
+    color:var(--gold-deep);text-transform:uppercase;margin-bottom:.9rem;
+  }
+  .exit-title{
+    font-family:'Great Vibes',cursive;color:var(--sage-deep);
+    font-size:3rem;line-height:1;margin-bottom:1.2rem;
+  }
+  .exit-title .a{color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.5em;vertical-align:middle;margin:0 .2rem}
+  .exit-note{color:var(--sage-deep);font-style:italic;font-size:1.05rem;margin-bottom:2rem}
+  .exit-btn{
+    display:inline-flex;align-items:center;gap:.6rem;
+    padding:.9rem 1.7rem;background:var(--sage);color:#fff;
+    border:1px solid var(--sage-deep);
+    font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.32em;
+    text-transform:uppercase;border-radius:99px;text-decoration:none;
+    box-shadow:0 4px 12px rgba(90,107,76,.3);
+    transition:all .3s;
+  }
+  .exit-btn:hover{background:var(--sage-deep);transform:translateY(-2px)}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back" aria-label="Back to gallery"><i class="fas fa-arrow-left"></i></a>
+<div class="label"><b>01</b> · The Envelope Opens</div>
+
+<div class="stage" id="stage">
+  <div class="env" id="env">
+    <div class="env-body"></div>
+    <div class="flap" id="flap"></div>
+    <div class="wax" id="wax">E&amp;S</div>
+    <div class="card" id="card">
+      <div class="card-flourish"><span class="fl"></span><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg><span class="fl"></span></div>
+      <div class="card-overline">Save the Date</div>
+      <div class="card-italic">for the wedding of</div>
+      <h1 class="card-names">Eric <span class="amp">&amp;</span> Sherita</h1>
+      <div class="card-date">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
+    </div>
+  </div>
+</div>
+
+<div class="tap-first" id="tapFirst"><i class="fas fa-hand-point-up"></i> Tap the wax seal to open</div>
+<div class="cta-hint" id="cta"><i class="fas fa-hand-point-up"></i> Tap anywhere to enter</div>
+
+<div class="exit-overlay" id="exit">
+  <div class="exit-content">
+    <div class="exit-eyebrow">Splash concept</div>
+    <div class="exit-title">The Envelope <span class="a">&amp;</span> the Seal</div>
+    <div class="exit-note">In the real site, the tap-to-enter opens either the Save-the-Date teaser or the full invitation, depending on the URL.</div>
+    <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> Back to concepts</a>
+  </div>
+</div>
+
+<script>
+/* Wax-crack + paper-slide SFX synthesised */
+let audioCtx = null;
+function crackSound(){
+  try{
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = audioCtx.currentTime;
+    const noise = audioCtx.createBufferSource();
+    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.3, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++){
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.05));
+    }
+    noise.buffer = buf;
+    const filt = audioCtx.createBiquadFilter();
+    filt.type = 'lowpass'; filt.frequency.value = 1200; filt.Q.value = 3;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.3, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    noise.connect(filt).connect(gain).connect(audioCtx.destination);
+    noise.start(t);
+  }catch(e){}
+}
+function slideSound(){
+  try{
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = audioCtx.currentTime;
+    const noise = audioCtx.createBufferSource();
+    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 1.4, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++){
+      data[i] = (Math.random() * 2 - 1) * 0.08 * Math.sin(i * 0.001);
+    }
+    noise.buffer = buf;
+    const filt = audioCtx.createBiquadFilter();
+    filt.type = 'bandpass'; filt.frequency.value = 3200; filt.Q.value = 1.5;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.18, t + 0.4);
+    gain.gain.linearRampToValueAtTime(0.001, t + 1.4);
+    noise.connect(filt).connect(gain).connect(audioCtx.destination);
+    noise.start(t);
+  }catch(e){}
+}
+
+let opened = false;
+document.getElementById('wax').addEventListener('click', e => {
+  e.stopPropagation();
+  if (opened) return;
+  opened = true;
+  document.getElementById('tapFirst').classList.add('gone');
+  document.getElementById('wax').classList.add('crack');
+  crackSound();
+  /* Particle burst */
+  for (let i = 0; i < 10; i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.setProperty('--dx', (Math.random() * 120 - 60) + 'px');
+    p.style.setProperty('--dy', (Math.random() * 120 - 60) + 'px');
+    document.getElementById('env').appendChild(p);
+    requestAnimationFrame(() => p.classList.add('pop'));
+  }
+  setTimeout(() => {
+    document.getElementById('flap').classList.add('open');
+    slideSound();
+  }, 500);
+  setTimeout(() => document.getElementById('card').classList.add('slide'), 1800);
+  setTimeout(() => document.getElementById('cta').classList.add('in'), 4200);
+});
+
+document.body.addEventListener('click', e => {
+  if (e.target.closest('.back') || e.target.closest('.exit-overlay') || e.target.closest('.wax')) return;
+  if (!opened) return;
+  if (!document.getElementById('cta').classList.contains('in')) return;
+  document.getElementById('exit').classList.add('on');
+});
+</script>
+
+</body>
+</html>

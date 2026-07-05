@@ -54,7 +54,7 @@ const eventPageMap: Record<string, string> = {
   church: "/church-events",
   naming: "/naming-ceremony",
   birthday: "/birthday",
-  anniversary: "/birthday",
+  anniversary: "/anniversary-invitations",
   graduation: "/graduation",
   corporate: "/corporate-events",
 };
@@ -706,6 +706,7 @@ const Services = () => {
               { label: "👶 Naming Ceremony", href: "/naming-ceremony" },
               { label: "🎓 Graduation", href: "/graduation" },
               { label: "🎂 Birthday", href: "/birthday" },
+              { label: "🥂 Anniversary", href: "/anniversary-invitations" },
               { label: "⛪ Church Events", href: "/church-events" },
               { label: "💼 Corporate", href: "/corporate-events" },
             ].map(e => (

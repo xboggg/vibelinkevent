@@ -51,6 +51,7 @@ const FuneralPrograms = lazy(() => import("./pages/events/FuneralPrograms"));
 const NamingCeremony = lazy(() => import("./pages/events/NamingCeremony"));
 const GraduationInvitations = lazy(() => import("./pages/events/GraduationInvitations"));
 const BirthdayInvitations = lazy(() => import("./pages/events/BirthdayInvitations"));
+const AnniversaryInvitations = lazy(() => import("./pages/events/AnniversaryInvitations"));
 const ChurchEvents = lazy(() => import("./pages/events/ChurchEvents"));
 const CorporateEvents = lazy(() => import("./pages/events/CorporateEvents"));
 
@@ -99,6 +100,7 @@ const App = () => (
               <Route path="/naming-ceremony" element={<NamingCeremony />} />
               <Route path="/graduation" element={<GraduationInvitations />} />
               <Route path="/birthday" element={<BirthdayInvitations />} />
+              <Route path="/anniversary-invitations" element={<AnniversaryInvitations />} />
               <Route path="/church-events" element={<ChurchEvents />} />
               <Route path="/corporate-events" element={<CorporateEvents />} />
               <Route path="/get-started" element={<GetStarted />} />

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Concept 3: The Ring Ripples — Eric &amp; Sherita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Cinzel:wght@400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  :root{
+    --ivory:#f5f2e8; --sage:#7d8e6d; --sage-deep:#5a6b4c;
+    --gold:#c9a24a; --gold-bright:#d4b464; --gold-deep:#8a6a23;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{
+    font-family:'Cormorant Garamond',serif;
+    background:
+      radial-gradient(circle at 50% 50%, #384433 0%, #1e2419 55%, #0e1109 100%);
+    color:var(--ivory);
+    display:flex;align-items:center;justify-content:center;
+    padding:2rem 1.5rem;
+    -webkit-font-smoothing:antialiased;
+    cursor:pointer;
+    position:relative;overflow:hidden;
+  }
+
+  .back{
+    position:fixed;top:1rem;left:1rem;z-index:100;
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(245,242,232,.15);backdrop-filter:blur(8px);
+    border:1px solid rgba(212,180,100,.4);color:var(--gold-bright);
+    display:flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:.95rem;
+    transition:all .3s;
+  }
+  .back:hover{background:rgba(245,242,232,.25);transform:scale(1.05)}
+  .label{
+    position:fixed;top:1.1rem;right:1rem;z-index:100;
+    font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.4em;
+    color:rgba(245,242,232,.55);text-transform:uppercase;
+  }
+  .label b{color:var(--gold-bright);font-weight:500}
+
+  .stage{
+    position:relative;width:100%;max-width:620px;
+    aspect-ratio:1/1;max-height:78vh;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* Water ripples - concentric circles pulsing outward */
+  .ripple{
+    position:absolute;top:50%;left:50%;
+    width:60px;height:60px;
+    border:1.5px solid rgba(212,180,100,.4);
+    border-radius:50%;
+    transform:translate(-50%,-50%) scale(1);
+    opacity:0;
+    pointer-events:none;
+  }
+  .ripple.go{
+    animation:rippleOut 3.4s ease-out forwards;
+  }
+  @keyframes rippleOut{
+    0%{transform:translate(-50%,-50%) scale(.4);opacity:.75;border-width:2px}
+    100%{transform:translate(-50%,-50%) scale(9);opacity:0;border-width:.5px}
+  }
+
+  /* Gold glow at center */
+  .glow{
+    position:absolute;top:50%;left:50%;
+    width:180px;height:180px;
+    background:radial-gradient(circle, rgba(212,180,100,.35) 0%, rgba(201,162,74,.15) 40%, transparent 70%);
+    transform:translate(-50%,-50%) scale(.2);opacity:0;
+    filter:blur(6px);
+    transition:opacity 2s ease, transform 2s ease;
+    pointer-events:none;
+  }
+  .glow.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+  /* Rings */
+  .rings-svg{
+    position:absolute;top:50%;left:50%;
+    width:180px;height:180px;
+    transform:translate(-50%,-50%);
+    z-index:5;
+  }
+  .rings-svg circle{
+    fill:none;stroke-width:4;
+    filter:drop-shadow(0 0 12px rgba(212,180,100,.6));
+  }
+  .ring-a{
+    stroke:var(--gold-bright);
+    transform-origin:50% 50%;
+    transform:translate(-40px, 0) scale(.4);
+    opacity:0;
+    transition:transform 1.6s cubic-bezier(.2,.8,.3,1), opacity 1.4s ease;
+  }
+  .ring-b{
+    stroke:var(--gold);
+    transform-origin:50% 50%;
+    transform:translate(40px, 0) scale(.4);
+    opacity:0;
+    transition:transform 1.6s cubic-bezier(.2,.8,.3,1), opacity 1.4s ease;
+  }
+  .rings-svg.rise .ring-a{transform:translate(-24px, 0) scale(1);opacity:1}
+  .rings-svg.rise .ring-b{transform:translate(24px, 0) scale(1);opacity:1}
+  .rings-svg.lock .ring-a{transform:translate(-16px, 0) scale(1)}
+  .rings-svg.lock .ring-b{transform:translate(16px, 0) scale(1)}
+
+  /* Content that appears after rings lock */
+  .content{
+    position:absolute;top:50%;left:0;right:0;
+    padding:0 1.5rem;text-align:center;
+    transform:translateY(-50%);
+    pointer-events:none;
+  }
+  .overline{
+    font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.55em;
+    color:var(--gold-bright);text-transform:uppercase;
+    margin-bottom:2.5rem;font-weight:500;
+    opacity:0;transition:opacity 1.2s ease;
+    text-shadow:0 2px 12px rgba(0,0,0,.5);
+    transform:translateY(-140px);
+  }
+  .overline.in{opacity:1}
+
+  /* Names in Great Vibes below the rings */
+  .names{
+    font-family:'Great Vibes',cursive;
+    font-size:clamp(3.8rem, 10vw, 6rem);
+    color:var(--ivory);line-height:1;letter-spacing:.01em;
+    margin-top:8rem;
+    opacity:0;
+    text-shadow:0 3px 30px rgba(0,0,0,.6), 0 0 40px rgba(212,180,100,.3);
+    transition:opacity 2s ease;
+  }
+  .names.in{opacity:1}
+  .names .amp{
+    display:inline-block;font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-weight:500;color:var(--gold-bright);font-size:.5em;
+    vertical-align:middle;margin:0 .2rem;
+  }
+
+  .date{
+    font-family:'Cinzel',serif;color:var(--ivory);
+    font-size:clamp(.85rem, 1.9vw, 1rem);
+    letter-spacing:.42em;padding:.6rem 0;
+    border-top:1px solid rgba(212,180,100,.5);
+    border-bottom:1px solid rgba(212,180,100,.5);
+    display:inline-block;padding-left:1.5rem;padding-right:1rem;
+    margin-top:1.4rem;font-weight:500;
+    opacity:0;transform:scaleX(.5);transform-origin:center;
+    transition:opacity 1.6s ease, transform 1.6s ease;
+    text-shadow:0 2px 10px rgba(0,0,0,.4);
+  }
+  .date.in{opacity:1;transform:scaleX(1)}
+
+  .cta-hint{
+    position:absolute;bottom:2rem;left:0;right:0;
+    text-align:center;
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:rgba(245,242,232,.72);font-size:.98rem;
+    letter-spacing:.05em;
+    opacity:0;transition:opacity 1.4s ease;
+  }
+  .cta-hint.in{opacity:1;animation:hintPulse 3s ease-in-out infinite 1s}
+  @keyframes hintPulse{0%,100%{opacity:.72}50%{opacity:1}}
+  .cta-hint i{color:var(--gold-bright);margin-right:.5rem}
+
+  .exit-overlay{
+    position:fixed;inset:0;background:var(--ivory);
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:2rem;
+    opacity:0;pointer-events:none;
+    transition:opacity 1.2s ease;z-index:200;
+  }
+  .exit-overlay.on{opacity:1;pointer-events:auto}
+  .exit-content{max-width:400px}
+  .exit-eyebrow{
+    font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.5em;
+    color:var(--gold-deep);text-transform:uppercase;margin-bottom:.9rem;
+  }
+  .exit-title{
+    font-family:'Great Vibes',cursive;color:var(--sage-deep);
+    font-size:3rem;line-height:1;margin-bottom:1.2rem;
+  }
+  .exit-title .a{color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.5em;vertical-align:middle;margin:0 .2rem}
+  .exit-note{color:var(--sage-deep);font-style:italic;font-size:1.05rem;margin-bottom:2rem}
+  .exit-btn{
+    display:inline-flex;align-items:center;gap:.6rem;
+    padding:.9rem 1.7rem;background:var(--sage);color:#fff;
+    border:1px solid var(--sage-deep);
+    font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.32em;
+    text-transform:uppercase;border-radius:99px;text-decoration:none;
+    box-shadow:0 4px 12px rgba(90,107,76,.3);
+    transition:all .3s;
+  }
+  .exit-btn:hover{background:var(--sage-deep);transform:translateY(-2px)}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back" aria-label="Back to gallery"><i class="fas fa-arrow-left"></i></a>
+<div class="label"><b>03</b> · The Ring Ripples</div>
+
+<div class="stage" id="stage">
+  <div class="glow" id="glow"></div>
+  <div class="ripple" id="rip1"></div>
+  <div class="ripple" id="rip2"></div>
+  <div class="ripple" id="rip3"></div>
+  <svg class="rings-svg" id="rings" viewBox="0 0 200 200">
+    <circle class="ring-a" cx="100" cy="100" r="46"/>
+    <circle class="ring-b" cx="100" cy="100" r="46"/>
+  </svg>
+  <div class="content">
+    <div class="overline" id="overline">Save the Date</div>
+    <h1 class="names" id="names">Eric <span class="amp">&amp;</span> Sherita</h1>
+    <div class="date" id="date">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
+  </div>
+</div>
+
+<div class="cta-hint" id="cta"><i class="fas fa-hand-point-up"></i> Tap anywhere to enter</div>
+
+<div class="exit-overlay" id="exit">
+  <div class="exit-content">
+    <div class="exit-eyebrow">Splash concept</div>
+    <div class="exit-title">Rings <span class="a">&amp;</span> Ripples</div>
+    <div class="exit-note">In the real site, the tap-to-enter opens either the Save-the-Date teaser or the full invitation, depending on the URL.</div>
+    <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> Back to concepts</a>
+  </div>
+</div>
+
+<script>
+/* Synthesised "plink" — the drop into water */
+let audioCtx = null;
+function plink(freq, dur, when){
+  try{
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const t = audioCtx.currentTime + (when || 0);
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, t);
+    osc.frequency.exponentialRampToValueAtTime(freq * 0.5, t + dur);
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.exponentialRampToValueAtTime(0.35, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + dur + 0.05);
+  }catch(e){}
+}
+/* Kick off audio on first user interaction (already have body click below) */
+function initAudio(){
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  /* Water-drop: two overlapping plinks, low + high */
+  plink(680, 0.65, 0);
+  plink(340, 0.9, 0.03);
+  /* Second smaller drop for the interlock */
+  plink(520, 0.55, 3.8);
+  plink(260, 0.7, 3.85);
+}
+
+const steps = [
+  { at:  500, act: () => { initAudio(); document.getElementById('rip1').classList.add('go'); document.getElementById('glow').classList.add('on'); } },
+  { at:  900, act: () => document.getElementById('rip2').classList.add('go') },
+  { at: 1400, act: () => document.getElementById('rip3').classList.add('go') },
+  { at: 1600, act: () => document.getElementById('rings').classList.add('rise') },
+  { at: 3800, act: () => document.getElementById('rings').classList.add('lock') },
+  { at: 4200, act: () => document.getElementById('overline').classList.add('in') },
+  { at: 4600, act: () => document.getElementById('names').classList.add('in') },
+  { at: 5600, act: () => document.getElementById('date').classList.add('in') },
+  { at: 7000, act: () => document.getElementById('cta').classList.add('in') },
+];
+steps.forEach(s => setTimeout(s.act, s.at));
+
+const startTime = Date.now();
+document.body.addEventListener('click', e => {
+  if (e.target.closest('.back') || e.target.closest('.exit-overlay')) return;
+  /* Skip ahead if animation not done */
+  if (Date.now() - startTime < 7000){
+    document.getElementById('rings').classList.add('rise','lock');
+    document.getElementById('glow').classList.add('on');
+    ['overline','names','date','cta'].forEach(id => document.getElementById(id).classList.add('in'));
+    return;
+  }
+  document.getElementById('exit').classList.add('on');
+});
+</script>
+
+</body>
+</html>

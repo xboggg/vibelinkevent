@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Concept 6: The Vows Reveal — Eric &amp; Sherita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Cinzel:wght@400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  :root{
+    --ivory:#f5f2e8; --sage:#7d8e6d; --sage-deep:#5a6b4c;
+    --gold:#c9a24a; --gold-bright:#d4b464; --gold-deep:#8a6a23;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{
+    font-family:'Cormorant Garamond',serif;
+    background:
+      radial-gradient(ellipse at 50% 30%, #4d5b3f 0%, #2f382a 40%, #1a1e17 100%);
+    color:var(--ivory);
+    display:flex;align-items:center;justify-content:center;
+    padding:2rem 1.5rem;
+    -webkit-font-smoothing:antialiased;
+    cursor:pointer;
+    position:relative;overflow:hidden;
+  }
+
+  /* Very subtle dust motes */
+  body::before{
+    content:'';position:absolute;inset:0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(212,180,100,.4) 100%, transparent),
+      radial-gradient(1px 1px at 60% 70%, rgba(212,180,100,.3) 100%, transparent),
+      radial-gradient(1px 1px at 40% 80%, rgba(212,180,100,.35) 100%, transparent),
+      radial-gradient(1px 1px at 80% 20%, rgba(212,180,100,.3) 100%, transparent),
+      radial-gradient(1px 1px at 90% 50%, rgba(212,180,100,.4) 100%, transparent),
+      radial-gradient(1px 1px at 15% 65%, rgba(212,180,100,.3) 100%, transparent);
+    animation:drift 22s linear infinite;
+    pointer-events:none;
+    opacity:.6;
+  }
+  @keyframes drift{
+    0%{transform:translateY(0) translateX(0)}
+    100%{transform:translateY(-40px) translateX(20px)}
+  }
+
+  .back{
+    position:fixed;top:1rem;left:1rem;z-index:100;
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(245,242,232,.15);backdrop-filter:blur(8px);
+    border:1px solid rgba(212,180,100,.4);color:var(--gold-bright);
+    display:flex;align-items:center;justify-content:center;
+    text-decoration:none;font-size:.95rem;
+    transition:all .3s;
+  }
+  .back:hover{background:rgba(245,242,232,.25);transform:scale(1.05)}
+  .label{
+    position:fixed;top:1.1rem;right:1rem;z-index:100;
+    font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.4em;
+    color:rgba(245,242,232,.55);text-transform:uppercase;
+  }
+  .label b{color:var(--gold-bright);font-weight:500}
+
+  .stage{
+    text-align:center;max-width:820px;width:100%;
+    position:relative;z-index:2;
+  }
+
+  .line{
+    font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
+    color:var(--ivory);
+    font-size:clamp(1.4rem, 3.6vw, 2.1rem);
+    letter-spacing:.03em;line-height:1.55;
+    opacity:0;transform:translateY(15px);
+    transition:opacity 2.2s ease, transform 2.2s ease;
+    position:absolute;left:0;right:0;top:50%;transform:translate(0,-50%) translateY(15px);
+    padding:0 1rem;
+  }
+  .line.in{opacity:1;transform:translate(0,-50%) translateY(0)}
+  .line.out{opacity:0;transform:translate(0,-50%) translateY(-15px);transition:opacity 1.6s ease, transform 1.6s ease}
+
+  .final{
+    opacity:0;position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:2rem 1.5rem;text-align:center;
+    transition:opacity 2s ease;
+  }
+  .final.in{opacity:1}
+  .final .flourish{
+    display:flex;align-items:center;justify-content:center;gap:1rem;
+    margin-bottom:1.6rem;color:var(--gold-bright);
+    width:100%;max-width:400px;
+  }
+  .final .flourish .fl{flex:1;height:1px;background:linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+    transform:scaleX(0);transform-origin:center;transition:transform 1.4s ease;}
+  .final.in .flourish .fl{transform:scaleX(1)}
+  .final .flourish svg{width:26px;height:26px;fill:var(--gold-bright);opacity:0;transition:opacity 1s ease .8s}
+  .final.in .flourish svg{opacity:1}
+
+  .overline{
+    font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.55em;
+    color:var(--gold-bright);text-transform:uppercase;
+    margin-bottom:1.4rem;font-weight:500;
+    opacity:0;transition:opacity 1.4s ease .3s;
+  }
+  .final.in .overline{opacity:1}
+
+  .names{
+    font-family:'Great Vibes',cursive;
+    font-size:clamp(4.4rem, 12vw, 8rem);
+    color:var(--ivory);line-height:1;letter-spacing:.01em;
+    text-shadow:0 3px 30px rgba(0,0,0,.55), 0 0 60px rgba(212,180,100,.2);
+    margin:.6rem 0 1.6rem;
+    transform:scale(.92);opacity:0;
+    transition:transform 2s cubic-bezier(.2,.8,.3,1) .5s, opacity 2s ease .5s;
+  }
+  .final.in .names{transform:scale(1);opacity:1}
+  .names .amp{
+    display:inline-block;font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-weight:500;color:var(--gold-bright);font-size:.5em;
+    vertical-align:middle;margin:0 .2rem;
+  }
+
+  .date{
+    font-family:'Cinzel',serif;color:var(--ivory);
+    font-size:clamp(.9rem, 2vw, 1.05rem);
+    letter-spacing:.42em;padding:.7rem 0;
+    border-top:1px solid rgba(212,180,100,.5);
+    border-bottom:1px solid rgba(212,180,100,.5);
+    display:inline-block;padding-left:1.5rem;padding-right:1rem;
+    opacity:0;transform:scaleX(.6);transform-origin:center;
+    transition:opacity 1.6s ease 1.2s, transform 1.6s ease 1.2s;
+    font-weight:500;
+    margin-bottom:1.8rem;
+  }
+  .final.in .date{opacity:1;transform:scaleX(1)}
+
+  .cta-hint{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:rgba(245,242,232,.72);font-size:1rem;
+    opacity:0;transition:opacity 1.4s ease 2s;
+    letter-spacing:.05em;
+  }
+  .final.in .cta-hint{opacity:1;animation:hintPulse 3s ease-in-out infinite 3.4s}
+  @keyframes hintPulse{
+    0%,100%{opacity:.72}
+    50%{opacity:1}
+  }
+  .cta-hint i{color:var(--gold-bright);margin-right:.5rem}
+
+  .exit-overlay{
+    position:fixed;inset:0;background:var(--ivory);
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:2rem;
+    opacity:0;pointer-events:none;
+    transition:opacity 1.2s ease;z-index:200;
+  }
+  .exit-overlay.on{opacity:1;pointer-events:auto}
+  .exit-content{max-width:400px}
+  .exit-eyebrow{
+    font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.5em;
+    color:var(--gold-deep);text-transform:uppercase;margin-bottom:.9rem;
+  }
+  .exit-title{
+    font-family:'Great Vibes',cursive;color:var(--sage-deep);
+    font-size:3rem;line-height:1;margin-bottom:1.2rem;
+  }
+  .exit-title .a{color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.5em;vertical-align:middle;margin:0 .2rem}
+  .exit-note{color:var(--sage-deep);font-style:italic;font-size:1.05rem;margin-bottom:2rem}
+  .exit-btn{
+    display:inline-flex;align-items:center;gap:.6rem;
+    padding:.9rem 1.7rem;background:var(--sage);color:#fff;
+    border:1px solid var(--sage-deep);
+    font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.32em;
+    text-transform:uppercase;border-radius:99px;text-decoration:none;
+    box-shadow:0 4px 12px rgba(90,107,76,.3);
+    transition:all .3s;
+  }
+  .exit-btn:hover{background:var(--sage-deep);transform:translateY(-2px)}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back" aria-label="Back to gallery"><i class="fas fa-arrow-left"></i></a>
+<div class="label"><b>06</b> · The Vows Reveal</div>
+
+<div class="stage" id="stage">
+  <div class="line" id="line1">On the twenty-eighth of November&hellip;</div>
+  <div class="line" id="line2">&hellip;two thousand and twenty-six&hellip;</div>
+  <div class="line" id="line3">&hellip;two hearts become one.</div>
+
+  <div class="final" id="final">
+    <div class="flourish" aria-hidden="true">
+      <span class="fl"></span>
+      <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
+      <span class="fl"></span>
+    </div>
+    <div class="overline">Save the Date</div>
+    <h1 class="names">Eric <span class="amp">&amp;</span> Sherita</h1>
+    <div class="date">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
+    <div class="cta-hint"><i class="fas fa-hand-point-up"></i> Tap anywhere to enter</div>
+  </div>
+</div>
+
+<div class="exit-overlay" id="exit">
+  <div class="exit-content">
+    <div class="exit-eyebrow">Splash concept</div>
+    <div class="exit-title">The Vows <span class="a">&amp;</span> the Names</div>
+    <div class="exit-note">In the real site, the tap-to-enter opens either the Save-the-Date teaser or the full invitation, depending on the URL.</div>
+    <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> Back to concepts</a>
+  </div>
+</div>
+
+<script>
+/* Timeline — every line fades in, holds, fades out. Then final reveal. */
+const steps = [
+  { at:   800, act: () => document.getElementById('line1').classList.add('in') },
+  { at:  3400, act: () => { document.getElementById('line1').classList.remove('in'); document.getElementById('line1').classList.add('out'); } },
+  { at:  4200, act: () => document.getElementById('line2').classList.add('in') },
+  { at:  6800, act: () => { document.getElementById('line2').classList.remove('in'); document.getElementById('line2').classList.add('out'); } },
+  { at:  7600, act: () => document.getElementById('line3').classList.add('in') },
+  { at: 10200, act: () => { document.getElementById('line3').classList.remove('in'); document.getElementById('line3').classList.add('out'); } },
+  { at: 11400, act: () => document.getElementById('final').classList.add('in') },
+];
+steps.forEach(s => setTimeout(s.act, s.at));
+
+const startTime = Date.now();
+document.body.addEventListener('click', e => {
+  if (e.target.closest('.back') || e.target.closest('.exit-overlay')) return;
+  /* If we're past the final reveal, exit. If not, skip ahead to final. */
+  if (Date.now() - startTime >= 11400){
+    document.getElementById('exit').classList.add('on');
+  } else {
+    /* Skip: cancel remaining and jump to final */
+    document.querySelectorAll('.line').forEach(l => l.classList.remove('in'));
+    document.getElementById('final').classList.add('in');
+  }
+});
+</script>
+
+</body>
+</html>

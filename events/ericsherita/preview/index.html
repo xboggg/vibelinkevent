@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Eric &amp; Sherita — Splash Concepts Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&family=Great+Vibes&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  :root{
+    --ivory:#f5f2e8; --ivory-warm:#f0eddd;
+    --sage:#7d8e6d; --sage-deep:#5a6b4c; --sage-soft:#a5b490;
+    --gold:#c9a24a; --gold-bright:#d4b464; --gold-deep:#8a6a23;
+    --text:#2a2e26; --text-soft:#4a4f43; --text-muted:#7a7f70;
+    --line:rgba(90,107,76,.15); --line-strong:rgba(90,107,76,.32); --line-gold:rgba(201,162,74,.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{max-width:100%;overflow-x:hidden}
+  body{
+    font-family:'Cormorant Garamond',serif;
+    background:var(--ivory);
+    color:var(--text);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(165,180,144,.14), transparent 45%),
+      radial-gradient(circle at 85% 90%, rgba(201,162,74,.10), transparent 45%);
+    min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+  header.gallery-head{
+    text-align:center;
+    padding:4rem 1.5rem 2rem;
+    max-width:900px;margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'Cinzel',serif;font-size:.72rem;
+    letter-spacing:.55em;color:var(--gold-deep);
+    text-transform:uppercase;margin-bottom:1rem;font-weight:500;
+  }
+  h1{
+    font-family:'Great Vibes',cursive;
+    font-size:clamp(3rem, 8vw, 5rem);
+    color:var(--sage-deep);line-height:1;letter-spacing:.01em;
+    margin-bottom:1rem;
+  }
+  h1 .amp{
+    display:inline-block;font-family:'Cormorant Garamond',serif;
+    font-style:italic;color:var(--gold);font-size:.55em;
+    vertical-align:middle;margin:0 .2rem;font-weight:500;
+  }
+  .subtitle{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--text-soft);font-size:1.15rem;max-width:640px;margin:0 auto 1rem;
+  }
+  .brief{
+    color:var(--text-muted);font-size:1rem;max-width:640px;margin:0 auto;
+    padding:1rem 0 0;border-top:1px solid var(--line);
+  }
+  .flourish{display:flex;align-items:center;justify-content:center;gap:.9rem;margin:1.5rem auto;max-width:220px}
+  .flourish .fl-line{flex:1;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent)}
+  .flourish svg{width:22px;height:22px;fill:var(--gold)}
+
+  main.gallery{
+    padding:2rem 1.4rem 6rem;
+    max-width:1200px;margin:0 auto;
+    display:grid;gap:1.4rem;
+    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+  }
+  .concept{
+    display:block;background:#fff;
+    border:1px solid var(--line-strong);
+    padding:0;position:relative;
+    box-shadow:0 4px 14px rgba(90,107,76,.08);
+    transition:all .35s cubic-bezier(.2,.8,.3,1);
+    cursor:pointer;
+    overflow:hidden;
+  }
+  .concept::before,.concept::after{
+    content:'';position:absolute;width:28px;height:28px;
+    border:1px solid var(--gold);transition:all .4s;
+  }
+  .concept::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+  .concept::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+  .concept:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 12px 32px rgba(90,107,76,.18)}
+  .concept:hover::before,.concept:hover::after{width:38px;height:38px;border-color:var(--gold-bright)}
+
+  .preview-hero{
+    height:180px;position:relative;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;
+  }
+  .concept-body{padding:1.4rem 1.4rem 1.6rem}
+  .concept-num{
+    font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.4em;
+    color:var(--gold-deep);text-transform:uppercase;margin-bottom:.6rem;font-weight:500;
+  }
+  .concept-title{
+    font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;
+    color:var(--sage-deep);margin-bottom:.5rem;line-height:1.2;
+  }
+  .concept-desc{
+    color:var(--text-soft);font-size:.98rem;line-height:1.6;
+    margin-bottom:1rem;
+  }
+  .concept-meta{
+    display:flex;gap:.7rem;flex-wrap:wrap;
+    padding-top:1rem;border-top:1px dashed var(--line);
+    color:var(--text-muted);font-size:.82rem;font-style:italic;
+  }
+  .concept-meta strong{color:var(--sage-deep);font-style:normal;letter-spacing:.05em}
+  .concept-cta{
+    display:inline-flex;align-items:center;gap:.5rem;
+    margin-top:1rem;padding:.75rem 1.4rem;
+    background:linear-gradient(135deg, var(--sage-soft), var(--sage));
+    color:#fff;border:1px solid var(--sage-deep);
+    font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.32em;
+    text-transform:uppercase;border-radius:99px;font-weight:500;
+    box-shadow:0 3px 10px rgba(90,107,76,.2);
+    transition:all .3s;
+  }
+  .concept:hover .concept-cta{background:var(--sage-deep);transform:translateX(3px)}
+  .concept-cta i{font-size:.8rem}
+
+  /* Micro-preview hero styles per concept */
+  .ph-handwritten{
+    background:linear-gradient(180deg, #faf8ed, #f0eddd);
+    color:var(--sage-deep);
+  }
+  .ph-handwritten .mini-script{
+    font-family:'Great Vibes',cursive;font-size:2.6rem;
+    color:var(--sage-deep);opacity:0;
+    animation:hwFade 4s ease-in-out infinite;
+  }
+  @keyframes hwFade{
+    0%,100%{opacity:0}
+    30%,70%{opacity:1}
+  }
+
+  .ph-vows{
+    background:linear-gradient(135deg, var(--sage-deep), #3d4a32);
+    color:var(--ivory);position:relative;
+  }
+  .ph-vows .mini-vow{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    font-size:1rem;letter-spacing:.05em;text-align:center;
+    padding:0 1rem;line-height:1.5;
+  }
+  .ph-vows .mini-vow span{opacity:0;display:block;margin:.3rem 0}
+  .ph-vows .mini-vow span:nth-child(1){animation:vowsFade 6s ease-in-out infinite 0s}
+  .ph-vows .mini-vow span:nth-child(2){animation:vowsFade 6s ease-in-out infinite 1.5s}
+  .ph-vows .mini-vow span:nth-child(3){animation:vowsFade 6s ease-in-out infinite 3s}
+  @keyframes vowsFade{
+    0%,60%,100%{opacity:0}
+    20%,50%{opacity:1}
+  }
+
+  .ph-rings{
+    background:radial-gradient(circle at center, #3d4a32, #1a1e17);
+    position:relative;overflow:hidden;
+  }
+  .ph-rings .ring{
+    position:absolute;top:50%;left:50%;
+    width:60px;height:60px;border:2px solid var(--gold-bright);
+    border-radius:50%;transform:translate(-50%,-50%);
+    box-shadow:0 0 30px rgba(201,162,74,.5);
+  }
+  .ph-rings .ring:nth-child(1){animation:ringPulse 3s ease-in-out infinite}
+  .ph-rings .ring:nth-child(2){animation:ringPulse 3s ease-in-out infinite 1.5s}
+  @keyframes ringPulse{
+    0%{transform:translate(-50%,-50%) scale(.7);opacity:.5}
+    50%{transform:translate(-50%,-50%) scale(1.2);opacity:1}
+    100%{transform:translate(-50%,-50%) scale(1.6);opacity:0}
+  }
+
+  .ph-golden{
+    background-image:url('../hero-mobile.jpg');
+    background-size:cover;background-position:center 20%;
+    position:relative;
+  }
+  .ph-golden::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(90,107,76,.3), rgba(90,107,76,.6));
+  }
+  .ph-golden .mini-flare{
+    position:absolute;top:50%;left:0;
+    width:60%;height:2px;
+    background:linear-gradient(90deg, transparent, rgba(201,162,74,.8), transparent);
+    animation:goldenFlare 5s ease-in-out infinite;
+    z-index:2;
+  }
+  @keyframes goldenFlare{
+    0%,100%{left:-40%}
+    50%{left:80%}
+  }
+
+  .ph-envelope{
+    background:linear-gradient(180deg, #faf8ed, #e8e3d0);
+    position:relative;display:flex;align-items:center;justify-content:center;
+  }
+  .ph-envelope .env{
+    width:110px;height:75px;background:#faf8ed;
+    border:1px solid var(--gold);position:relative;
+    box-shadow:0 6px 20px rgba(90,107,76,.15);
+  }
+  .ph-envelope .env::before{
+    content:'';position:absolute;top:-1px;left:-1px;right:-1px;
+    height:0;border-left:55px solid transparent;border-right:55px solid transparent;
+    border-top:38px solid var(--sage);
+    transform-origin:top;
+    animation:envOpen 4s ease-in-out infinite;
+  }
+  .ph-envelope .wax{
+    position:absolute;top:26px;left:50%;transform:translateX(-50%);
+    width:22px;height:22px;border-radius:50%;
+    background:radial-gradient(circle, #b23030, #7a1f1f);
+    box-shadow:0 2px 6px rgba(0,0,0,.3);
+    z-index:2;
+    animation:waxSeal 4s ease-in-out infinite;
+  }
+  @keyframes envOpen{
+    0%,40%{transform:rotateX(0deg)}
+    60%,90%{transform:rotateX(-160deg)}
+    100%{transform:rotateX(0deg)}
+  }
+  @keyframes waxSeal{
+    0%,40%,100%{opacity:1;transform:translateX(-50%) scale(1)}
+    50%{opacity:0;transform:translateX(-50%) scale(1.4)}
+  }
+
+  .ph-garden{
+    background-image:url('../splash-mobile.jpg');
+    background-size:cover;background-position:center;
+    position:relative;overflow:hidden;
+    animation:gardenZoom 8s ease-in-out infinite;
+  }
+  @keyframes gardenZoom{
+    0%,100%{background-size:120%;background-position:center 40%}
+    50%{background-size:105%;background-position:center 30%}
+  }
+  .ph-garden::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.55));
+  }
+  .ph-garden .mini-couple{
+    position:absolute;bottom:20px;left:50%;transform:translateX(-50%);
+    font-family:'Great Vibes',cursive;color:#fff;font-size:1.4rem;
+    text-shadow:0 2px 8px rgba(0,0,0,.5);z-index:2;
+    opacity:.7;
+  }
+
+  .tag{
+    display:inline-block;padding:.15rem .5rem;
+    font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.2em;
+    text-transform:uppercase;border-radius:99px;font-weight:500;
+    background:rgba(125,142,109,.15);color:var(--sage-deep);
+  }
+  .tag.quiet{background:rgba(90,107,76,.12);color:var(--sage-deep)}
+  .tag.rich{background:rgba(201,162,74,.18);color:var(--gold-deep)}
+  .tag.long{background:rgba(178,48,48,.12);color:#8a2020}
+
+  footer.gallery-foot{
+    text-align:center;padding:2rem 1.5rem 3rem;
+    color:var(--text-muted);font-size:.85rem;font-style:italic;
+    border-top:1px solid var(--line);max-width:640px;margin:0 auto;
+  }
+  footer.gallery-foot strong{color:var(--sage-deep);font-style:normal}
+
+  @media(max-width:640px){
+    header.gallery-head{padding:2.6rem 1.2rem 1.4rem}
+    main.gallery{padding:1rem 1rem 4rem;gap:1.1rem}
+    .concept-body{padding:1.2rem 1.2rem 1.4rem}
+    .preview-hero{height:150px}
+  }
+</style>
+</head>
+<body>
+
+<header class="gallery-head">
+  <div class="eyebrow">Splash Concepts Review</div>
+  <h1>Eric <span class="amp">&amp;</span> Sherita</h1>
+  <div class="flourish" aria-hidden="true">
+    <span class="fl-line"></span>
+    <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
+    <span class="fl-line"></span>
+  </div>
+  <p class="subtitle">Six splash-screen concepts to pick from &mdash; each one built as a full working preview.</p>
+  <p class="brief">Tap any concept card to see the full animation exactly as it would ship. Tap-to-enter inside the preview to see the transition. Tap the back arrow to return here. Palette stays sage / ivory / gold in every concept &mdash; only the mood, motion and typography change.</p>
+</header>
+
+<main class="gallery">
+
+  <a class="concept" href="handwritten.html">
+    <div class="preview-hero ph-handwritten">
+      <div class="mini-script">Eric &amp; Sherita</div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 5</div>
+      <div class="concept-title">Handwritten Invitation</div>
+      <div class="concept-desc">Ivory paper. A pen writes the names, then "Save the Date", then the date &mdash; stroke by stroke, in real time, with a soft pen-scratch sound. Sage-gold botanical accents sketch themselves in as the writing lands.</div>
+      <div class="concept-meta"><span class="tag quiet">Quiet</span><span class="tag">Pen scratch</span><span class="tag long">6&ndash;8s</span></div>
+      <div class="concept-cta">Watch <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="vows.html">
+    <div class="preview-hero ph-vows">
+      <div class="mini-vow">
+        <span>On the twenty-eighth of November</span>
+        <span>two thousand and twenty-six</span>
+        <span>two hearts become one</span>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 6</div>
+      <div class="concept-title">The Vows Reveal</div>
+      <div class="concept-desc">Deep sage backdrop. Silent. Text fades in one line at a time, like an opening title card in a wedding film. Ends with the names in Great Vibes, huge and centred, and a soft gold flourish. No photos on the splash at all.</div>
+      <div class="concept-meta"><span class="tag quiet">Quiet</span><span class="tag">Silence</span><span class="tag long">7&ndash;9s</span></div>
+      <div class="concept-cta">Watch <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="rings.html">
+    <div class="preview-hero ph-rings">
+      <div class="ring"></div>
+      <div class="ring"></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 3</div>
+      <div class="concept-title">The Ring Ripples</div>
+      <div class="concept-desc">Deep sage. A soft "plink" &mdash; one gold ring drops into still water and ripples outward. A second ring rises up, interlocks. Names bloom in Great Vibes out of the light where the rings meet, drawn stroke by stroke like calligraphy.</div>
+      <div class="concept-meta"><span class="tag quiet">Quiet</span><span class="tag">Water-drop SFX</span><span class="tag">5&ndash;7s</span></div>
+      <div class="concept-cta">Watch <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="golden.html">
+    <div class="preview-hero ph-golden">
+      <div class="mini-flare"></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 4</div>
+      <div class="concept-title">Golden Hour Fade</div>
+      <div class="concept-desc">Full-bleed walking-couple photo, held perfectly still for 3 seconds so it lands. Then a soft golden lens flare drifts across, dust motes catch the sun, frame pulls back very slowly. Names fade in as the flare crosses centre. Botanical branches grow in from the corners.</div>
+      <div class="concept-meta"><span class="tag rich">Cinematic</span><span class="tag">VibeLink track</span><span class="tag">6&ndash;8s</span></div>
+      <div class="concept-cta">Watch <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="envelope-v7.html" style="grid-column:1 / -1;border:2px solid var(--gold-bright);box-shadow:0 8px 30px rgba(201,162,74,.55);background:linear-gradient(180deg, #fff 0%, #faf8ed 100%)">
+    <div class="preview-hero ph-envelope" style="height:260px;background:linear-gradient(180deg, #4a2e1c 0%, #150a03 100%);position:relative;overflow:hidden">
+      <div class="env" style="background:linear-gradient(180deg, #f7efdd, #f0e6cc);width:170px;height:110px;box-shadow:0 20px 34px rgba(0,0,0,.65);position:relative;z-index:2">
+        <div class="wax" style="background:radial-gradient(circle at 30% 25%, #c8d5b3, #7d8e6d 45%, #4a5a3e 100%);box-shadow:0 5px 12px rgba(0,0,0,.55),inset 0 -5px 10px rgba(0,0,0,.4),inset 0 3px 4px rgba(255,255,255,.25);width:52px;height:52px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#f5f2e8;font-family:'Great Vibes',cursive;font-size:1.4rem;text-shadow:0 -1px 0 rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.2)"><span>E&amp;S</span></div>
+      </div>
+      <div style="position:absolute;top:6%;right:12%;color:#fff;font-size:2rem;opacity:.9;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5)) drop-shadow(0 0 6px rgba(255,240,200,.4))">
+        <i class="fas fa-dove"></i>
+      </div>
+      <div style="position:absolute;top:20%;left:14%;color:#a5b490;font-size:.9rem;opacity:.7;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:50%;left:8%;color:#a5b490;font-size:.8rem;opacity:.6;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:75%;right:22%;color:#a5b490;font-size:.85rem;opacity:.5;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num" style="color:var(--gold-bright)">Concept 1 &middot; Premium v7 &middot; RECOMMENDED</div>
+      <div class="concept-title">The Envelope Opens <span style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold);font-size:.75em;font-weight:400">&mdash; eucalyptus corners + dove fix</span></div>
+      <div class="concept-desc">
+        <strong>Three real fixes over v6:</strong> (1) The tiny gold-squiggle corner ornaments are gone. In their place: <strong>hand-drawn eucalyptus flourishes</strong> in each corner &mdash; sage stems curving inward with alternating leaves + gold bud accents. Matches the top sprig, ties into the falling petals, feels genuinely wedding-native. (2) <strong>The dove no longer hides behind the card on mobile</strong> &mdash; orbit widened to the full viewport (~90vh) and z-index raised above the card, so the dove now flies around the outside of the whole scene at all times. (3) <strong>Dove wing now visibly flaps</strong> &mdash; the flap SVG path is rendered on top of the body (not underneath), so you can see the wing move. Also slightly bigger and with a soft warm glow.
+      </div>
+      <div class="concept-meta"><span class="tag rich">Premium v7</span><span class="tag">Eucalyptus corners</span><span class="tag">Full-viewport dove</span><span class="tag">Flapping wing</span><span class="tag long">tap&ndash;driven</span></div>
+      <div class="concept-cta">Watch v7 <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="envelope-v6.html" style="opacity:.85">
+    <div class="preview-hero ph-envelope" style="height:260px;background:linear-gradient(180deg, #4a2e1c 0%, #150a03 100%);position:relative;overflow:hidden">
+      <div class="env" style="background:linear-gradient(180deg, #f7efdd, #f0e6cc);width:170px;height:110px;box-shadow:0 20px 34px rgba(0,0,0,.65);position:relative;z-index:2">
+        <div class="wax" style="background:radial-gradient(circle at 30% 25%, #c8d5b3, #7d8e6d 45%, #4a5a3e 100%);box-shadow:0 5px 12px rgba(0,0,0,.55),inset 0 -5px 10px rgba(0,0,0,.4),inset 0 3px 4px rgba(255,255,255,.25);width:52px;height:52px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#f5f2e8;font-family:'Great Vibes',cursive;font-size:1.4rem;text-shadow:0 -1px 0 rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.2)"><span>E&amp;S</span></div>
+      </div>
+      <div style="position:absolute;top:6%;right:14%;color:#fff;font-size:1.9rem;opacity:.85;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5))">
+        <i class="fas fa-dove"></i>
+      </div>
+      <div style="position:absolute;top:20%;left:15%;color:#a5b490;font-size:.9rem;opacity:.7;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:50%;left:8%;color:#a5b490;font-size:.8rem;opacity:.6;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:75%;right:22%;color:#a5b490;font-size:.85rem;opacity:.5;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 1 &middot; v6 <span style="color:var(--text-muted);font-weight:400">(compare)</span></div>
+      <div class="concept-title">Envelope v6</div>
+      <div class="concept-desc">First card redesign + flap-stays-open build. Corner ornaments were tiny gold squiggles (upgraded to eucalyptus flourishes in v7) and dove hid behind the card on mobile (fixed in v7). Kept for comparison.</div>
+      <div class="concept-meta"><span class="tag rich">v6</span><span class="tag">Card + CTA</span><span class="tag long">tap&ndash;driven</span></div>
+      <div class="concept-cta">Compare <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="envelope-v5.html" style="opacity:.85">
+    <div class="preview-hero ph-envelope" style="height:260px;background:linear-gradient(180deg, #4a2e1c 0%, #150a03 100%);position:relative;overflow:hidden">
+      <div class="env" style="background:linear-gradient(180deg, #f7efdd, #f0e6cc);width:170px;height:110px;box-shadow:0 20px 34px rgba(0,0,0,.65);position:relative;z-index:2">
+        <div class="wax" style="background:radial-gradient(circle at 30% 25%, #c8d5b3, #7d8e6d 45%, #4a5a3e 100%);box-shadow:0 5px 12px rgba(0,0,0,.55),inset 0 -5px 10px rgba(0,0,0,.4),inset 0 3px 4px rgba(255,255,255,.25);width:52px;height:52px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#f5f2e8;font-family:'Great Vibes',cursive;font-size:1.4rem;text-shadow:0 -1px 0 rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.2)"><span>E&amp;S</span></div>
+      </div>
+      <div style="position:absolute;top:6%;right:14%;color:#fff;font-size:1.9rem;opacity:.85;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5))">
+        <i class="fas fa-dove"></i>
+      </div>
+      <div style="position:absolute;top:20%;left:15%;color:#a5b490;font-size:.9rem;opacity:.7;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:50%;left:8%;color:#a5b490;font-size:.8rem;opacity:.6;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:35%;right:8%;color:#e8dcb8;font-size:.75rem;opacity:.6;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:75%;right:22%;color:#a5b490;font-size:.85rem;opacity:.5;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 1 &middot; v5 <span style="color:var(--text-muted);font-weight:400">(compare)</span></div>
+      <div class="concept-title">Envelope v5</div>
+      <div class="concept-desc">Fixed the v4 3D flap bug by sliding the whole flap off the top of the frame. Card emerged into clear space but the envelope-top disappearing broke the illusion, plus the card design was still plain and CTA was too subtle. Kept for comparison.</div>
+      <div class="concept-meta"><span class="tag rich">v5</span><span class="tag">Flap flew off</span><span class="tag long">tap&ndash;driven</span></div>
+      <div class="concept-cta">Compare <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="envelope-v4.html" style="opacity:.85">
+    <div class="preview-hero ph-envelope" style="height:260px;background:linear-gradient(180deg, #4a2e1c 0%, #150a03 100%);position:relative;overflow:hidden">
+      <div class="env" style="background:linear-gradient(180deg, #f7efdd, #f0e6cc);width:170px;height:110px;box-shadow:0 20px 34px rgba(0,0,0,.65);position:relative;z-index:2">
+        <div class="wax" style="background:radial-gradient(circle at 30% 25%, #c8d5b3, #7d8e6d 45%, #4a5a3e 100%);box-shadow:0 5px 12px rgba(0,0,0,.55),inset 0 -5px 10px rgba(0,0,0,.4),inset 0 3px 4px rgba(255,255,255,.25);width:52px;height:52px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#f5f2e8;font-family:'Great Vibes',cursive;font-size:1.4rem;text-shadow:0 -1px 0 rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.2)"><span>E&amp;S</span></div>
+      </div>
+      <div style="position:absolute;top:6%;right:14%;color:#fff;font-size:1.9rem;opacity:.85;filter:drop-shadow(0 3px 8px rgba(0,0,0,.5))">
+        <i class="fas fa-dove"></i>
+      </div>
+      <div style="position:absolute;top:20%;left:15%;color:#a5b490;font-size:.9rem;opacity:.7;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:50%;left:8%;color:#a5b490;font-size:.8rem;opacity:.6;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:35%;right:8%;color:#e8dcb8;font-size:.75rem;opacity:.6;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+      <div style="position:absolute;top:75%;right:22%;color:#a5b490;font-size:.85rem;opacity:.5;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))"><i class="fas fa-leaf"></i></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 1 &middot; v4 <span style="color:var(--text-muted);font-weight:400">(compare)</span></div>
+      <div class="concept-title">Envelope v4</div>
+      <div class="concept-desc">First all-in build with petals + ribbon + circling dove + sparkles. Had a known 3D-flap overlap bug on Android Chrome where the sage flap sat on top of the emerged card. Kept here for comparison.</div>
+      <div class="concept-meta"><span class="tag rich">v4</span><span class="tag" style="color:#a83030">Known bug</span><span class="tag">Petal fall</span><span class="tag long">tap&ndash;driven</span></div>
+      <div class="concept-cta">Compare <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="envelope-v3.html">
+    <div class="preview-hero ph-envelope" style="background:linear-gradient(180deg, #4a2e1c 0%, #150a03 100%)">
+      <div class="env" style="background:linear-gradient(180deg, #f7efdd, #f0e6cc)">
+        <div class="wax" style="background:radial-gradient(circle at 30% 25%, #c8d5b3, #7d8e6d 45%, #4a5a3e 100%);"></div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 1 &middot; v3 <span style="color:var(--text-muted);font-weight:400">(compare)</span></div>
+      <div class="concept-title">Envelope v3</div>
+      <div class="concept-desc">Prior premium build with SVG wax seal and a dove drifting left-to-right (no petals, ribbon, or circling).</div>
+      <div class="concept-meta"><span class="tag rich">Premium</span><span class="tag">SVG wax</span><span class="tag">Drifting dove</span><span class="tag long">tap&ndash;driven</span></div>
+      <div class="concept-cta">Compare <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="envelope-v2.html">
+    <div class="preview-hero ph-envelope">
+      <div class="env" style="background:linear-gradient(180deg, #f7efdd, #f0e6cc)">
+        <div class="wax" style="background:radial-gradient(circle at 30% 30%, #a5b490, #5a6b4c 55%, #3d4a32);"></div>
+      </div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 1 &middot; v2 <span style="color:var(--text-muted);font-weight:400">(compare)</span></div>
+      <div class="concept-title">Envelope v2</div>
+      <div class="concept-desc">Previous premium attempt. Wax seal was CSS-only (not SVG) and had a known tap-response bug where the crack faded the seal before the flap opened.</div>
+      <div class="concept-meta"><span class="tag rich">Cinematic</span><span class="tag">CSS wax</span><span class="tag long">tap&ndash;driven</span></div>
+      <div class="concept-cta">Compare <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="envelope.html">
+    <div class="preview-hero ph-envelope">
+      <div class="env"><div class="wax"></div></div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 1 &middot; v1 <span style="color:var(--text-muted);font-weight:400">(reference)</span></div>
+      <div class="concept-title">Envelope v1</div>
+      <div class="concept-desc">The original proof-of-concept build kept for comparison. Cleaner but less premium: flat envelope, single-gradient wax, one-step slide + unfold.</div>
+      <div class="concept-meta"><span class="tag rich">Cinematic</span><span class="tag">2-layer audio</span><span class="tag long">tap&ndash;driven</span></div>
+      <div class="concept-cta">Compare <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+  <a class="concept" href="garden.html">
+    <div class="preview-hero ph-garden">
+      <div class="mini-couple">Eric &amp; Sherita</div>
+    </div>
+    <div class="concept-body">
+      <div class="concept-num">Concept 2</div>
+      <div class="concept-title">The Path Through the Garden</div>
+      <div class="concept-desc">Tight close-up of eucalyptus leaves. Camera pulls back over 4 seconds, revealing more foliage, then a stone path curving into distance, then the couple far away walking toward the camera. Names fade in over the widening frame.</div>
+      <div class="concept-meta"><span class="tag rich">Cinematic</span><span class="tag">VibeLink track</span><span class="tag long">7&ndash;9s</span></div>
+      <div class="concept-cta">Watch <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </a>
+
+</main>
+
+<footer class="gallery-foot">
+  Once you've chosen a concept, let me know and we'll wire it into the live splash. The full invitation site is unchanged &mdash; only what guests see on tap changes. <br><br>
+  <strong>Return to live site:</strong> <a href="/" style="color:var(--gold-deep);text-decoration:underline">ericsherita.vibelinkevent.com</a>
+</footer>
+
+</body>
+</html>

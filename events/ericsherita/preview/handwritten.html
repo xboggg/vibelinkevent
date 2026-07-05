@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Concept 5: Handwritten Invitation — Eric &amp; Sherita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;500;600&family=Great+Vibes&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  :root{
+    --ivory:#f5f2e8; --ivory-warm:#f0eddd; --paper:#faf6ea;
+    --sage:#7d8e6d; --sage-deep:#5a6b4c;
+    --gold:#c9a24a; --gold-bright:#d4b464; --gold-deep:#8a6a23;
+    --ink:#3d3527;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{
+    font-family:'Cormorant Garamond',serif;
+    background:#2a2418;
+    display:flex;align-items:center;justify-content:center;
+    padding:1.5rem;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .back{
+    position:fixed;top:1rem;left:1rem;z-index:100;
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(245,242,232,.92);
+    border:1px solid var(--gold);color:var(--sage-deep);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:.95rem;text-decoration:none;
+    transition:all .3s;box-shadow:0 4px 12px rgba(0,0,0,.3);
+  }
+  .back:hover{background:#fff;transform:scale(1.05)}
+
+  .label{
+    position:fixed;top:1.1rem;right:1rem;z-index:100;
+    font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.4em;
+    color:rgba(245,242,232,.55);text-transform:uppercase;
+  }
+  .label b{color:var(--gold-bright);font-weight:500}
+
+  .paper{
+    position:relative;width:100%;max-width:520px;
+    aspect-ratio:3/4;max-height:88vh;
+    background:
+      radial-gradient(ellipse at center, var(--paper) 0%, #f0e9d5 100%);
+    box-shadow:
+      0 25px 60px rgba(0,0,0,.55),
+      0 0 0 1px rgba(58,44,20,.12),
+      inset 0 0 60px rgba(139,109,58,.08);
+    padding:8% 6%;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;
+    background-image:
+      radial-gradient(ellipse at center, var(--paper) 0%, #f0e9d5 100%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' seed='4'/><feColorMatrix values='0 0 0 0 0.6 0 0 0 0 0.5 0 0 0 0 0.3 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-blend-mode:multiply;
+  }
+  .paper::after{
+    content:'';position:absolute;inset:8px;
+    border:1px solid rgba(139,109,58,.18);
+    pointer-events:none;
+  }
+
+  /* Ornaments */
+  .orn{opacity:0;transition:opacity 1s ease}
+  .orn.in{opacity:1}
+
+  .orn-top{
+    display:flex;align-items:center;justify-content:center;gap:.7rem;
+    margin-bottom:1.4rem;color:var(--gold-deep);
+  }
+  .orn-top .fl{width:60px;height:1px;background:linear-gradient(90deg, transparent, var(--gold-deep), transparent)}
+  .orn-top svg{width:18px;height:18px;fill:var(--gold-deep)}
+
+  .overline{
+    font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.55em;
+    color:var(--gold-deep);text-transform:uppercase;
+    margin-bottom:1.6rem;font-weight:500;
+    opacity:0;transition:opacity .8s ease;
+  }
+  .overline.in{opacity:1}
+
+  /* Names as SVG for stroke-draw effect */
+  .names-wrap{margin:.4rem 0 1.6rem;width:100%;max-width:420px}
+  .names-svg{width:100%;height:auto}
+  .names-svg text{
+    font-family:'Great Vibes',cursive;
+    font-size:88px;
+    fill:none;stroke:var(--ink);stroke-width:1.6;
+    stroke-dasharray:1400;stroke-dashoffset:1400;
+  }
+  .names-svg.draw text{
+    animation:strokeDraw 3.4s ease-out forwards, strokeFill 1s ease-out 3s forwards;
+  }
+  @keyframes strokeDraw{
+    to{stroke-dashoffset:0}
+  }
+  @keyframes strokeFill{
+    to{fill:var(--ink);stroke-width:0}
+  }
+
+  .ampersand{
+    display:inline-block;font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--gold-deep);font-weight:500;
+  }
+
+  .date-line{
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:var(--ink);font-size:1.3rem;letter-spacing:.02em;
+    margin:1.2rem 0 1rem;
+    opacity:0;transform:translateY(8px);
+    transition:opacity 1s ease, transform 1s ease;
+  }
+  .date-line.in{opacity:1;transform:translateY(0)}
+
+  .date{
+    font-family:'Cinzel',serif;color:var(--ink);
+    font-size:.98rem;letter-spacing:.32em;
+    padding:.5rem 0;
+    border-top:1px solid var(--gold-deep);border-bottom:1px solid var(--gold-deep);
+    display:inline-block;padding-left:1.1rem;padding-right:.7rem;
+    margin:.4rem 0 1.6rem;font-weight:500;
+    opacity:0;transform:scaleX(.6);transform-origin:center;
+    transition:opacity 1.2s ease, transform 1.2s ease;
+  }
+  .date.in{opacity:1;transform:scaleX(1)}
+
+  /* Botanical growth in corners */
+  .botanical{
+    position:absolute;width:120px;height:120px;
+    opacity:0;transition:opacity 1.5s ease;
+  }
+  .botanical.in{opacity:.85}
+  .botanical.top-l{top:2%;left:2%;transform:rotate(0)}
+  .botanical.bottom-r{bottom:2%;right:2%;transform:rotate(180deg)}
+  .botanical path,.botanical circle{
+    fill:none;stroke:var(--sage);stroke-width:1.2;
+    stroke-dasharray:400;stroke-dashoffset:400;
+  }
+  .botanical.in path,.botanical.in circle{
+    animation:botanicalDraw 2s ease-out forwards;
+  }
+  @keyframes botanicalDraw{
+    to{stroke-dashoffset:0}
+  }
+
+  /* Wax seal at bottom */
+  .seal{
+    position:relative;
+    width:70px;height:70px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--sage-soft, #a5b490), var(--sage-deep));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cinzel',serif;font-weight:600;font-size:.85rem;
+    color:var(--ivory);letter-spacing:.08em;
+    box-shadow:0 4px 12px rgba(0,0,0,.35), inset 0 -3px 6px rgba(0,0,0,.25);
+    opacity:0;transform:scale(.5);
+    transition:opacity 1s ease, transform 1s cubic-bezier(.34,1.56,.64,1);
+    cursor:pointer;
+    margin-top:.6rem;
+  }
+  .seal.in{opacity:1;transform:scale(1)}
+  .seal:hover{transform:scale(1.05)}
+  .seal-inner{
+    position:absolute;inset:6px;border-radius:50%;
+    border:1px dashed rgba(245,242,232,.4);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .seal-caption{
+    font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.32em;
+    color:var(--gold-deep);text-transform:uppercase;margin-top:.9rem;
+    opacity:0;transition:opacity .8s ease;
+  }
+  .seal-caption.in{opacity:1}
+
+  .exit-overlay{
+    position:fixed;inset:0;background:var(--ivory);
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:2rem;
+    opacity:0;pointer-events:none;
+    transition:opacity 1s ease;z-index:200;
+  }
+  .exit-overlay.on{opacity:1;pointer-events:auto}
+  .exit-content{max-width:400px}
+  .exit-eyebrow{
+    font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.5em;
+    color:var(--gold-deep);text-transform:uppercase;margin-bottom:.9rem;
+  }
+  .exit-title{
+    font-family:'Great Vibes',cursive;color:var(--sage-deep);
+    font-size:3rem;line-height:1;margin-bottom:1.2rem;
+  }
+  .exit-title .a{color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.5em;vertical-align:middle;margin:0 .2rem}
+  .exit-note{color:var(--sage-deep);font-style:italic;font-size:1.05rem;margin-bottom:2rem}
+  .exit-btn{
+    display:inline-flex;align-items:center;gap:.6rem;
+    padding:.9rem 1.7rem;background:var(--sage);color:#fff;
+    border:1px solid var(--sage-deep);
+    font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.32em;
+    text-transform:uppercase;border-radius:99px;text-decoration:none;
+    box-shadow:0 4px 12px rgba(90,107,76,.3);
+    transition:all .3s;
+  }
+  .exit-btn:hover{background:var(--sage-deep);transform:translateY(-2px)}
+
+  @media(max-width:540px){
+    .paper{padding:10% 6%}
+    .names-svg text{font-size:74px}
+    .date-line{font-size:1.1rem}
+    .date{font-size:.85rem;letter-spacing:.24em}
+    .overline{font-size:.6rem;letter-spacing:.38em;margin-bottom:1.2rem}
+    .botanical{width:80px;height:80px}
+    .seal{width:60px;height:60px;font-size:.75rem}
+    .exit-title{font-size:2.4rem}
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back" aria-label="Back to gallery"><i class="fas fa-arrow-left"></i></a>
+<div class="label"><b>05</b> · Handwritten</div>
+
+<div class="paper" id="paper">
+  <div class="orn orn-top" id="ornTop">
+    <span class="fl"></span>
+    <svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg>
+    <span class="fl"></span>
+  </div>
+
+  <div class="overline" id="overline">Save the Date</div>
+
+  <div class="names-wrap">
+    <svg class="names-svg" id="namesSvg" viewBox="0 0 420 110" preserveAspectRatio="xMidYMid meet">
+      <text x="50%" y="70%" text-anchor="middle" dominant-baseline="middle">Eric &amp; Sherita</text>
+    </svg>
+  </div>
+
+  <div class="date-line" id="dateLine">for the wedding of the beloved</div>
+  <div class="date" id="date">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
+
+  <div class="seal" id="seal">
+    <div class="seal-inner">E&amp;S</div>
+  </div>
+  <div class="seal-caption" id="sealCaption">Tap the seal to enter</div>
+
+  <svg class="botanical top-l" id="botTl" viewBox="0 0 120 120" aria-hidden="true">
+    <path d="M 15 15 Q 40 20 55 55 Q 70 90 100 100"/>
+    <path d="M 30 25 Q 25 40 35 55"/>
+    <path d="M 45 35 Q 55 42 50 60"/>
+    <path d="M 55 55 Q 65 60 62 78"/>
+    <path d="M 75 75 Q 82 78 82 92"/>
+    <circle cx="25" cy="42" r="3"/>
+    <circle cx="45" cy="58" r="3"/>
+    <circle cx="65" cy="80" r="3"/>
+  </svg>
+  <svg class="botanical bottom-r" id="botBr" viewBox="0 0 120 120" aria-hidden="true">
+    <path d="M 15 15 Q 40 20 55 55 Q 70 90 100 100"/>
+    <path d="M 30 25 Q 25 40 35 55"/>
+    <path d="M 45 35 Q 55 42 50 60"/>
+    <path d="M 55 55 Q 65 60 62 78"/>
+    <path d="M 75 75 Q 82 78 82 92"/>
+    <circle cx="25" cy="42" r="3"/>
+    <circle cx="45" cy="58" r="3"/>
+    <circle cx="65" cy="80" r="3"/>
+  </svg>
+</div>
+
+<div class="exit-overlay" id="exit">
+  <div class="exit-content">
+    <div class="exit-eyebrow">Splash concept</div>
+    <div class="exit-title">Handwritten <span class="a">&amp;</span> Sealed</div>
+    <div class="exit-note">In the real site, the tap-to-enter opens either the Save-the-Date teaser or the full invitation, depending on the URL.</div>
+    <a href="index.html" class="exit-btn"><i class="fas fa-arrow-left"></i> Back to concepts</a>
+  </div>
+</div>
+
+<script>
+/* Pen scratch loop — synthesised on the fly via Web Audio */
+let audioCtx = null;
+let scratchNode = null;
+function startPenScratch(){
+  if (audioCtx) return;
+  try{
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.5, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++){
+      // Pink-ish noise gated at ~110Hz for a paper-scratch feel
+      data[i] = (Math.random() * 2 - 1) * 0.15 * (0.6 + 0.4 * Math.sin(i / 200));
+    }
+    scratchNode = audioCtx.createBufferSource();
+    scratchNode.buffer = buf;
+    scratchNode.loop = true;
+    const gain = audioCtx.createGain();
+    gain.gain.value = 0.08;
+    const filt = audioCtx.createBiquadFilter();
+    filt.type = 'bandpass';
+    filt.frequency.value = 2400;
+    filt.Q.value = 2.5;
+    scratchNode.connect(filt).connect(gain).connect(audioCtx.destination);
+    scratchNode.start();
+  }catch(e){}
+}
+function stopPenScratch(){
+  try{ scratchNode && scratchNode.stop(); }catch(e){}
+  scratchNode = null;
+}
+
+/* Timeline */
+const timeline = [
+  { at:   400, act: () => document.getElementById('ornTop').classList.add('in') },
+  { at:  1000, act: () => document.getElementById('overline').classList.add('in') },
+  { at:  1700, act: () => { startPenScratch(); document.getElementById('namesSvg').classList.add('draw'); document.getElementById('botTl').classList.add('in'); document.getElementById('botBr').classList.add('in'); } },
+  { at:  4900, act: () => stopPenScratch() },
+  { at:  5100, act: () => document.getElementById('dateLine').classList.add('in') },
+  { at:  6000, act: () => document.getElementById('date').classList.add('in') },
+  { at:  7200, act: () => { document.getElementById('seal').classList.add('in'); document.getElementById('sealCaption').classList.add('in'); } }
+];
+timeline.forEach(step => setTimeout(step.act, step.at));
+
+/* Tap the seal (or anywhere on paper after ~7s) to exit */
+document.getElementById('seal').addEventListener('click', showExit);
+document.getElementById('paper').addEventListener('click', e => {
+  if (Date.now() - startTime > 7200) showExit();
+});
+function showExit(){
+  stopPenScratch();
+  document.getElementById('exit').classList.add('on');
+}
+const startTime = Date.now();
+</script>
+
+</body>
+</html>
