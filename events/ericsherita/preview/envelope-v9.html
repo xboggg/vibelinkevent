@@ -342,8 +342,7 @@
     100%{opacity:0;transform:translate(calc(-50% + var(--dx)), calc(-50% - 260px)) scale(.3)}
   }
 
-  /* ========== FOLDED CARD — the big reveal ========== */
-  /* Card wrapper positions inside envelope, then translates up + scales to full size */
+  /* ========== FOLDED CARD ========== */
   .card-wrap{
     position:fixed;
     top:50%;left:50%;
@@ -351,89 +350,70 @@
     width:min(94vw, 460px);
     z-index:8;
     opacity:0;
-    perspective:1400px;
     transition:transform 2.4s cubic-bezier(.2,.85,.25,1), opacity 1.4s ease;
     pointer-events:none;
   }
-  .card-wrap.slide{
-    transform:translate(-50%,-50%) scale(1);
-    opacity:1;
-  }
-  /* Two-panel folded card - the bottom panel is visible when folded, top panel unfolds down */
+  .card-wrap.slide{transform:translate(-50%,-50%) scale(1);opacity:1}
+
   .card-fold{
     position:relative;width:100%;
-    transform-style:preserve-3d;
-  }
-  .card-panel{
-    position:relative;width:100%;
     background:
-      radial-gradient(ellipse at 50% 30%, rgba(255,247,220,.5) 0%, transparent 60%),
-      linear-gradient(180deg, var(--card-cream) 0%, var(--card-warm) 100%);
+      radial-gradient(ellipse at 50% 25%, rgba(255,247,220,.5) 0%, transparent 60%),
+      linear-gradient(180deg, var(--card-cream) 0%, var(--card-warm) 50%, #eadeb8 100%);
     box-shadow:
       0 40px 60px rgba(0,0,0,.55),
       0 18px 28px rgba(0,0,0,.4),
       0 0 0 1px rgba(139,109,58,.28),
-      inset 0 2px 0 rgba(255,255,255,.65);
+      inset 0 2px 0 rgba(255,255,255,.65),
+      inset 0 -20px 30px rgba(139,109,58,.06);
+    outline:1.5px solid var(--gold);
+    outline-offset:-8px;
+    padding:1.8rem 1.4rem 1.5rem;
+    text-align:center;
+    transform-origin:center top;
+    transform:scaleY(.02);opacity:.3;
+    transition:transform 1.8s cubic-bezier(.25,.85,.3,1), opacity 1.4s ease;
     overflow:hidden;
   }
-  .card-panel::before{
-    content:'';position:absolute;inset:0;pointer-events:none;
+  .card-wrap.unfold .card-fold{transform:scaleY(1);opacity:1}
+  .card-fold::before{
+    content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
     background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence baseFrequency='0.82' numOctaves='2' seed='23'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.42 0 0 0 0 0.22 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
     mix-blend-mode:multiply;opacity:.85;
   }
-
-  /* Top panel (initially folded down, hidden) */
-  .panel-top{
-    height:0;overflow:hidden;
-    transition:height 1.6s cubic-bezier(.25,.85,.3,1);
-    background:linear-gradient(180deg, var(--card-cream) 0%, var(--card-warm) 100%);
-    transform-origin:bottom;
-  }
-  .card-wrap.unfold .panel-top{height:min(60vh, 320px)}
-
-  .panel-top-inner{
-    position:relative;width:100%;height:100%;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:1.6rem 1.4rem 1.2rem;text-align:center;
-    opacity:0;
-    transition:opacity 1s ease;
-  }
-  .card-wrap.unfold .panel-top-inner{opacity:1;transition-delay:1.2s}
-
-  /* Bottom panel — visible from the moment card emerges */
-  .panel-bot{
-    padding:1.6rem 1.4rem 1.8rem;
-    text-align:center;
-    position:relative;
-  }
-
-  /* Watermark E&S on both panels combined - massive script behind text */
   .card-fold::after{
     content:'E & S';
     position:absolute;top:50%;left:50%;
     transform:translate(-50%,-50%);
     font-family:'Great Vibes', cursive;
-    font-size:12rem;color:var(--sage);
+    font-size:11rem;color:var(--sage);
     opacity:.05;
     pointer-events:none;z-index:1;
     letter-spacing:.05em;white-space:nowrap;
   }
 
-  /* Gold-foil border */
-  .trace-svg{
-    position:absolute;inset:8px;pointer-events:none;
-    z-index:3;opacity:0;
-    transition:opacity .6s ease;
+  /* Intentional fold crease at midpoint (design element, not a bug) */
+  .card-crease{
+    position:absolute;top:50%;left:0;right:0;height:0;
+    z-index:2;pointer-events:none;
+    border-top:1px solid rgba(90,65,25,.14);
+    box-shadow:0 1px 0 rgba(255,247,220,.7);
+    opacity:0;
+    transition:opacity .8s ease;
   }
-  .card-wrap.unfold .trace-svg{opacity:1;transition-delay:2.4s}
-  .trace-svg rect{
-    fill:none;stroke:url(#goldFoil);
-    stroke-width:1.5;
-    stroke-dasharray:4500;stroke-dashoffset:4500;
-    filter:drop-shadow(0 0 3px rgba(212,180,100,.55));
+  .card-wrap.unfold .card-crease{opacity:1;transition-delay:1.4s}
+  .card-crease::before{
+    content:'';position:absolute;top:-3px;left:0;right:0;height:7px;
+    background:linear-gradient(180deg, transparent, rgba(90,65,25,.05) 50%, transparent);
+    pointer-events:none;
   }
-  .card-wrap.unfold .trace-svg rect{animation:traceLine 2.4s ease-out 2.6s forwards}
-  @keyframes traceLine{to{stroke-dashoffset:0}}
+
+  .card-inner{
+    position:relative;z-index:5;
+    opacity:0;
+    transition:opacity 1.4s ease;
+  }
+  .card-wrap.unfold .card-inner{opacity:1;transition-delay:.8s}
 
   .card-corner{
     position:absolute;width:32px;height:32px;pointer-events:none;
@@ -748,7 +728,7 @@
     .cd-label{font-size:.45rem}
     .cal-btn i{font-size:.9rem}
     .cal-btn span{font-size:.44rem;letter-spacing:.16em}
-    .card-wrap.unfold .panel-top{height:min(52vh, 260px)}
+    .card-fold{padding:1.4rem 1.1rem 1.2rem}
   }
 </style>
 
@@ -886,9 +866,7 @@
 <!-- ========== THE FOLDED CARD ========== -->
 <div class="card-wrap" id="cardWrap">
   <div class="card-fold" id="cardFold">
-    <svg class="trace-svg" preserveAspectRatio="none" viewBox="0 0 400 580">
-      <rect x="1.5" y="1.5" width="397" height="577"/>
-    </svg>
+    <div class="card-crease"></div>
 
     <div class="card-corner tl">
       <svg viewBox="0 0 32 32">
@@ -919,31 +897,26 @@
       </svg>
     </div>
 
-    <!-- TOP panel: names + date + venue -->
-    <div class="card-panel panel-top">
-      <div class="panel-top-inner">
-        <svg class="sprig" viewBox="0 0 56 26">
-          <path d="M 28 22 L 28 2" stroke="var(--sage-deep)" stroke-width="1" fill="none"/>
-          <ellipse cx="22" cy="10" rx="4" ry="6" fill="url(#petalSage)" transform="rotate(-30 22 10)"/>
-          <ellipse cx="34" cy="10" rx="4" ry="6" fill="url(#petalSage)" transform="rotate(30 34 10)"/>
-          <ellipse cx="18" cy="16" rx="3.5" ry="5" fill="url(#petalSage)" transform="rotate(-20 18 16)"/>
-          <ellipse cx="38" cy="16" rx="3.5" ry="5" fill="url(#petalSage)" transform="rotate(20 38 16)"/>
-          <ellipse cx="14" cy="22" rx="3" ry="4" fill="url(#petalSage)" transform="rotate(-10 14 22)"/>
-          <ellipse cx="42" cy="22" rx="3" ry="4" fill="url(#petalSage)" transform="rotate(10 42 22)"/>
-          <circle cx="28" cy="4" r="2.5" fill="var(--gold)"/>
-        </svg>
+    <!-- One continuous card content — no seams -->
+    <div class="card-inner">
+      <svg class="sprig" viewBox="0 0 56 26">
+        <path d="M 28 22 L 28 2" stroke="var(--sage-deep)" stroke-width="1" fill="none"/>
+        <ellipse cx="22" cy="10" rx="4" ry="6" fill="url(#petalSage)" transform="rotate(-30 22 10)"/>
+        <ellipse cx="34" cy="10" rx="4" ry="6" fill="url(#petalSage)" transform="rotate(30 34 10)"/>
+        <ellipse cx="18" cy="16" rx="3.5" ry="5" fill="url(#petalSage)" transform="rotate(-20 18 16)"/>
+        <ellipse cx="38" cy="16" rx="3.5" ry="5" fill="url(#petalSage)" transform="rotate(20 38 16)"/>
+        <ellipse cx="14" cy="22" rx="3" ry="4" fill="url(#petalSage)" transform="rotate(-10 14 22)"/>
+        <ellipse cx="42" cy="22" rx="3" ry="4" fill="url(#petalSage)" transform="rotate(10 42 22)"/>
+        <circle cx="28" cy="4" r="2.5" fill="var(--gold)"/>
+      </svg>
 
-        <div class="card-flourish"><span class="fl"></span><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg><span class="fl"></span></div>
-        <div class="card-overline">Save the Date</div>
-        <div class="card-italic">for the wedding of</div>
-        <h1 class="card-names">Eric <span class="amp">&amp;</span> Sherita</h1>
-        <div class="card-date">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
-        <div class="card-venue">North Brunswick, New Jersey</div>
-      </div>
-    </div>
+      <div class="card-flourish"><span class="fl"></span><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg><span class="fl"></span></div>
+      <div class="card-overline">Save the Date</div>
+      <div class="card-italic">for the wedding of</div>
+      <h1 class="card-names">Eric <span class="amp">&amp;</span> Sherita</h1>
+      <div class="card-date">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
+      <div class="card-venue">North Brunswick, New Jersey</div>
 
-    <!-- BOTTOM panel: countdown + save-the-date CTA + calendar buttons + share -->
-    <div class="card-panel panel-bot">
       <div class="countdown" aria-label="Countdown">
         <div class="cd-tile"><div class="cd-num" id="cdDays">--</div><div class="cd-label">Days</div></div>
         <div class="cd-tile"><div class="cd-num" id="cdHours">--</div><div class="cd-label">Hours</div></div>
@@ -981,7 +954,6 @@
         <span>Share this joy with family &amp; friends</span>
       </button>
     </div>
-  </div>
 </div>
 
 <div class="tap-first" id="tapFirst"><i class="fas fa-hand-point-up"></i> Tap the wax seal</div>
@@ -1262,12 +1234,11 @@ function openEnvelope(){
   setTimeout(() => { flap.classList.add('open'); slideSound(0.2); }, 900);
   setTimeout(() => env.classList.add('recede'), 2200);
 
-  /* Card slides out (small, then scales), then unfolds */
+  /* Card slides out then unfolds */
   setTimeout(() => cardWrap.classList.add('slide'), 2000);
   setTimeout(() => {
     cardWrap.classList.add('unfold');
     cardWrap.style.pointerEvents = 'auto';
-    /* Music.mp3 starts when card is ~80% unfolded */
     tryStartMusic();
     musicToggleBtn.classList.add('on');
   }, 3400);

@@ -1066,19 +1066,20 @@
 </button>
 
 <script>
-/* ============ MODE GATE ============
-   Default (no query param) → Save-the-Date teaser only.
-   Add ?invite=honour to the URL to reveal the full invitation.
-   To flip the site public later: set FORCE_FULL = true below, or remove this block.
-======================================= */
-const FORCE_FULL = false;
+/* Full site is public. The v9 splash (envelope + unfolding card) handles the save-the-date gate
+   locally via localStorage. Once the guest taps a calendar button + the "See Venues & RSVP" pill,
+   the splash iframe posts { type: 'splash-done' } and we drop them into the full site.
+   ?invite=honour = admin bypass that skips the splash iframe entirely. */
 const _params = new URLSearchParams(window.location.search);
-const isFullInvite = FORCE_FULL || _params.get('invite') === 'honour';
-if (!isFullInvite){
-  document.body.classList.add('teaser-mode');
+const adminBypass = _params.get('invite') === 'honour';
+
+if (adminBypass){
+  /* Skip the splash iframe entirely for admin */
+  const s = document.getElementById('splashFrame');
+  if (s) s.remove();
+  document.body.classList.remove('locked');
 }
 
-/* Splash iframe (v8 envelope) posts { type: 'splash-done' } when the user taps the card. */
 window.addEventListener('message', e => {
   if (!e.data || e.data.type !== 'splash-done') return;
   const s = document.getElementById('splashFrame');
@@ -1087,10 +1088,6 @@ window.addEventListener('message', e => {
   document.body.classList.remove('locked');
   if (!audioOn) tryStartAudio();
   setTimeout(() => s.remove(), 1400);
-  if (!isFullInvite){
-    const t = document.getElementById('teaserPanel');
-    if (t){ requestAnimationFrame(() => t.classList.add('visible')); }
-  }
 });
 
 /* Floating gold particles + leaves */
