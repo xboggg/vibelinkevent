@@ -83,9 +83,9 @@ const services = [
     features: [
       { name: "Adinkra symbol design", desc: "Sankofa, Gye Nyame, Osrane ne Nsoromma" },
       { name: "Kente-inspired palette", desc: "Colours that honour both families" },
-      { name: "Full family list", desc: "Elders, spokespersons, family heads" },
+      { name: "Family acknowledgement", desc: "Respectful mention of both sides" },
       { name: "Dress code display", desc: "Colour of the day, cloth pattern" },
-      { name: "MoMo dowry contributions", desc: "Diaspora family contributes digitally" },
+      { name: "Wish wall", desc: "Blessings from every guest, kept forever" },
       { name: "Livestream + RSVP", desc: "Family abroad watches live" }
     ],
     slug: "engagement",
