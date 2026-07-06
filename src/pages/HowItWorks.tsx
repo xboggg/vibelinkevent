@@ -252,7 +252,7 @@ const HowItWorks = () => {
       {/* Hero Section */}
       <section
         ref={heroRef}
-        className="relative pt-24 lg:pt-32 pb-40 lg:pb-48 bg-gradient-to-br from-[#6B46C1] via-[#553C9A] to-[#44337A] overflow-hidden"
+        className="relative pt-24 lg:pt-32 pb-24 lg:pb-32 bg-gradient-to-br from-[#6B46C1] via-[#553C9A] to-[#44337A] overflow-hidden"
       >
         <FloatingElements />
 
@@ -372,7 +372,7 @@ const HowItWorks = () => {
       </section>
 
       {/* Steps Timeline Section — vertical stacked list, single rail, per-step colour */}
-      <section className="py-12 lg:py-20 bg-background relative overflow-hidden">
+      <section className="pt-6 pb-16 lg:pt-10 lg:pb-20 bg-background relative overflow-hidden">
         {/* Soft ambient background blobs — desktop only. On mobile they'd
             take up ~90% of the viewport and read as awkward coloured
             patches rather than ambient tint, so we hide them below md. */}
