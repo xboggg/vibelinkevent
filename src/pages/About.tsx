@@ -1202,77 +1202,97 @@ const About = () => {
         </motion.div>
       )}
 
-      {/* Why Choose VibeLink */}
-      <section className="py-20 bg-background">
+      {/* What We Believe — 3 values, sets us apart on principles */}
+      <section className="py-20 bg-background overflow-x-hidden">
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-14"
+            className="max-w-3xl mx-auto text-center mb-12 lg:mb-16"
           >
             <motion.span
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}
               viewport={{ once: true }}
-              className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4"
+              transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
+              className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4"
             >
-              Why Choose Us
+              What We Believe
             </motion.span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-              Why Choose{" "}
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                VibeLink?
+              Three ideas that shape{" "}
+              <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                everything we build
               </span>
             </h2>
-            <p className="text-muted-foreground text-lg">What makes us different</p>
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
+              Not features. Not policies. The values behind the product.
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {whyChooseFeatures.map((feature, index) => {
-              const isGold = index === 1 || index === 4;
-              return (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -6 }}
-                  className="relative p-[2px] rounded-2xl cursor-default"
-                  style={{
-                    background: isGold
-                      ? 'linear-gradient(135deg, #D4AF37, #6B46C1, #f0c040)'
-                      : 'linear-gradient(135deg, #6B46C1, #D4AF37, #9F7AEA)',
-                    boxShadow: '0 4px 20px rgba(107,70,193,0.06)'
-                  }}
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {[
+              {
+                n: "01",
+                value: "Every celebration is worth doing beautifully.",
+                body: "A wedding in Kumasi, a naming in Cape Coast, a memorial in Ho — they all deserve the same care. We build one product with respect at its centre. No tiers of effort.",
+                accent: "from-primary to-purple-500",
+                shadow: "hover:shadow-primary/20",
+                bar: "from-primary via-purple-500 to-primary",
+              },
+              {
+                n: "02",
+                value: "Family belongs, wherever they live.",
+                body: "The diaspora isn't a checkbox — it's half our audience. Every invitation is built so the cousin in London opens the same beautiful link as the neighbour next door.",
+                accent: "from-secondary via-yellow-400 to-secondary",
+                shadow: "hover:shadow-secondary/20",
+                bar: "from-secondary via-yellow-400 to-secondary",
+              },
+              {
+                n: "03",
+                value: "Culture first. Template never.",
+                body: "Kente palettes, one-week formats, funeral programs, outdoorings — every feature comes from watching how Ghanaian families actually celebrate. Not from adapting a global template.",
+                accent: "from-emerald-500 via-teal-500 to-emerald-600",
+                shadow: "hover:shadow-emerald-500/20",
+                bar: "from-emerald-500 via-teal-500 to-emerald-600",
+              },
+            ].map((v, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                whileHover={{ y: -6 }}
+                className={`group relative bg-card border border-border rounded-2xl p-8 pb-9 shadow-sm hover:shadow-xl ${v.shadow} transition-all duration-300 overflow-hidden`}
+              >
+                {/* Watermark number top-right */}
+                <span
+                  aria-hidden
+                  className={`absolute -top-3 -right-2 text-7xl md:text-8xl font-black leading-none pointer-events-none select-none bg-gradient-to-br ${v.accent} bg-clip-text text-transparent opacity-10 group-hover:opacity-20 transition-opacity`}
                 >
-                  <div
-                    className="bg-background rounded-2xl p-7 h-full"
-                    style={{ boxShadow: isGold ? '0 20px 50px rgba(212,175,55,0.06)' : '0 20px 50px rgba(107,70,193,0.06)' }}
-                  >
-                    <div
-                      className="w-14 h-14 rounded-xl flex items-center justify-center mb-5"
-                      style={{ background: isGold ? 'rgba(212,175,55,0.1)' : 'rgba(107,70,193,0.1)' }}
-                    >
-                      <feature.icon className="h-7 w-7" style={{ color: isGold ? '#D4AF37' : '#6B46C1' }} />
-                    </div>
-                    <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
-                    <p className="text-muted-foreground leading-relaxed text-sm mb-4">{feature.description}</p>
-                    <span
-                      className="inline-block text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full"
-                      style={{
-                        background: isGold ? 'rgba(212,175,55,0.1)' : 'rgba(107,70,193,0.08)',
-                        color: isGold ? '#B8961F' : '#6B46C1'
-                      }}
-                    >
-                      {feature.tag}
-                    </span>
-                  </div>
-                </motion.div>
-              );
-            })}
+                  {v.n}
+                </span>
+
+                {/* Small number chip */}
+                <span className={`inline-block text-[10px] font-bold tracking-[0.2em] uppercase mb-4 relative bg-gradient-to-r ${v.accent} bg-clip-text text-transparent`}>
+                  Value {v.n}
+                </span>
+
+                <h3 className="text-lg md:text-xl font-bold text-foreground mb-3 relative leading-snug">
+                  {v.value}
+                </h3>
+
+                <p className="text-muted-foreground leading-relaxed text-sm md:text-[15px] relative">
+                  {v.body}
+                </p>
+
+                {/* Accent bar bottom */}
+                <div className={`absolute bottom-0 left-8 right-8 h-1 rounded-full bg-gradient-to-r ${v.bar} opacity-70`} />
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
