@@ -101,7 +101,9 @@ function PhoneFrame({
             </div>
           )}
 
-          {/* Full-screen tap area that triggers Live mode — only on front phone */}
+          {/* Whole-screen tap area on the front phone — invisible, no chrome
+              on top of the invitation. The visible CTA lives BELOW the
+              phone, in the carousel container. */}
           {canGoLive && (
             <button
               onClick={(e) => {
@@ -109,14 +111,8 @@ function PhoneFrame({
                 onTryLive?.();
               }}
               aria-label={`Try ${title} live`}
-              className="absolute inset-0 z-30 focus:outline-none group"
-            >
-              {/* iOS-style action pill anchored to bottom of screen — clearly attached to THIS phone */}
-              <span className="absolute bottom-6 left-1/2 -translate-x-1/2 px-3.5 py-2 rounded-full bg-white/95 text-gray-900 text-xs font-bold shadow-lg backdrop-blur inline-flex items-center gap-1.5 whitespace-nowrap group-hover:scale-105 transition-transform">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Tap to try it live
-              </span>
-            </button>
+              className="absolute inset-0 z-30 focus:outline-none"
+            />
           )}
 
           {/* Home indicator */}
@@ -176,7 +172,7 @@ export function PhoneCarousel({
 
   return (
     <div
-      className={`relative h-[520px] md:h-[600px] flex items-center justify-center ${className}`}
+      className={`relative h-[600px] md:h-[700px] flex items-center justify-center ${className}`}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
@@ -253,20 +249,42 @@ export function PhoneCarousel({
         </>
       )}
 
-      {/* Dot indicators */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2">
-        {items.map((_, i) => (
-          <button
-            key={i}
+      {/* Bottom controls: 'Tap to try it live' button + dot indicators.
+          The button sits DIRECTLY BELOW the front phone bezel so it's
+          obviously tied to it, without covering the invitation content. */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+        {showLiveButton && liveIdx === null && items[active]?.demoUrl && (
+          <motion.button
+            key={active}
+            initial={{ opacity: 0, y: 6, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.25 }}
             onClick={() => {
               setUserInteracted(true);
-              setLiveIdx(null);
-              setActive(i);
+              setLiveIdx(active);
             }}
-            className={`h-2 rounded-full transition-all ${i === active ? "w-8 bg-primary" : "w-2 bg-muted-foreground/30"}`}
-            aria-label={`Show ${items[i].title}`}
-          />
-        ))}
+            className="px-5 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-sm font-semibold shadow-lg shadow-primary/40 hover:scale-105 transition-transform inline-flex items-center gap-2 whitespace-nowrap"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            Tap to try it live
+          </motion.button>
+        )}
+
+        {/* Dot indicators */}
+        <div className="flex gap-2">
+          {items.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                setUserInteracted(true);
+                setLiveIdx(null);
+                setActive(i);
+              }}
+              className={`h-2 rounded-full transition-all ${i === active ? "w-8 bg-primary" : "w-2 bg-muted-foreground/30"}`}
+              aria-label={`Show ${items[i].title}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
