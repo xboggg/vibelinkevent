@@ -5,44 +5,30 @@ const features = [
   {
     n: "01",
     tag: "SHARING",
-    title: "One Beautiful Link",
-    description: "Everything about your event in a single link — RSVP, directions, photos, music, dress code. Share it on WhatsApp, SMS or email and it opens beautifully on any phone.",
-    pill: "🔗 WhatsApp-ready preview",
+    title: "One Link. Every Guest.",
+    description: "Your entire event — RSVP, gallery, directions, music, dress code — in a single link that opens on any phone. No app to download. No PDF to save. Just tap.",
+    pill: "🔗 WhatsApp-ready",
   },
   {
     n: "02",
-    tag: "REACH",
-    title: "Diaspora Friendly",
-    description: "Livestream links, timezone info, and international sharing built in. Your family in London, New York, and Berlin is as included as those in Accra.",
-    pill: "🌍 10+ countries reached",
+    tag: "FLEXIBILITY",
+    title: "Change Anything, Anytime.",
+    description: "Venue moved? Time changed? Update once after sharing and every guest sees the latest instantly. No reprints. No reshares. No confusion at the gate.",
+    pill: "🔄 Live updates",
   },
   {
     n: "03",
-    tag: "PAYMENTS",
-    title: "MoMo Collection",
-    description: "Accept contributions digitally and track every donation transparently. MTN, Vodafone and AirtelTigo supported. No setup fee.",
-    pill: "💰 GHc 0 setup fee",
+    tag: "CULTURE",
+    title: "Made for How We Celebrate.",
+    description: "Kente palettes, outdoorings, funeral programs, one-week announcements — every feature is designed around Ghanaian events, not adapted from someone else's template.",
+    pill: "🇬🇭 Built for Ghana",
   },
   {
     n: "04",
-    tag: "MANAGEMENT",
-    title: "RSVP Tracking",
-    description: "See exactly who's confirmed, who's tentative, and how many guests to expect. Real-time analytics so you can plan catering with confidence.",
-    pill: "✅ Live guest count",
-  },
-  {
-    n: "05",
-    tag: "FLEXIBILITY",
-    title: "Change Anytime",
-    description: "Venue moved? Time changed? Update your invitation instantly after sharing. Every guest automatically sees the latest details — no reprints needed.",
-    pill: "🔄 Instant updates",
-  },
-  {
-    n: "06",
-    tag: "CULTURE",
-    title: "Built for Our Events",
-    description: "Kente options, outdooring formats, funeral programs, one-week announcements — every feature is designed around how Ghanaians actually celebrate.",
-    pill: "🇬🇭 Ghana + diaspora",
+    tag: "DIASPORA",
+    title: "Everyone Included. Everywhere.",
+    description: "Your cousin in London opens the same beautiful link as your neighbour in Accra. Livestream, timezone info, WhatsApp — the whole diaspora feels part of the day.",
+    pill: "🌍 10+ countries reached",
   },
 ];
 
@@ -66,7 +52,7 @@ export function FeaturesSection() {
             Why VibeLink
           </span>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            Six Reasons Families{" "}
+            Four Reasons Families{" "}
             <span className="text-secondary">Choose Us</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -77,7 +63,7 @@ export function FeaturesSection() {
         {/* Cards grid */}
         <motion.div
           ref={sectionRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 max-w-5xl mx-auto"
         >
           {features.map((f, i) => (
             <motion.div
