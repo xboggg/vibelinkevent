@@ -293,7 +293,8 @@ const About = () => {
                   <p className="text-[11px] text-amber-900/70 mt-1">1980s → 2000s</p>
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-amber-950 mb-2">The Paper Era</h3>
+              <h3 className="text-xl font-bold text-amber-950 mb-0.5">The Paper Era</h3>
+              <p className="text-[13px] font-semibold text-amber-800/90 italic mb-3">Traditional Printed Cards</p>
               <p className="text-amber-900/70 text-sm leading-relaxed mb-4">
                 For generations, Ghanaians celebrated life's milestones with beautifully printed invitation cards. But paper came with limitations.
               </p>
@@ -323,7 +324,8 @@ const About = () => {
                   <p className="text-[11px] text-emerald-900/70 mt-1">2010s → 2024</p>
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-emerald-950 mb-2">The WhatsApp Era</h3>
+              <h3 className="text-xl font-bold text-emerald-950 mb-0.5">The WhatsApp Era</h3>
+              <p className="text-[13px] font-semibold text-emerald-800/90 italic mb-3">JPEG & PDF Flyers</p>
               <p className="text-emerald-900/70 text-sm leading-relaxed mb-4">
                 Then came the digital shift. Designers created invitation flyers — JPEGs and PDFs shared via WhatsApp, email, and social media. Faster and cheaper, but with new problems.
               </p>
@@ -364,16 +366,17 @@ const About = () => {
                     <div>
                       <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-secondary/20 border border-secondary/40 text-secondary">
                         <motion.span animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                        Now
+                        BEST
                       </span>
-                      <p className="text-[11px] text-white/60 mt-1">2025 → Live</p>
+                      <p className="text-[11px] text-white/60 mt-1">NOW</p>
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold mb-2">
+                  <h3 className="text-xl font-bold mb-0.5">
                     The{" "}
                     <span className="bg-gradient-to-r from-secondary via-yellow-300 to-secondary bg-clip-text text-transparent">VibeLink</span>{" "}
                     Era
                   </h3>
+                  <p className="text-[13px] font-semibold text-secondary/90 italic mb-3">Live, Interactive Invitations</p>
                   <p className="text-white/70 text-sm leading-relaxed mb-4">
                     Not a picture. A living, breathing event page. One link that RSVPs, remembers, updates, streams, connects the diaspora.
                   </p>

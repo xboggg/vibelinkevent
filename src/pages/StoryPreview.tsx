@@ -278,7 +278,8 @@ function SampleC() {
             <p className="text-[11px] text-amber-900/70 mt-1">{eras[0].period}</p>
           </div>
         </div>
-        <h3 className="text-xl font-bold text-amber-950 mb-2">{eras[0].label}</h3>
+        <h3 className="text-xl font-bold text-amber-950 mb-0.5">{eras[0].label}</h3>
+        <p className="text-[13px] font-semibold text-amber-800/90 italic mb-3">{eras[0].heading}</p>
         <p className="text-amber-900/70 text-sm leading-relaxed mb-4">{eras[0].body}</p>
         <ul className="space-y-2 text-sm">
           {eras[0].cons.slice(0, 6).map((item, j) => (
@@ -306,7 +307,8 @@ function SampleC() {
             <p className="text-[11px] text-emerald-900/70 mt-1">{eras[1].period}</p>
           </div>
         </div>
-        <h3 className="text-xl font-bold text-emerald-950 mb-2">{eras[1].label}</h3>
+        <h3 className="text-xl font-bold text-emerald-950 mb-0.5">{eras[1].label}</h3>
+        <p className="text-[13px] font-semibold text-emerald-800/90 italic mb-3">{eras[1].heading}</p>
         <p className="text-emerald-900/70 text-sm leading-relaxed mb-4">{eras[1].body}</p>
         <ul className="space-y-2 text-sm">
           {eras[1].cons.slice(0, 6).map((item, j) => (
@@ -345,16 +347,17 @@ function SampleC() {
               <div>
                 <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-secondary/20 border border-secondary/40 text-secondary">
                   <motion.span animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                  Now
+                  BEST
                 </span>
-                <p className="text-[11px] text-white/60 mt-1">{eras[2].period}</p>
+                <p className="text-[11px] text-white/60 mt-1">NOW</p>
               </div>
             </div>
-            <h3 className="text-xl font-bold mb-2">
+            <h3 className="text-xl font-bold mb-0.5">
               The{" "}
               <span className="bg-gradient-to-r from-secondary via-yellow-300 to-secondary bg-clip-text text-transparent">VibeLink</span>{" "}
               Era
             </h3>
+            <p className="text-[13px] font-semibold text-secondary/90 italic mb-3">{eras[2].heading}</p>
             <p className="text-white/70 text-sm leading-relaxed mb-4">{eras[2].body}</p>
             <ul className="space-y-2 text-sm">
               {eras[2].pros.slice(0, 6).map((item, j) => (
