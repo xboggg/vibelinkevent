@@ -458,6 +458,45 @@ a:hover i.fa-chevron-down{transform:translateY(3px)}
   mix-blend-mode:screen;
 }
 /* Gold floating particles */
+/* Ghost dove — flies once across the upper hero, triggered by JS after the
+   splash finishes. Idle state: off-screen, invisible. */
+.hero-dove{
+  position:absolute;top:14%;left:-16%;z-index:2;
+  width:110px;height:80px;pointer-events:none;
+  opacity:0;
+  filter:drop-shadow(0 4px 14px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(255,240,200,.4));
+  will-change:transform,left,top,opacity;
+}
+.hero-dove.fly{
+  animation:heroDoveFly 9s cubic-bezier(.4,.05,.5,1) forwards;
+}
+.hero-dove svg{width:100%;height:100%;display:block}
+.hero-dove-wing{
+  transform-origin:60% 55%;
+}
+.hero-dove.fly .hero-dove-wing{
+  animation:heroDoveWing .65s ease-in-out infinite;
+}
+@keyframes heroDoveFly{
+   0%  {left:-16%;  top:14%; opacity:0}
+   8%  {opacity:.9}
+  50%  {           top:8%}
+  92%  {opacity:.8}
+  100% {left:116%;  top:16%; opacity:0}
+}
+@keyframes heroDoveWing{
+  0%,100%{transform:rotate(-8deg)}
+  50%    {transform:rotate(18deg)}
+}
+@media(max-width:640px){
+  /* Mobile: keep dove almost as big as desktop and give it a shorter flight
+     path so it's clearly visible against the tighter mobile hero. */
+  .hero-dove{width:88px;height:64px;top:10%}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero-dove{display:none}
+}
+
 .hero-particles{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
 .hero-particle{
   position:absolute;bottom:-20px;width:5px;height:5px;
@@ -1241,6 +1280,11 @@ footer.site-foot{padding:5rem 1.5rem 2.4rem;text-align:center;background:linear-
 @media(max-width:640px){
   section.chapter{padding:4rem 1.2rem}
   .hero-scroll{display:none}
+  /* Mobile hero: switch from 2-row grid (which reserved space for the now-hidden
+     scroll hint and pushed content downward) to a flex column with content
+     truly centred. Tighter padding + smaller headings so everything fits. */
+  .hero{display:flex;flex-direction:column;justify-content:center;align-items:stretch;padding:5rem 1.25rem 3.5rem;min-height:100vh}
+  .hero-content{align-self:center;width:100%;margin:0}
   .music-toggle-standalone{bottom:1rem;right:1rem;width:44px;height:44px;font-size:.95rem}
   .love-converter-row{flex-direction:column}
   .love-converter input{width:100%}

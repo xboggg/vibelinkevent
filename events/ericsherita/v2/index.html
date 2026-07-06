@@ -86,6 +86,10 @@
     s.classList.add('gone');
     document.body.classList.remove('splash-locked');
     setTimeout(() => s.remove(), 950);
+    /* Trigger the hero ghost-dove flyby AFTER the splash finishes — the CSS
+       animation is paused by default; adding .fly starts it. */
+    const dove = document.querySelector('.hero-dove');
+    if (dove) setTimeout(() => dove.classList.add('fly'), 700);
   });
 </script>
 
@@ -169,6 +173,21 @@
   <div class="hero-veil"></div>
   <div class="hero-glow" id="heroGlow"></div>
   <div class="hero-particles" id="heroParticles"></div>
+
+  <!-- Ghost dove: flies once across the upper hero on load, then disappears.
+       Echoes the splash motif without cluttering the couple photograph. -->
+  <div class="hero-dove" aria-hidden="true">
+    <svg viewBox="0 0 82 60" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#fff" opacity=".85" d="M 8 32 Q 2 30 4 26 L 12 28 Q 10 32 8 32 Z"/>
+      <path fill="#fff" opacity=".9"  d="M 6 36 Q 0 36 2 32 L 12 32 Q 10 36 6 36 Z"/>
+      <path fill="#fff" d="M 14 30 Q 12 22 22 20 Q 34 16 46 20 Q 58 22 62 28 Q 60 36 52 38 Q 40 42 26 40 Q 16 38 14 30 Z"/>
+      <circle fill="#fff" cx="60" cy="24" r="8"/>
+      <path fill="#d4b464" d="M 66 24 L 74 22 L 68 27 Z"/>
+      <circle fill="#5a6b4c" cx="62" cy="22" r="1.3"/>
+      <path class="hero-dove-wing" d="M 26 22 Q 30 4 44 10 Q 54 14 50 24 Q 42 30 32 28 Q 24 26 26 22 Z" fill="#fff" stroke="rgba(90,107,76,.2)" stroke-width=".5"/>
+    </svg>
+  </div>
+
   <div class="hero-content">
     <div class="hero-eyebrow" data-i18n>You Are Invited</div>
     <div class="hero-italic" data-i18n>to the wedding of</div>
