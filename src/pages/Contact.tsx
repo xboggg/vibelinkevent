@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
-import { MessageCircle as MessageCircleIcon, Mail, MapPin, Phone, Clock, HelpCircle, Loader2 } from "lucide-react";
+import { MessageCircle as MessageCircleIcon, Mail, MapPin, Phone, Clock, HelpCircle, Loader2, Sparkles, Send, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -159,61 +159,170 @@ const Contact = () => {
         keywords="contact VibeLink Event, digital invitations help, WhatsApp support Ghana"
         canonical="/contact"
       />
-      {/* Hero */}
-      <section className="pt-24 lg:pt-32 pb-16 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A]">
-        <div className="container mx-auto px-4 lg:px-8">
+      {/* Hero — animated orbs, gradient headline, pulsing trust badge */}
+      <section className="relative pt-24 lg:pt-32 pb-20 lg:pb-28 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A] overflow-hidden">
+        {/* Animated floating orbs */}
+        <motion.div
+          className="absolute top-20 -left-16 w-80 h-80 rounded-full bg-secondary/20 blur-3xl"
+          animate={{ x: [0, 40, 0], y: [0, 20, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute -top-10 right-0 w-96 h-96 rounded-full bg-pink-500/15 blur-3xl"
+          animate={{ x: [0, -30, 0], y: [0, 40, 0], scale: [1.1, 1, 1.1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-0 left-1/3 w-96 h-96 rounded-full bg-blue-500/15 blur-3xl"
+          animate={{ x: [0, 20, 0], y: [0, -20, 0], scale: [1, 1.2, 1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Sparkle particles */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-white/60"
+            style={{
+              left: `${15 + i * 13}%`,
+              top: `${20 + (i % 3) * 25}%`,
+            }}
+            animate={{ opacity: [0, 1, 0], scale: [0, 1.5, 0] }}
+            transition={{ duration: 3, repeat: Infinity, delay: i * 0.5, ease: "easeInOut" }}
+          />
+        ))}
+
+        <div className="container mx-auto px-4 lg:px-8 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto"
           >
+            {/* Pulsing trust badge */}
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ duration: 0.6, type: "spring", stiffness: 200, delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6"
+            >
+              <motion.span
+                animate={{ scale: [1, 1.3, 1] }}
+                transition={{ duration: 1.8, repeat: Infinity }}
+                className="w-2 h-2 rounded-full bg-emerald-400"
+              />
+              <span className="text-white/90 text-sm font-medium">We usually reply within 2 hours</span>
+            </motion.div>
+
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Contact Us
+              Let's build{" "}
+              <span className="bg-gradient-to-r from-secondary via-yellow-300 to-secondary bg-clip-text text-transparent">
+                something
+              </span>
+              {" "}beautiful
             </h1>
-            <p className="text-white/80 text-lg lg:text-xl">
-              Have a question or ready to create your event? We'd love to hear from you.
+            <p className="text-white/80 text-lg lg:text-xl max-w-2xl mx-auto">
+              A question, a quote, a vision — send it our way. Ghana, Germany, or anywhere in the diaspora, we're one message away.
             </p>
           </motion.div>
         </div>
+
+        {/* Wave divider */}
+        <div className="absolute bottom-0 left-0 right-0 leading-none">
+          <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" preserveAspectRatio="none" className="block w-full h-[50px] md:h-[80px]">
+            <path
+              d="M0 100L60 90C120 80 240 60 360 55C480 50 600 60 720 62.5C840 65 960 60 1080 55C1200 50 1320 55 1380 57.5L1440 60V100H0Z"
+              className="fill-background"
+            />
+          </svg>
+        </div>
       </section>
 
-      {/* Contact Info Cards */}
-      <section className="py-16 bg-background">
+      {/* Contact Info Cards — 4 colour-themed cards, spring-in, hover lift with colour glow */}
+      <section className="py-14 lg:py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
             {[
-              { icon: MapPin, title: "Ghana Office", detail: "Accra, Ghana", flag: "🇬🇭", delay: 0 },
-              { icon: MapPin, title: "Germany Office", detail: "Berlin, Germany", flag: "🇩🇪", delay: 0.1 },
-              { icon: Phone, title: "Phone / WhatsApp", detail: "+49 157 571 78561", flag: null, delay: 0.2 },
-              { icon: Clock, title: "Response Time", detail: "Within 2 hours", flag: null, delay: 0.3 },
+              {
+                icon: MapPin, title: "Ghana Office", detail: "Accra, Ghana", flag: "🇬🇭",
+                grad: "from-red-500 via-yellow-400 to-emerald-500",
+                tint: "bg-emerald-50 dark:bg-emerald-950/30",
+                text: "text-emerald-600 dark:text-emerald-400",
+                border: "border-emerald-200/70 dark:border-emerald-900/50",
+                glow: "shadow-emerald-500/25",
+              },
+              {
+                icon: MapPin, title: "Germany Office", detail: "Berlin, Germany", flag: "🇩🇪",
+                grad: "from-black via-red-600 to-yellow-400",
+                tint: "bg-amber-50 dark:bg-amber-950/30",
+                text: "text-amber-700 dark:text-amber-400",
+                border: "border-amber-200/70 dark:border-amber-900/50",
+                glow: "shadow-amber-500/25",
+              },
+              {
+                icon: Phone, title: "WhatsApp", detail: "+49 157 571 78561", flag: null,
+                grad: "from-emerald-400 to-green-600",
+                tint: "bg-green-50 dark:bg-green-950/30",
+                text: "text-green-700 dark:text-green-400",
+                border: "border-green-200/70 dark:border-green-900/50",
+                glow: "shadow-green-500/25",
+              },
+              {
+                icon: Zap, title: "Response Time", detail: "Within 2 hours", flag: null,
+                grad: "from-violet-500 to-purple-600",
+                tint: "bg-violet-50 dark:bg-violet-950/30",
+                text: "text-violet-600 dark:text-violet-400",
+                border: "border-violet-200/70 dark:border-violet-900/50",
+                glow: "shadow-violet-500/25",
+              },
             ].map((card, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: card.delay }}
-                className="text-center p-6 rounded-2xl bg-card border border-border hover:shadow-md transition-shadow"
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.5, delay: i * 0.1, type: "spring", stiffness: 100 }}
+                whileHover={{ y: -6, scale: 1.03 }}
+                className={`group relative text-center p-6 rounded-2xl bg-card border ${card.border} shadow-sm hover:shadow-xl ${card.glow} transition-shadow duration-300`}
               >
-                <div className="w-14 h-14 mx-auto rounded-xl bg-secondary/20 flex items-center justify-center mb-4">
+                {/* Coloured accent bar on top */}
+                <div className={`absolute top-0 left-4 right-4 h-1 rounded-b-full bg-gradient-to-r ${card.grad}`} />
+
+                {/* Icon badge with gradient */}
+                <motion.div
+                  className={`w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br ${card.grad} flex items-center justify-center mb-4 shadow-lg`}
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                >
                   {card.flag ? (
-                    <span className="text-2xl">{card.flag}</span>
+                    <span className="text-2xl drop-shadow-sm">{card.flag}</span>
                   ) : (
-                    <card.icon className="h-7 w-7 text-secondary" />
+                    <card.icon className="h-6 w-6 text-white" strokeWidth={2.25} />
                   )}
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{card.title}</h3>
-                <p className="text-muted-foreground text-sm">{card.detail}</p>
+                </motion.div>
+                <h3 className="text-base font-bold text-foreground mb-1">{card.title}</h3>
+                <p className={`${card.text} text-sm font-medium`}>{card.detail}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact Form Section */}
-      <section className="py-16 bg-muted/50">
-        <div className="container mx-auto px-4 lg:px-8">
+      {/* Contact Form Section — soft gradient background, glass card with animated gradient border */}
+      <section className="relative py-14 lg:py-20 bg-gradient-to-br from-purple-50 via-background to-pink-50 dark:from-purple-950/20 dark:via-background dark:to-pink-950/20 overflow-hidden">
+        {/* Soft ambient orb (outside the section clipping - safe because no overflow-hidden) */}
+        <motion.div
+          className="absolute top-1/4 -left-32 w-96 h-96 rounded-full bg-primary/10 blur-3xl pointer-events-none"
+          animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full bg-secondary/10 blur-3xl pointer-events-none"
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.5, 0.8, 0.5] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <div className="container mx-auto px-4 lg:px-8 relative">
           <div className="max-w-2xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -222,25 +331,43 @@ const Contact = () => {
               transition={{ duration: 0.6 }}
               className="text-center mb-10"
             >
-              <div className="w-16 h-16 mx-auto rounded-full bg-secondary/20 flex items-center justify-center mb-6">
-                <MessageCircleIcon className="h-8 w-8 text-secondary" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                Get In Touch
+              <motion.div
+                initial={{ scale: 0, rotate: -45 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
+                className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-primary via-purple-500 to-secondary flex items-center justify-center mb-6 shadow-lg shadow-primary/30"
+              >
+                <MessageCircleIcon className="h-8 w-8 text-white" strokeWidth={2.25} />
+              </motion.div>
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+                Get In{" "}
+                <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                  Touch
+                </span>
               </h2>
               <p className="text-muted-foreground text-lg">
-                Have a question or want to discuss your event? Send us a message
-                and we'll get back to you.
+                Have a question or want to discuss your event? Drop us a line — we'll get back to you within 2 hours.
               </p>
             </motion.div>
 
+            {/* Animated gradient border wrapper */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="p-8 rounded-2xl bg-card border border-border space-y-6"
+              className="relative rounded-3xl p-[2px] bg-gradient-to-r from-primary via-secondary to-pink-500 shadow-xl shadow-primary/20"
             >
+              <div className="p-6 md:p-8 rounded-[calc(1.5rem-2px)] bg-card space-y-6 relative overflow-hidden">
+                {/* Sparkles floating in top corner */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  className="absolute -top-6 -right-6 text-primary/10 pointer-events-none"
+                >
+                  <Sparkles className="w-20 h-20" />
+                </motion.div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-foreground">
@@ -294,6 +421,7 @@ const Contact = () => {
                 >
                   <option value="" disabled>Select event type...</option>
                   <option value="Wedding">Wedding</option>
+                  <option value="Engagement">Engagement / Customary Marriage</option>
                   <option value="Funeral / Memorial">Funeral / Memorial</option>
                   <option value="Church Event">Church Event</option>
                   <option value="Naming Ceremony">Naming Ceremony</option>
@@ -327,24 +455,26 @@ const Contact = () => {
                 </p>
               </div>
 
-              {/* Dual Send Buttons */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Dual Send Buttons — WhatsApp green + primary purple, both with hover-lift + shimmer */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
+                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} className="w-full">
                 <Button
                   type="button"
                   onClick={handleWhatsAppSubmit}
                   size="lg"
-                  className="w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold"
+                  className="w-full bg-gradient-to-r from-[#25D366] to-[#1ebe5d] hover:from-[#1ebe5d] hover:to-[#128C7E] text-white font-semibold shadow-md hover:shadow-lg shadow-green-500/30 transition-all"
                 >
                   <svg className="h-5 w-5 mr-2 fill-white flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                   Send via WhatsApp
                 </Button>
+                </motion.div>
+                <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} className="w-full">
                 <Button
                   type="button"
                   onClick={handleEmailSubmit}
                   disabled={isSending}
-                  variant="outline"
                   size="lg"
-                  className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-60"
+                  className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white font-semibold shadow-md hover:shadow-lg shadow-primary/30 transition-all disabled:opacity-60"
                 >
                   {isSending ? (
                     <>
@@ -353,19 +483,21 @@ const Contact = () => {
                     </>
                   ) : (
                     <>
-                      <Mail className="h-5 w-5 mr-2" />
+                      <Send className="h-5 w-5 mr-2" />
                       Send Message
                     </>
                   )}
                 </Button>
+                </motion.div>
+              </div>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-background">
+      {/* FAQ Section — coloured icon, animated accordion cards */}
+      <section className="py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -374,14 +506,23 @@ const Contact = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <div className="w-16 h-16 mx-auto rounded-full bg-secondary/20 flex items-center justify-center mb-6">
-              <HelpCircle className="h-8 w-8 text-secondary" />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Frequently Asked Questions
+            <motion.div
+              initial={{ scale: 0, rotate: -45 }}
+              whileInView={{ scale: 1, rotate: 0 }}
+              viewport={{ once: true }}
+              transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
+              className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30"
+            >
+              <HelpCircle className="h-8 w-8 text-white" strokeWidth={2.25} />
+            </motion.div>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Frequently Asked{" "}
+              <span className="bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Questions
+              </span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Find answers to common questions about our services
+              Everything you need to know before we get started.
             </p>
           </motion.div>
 
@@ -392,29 +533,45 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-3xl mx-auto"
           >
-            <Accordion type="single" collapsible className="space-y-4">
+            <Accordion type="single" collapsible className="space-y-3">
               {faqs.map((faq, index) => (
-                <AccordionItem 
-                  key={index} 
-                  value={`item-${index}`}
-                  className="bg-card border border-border rounded-xl px-6 data-[state=open]:shadow-md transition-shadow"
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
                 >
-                  <AccordionTrigger className="text-left text-foreground font-medium hover:no-underline py-5">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground pb-5">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
+                  <AccordionItem
+                    value={`item-${index}`}
+                    className="group bg-card border border-border rounded-xl px-6 data-[state=open]:border-primary/40 data-[state=open]:shadow-md data-[state=open]:shadow-primary/10 transition-all hover:border-primary/30"
+                  >
+                    <AccordionTrigger className="text-left text-foreground font-medium hover:no-underline hover:text-primary transition-colors py-5">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                </motion.div>
               ))}
             </Accordion>
 
-            <div className="text-center mt-8">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="text-center mt-10"
+            >
               <p className="text-muted-foreground text-sm mb-3">Looking for more answers?</p>
-              <Link to="/faq" className="inline-flex items-center gap-2 text-primary font-semibold hover:underline text-sm">
+              <Link
+                to="/faq"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:shadow-lg hover:shadow-primary/30 transition-all text-sm"
+              >
                 View Full FAQ Page →
               </Link>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>

@@ -350,7 +350,7 @@
     width:min(94vw, 460px);
     z-index:8;
     opacity:0;
-    transition:transform 2.4s cubic-bezier(.2,.85,.25,1), opacity 1.4s ease;
+    transition:transform 1.2s cubic-bezier(.2,.85,.25,1), opacity .7s ease;
     pointer-events:none;
   }
   .card-wrap.slide{transform:translate(-50%,-50%) scale(1);opacity:1}
@@ -372,7 +372,7 @@
     text-align:center;
     transform-origin:center top;
     transform:scaleY(.02);opacity:.3;
-    transition:transform 1.8s cubic-bezier(.25,.85,.3,1), opacity 1.4s ease;
+    transition:transform 1s cubic-bezier(.25,.85,.3,1), opacity .7s ease;
     overflow:hidden;
   }
   .card-wrap.unfold .card-fold{transform:scaleY(1);opacity:1}
@@ -401,7 +401,7 @@
     opacity:0;
     transition:opacity .8s ease;
   }
-  .card-wrap.unfold .card-crease{opacity:1;transition-delay:1.4s}
+  .card-wrap.unfold .card-crease{opacity:1;transition-delay:.8s}
   .card-crease::before{
     content:'';position:absolute;top:-3px;left:0;right:0;height:7px;
     background:linear-gradient(180deg, transparent, rgba(90,65,25,.05) 50%, transparent);
@@ -411,16 +411,16 @@
   .card-inner{
     position:relative;z-index:5;
     opacity:0;
-    transition:opacity 1.4s ease;
+    transition:opacity .7s ease;
   }
-  .card-wrap.unfold .card-inner{opacity:1;transition-delay:.8s}
+  .card-wrap.unfold .card-inner{opacity:1;transition-delay:.5s}
 
   .card-corner{
     position:absolute;width:32px;height:32px;pointer-events:none;
     z-index:4;opacity:0;
     transition:opacity 1s ease;
   }
-  .card-wrap.unfold .card-corner{opacity:.85;transition-delay:3s}
+  .card-wrap.unfold .card-corner{opacity:.85;transition-delay:1.6s}
   .card-corner svg{width:100%;height:100%;filter:drop-shadow(0 1px 1px rgba(90,107,76,.2))}
   .card-corner.tl{top:6px;left:6px}
   .card-corner.tr{top:6px;right:6px;transform:scaleX(-1)}
@@ -434,7 +434,7 @@
     opacity:0;
     transition:opacity 1s ease, transform 1s ease;
   }
-  .card-wrap.unfold .sprig{opacity:.9;transform:translateX(-50%) scale(1);transition-delay:2.8s}
+  .card-wrap.unfold .sprig{opacity:.9;transform:translateX(-50%) scale(1);transition-delay:1.5s}
 
   .card-flourish{display:flex;align-items:center;justify-content:center;gap:.7rem;margin-bottom:.4rem;color:var(--gold-deep);width:100%;max-width:200px;margin-left:auto;margin-right:auto}
   .card-flourish .fl{flex:1;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent)}
@@ -637,18 +637,33 @@
   }
 
   .tap-first{
-    position:absolute;bottom:2rem;left:0;right:0;
-    text-align:center;
+    position:fixed;left:50%;bottom:2.5rem;
+    transform:translateX(-50%);
+    display:inline-flex;align-items:center;gap:.55rem;
+    padding:.75rem 1.4rem;
+    background:rgba(20,12,4,.65);
+    border:1px solid rgba(201,162,74,.65);
+    border-radius:999px;
+    -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
     font-family:'Cormorant Garamond',serif;font-style:italic;
-    color:rgba(245,235,210,.9);font-size:1.05rem;
+    color:#f7ecc9;font-size:1.1rem;
     letter-spacing:.05em;
-    text-shadow:0 2px 8px rgba(0,0,0,.8);
-    animation:hintPulse 2.4s ease-in-out infinite;
-    z-index:30;
+    text-shadow:0 2px 8px rgba(0,0,0,.9);
+    box-shadow:0 8px 26px rgba(0,0,0,.6), 0 0 0 0 rgba(201,162,74,.55);
+    animation:hintPulse 2s ease-in-out infinite;
+    z-index:200;pointer-events:none;
+    white-space:nowrap;
+  }
+  @media(max-width:640px){
+    .tap-first{bottom:1.8rem;font-size:1rem;padding:.65rem 1.15rem}
   }
   .tap-first.gone{display:none}
-  .tap-first i{color:var(--gold-bright);margin-right:.5rem}
-  @keyframes hintPulse{0%,100%{opacity:.85}50%{opacity:1}}
+  .tap-first i{color:var(--gold-bright)}
+  @keyframes hintPulse{
+    0%,100%{opacity:.95;box-shadow:0 8px 26px rgba(0,0,0,.6), 0 0 0 0 rgba(201,162,74,.6)}
+    50%   {opacity:1;   box-shadow:0 8px 26px rgba(0,0,0,.6), 0 0 0 16px rgba(201,162,74,0)}
+  }
 
   /* ========== Cinematic Welcome-Back Screen ========== */
   .welcome-back{
@@ -719,6 +734,10 @@
   }
 
   /* Flying dove — SVG that traverses left to right */
+  /* Welcome-back dove + petals + particles disabled per Edmund 2026-07-06 */
+  .welcome-dove,
+  .welcome-petals,
+  .welcome-particles{display:none !important}
   .welcome-dove{
     position:absolute;top:22%;left:-15%;z-index:3;
     width:90px;height:66px;
@@ -1109,8 +1128,9 @@
         <i class="fab fa-whatsapp"></i>
         <span>Share this joy with family &amp; friends</span>
       </button>
-    </div>
-</div>
+    </div><!-- /.card-inner -->
+  </div><!-- /.card-fold -->
+</div><!-- /.card-wrap -->
 
 <div class="tap-first" id="tapFirst"><i class="fas fa-hand-point-up"></i> Tap the wax seal</div>
 
@@ -1263,9 +1283,32 @@ function clearSaved(){
 
 function updateDemoLabel(){ /* no-op in production */ }
 
-/* Tell the parent frame we're done — parent handles the transition to the full site */
-function finishSplash(){
+/* ============ FINISH / HANDOFF TO MAIN SITE ============
+   Parent preloads the hero and posts {type:'main-ready'} when the site is
+   paintable. We WAIT for that signal before fading — otherwise the guest sees
+   a blank frame between the splash and the hero. Fallback = 1400ms so a
+   broken/slow image never traps the user on the splash. */
+let _parentReady = false;
+window.addEventListener('message', e => {
+  if (e.data && e.data.type === 'main-ready') _parentReady = true;
+});
+
+function _doFinish(){
+  document.body.style.transition = 'opacity .9s ease';
+  document.body.style.opacity = '0';
   try{ window.parent && window.parent.postMessage({ type: 'splash-done' }, '*'); }catch(e){}
+}
+
+function finishSplash(){
+  try{ window.parent && window.parent.postMessage({ type: 'splash-ready-check' }, '*'); }catch(e){}
+  if (_parentReady){ _doFinish(); return; }
+  const start = Date.now();
+  const t = setInterval(() => {
+    if (_parentReady || Date.now() - start > 1400){
+      clearInterval(t);
+      _doFinish();
+    }
+  }, 50);
 }
 
 /* ============ MAIN FLOW ============ */
@@ -1284,6 +1327,12 @@ const musicToggleBtn = document.getElementById('musicToggle');
 if (hasSaved()){
   document.getElementById('stage').style.display = 'none';
   tapFirst.style.display = 'none';
+  /* Also hide the ambient envelope-side dove + falling petals — otherwise they
+     remain animating BEHIND the welcome-back overlay and flash back into view
+     during the fade-to-site transition. */
+  const _amb1 = document.getElementById('petalField'); if (_amb1) _amb1.style.display = 'none';
+  const _amb2 = document.getElementById('dove');       if (_amb2) _amb2.style.display = 'none';
+  document.querySelectorAll('.amb').forEach(el => el.style.display = 'none');
   welcomeBack.classList.add('on');
   musicToggleBtn.classList.add('on');
   setTimeout(() => tryStartMusic(), 400);
@@ -1294,36 +1343,9 @@ if (hasSaved()){
   const daysEl = document.getElementById('welcomeDays');
   if (daysEl) daysEl.textContent = daysLeft;
 
-  /* Spawn falling petals */
-  const petalShapes = [
-    '<svg viewBox="0 0 40 60"><path d="M 20 2 Q 4 20 6 40 Q 10 55 20 58 Q 30 55 34 40 Q 36 20 20 2 Z" fill="url(#wPetalSage)"/><path d="M 20 8 L 20 54" stroke="#3d4a32" stroke-width="1" opacity=".35"/></svg>',
-    '<svg viewBox="0 0 40 60"><path d="M 20 2 Q 4 20 6 40 Q 10 55 20 58 Q 30 55 34 40 Q 36 20 20 2 Z" fill="url(#wPetalCream)"/></svg>',
-    '<svg viewBox="0 0 40 60"><ellipse cx="20" cy="30" rx="18" ry="28" fill="url(#wPetalSage)"/></svg>',
-  ];
-  const petalField = document.getElementById('welcomePetals');
-  for (let i = 0; i < 16; i++){
-    const p = document.createElement('div');
-    p.className = 'welcome-petal';
-    p.innerHTML = petalShapes[i % petalShapes.length];
-    p.style.left = (Math.random() * 100) + 'vw';
-    p.style.animationDuration = (7 + Math.random() * 5) + 's';
-    p.style.animationDelay = (Math.random() * 3) + 's';
-    p.style.setProperty('--drift', (Math.random() * 180 - 90) + 'px');
-    p.style.transform = 'scale(' + (0.6 + Math.random() * 0.6) + ')';
-    petalField.appendChild(p);
-  }
-
-  /* Rising gold particles */
-  const particleField = document.getElementById('welcomeParticles');
-  for (let i = 0; i < 24; i++){
-    const p = document.createElement('div');
-    p.className = 'welcome-gold-p';
-    p.style.left = (Math.random() * 100) + 'vw';
-    p.style.animationDuration = (6 + Math.random() * 5) + 's';
-    p.style.animationDelay = (Math.random() * 3) + 's';
-    p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
-    particleField.appendChild(p);
-  }
+  /* Falling petals + rising gold particles removed per Edmund 2026-07-06.
+     The dove is hidden via CSS (see .welcome-dove{display:none}).
+     Kept as a clean fade-in of the photo + text + countdown. */
 
   /* After 3 seconds → fade out → post to parent → parent hides the iframe */
   setTimeout(() => {
@@ -1400,19 +1422,19 @@ function openEnvelope(){
     }
   }, 400);
 
-  /* Wax fades, flap lifts, envelope recedes */
-  setTimeout(() => wax.classList.add('gone'), 1100);
-  setTimeout(() => { flap.classList.add('open'); slideSound(0.2); }, 900);
-  setTimeout(() => env.classList.add('recede'), 2200);
+  /* Wax fades, flap lifts, envelope recedes  (compressed → card readable ~4s) */
+  setTimeout(() => { flap.classList.add('open'); slideSound(0.2); }, 550);
+  setTimeout(() => wax.classList.add('gone'), 650);
+  setTimeout(() => env.classList.add('recede'), 1400);
 
   /* Card slides out then unfolds */
-  setTimeout(() => cardWrap.classList.add('slide'), 2000);
+  setTimeout(() => cardWrap.classList.add('slide'), 1200);
   setTimeout(() => {
     cardWrap.classList.add('unfold');
     cardWrap.style.pointerEvents = 'auto';
     tryStartMusic();
     musicToggleBtn.classList.add('on');
-  }, 3400);
+  }, 2200);
 }
 
 wax.addEventListener('click', e => { e.stopPropagation(); e.preventDefault(); if (!hasSaved()) openEnvelope(); });

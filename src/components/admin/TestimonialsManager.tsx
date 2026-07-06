@@ -48,13 +48,14 @@ interface Testimonial {
 
 const eventTypes = [
   "Wedding",
+  "Engagement",
   "Funeral",
+  "Church Event",
   "Naming Ceremony",
   "Birthday",
-  "Graduation",
   "Anniversary",
+  "Graduation",
   "Corporate Event",
-  "Church Event",
 ];
 
 const emptyTestimonial: Omit<Testimonial, "id" | "created_at"> = {

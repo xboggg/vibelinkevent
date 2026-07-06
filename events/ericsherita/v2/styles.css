@@ -432,39 +432,20 @@ a:hover i.fa-chevron-down{transform:translateY(3px)}
   padding:6rem 1.5rem 5rem;
 }
 .hero-content{align-self:center}
-.hero-bg, .hero-bg-2{
+.hero-bg{
   position:absolute;inset:-10% 0;z-index:0;
-  background-position:center 30%;
-  background-size:cover;background-repeat:no-repeat;
+  background:url('hero-medium.jpg') center 30%/cover no-repeat;
   filter:brightness(.72) saturate(1.08);
-  will-change:transform, opacity;
+  will-change:transform;
   animation:heroKenBurns 26s ease-in-out infinite alternate;
 }
-.hero-bg{background-image:url('hero-medium.jpg');animation:heroKenBurns 26s ease-in-out infinite alternate, heroSlideA 16s ease-in-out infinite}
-.hero-bg-2{background-image:url('hero2-medium.jpg');opacity:0;animation:heroKenBurns 26s ease-in-out infinite alternate, heroSlideB 16s ease-in-out infinite}
-@media(min-width:1201px){
-  .hero-bg{background-image:url('hero.jpg')}
-  .hero-bg-2{background-image:url('hero2.jpg')}
-}
-@media(max-width:640px){
-  .hero-bg{background-image:url('hero-mobile.jpg');background-position:center 20%}
-  .hero-bg-2{background-image:url('hero2-mobile.jpg');background-position:center 20%}
-}
+@media(min-width:1201px){.hero-bg{background-image:url('hero.jpg')}}
+@media(max-width:640px){.hero-bg{background-image:url('hero-mobile.jpg');background-position:center 20%}}
 @keyframes heroKenBurns{
   0%{transform:scale(1.06) translate3d(0,0,0)}
   100%{transform:scale(1.20) translate3d(-15px,-18px,0)}
 }
-/* Cross-fade slideshow — 16s cycle: A shows 0-8s, B shows 8-16s, then loops */
-@keyframes heroSlideA{
-  0%,45%{opacity:1}
-  50%,95%{opacity:0}
-  100%{opacity:1}
-}
-@keyframes heroSlideB{
-  0%,45%{opacity:0}
-  50%,95%{opacity:1}
-  100%{opacity:0}
-}
+.hero-bg-2{display:none}
 .hero-veil{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.05) 30%, rgba(0,0,0,.3) 65%, rgba(0,0,0,.8) 100%);

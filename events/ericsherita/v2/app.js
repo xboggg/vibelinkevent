@@ -213,8 +213,17 @@ const TARGET = new Date('2026-11-28T17:00:00+00:00').getTime();
   tick(); setInterval(tick, 1000);
 })();
 
-/* ============ MILESTONE BANNER ============ */
+/* ============ MILESTONE BANNER — disabled per Edmund's request 2026-07-06.
+   Post-wedding Thank-You reveal is preserved below. ============ */
 (function(){
+  const now = Date.now();
+  const diff = TARGET - now;
+  if (diff < -86400000){
+    const ty = $('#thankyou');
+    if (ty) ty.classList.add('on');
+  }
+})();
+if (false) (function(){
   const banner = $('#milestoneBanner');
   if (!banner) return;
   const now = Date.now();
