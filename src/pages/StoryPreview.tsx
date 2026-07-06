@@ -257,70 +257,118 @@ function SampleB() {
   );
 }
 
-// —— C · Side-by-side comparison ————————————————————————
+// —— C · Side-by-side comparison (colour-refreshed) ——————————————
+// Paper: warm amber/orange/rose gradient. WhatsApp: emerald/teal/cyan
+// gradient. VibeLink: full glass/gradient treatment reused from Sample B.
 function SampleC() {
-  const columns = [
-    {
-      era: eras[0], colour: "amber", accent: "border-amber-200 bg-amber-50/50",
-      chip: "bg-amber-100 text-amber-700", iconBg: "bg-amber-500", tag: "Then",
-    },
-    {
-      era: eras[1], colour: "emerald", accent: "border-emerald-200 bg-emerald-50/50",
-      chip: "bg-emerald-100 text-emerald-700", iconBg: "bg-emerald-500", tag: "Better",
-    },
-    {
-      era: eras[2], colour: "purple", accent: "border-primary/40 bg-gradient-to-br from-purple-50 to-pink-50",
-      chip: "bg-primary text-white", iconBg: "bg-gradient-to-br from-primary to-secondary", tag: "Now", highlight: true,
-    },
-  ];
   return (
-    <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-4 md:gap-6">
-      {columns.map((col, i) => {
-        const Icon = col.era.icon;
-        const list = col.era.pros.length ? col.era.pros : col.era.cons;
-        const listIcon = col.era.pros.length ? Check : X;
-        const listIconColour = col.era.pros.length ? "text-emerald-500" : "text-red-500";
-        return (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-            className={`relative rounded-2xl border-2 ${col.accent} p-6 ${col.highlight ? "shadow-xl shadow-primary/20 md:scale-105" : "shadow-sm"}`}
-          >
-            {col.highlight && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-[10px] font-bold uppercase tracking-widest shadow-lg">
-                You are here
-              </span>
-            )}
+    <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-4 md:gap-6 items-stretch">
+      {/* PAPER — warm amber → orange → rose */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="relative rounded-2xl border-2 border-amber-300/70 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-6 shadow-sm"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 flex items-center justify-center shadow-md shadow-orange-500/30">
+            <FileText className="w-7 h-7 text-white" strokeWidth={2} />
+          </div>
+          <div>
+            <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-200 to-orange-200 text-amber-900">Then</span>
+            <p className="text-[11px] text-amber-900/70 mt-1">{eras[0].period}</p>
+          </div>
+        </div>
+        <h3 className="text-xl font-bold text-amber-950 mb-2">{eras[0].label}</h3>
+        <p className="text-amber-900/70 text-sm leading-relaxed mb-4">{eras[0].body}</p>
+        <ul className="space-y-2 text-sm">
+          {eras[0].cons.slice(0, 6).map((item, j) => (
+            <li key={j} className="flex items-start gap-2 text-amber-900/80">
+              <X className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </motion.div>
 
-            {/* Header */}
+      {/* WHATSAPP — emerald → teal → cyan */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="relative rounded-2xl border-2 border-emerald-300/70 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 p-6 shadow-sm"
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600 flex items-center justify-center shadow-md shadow-emerald-500/30">
+            <Smartphone className="w-7 h-7 text-white" strokeWidth={2} />
+            <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center border-2 border-white">99+</span>
+          </div>
+          <div>
+            <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-gradient-to-r from-emerald-200 to-teal-200 text-emerald-900">Better</span>
+            <p className="text-[11px] text-emerald-900/70 mt-1">{eras[1].period}</p>
+          </div>
+        </div>
+        <h3 className="text-xl font-bold text-emerald-950 mb-2">{eras[1].label}</h3>
+        <p className="text-emerald-900/70 text-sm leading-relaxed mb-4">{eras[1].body}</p>
+        <ul className="space-y-2 text-sm">
+          {eras[1].cons.slice(0, 6).map((item, j) => (
+            <li key={j} className="flex items-start gap-2 text-emerald-900/80">
+              <X className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </motion.div>
+
+      {/* VIBELINK — dark glass + gradient border (reused from Sample B) */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="relative rounded-2xl p-[2px] bg-gradient-to-r from-primary via-purple-500 to-secondary shadow-2xl shadow-primary/30 md:scale-105"
+      >
+        <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-[10px] font-bold uppercase tracking-widest shadow-lg z-10">
+          You are here
+        </span>
+
+        <div className="relative rounded-[calc(1rem-2px)] p-6 bg-gradient-to-br from-purple-950 via-slate-900 to-purple-900 overflow-hidden text-white h-full">
+          <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-primary/30 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-16 -left-16 w-40 h-40 rounded-full bg-secondary/30 blur-3xl pointer-events-none" />
+
+          <div className="relative">
             <div className="flex items-center gap-3 mb-4">
-              <div className={`w-14 h-14 rounded-2xl ${col.iconBg} flex items-center justify-center shadow-md`}>
-                <Icon className="w-7 h-7 text-white" strokeWidth={2} />
+              <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/50">
+                <Sparkles className="w-7 h-7 text-white" strokeWidth={2} />
+                <motion.span
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.9, 0.4, 0.9] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/60"
+                />
               </div>
               <div>
-                <span className={`inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${col.chip}`}>{col.tag}</span>
-                <p className="text-[11px] text-muted-foreground mt-1">{col.era.period}</p>
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-secondary/20 border border-secondary/40 text-secondary">
+                  <motion.span animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  Now
+                </span>
+                <p className="text-[11px] text-white/60 mt-1">{eras[2].period}</p>
               </div>
             </div>
-
-            <h3 className="text-xl font-bold text-foreground mb-2">{col.era.label}</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed mb-4">{col.era.body}</p>
-
+            <h3 className="text-xl font-bold mb-2">
+              The{" "}
+              <span className="bg-gradient-to-r from-secondary via-yellow-300 to-secondary bg-clip-text text-transparent">VibeLink</span>{" "}
+              Era
+            </h3>
+            <p className="text-white/70 text-sm leading-relaxed mb-4">{eras[2].body}</p>
             <ul className="space-y-2 text-sm">
-              {list.slice(0, 6).map((item, j) => {
-                const ListIcon = listIcon;
-                return (
-                  <li key={j} className="flex items-start gap-2 text-foreground/80">
-                    <ListIcon className={`w-4 h-4 shrink-0 mt-0.5 ${listIconColour}`} />
-                    <span>{item}</span>
-                  </li>
-                );
-              })}
+              {eras[2].pros.slice(0, 6).map((item, j) => (
+                <li key={j} className="flex items-start gap-2 text-white/90">
+                  <div className="w-4 h-4 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <Check className="w-2.5 h-2.5 text-emerald-400" strokeWidth={3} />
+                  </div>
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
-          </motion.div>
-        );
-      })}
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }

@@ -7,7 +7,8 @@ import {
   Instagram, Facebook, Twitter, Linkedin, Loader2, ChevronLeft, ChevronRight,
   FileText, Smartphone, RefreshCw, MapPin, Clock, Camera, Music, Video,
   QrCode, Search, MessageSquare, ClipboardList, Radio, Flower2,
-  BookOpen, Coins, CheckCircle2, XCircle, ArrowRight, Zap, ChevronDown
+  BookOpen, Coins, CheckCircle2, XCircle, ArrowRight, Zap, ChevronDown,
+  Check, X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedCounter } from "@/components/AnimatedCounter";
@@ -263,246 +264,137 @@ const About = () => {
         </div>
       </section>
 
-      {/* Our Story - The Evolution */}
+      {/* Our Story — 3-column then/better/now comparison */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-14 lg:mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Our Story
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              The evolution of invitations in Ghana
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">Our Story</h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">The evolution of invitations in Ghana</p>
           </motion.div>
 
-          {/* Timeline */}
-          <div className="max-w-5xl mx-auto">
-
-            {/* Era 1: Paper */}
+          <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-4 md:gap-6 items-stretch">
+            {/* PAPER — warm amber → orange → rose */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative pl-8 md:pl-0 md:grid md:grid-cols-2 gap-8 mb-16"
+              initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="relative rounded-2xl border-2 border-amber-300/70 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-6 shadow-sm"
             >
-              <div className="md:text-right md:pr-12">
-                <motion.div
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-sky-400 to-blue-500 mb-4 relative overflow-hidden shadow-lg"
-                  animate={{
-                    scale: [1, 1.03, 1],
-                    boxShadow: [
-                      "0 4px 15px -3px rgba(56, 189, 248, 0.3)",
-                      "0 8px 25px -3px rgba(56, 189, 248, 0.5)",
-                      "0 4px 15px -3px rgba(56, 189, 248, 0.3)"
-                    ],
-                  }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <motion.div
-                    animate={{ rotate: [0, -10, 10, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <FileText className="h-5 w-5 text-white" />
-                  </motion.div>
-                  <span className="font-semibold text-white">The Paper Era</span>
-                </motion.div>
-                <h3 className="text-2xl font-bold text-foreground mb-4">Traditional Printed Cards</h3>
-                <p className="text-muted-foreground mb-4">
-                  For generations, Ghanaians celebrated life's milestones with beautifully printed invitation cards.
-                  But paper came with limitations...
-                </p>
-                <div className="space-y-2">
-                  {paperProblems.map((problem, i) => (
-                    <div key={i} className="flex items-center gap-2 justify-start md:justify-end text-sm text-red-500">
-                      <span>{problem}</span>
-                      <XCircle className="h-4 w-4 flex-shrink-0" />
-                    </div>
-                  ))}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 flex items-center justify-center shadow-md shadow-orange-500/30">
+                  <FileText className="w-7 h-7 text-white" strokeWidth={2} />
+                </div>
+                <div>
+                  <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-200 to-orange-200 text-amber-900">Then</span>
+                  <p className="text-[11px] text-amber-900/70 mt-1">1980s → 2000s</p>
                 </div>
               </div>
-              <div className="hidden md:flex items-center justify-center">
-                <motion.div
-                  className="w-32 h-32 rounded-full bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center shadow-lg"
-                  animate={{
-                    y: [0, -10, 0],
-                    boxShadow: [
-                      "0 10px 25px -5px rgba(56, 189, 248, 0.3)",
-                      "0 25px 50px -12px rgba(56, 189, 248, 0.5)",
-                      "0 10px 25px -5px rgba(56, 189, 248, 0.3)"
-                    ],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  <motion.div
-                    animate={{ rotate: [0, -5, 5, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <FileText className="h-16 w-16 text-white" />
-                  </motion.div>
-                </motion.div>
-              </div>
-              {/* Timeline line for Paper Era */}
-              <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-gray-300 via-amber-400 to-purple-500 -translate-x-1/2 hidden md:block" />
+              <h3 className="text-xl font-bold text-amber-950 mb-2">The Paper Era</h3>
+              <p className="text-amber-900/70 text-sm leading-relaxed mb-4">
+                For generations, Ghanaians celebrated life's milestones with beautifully printed invitation cards. But paper came with limitations.
+              </p>
+              <ul className="space-y-2 text-sm">
+                {paperProblems.map((item, j) => (
+                  <li key={j} className="flex items-start gap-2 text-amber-900/80">
+                    <X className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
 
-            {/* Era 2: WhatsApp/Digital Images */}
+            {/* WHATSAPP — emerald → teal → cyan */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative pl-8 md:pl-0 md:grid md:grid-cols-2 gap-8 mb-16"
+              initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="relative rounded-2xl border-2 border-emerald-300/70 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 p-6 shadow-sm"
             >
-              <div className="hidden md:flex items-center justify-center order-1">
-                <motion.div
-                  className="w-32 h-32 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg"
-                  animate={{
-                    y: [0, -10, 0],
-                    boxShadow: [
-                      "0 10px 25px -5px rgba(34, 197, 94, 0.3)",
-                      "0 25px 50px -12px rgba(34, 197, 94, 0.5)",
-                      "0 10px 25px -5px rgba(34, 197, 94, 0.3)"
-                    ],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.5
-                  }}
-                  whileHover={{ scale: 1.1, rotate: -5 }}
-                >
-                  <motion.div
-                    animate={{ rotate: [0, 10, -10, 0], y: [0, -3, 3, 0] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <Smartphone className="h-16 w-16 text-white" />
-                  </motion.div>
-                </motion.div>
-              </div>
-              <div className="md:pl-12 order-2">
-                <motion.div
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 dark:bg-green-900/30 mb-4 relative overflow-hidden"
-                  animate={{
-                    scale: [1, 1.03, 1],
-                    boxShadow: [
-                      "0 0 0 0 rgba(34, 197, 94, 0)",
-                      "0 0 20px 5px rgba(34, 197, 94, 0.25)",
-                      "0 0 0 0 rgba(34, 197, 94, 0)"
-                    ],
-                  }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.5
-                  }}
-                >
-                  <motion.div
-                    animate={{ rotate: [0, 15, -15, 0], y: [0, -2, 2, 0] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <Smartphone className="h-5 w-5 text-green-600" />
-                  </motion.div>
-                  <span className="font-semibold text-green-700 dark:text-green-400">The WhatsApp Era</span>
-                </motion.div>
-                <h3 className="text-2xl font-bold text-foreground mb-4">JPEG & PDF Flyers</h3>
-                <p className="text-muted-foreground mb-4">
-                  Then came the digital shift. Designers created invitation flyers - JPEGs and PDFs shared via
-                  WhatsApp, email, and social media. Faster and cheaper, but with new problems...
-                </p>
-                <div className="space-y-2">
-                  {whatsappProblems.map((problem, i) => (
-                    <div key={i} className="flex items-center gap-2 text-sm text-amber-600">
-                      <XCircle className="h-4 w-4 flex-shrink-0" />
-                      <span>{problem}</span>
-                    </div>
-                  ))}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600 flex items-center justify-center shadow-md shadow-emerald-500/30">
+                  <Smartphone className="w-7 h-7 text-white" strokeWidth={2} />
+                  <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center border-2 border-white">99+</span>
+                </div>
+                <div>
+                  <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-gradient-to-r from-emerald-200 to-teal-200 text-emerald-900">Better</span>
+                  <p className="text-[11px] text-emerald-900/70 mt-1">2010s → 2024</p>
                 </div>
               </div>
-              {/* Timeline line for WhatsApp Era */}
-              <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-green-400 via-amber-400 to-purple-500 -translate-x-1/2 hidden md:block" />
+              <h3 className="text-xl font-bold text-emerald-950 mb-2">The WhatsApp Era</h3>
+              <p className="text-emerald-900/70 text-sm leading-relaxed mb-4">
+                Then came the digital shift. Designers created invitation flyers — JPEGs and PDFs shared via WhatsApp, email, and social media. Faster and cheaper, but with new problems.
+              </p>
+              <ul className="space-y-2 text-sm">
+                {whatsappProblems.map((item, j) => (
+                  <li key={j} className="flex items-start gap-2 text-emerald-900/80">
+                    <X className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
 
-            {/* Era 3: VibeLink */}
+            {/* VIBELINK — dark glass + gradient border */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
+              initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="relative rounded-2xl p-[2px] bg-gradient-to-r from-primary via-purple-500 to-secondary shadow-2xl shadow-primary/30 md:scale-105"
             >
-              <div className="text-center max-w-3xl mx-auto px-4">
-                <motion.div
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 mb-6 shadow-lg relative overflow-hidden"
-                  animate={{
-                    scale: [1, 1.05, 1],
-                    boxShadow: [
-                      "0 10px 25px -5px rgba(139, 92, 246, 0.3)",
-                      "0 20px 40px -5px rgba(139, 92, 246, 0.5)",
-                      "0 10px 25px -5px rgba(139, 92, 246, 0.3)"
-                    ],
-                    y: [0, -5, 0],
-                  }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  {/* Shimmer effect */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12"
-                    animate={{
-                      x: ["-100%", "200%"],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      repeatDelay: 1.5
-                    }}
-                  />
-                  <motion.div
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  >
-                    <Zap className="h-5 w-5 text-white relative z-10" />
-                  </motion.div>
-                  <span className="font-bold text-white relative z-10">The VibeLink Era</span>
-                </motion.div>
-                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-4">
-                  What if an invitation could do <span className="text-primary">more</span>?
-                </h3>
-                <p className="text-muted-foreground text-base sm:text-lg mb-6">
-                  VibeLink Event was born from this question. We don't just design invitations -
-                  we create <strong>living, breathing event experiences</strong>. One simple link that does everything.
-                </p>
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-[10px] font-bold uppercase tracking-widest shadow-lg z-10 whitespace-nowrap">
+                You are here
+              </span>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                  className="text-muted-foreground text-base sm:text-lg leading-relaxed"
-                >
-                  VibeLink Event solves the limitations of traditional printed invitations and static digital flyers by creating interactive, shareable event pages with one link that lets you <strong className="text-foreground">update</strong> details instantly, <strong className="text-foreground">track</strong> RSVPs, <strong className="text-foreground">share</strong> venue directions, and <strong className="text-foreground">reach</strong> loved ones anywhere in the world.
-                </motion.p>
+              <div className="relative rounded-[calc(1rem-2px)] p-6 bg-gradient-to-br from-purple-950 via-slate-900 to-purple-900 overflow-hidden text-white h-full">
+                <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-primary/30 blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-16 -left-16 w-40 h-40 rounded-full bg-secondary/30 blur-3xl pointer-events-none" />
+
+                <div className="relative">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/50">
+                      <Sparkles className="w-7 h-7 text-white" strokeWidth={2} />
+                      <motion.span
+                        animate={{ scale: [1, 1.3, 1], opacity: [0.9, 0.4, 0.9] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/60"
+                      />
+                    </div>
+                    <div>
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-secondary/20 border border-secondary/40 text-secondary">
+                        <motion.span animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        Now
+                      </span>
+                      <p className="text-[11px] text-white/60 mt-1">2025 → Live</p>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">
+                    The{" "}
+                    <span className="bg-gradient-to-r from-secondary via-yellow-300 to-secondary bg-clip-text text-transparent">VibeLink</span>{" "}
+                    Era
+                  </h3>
+                  <p className="text-white/70 text-sm leading-relaxed mb-4">
+                    Not a picture. A living, breathing event page. One link that RSVPs, remembers, updates, streams, connects the diaspora.
+                  </p>
+                  <ul className="space-y-2 text-sm">
+                    {[
+                      "Update details anytime, guests see it instantly",
+                      "Track RSVPs in real-time",
+                      "Google Maps directions built-in",
+                      "Photo galleries, music, live streams",
+                      "Works on every phone, no app to download",
+                      "Reaches loved ones anywhere in the world",
+                    ].map((item, j) => (
+                      <li key={j} className="flex items-start gap-2 text-white/90">
+                        <div className="w-4 h-4 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+                          <Check className="w-2.5 h-2.5 text-emerald-400" strokeWidth={3} />
+                        </div>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </motion.div>
           </div>
