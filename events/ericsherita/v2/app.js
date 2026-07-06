@@ -268,10 +268,34 @@ if (false) (function(){
 (function(){
   const audio = $('#siteAudio'); const toggle = $('#musicToggle'); const icon = $('#musicIcon');
   if (!audio || !toggle) return;
-  audio.volume = 0.3;
+  const TARGET_VOL = 0.3;
+  audio.volume = 0;   /* start silent so we can fade in */
   let playing = false;
-  function play(){ audio.play().then(() => { playing = true; icon.className = 'fas fa-volume-up'; toggle.classList.add('playing'); }).catch(() => {}); }
-  function pause(){ audio.pause(); playing = false; icon.className = 'fas fa-music'; toggle.classList.remove('playing'); }
+  let fadeTimer = null;
+  /* Gently ramp volume from current level to a target over `duration` ms. */
+  function fadeTo(target, duration){
+    clearInterval(fadeTimer);
+    const step = 40, ticks = Math.max(1, Math.round(duration / step));
+    const inc = (target - audio.volume) / ticks;
+    fadeTimer = setInterval(() => {
+      audio.volume = Math.max(0, Math.min(1, audio.volume + inc));
+      if ((inc > 0 && audio.volume >= target - 0.001) ||
+          (inc < 0 && audio.volume <= target + 0.001)){
+        audio.volume = target; clearInterval(fadeTimer);
+      }
+    }, step);
+  }
+  function play(){
+    audio.play().then(() => {
+      playing = true; icon.className = 'fas fa-volume-up'; toggle.classList.add('playing');
+      fadeTo(TARGET_VOL, 1400);
+    }).catch(() => {});
+  }
+  function pause(){
+    clearInterval(fadeTimer);
+    audio.pause(); playing = false;
+    icon.className = 'fas fa-music'; toggle.classList.remove('playing');
+  }
   toggle.addEventListener('click', () => { playing ? pause() : play(); });
 
   /* Expose a hook so the splash handoff can seamlessly continue the music

@@ -276,10 +276,10 @@ const About = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">Our Story</h2>
             <p className="text-primary font-semibold text-sm md:text-base mb-4 uppercase tracking-wider">The evolution of invitations in Ghana</p>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-              Ghana celebrates like nowhere else — weddings, naming ceremonies, memorials, engagements. But the way we've invited each other to those moments hasn't kept up with the way we live now.
+              Ghanaian celebrations have always been our biggest moments — weddings, naming ceremonies, memorials, engagements. But the way we invite people to them has quietly changed with every wave of technology.
             </p>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed mt-3">
-              Three generations. Three completely different ideas of what an invitation could be. Here's how we got to the third one.
+              Three eras. Three completely different ideas of what an invitation could be.
             </p>
           </motion.div>
 
@@ -317,7 +317,7 @@ const About = () => {
               <h3 className="text-xl font-bold text-amber-950 mb-0.5">The Paper Era</h3>
               <p className="text-[13px] font-semibold text-amber-800/90 italic mb-3">Traditional Printed Cards</p>
               <p className="text-amber-900/70 text-sm leading-relaxed mb-4">
-                For generations, Ghanaians celebrated life's milestones with beautifully printed invitation cards. But paper came with limitations.
+                For decades, our biggest moments were announced with beautifully printed cards — hand-delivered, gold-edged, kept as keepsakes. Paper did a lot. But it couldn't do everything.
               </p>
               <motion.ul
                 className="space-y-2 text-sm"
@@ -373,7 +373,7 @@ const About = () => {
               <h3 className="text-xl font-bold text-emerald-950 mb-0.5">The WhatsApp Era</h3>
               <p className="text-[13px] font-semibold text-emerald-800/90 italic mb-3">JPEG & PDF Flyers</p>
               <p className="text-emerald-900/70 text-sm leading-relaxed mb-4">
-                Then came the digital shift. Designers created invitation flyers — JPEGs and PDFs shared via WhatsApp, email, and social media. Faster and cheaper, but with new problems.
+                Then the phone changed everything. Designers replaced ink with pixels, and JPEG flyers started flying through WhatsApp groups and family chats. Faster. Cheaper. But something got lost in the compression.
               </p>
               <motion.ul
                 className="space-y-2 text-sm"
@@ -453,7 +453,7 @@ const About = () => {
                   </h3>
                   <p className="text-[13px] font-semibold text-secondary/90 italic mb-3">Live, Interactive Invitations</p>
                   <p className="text-white/70 text-sm leading-relaxed mb-4">
-                    Not a picture. A living, breathing event page. One link that RSVPs, remembers, updates, streams, connects the diaspora.
+                    Not a picture. Not a PDF. A living, breathing event page — one link that holds your whole event and updates the moment you do. Your guests are anywhere in the world. So is your invitation.
                   </p>
                   <motion.ul
                     className="space-y-2 text-sm"

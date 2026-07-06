@@ -10,7 +10,7 @@ const eras = [
     label: "The Paper Era",
     period: "1980s → 2000s",
     heading: "Traditional Printed Cards",
-    body: "For generations, Ghanaians celebrated life's milestones with beautifully printed invitation cards. But paper came with limitations.",
+    body: "For decades, our biggest moments were announced with beautifully printed cards — hand-delivered, gold-edged, kept as keepsakes. Paper did a lot. But it couldn't do everything.",
     icon: FileText,
     cons: [
       "Expensive to print in bulk",
@@ -25,7 +25,7 @@ const eras = [
     label: "The WhatsApp Era",
     period: "2010s → 2024",
     heading: "JPEG & PDF Flyers",
-    body: "Then came the digital shift. Designers created invitation flyers — JPEGs and PDFs shared via WhatsApp, email, and social media. Faster and cheaper, but with new problems.",
+    body: "Then the phone changed everything. Designers replaced ink with pixels, and JPEG flyers started flying through WhatsApp groups and family chats. Faster. Cheaper. But something got lost in the compression.",
     icon: Smartphone,
     cons: [
       "Images get compressed and lose quality",
@@ -42,7 +42,7 @@ const eras = [
     label: "The VibeLink Era",
     period: "2025 → Now",
     heading: "Live, Interactive Invitations",
-    body: "VibeLink Event was born to solve every problem above. We don't just design invitations — we create living, breathing event experiences. One simple link that does everything.",
+    body: "Not a picture. Not a PDF. A living, breathing event page — one link that holds your whole event and updates the moment you do. Your guests are anywhere in the world. So is your invitation.",
     icon: Sparkles,
     cons: [],
     pros: [

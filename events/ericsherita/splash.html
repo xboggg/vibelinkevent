@@ -1212,18 +1212,36 @@ function slideSound(delay){
 const audio = document.getElementById('bgAudio');
 const musicToggle = document.getElementById('musicToggle');
 const musicIcon = document.getElementById('musicIcon');
-audio.volume = 0.30;
+const TARGET_VOL = 0.30;
+audio.volume = 0;   /* start silent so we can fade in */
 let musicOn = false;
+let fadeTimer = null;
+/* Gently ramp volume 0 → target over ~1.4s so the track doesn't punch in. */
+function fadeAudioIn(target, duration){
+  clearInterval(fadeTimer);
+  const step = 40, ticks = Math.max(1, Math.round(duration / step));
+  const inc = (target - audio.volume) / ticks;
+  fadeTimer = setInterval(() => {
+    audio.volume = Math.min(target, audio.volume + inc);
+    if (audio.volume >= target - 0.001){ audio.volume = target; clearInterval(fadeTimer); }
+  }, step);
+}
 function tryStartMusic(){
+  audio.volume = 0;
   audio.play().then(() => {
     musicOn = true;
     musicIcon.className = 'fas fa-volume-up';
     musicToggle.classList.add('playing');
+    fadeAudioIn(TARGET_VOL, 1400);
   }).catch(() => {});
 }
 musicToggle.addEventListener('click', () => {
-  if (musicOn){ audio.pause(); musicOn = false; musicIcon.className = 'fas fa-volume-mute'; musicToggle.classList.remove('playing'); }
-  else tryStartMusic();
+  if (musicOn){
+    clearInterval(fadeTimer);
+    audio.pause(); musicOn = false;
+    musicIcon.className = 'fas fa-volume-mute';
+    musicToggle.classList.remove('playing');
+  } else tryStartMusic();
 });
 
 /* ============ PETALS ============ */
