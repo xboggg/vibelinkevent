@@ -650,33 +650,136 @@
   .tap-first i{color:var(--gold-bright);margin-right:.5rem}
   @keyframes hintPulse{0%,100%{opacity:.85}50%{opacity:1}}
 
-  /* Welcome-back cinema title */
+  /* ========== Cinematic Welcome-Back Screen ========== */
   .welcome-back{
     position:fixed;inset:0;z-index:150;
     display:none;
     background:radial-gradient(ellipse at center, #232821 0%, #0e120c 60%, #050603 100%);
     align-items:center;justify-content:center;
     padding:2rem 1.5rem;text-align:center;
-    opacity:0;
+    opacity:0;overflow:hidden;
     transition:opacity 1s ease;
   }
   .welcome-back.on{display:flex;opacity:1}
   .welcome-back.gone{opacity:0;pointer-events:none}
+
+  /* Hero photo faded in behind names */
+  .welcome-photo{
+    position:absolute;inset:0;z-index:0;
+    background:url('welcome-bg.jpg') center 30%/cover no-repeat;
+    opacity:0;
+    filter:blur(1px) brightness(.55) saturate(1.15);
+    animation:welcomePhotoIn 1.4s ease .3s forwards, welcomePhotoZoom 6s ease-out .3s forwards;
+    will-change:opacity, transform;
+  }
+  @keyframes welcomePhotoIn{to{opacity:.42}}
+  @keyframes welcomePhotoZoom{
+    from{transform:scale(1.02)}
+    to{transform:scale(1.14)}
+  }
+
+  /* Warm vignette on top of photo */
+  .welcome-back::before{
+    content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:
+      radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,.45) 65%, rgba(0,0,0,.85) 100%),
+      radial-gradient(ellipse at center, rgba(255,205,140,.10) 0%, transparent 60%);
+  }
+
+  /* Falling petals */
+  .welcome-petals{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+  .welcome-petal{
+    position:absolute;top:-30px;
+    width:14px;height:22px;opacity:0;
+    animation:wPetalFall linear infinite;
+    will-change:transform;
+  }
+  .welcome-petal svg{width:100%;height:100%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+  @keyframes wPetalFall{
+    0%{opacity:0;transform:translate(0,-30px) rotate(0)}
+    10%{opacity:.8}
+    100%{opacity:0;transform:translate(var(--drift), 110vh) rotate(360deg)}
+  }
+
+  /* Rising gold particles */
+  .welcome-particles{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+  .welcome-gold-p{
+    position:absolute;bottom:-10px;
+    width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,220,140,.9), transparent 70%);
+    opacity:0;
+    animation:wGoldRise linear infinite;
+    will-change:transform, opacity;
+  }
+  @keyframes wGoldRise{
+    0%{opacity:0;transform:translateY(0) translateX(0)}
+    15%{opacity:.85}
+    88%{opacity:.5}
+    100%{opacity:0;transform:translateY(-110vh) translateX(var(--drift, 30px))}
+  }
+
+  /* Flying dove — SVG that traverses left to right */
+  .welcome-dove{
+    position:absolute;top:22%;left:-15%;z-index:3;
+    width:90px;height:66px;
+    filter:drop-shadow(0 4px 12px rgba(0,0,0,.65)) drop-shadow(0 0 8px rgba(255,240,200,.35));
+    animation:doveTraverse 4.5s ease-in-out .6s forwards;
+    will-change:transform, left, top;
+  }
+  @keyframes doveTraverse{
+    0%{left:-15%;top:22%}
+    50%{top:15%}
+    100%{left:110%;top:24%}
+  }
+  .welcome-dove-wing{
+    transform-origin:60% 55%;
+    animation:wWingFlap .8s ease-in-out infinite;
+  }
+  @keyframes wWingFlap{
+    0%,100%{transform:rotate(-6deg)}
+    50%{transform:rotate(22deg)}
+  }
+
   .welcome-back-content{
-    max-width:640px;
-    animation:welcomeIn 2s cubic-bezier(.2,.85,.3,1) forwards;
+    position:relative;z-index:5;
+    max-width:820px;
   }
-  @keyframes welcomeIn{
-    0%{opacity:0;transform:scale(.95)}
-    50%{opacity:1;transform:scale(1)}
-    100%{opacity:1;transform:scale(1)}
+
+  /* Gold flourish above and below names */
+  .welcome-flourish{
+    display:flex;align-items:center;justify-content:center;gap:1rem;
+    margin:.4rem auto;max-width:340px;
+    color:var(--gold-bright);
   }
+  .welcome-flourish .fl{
+    flex:1;height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+    transform:scaleX(0);transform-origin:center;
+    animation:wFlourishGrow 1.4s ease-out 1s forwards;
+  }
+  .welcome-flourish svg{
+    width:22px;height:22px;fill:var(--gold-bright);
+    opacity:0;
+    animation:welcomeSubIn 1s ease 1.6s forwards;
+    filter:drop-shadow(0 2px 8px rgba(212,180,100,.5));
+  }
+  @keyframes wFlourishGrow{to{transform:scaleX(1)}}
+
   .welcome-names{
     font-family:'Great Vibes',cursive;
     font-size:clamp(4rem, 12vw, 7.4rem);
     color:var(--ivory);line-height:1;
-    text-shadow:0 3px 30px rgba(0,0,0,.7), 0 0 60px rgba(212,180,100,.35);
-    margin-bottom:1rem;
+    text-shadow:0 3px 30px rgba(0,0,0,.75), 0 0 60px rgba(212,180,100,.4);
+    margin:.6rem 0;
+    animation:welcomeNamesIn 1.4s cubic-bezier(.2,.85,.3,1) forwards, welcomeNamesGlow 3.4s ease-in-out 1.4s infinite;
+  }
+  @keyframes welcomeNamesIn{
+    0%{opacity:0;transform:scale(.9)}
+    100%{opacity:1;transform:scale(1)}
+  }
+  @keyframes welcomeNamesGlow{
+    0%,100%{text-shadow:0 3px 30px rgba(0,0,0,.75), 0 0 60px rgba(212,180,100,.4)}
+    50%{text-shadow:0 3px 30px rgba(0,0,0,.75), 0 0 100px rgba(212,180,100,.65)}
   }
   .welcome-names .amp{
     display:inline-block;font-family:'Cormorant Garamond',serif;font-style:italic;
@@ -684,13 +787,33 @@
     vertical-align:middle;margin:0 .2rem;font-weight:500;
   }
   .welcome-sub{
-    font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.55em;
+    font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.55em;
     color:var(--gold-bright);text-transform:uppercase;font-weight:500;
     text-shadow:0 2px 12px rgba(0,0,0,.6);
     opacity:0;
-    animation:welcomeSubIn 1.2s ease 1s forwards;
+    animation:welcomeSubIn 1.2s ease 1.4s forwards;
   }
   @keyframes welcomeSubIn{to{opacity:1}}
+
+  /* Live countdown line */
+  .welcome-countdown{
+    margin-top:1.6rem;
+    font-family:'Cormorant Garamond',serif;font-style:italic;
+    color:rgba(245,235,210,.85);font-size:1.05rem;letter-spacing:.03em;
+    opacity:0;
+    text-shadow:0 2px 10px rgba(0,0,0,.55);
+    animation:welcomeSubIn 1.2s ease 1.9s forwards;
+  }
+  .welcome-countdown strong{
+    font-family:'Cormorant Garamond',serif;font-style:normal;font-weight:600;
+    color:var(--gold-bright);font-size:1.2em;
+    margin:0 .1em;
+  }
+  @media(max-width:640px){
+    .welcome-countdown{font-size:.95rem;margin-top:1rem}
+    .welcome-dove{width:70px;height:52px}
+    .welcome-flourish{max-width:280px}
+  }
 
   .exit-overlay{
     position:fixed;inset:0;background:var(--ivory);
@@ -808,9 +931,46 @@
 
 <!-- ========== WELCOME-BACK cinema title (returning visitors) ========== -->
 <div class="welcome-back" id="welcomeBack">
+  <div class="welcome-photo"></div>
+  <div class="welcome-petals" id="welcomePetals"></div>
+  <div class="welcome-particles" id="welcomeParticles"></div>
+
+  <!-- Flying dove SVG -->
+  <div class="welcome-dove">
+    <svg viewBox="0 0 82 60" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="wDoveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#fff"/>
+          <stop offset="60%" stop-color="#f3ede0"/>
+          <stop offset="100%" stop-color="#d9d0b8"/>
+        </linearGradient>
+        <linearGradient id="wPetalSage" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#a5b490"/>
+          <stop offset="50%" stop-color="#7d8e6d"/>
+          <stop offset="100%" stop-color="#5a6b4c"/>
+        </linearGradient>
+        <linearGradient id="wPetalCream" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#f7efdd"/>
+          <stop offset="50%" stop-color="#e8dcb8"/>
+          <stop offset="100%" stop-color="#c9b98a"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#wDoveGrad)" d="M 8 32 Q 2 30 4 26 L 12 28 Q 10 32 8 32 Z" opacity=".85"/>
+      <path fill="url(#wDoveGrad)" d="M 6 36 Q 0 36 2 32 L 12 32 Q 10 36 6 36 Z" opacity=".9"/>
+      <path fill="url(#wDoveGrad)" d="M 14 30 Q 12 22 22 20 Q 34 16 46 20 Q 58 22 62 28 Q 60 36 52 38 Q 40 42 26 40 Q 16 38 14 30 Z"/>
+      <circle fill="url(#wDoveGrad)" cx="60" cy="24" r="8"/>
+      <path fill="#d4b464" d="M 66 24 L 74 22 L 68 27 Z"/>
+      <circle fill="#5a6b4c" cx="62" cy="22" r="1.3"/>
+      <path class="welcome-dove-wing" fill="#fff" stroke="rgba(90,107,76,.2)" stroke-width=".5" d="M 26 22 Q 30 4 44 10 Q 54 14 50 24 Q 42 30 32 28 Q 24 26 26 22 Z"/>
+    </svg>
+  </div>
+
   <div class="welcome-back-content">
+    <div class="welcome-flourish"><span class="fl"></span><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg><span class="fl"></span></div>
     <h1 class="welcome-names">Eric <span class="amp">&amp;</span> Sherita</h1>
     <div class="welcome-sub">Welcome Back</div>
+    <div class="welcome-flourish"><span class="fl"></span><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg><span class="fl"></span></div>
+    <div class="welcome-countdown">The day is coming &mdash; <strong id="welcomeDays">--</strong> days to go</div>
   </div>
 </div>
 
@@ -1120,18 +1280,56 @@ const enterBtn = document.getElementById('enterBtn');
 const welcomeBack = document.getElementById('welcomeBack');
 const musicToggleBtn = document.getElementById('musicToggle');
 
-/* If returning visitor → welcome-back cinema title, then straight to full site */
+/* If returning visitor → cinematic welcome-back screen (3s) → full site */
 if (hasSaved()){
   document.getElementById('stage').style.display = 'none';
   tapFirst.style.display = 'none';
   welcomeBack.classList.add('on');
   musicToggleBtn.classList.add('on');
   setTimeout(() => tryStartMusic(), 400);
-  /* After ~2s auto-fade → post to parent → parent hides the iframe */
+
+  /* Populate days-to-go countdown */
+  const WEDDING_TARGET = new Date('2026-11-28T17:00:00+00:00').getTime();
+  const daysLeft = Math.max(0, Math.ceil((WEDDING_TARGET - Date.now()) / 86400000));
+  const daysEl = document.getElementById('welcomeDays');
+  if (daysEl) daysEl.textContent = daysLeft;
+
+  /* Spawn falling petals */
+  const petalShapes = [
+    '<svg viewBox="0 0 40 60"><path d="M 20 2 Q 4 20 6 40 Q 10 55 20 58 Q 30 55 34 40 Q 36 20 20 2 Z" fill="url(#wPetalSage)"/><path d="M 20 8 L 20 54" stroke="#3d4a32" stroke-width="1" opacity=".35"/></svg>',
+    '<svg viewBox="0 0 40 60"><path d="M 20 2 Q 4 20 6 40 Q 10 55 20 58 Q 30 55 34 40 Q 36 20 20 2 Z" fill="url(#wPetalCream)"/></svg>',
+    '<svg viewBox="0 0 40 60"><ellipse cx="20" cy="30" rx="18" ry="28" fill="url(#wPetalSage)"/></svg>',
+  ];
+  const petalField = document.getElementById('welcomePetals');
+  for (let i = 0; i < 16; i++){
+    const p = document.createElement('div');
+    p.className = 'welcome-petal';
+    p.innerHTML = petalShapes[i % petalShapes.length];
+    p.style.left = (Math.random() * 100) + 'vw';
+    p.style.animationDuration = (7 + Math.random() * 5) + 's';
+    p.style.animationDelay = (Math.random() * 3) + 's';
+    p.style.setProperty('--drift', (Math.random() * 180 - 90) + 'px');
+    p.style.transform = 'scale(' + (0.6 + Math.random() * 0.6) + ')';
+    petalField.appendChild(p);
+  }
+
+  /* Rising gold particles */
+  const particleField = document.getElementById('welcomeParticles');
+  for (let i = 0; i < 24; i++){
+    const p = document.createElement('div');
+    p.className = 'welcome-gold-p';
+    p.style.left = (Math.random() * 100) + 'vw';
+    p.style.animationDuration = (6 + Math.random() * 5) + 's';
+    p.style.animationDelay = (Math.random() * 3) + 's';
+    p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+    particleField.appendChild(p);
+  }
+
+  /* After 3 seconds → fade out → post to parent → parent hides the iframe */
   setTimeout(() => {
     welcomeBack.classList.add('gone');
     setTimeout(finishSplash, 900);
-  }, 2200);
+  }, 3000);
 }
 
 /* First-visit flow: envelope + card unfold + calendar gate */
