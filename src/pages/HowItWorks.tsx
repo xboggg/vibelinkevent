@@ -231,9 +231,12 @@ const HowItWorks = () => {
     };
   }, []);
 
+  // Fill completes when the section BOTTOM is ~70% down the viewport —
+  // by that scroll point step 06's badge is roughly mid-screen, so the
+  // gradient reaches it before it scrolls off the top.
   const { scrollYProgress: stepsProgress } = useScroll({
     target: stepsRef,
-    offset: ["start 80%", "end 30%"],
+    offset: ["start 90%", "end 70%"],
   });
   const railHeight = useTransform(stepsProgress, [0, 1], [0, rail.height]);
 
