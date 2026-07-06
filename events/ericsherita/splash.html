@@ -1296,7 +1296,15 @@ window.addEventListener('message', e => {
 function _doFinish(){
   document.body.style.transition = 'opacity .9s ease';
   document.body.style.opacity = '0';
-  try{ window.parent && window.parent.postMessage({ type: 'splash-done' }, '*'); }catch(e){}
+  /* Pass the current audio playback position to the parent so the main site's
+     music can resume seamlessly from the same point (no gap when the iframe
+     is removed). */
+  let audioAt = null;
+  try{
+    const a = document.getElementById('bgAudio');
+    if (a && !a.paused && !isNaN(a.currentTime)) audioAt = a.currentTime;
+  }catch(e){}
+  try{ window.parent && window.parent.postMessage({ type: 'splash-done', audioAt: audioAt }, '*'); }catch(e){}
 }
 
 function finishSplash(){

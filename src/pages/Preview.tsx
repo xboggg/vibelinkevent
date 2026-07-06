@@ -5,12 +5,18 @@ import SEO from "@/components/SEO";
 import { ChevronLeft, ChevronRight, ExternalLink, Check } from "lucide-react";
 import { portfolioItems } from "@/data/portfolioItems";
 
-// Pick 4 real portfolio items for the demos
+// 10 real portfolio items with server-side phone screenshots in /phone-shots/
 const items = [
   portfolioItems.find((p) => p.slug === "baby-boy-coleman-christening"),
   portfolioItems.find((p) => p.slug === "atta-panyin-memorial"),
   portfolioItems.find((p) => p.slug === "pastor-mensah-retirement"),
   portfolioItems.find((p) => p.slug === "sarah-john-wedding"),
+  portfolioItems.find((p) => p.slug === "baby-adjoa-naming"),
+  portfolioItems.find((p) => p.slug === "dr-mensah-graduation"),
+  portfolioItems.find((p) => p.slug === "mama-akosua-memorial"),
+  portfolioItems.find((p) => p.slug === "baby-kwame-naming"),
+  portfolioItems.find((p) => p.slug === "novastream-conference"),
+  portfolioItems.find((p) => p.slug === "frank-hannah-engagement"),
 ].filter(Boolean) as typeof portfolioItems;
 
 // —— Section shell ———————————————————————————————————————
@@ -308,10 +314,11 @@ function WhatsAppSharePreview() {
 
 // —— C · Bento grid ————————————————————————————————————————
 function BentoGrid() {
-  // Item 0 is featured/large, others are smaller
+  // Bento pattern only fits 4 tiles cleanly (1 hero + 3 supporting)
+  const four = items.slice(0, 4);
   return (
     <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[200px]">
-      {items.map((item, i) => {
+      {four.map((item, i) => {
         const thumb = (item as { thumbnail?: string }).thumbnail || item.image;
         // Alternate sizes: item 0 spans 2x2, item 1 spans 2x1, item 2 spans 1x2, item 3 spans 1x1
         const span = [

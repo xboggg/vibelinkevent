@@ -85,6 +85,14 @@
     if (!s) return;
     s.classList.add('gone');
     document.body.classList.remove('splash-locked');
+
+    /* If the splash was playing music, seamlessly continue it on the main
+       site from the same timestamp. The RSVP tap that triggered splash-done
+       counts as a user gesture, so autoplay is allowed. */
+    if (typeof e.data.audioAt === 'number' && typeof window.__resumeSiteMusic === 'function'){
+      window.__resumeSiteMusic(e.data.audioAt);
+    }
+
     setTimeout(() => s.remove(), 950);
     /* Trigger the hero ghost-dove flyby AFTER the splash finishes — the CSS
        animation is paused by default; adding .fly starts it. */

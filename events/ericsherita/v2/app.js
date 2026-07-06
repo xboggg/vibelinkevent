@@ -273,6 +273,18 @@ if (false) (function(){
   function play(){ audio.play().then(() => { playing = true; icon.className = 'fas fa-volume-up'; toggle.classList.add('playing'); }).catch(() => {}); }
   function pause(){ audio.pause(); playing = false; icon.className = 'fas fa-music'; toggle.classList.remove('playing'); }
   toggle.addEventListener('click', () => { playing ? pause() : play(); });
+
+  /* Expose a hook so the splash handoff can seamlessly continue the music
+     from where the splash left off — the "See Venues & RSVP" tap counts as
+     a user gesture for autoplay purposes. */
+  window.__resumeSiteMusic = function(seekSeconds){
+    try{
+      if (typeof seekSeconds === 'number' && !isNaN(seekSeconds)){
+        audio.currentTime = seekSeconds % (audio.duration || seekSeconds || 1);
+      }
+    }catch(e){}
+    play();
+  };
 })();
 
 /* ============ HOTEL SLIDER (mobile, one card at a time) ============ */

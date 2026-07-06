@@ -473,20 +473,31 @@ a:hover i.fa-chevron-down{transform:translateY(3px)}
   will-change:transform,opacity;
 }
 .hero-dove.fly{
-  animation:heroDoveFly 11s linear forwards;
+  animation:heroDoveFly 22s linear infinite;
 }
 .hero-dove svg{width:100%;height:100%;display:block}
 .hero-dove-wing{transform-origin:60% 55%}
 .hero-dove.fly .hero-dove-wing{
   animation:heroDoveWing .7s ease-in-out infinite;
 }
-/* Fly path uses viewport-relative distances so it works at any width. */
+/* Loop: left → right (first half), gentle off-screen pause, then right → left
+   (second half, dove is horizontally flipped via scaleX(-1) so it faces the
+   direction it's flying), gentle off-screen pause again. Viewport-relative
+   distances so it works at any width. */
 @keyframes heroDoveFly{
-   0%  {transform:translate3d(-140px, 90px, 0); opacity:0}
-   6%  {opacity:.9}
-  50%  {transform:translate3d(calc(50vw - 55px), 50px, 0)}
-  94%  {opacity:.85}
-  100% {transform:translate3d(calc(100vw + 140px), 100px, 0); opacity:0}
+   0%   {transform:translate3d(-140px, 90px, 0) scaleX(1);  opacity:0}
+   3%   {opacity:.9}
+   22%  {transform:translate3d(calc(50vw - 55px), 50px, 0) scaleX(1)}
+   44%  {opacity:.85}
+   47%  {transform:translate3d(calc(100vw + 140px), 100px, 0) scaleX(1); opacity:0}
+  /* Silent pause + snap to the right side, facing left */
+   50%  {transform:translate3d(calc(100vw + 140px), 110px, 0) scaleX(-1); opacity:0}
+   53%  {opacity:.9}
+   72%  {transform:translate3d(calc(50vw - 55px), 60px, 0) scaleX(-1)}
+   94%  {opacity:.85}
+   97%  {transform:translate3d(-140px, 90px, 0) scaleX(-1); opacity:0}
+  /* Silent pause + snap back to the left side, facing right, ready to loop */
+  100%  {transform:translate3d(-140px, 90px, 0) scaleX(1);  opacity:0}
 }
 @keyframes heroDoveWing{
   0%,100%{transform:rotate(-10deg)}
