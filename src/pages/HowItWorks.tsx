@@ -2,12 +2,7 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { CTASection } from "@/components/sections/CTASection";
 import SEO from "@/components/SEO";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { WhatsAppFAQ } from "@/components/WhatsAppFAQ";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -623,31 +618,7 @@ const HowItWorks = () => {
             </p>
           </motion.div>
 
-          <div className="max-w-3xl mx-auto">
-            <Accordion type="single" collapsible className="space-y-4">
-              {faqs.map((faq, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                >
-                  <AccordionItem
-                    value={`item-${index}`}
-                    className="rounded-2xl border border-border bg-card px-6 overflow-hidden data-[state=open]:shadow-lg transition-shadow"
-                  >
-                    <AccordionTrigger className="text-left font-semibold text-foreground hover:text-primary py-5">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground pb-5">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                </motion.div>
-              ))}
-            </Accordion>
-          </div>
+          <WhatsAppFAQ faqs={faqs} intro="Hi 👋 These are the questions we get most often about the process. Tap any to see the answer." />
 
           {/* Still have questions */}
           <motion.div

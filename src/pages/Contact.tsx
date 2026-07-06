@@ -10,12 +10,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { WhatsAppFAQ } from "@/components/WhatsAppFAQ";
 
 const faqs = [
   {
@@ -533,29 +528,7 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-3xl mx-auto"
           >
-            <Accordion type="single" collapsible className="space-y-3">
-              {faqs.map((faq, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                >
-                  <AccordionItem
-                    value={`item-${index}`}
-                    className="group bg-card border border-border rounded-xl px-6 data-[state=open]:border-primary/40 data-[state=open]:shadow-md data-[state=open]:shadow-primary/10 transition-all hover:border-primary/30"
-                  >
-                    <AccordionTrigger className="text-left text-foreground font-medium hover:no-underline hover:text-primary transition-colors py-5">
-                      {faq.question}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground pb-5 leading-relaxed">
-                      {faq.answer}
-                    </AccordionContent>
-                  </AccordionItem>
-                </motion.div>
-              ))}
-            </Accordion>
+            <WhatsAppFAQ faqs={faqs} intro="Hi 👋 Here are the questions we hear most often — tap one to see the answer." />
 
             <motion.div
               initial={{ opacity: 0, y: 10 }}

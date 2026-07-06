@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Check, ArrowRight, Star, ChevronDown } from "lucide-react";
+import { Check, ArrowRight, Star } from "lucide-react";
 import SEO from "@/components/SEO";
+import { WhatsAppFAQ } from "@/components/WhatsAppFAQ";
 
 export interface EventFeature {
   icon: string;
@@ -71,7 +72,6 @@ interface Props {
 }
 
 export function EventPageTemplate({ config }: Props) {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
     <Layout>
@@ -262,27 +262,18 @@ export function EventPageTemplate({ config }: Props) {
         </div>
       </section>
 
-      {/* ── FAQ ── */}
+      {/* ── FAQ (WhatsApp chat) ── */}
       <section className="py-20 bg-white">
-        <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
+        <div className="container mx-auto px-4 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="text-center mb-10">
+            className="text-center mb-8">
             <h2 className="text-3xl font-bold text-gray-900 mb-2">Frequently Asked</h2>
+            <p className="text-gray-500 text-sm">Tap a question — we'll reply below</p>
           </motion.div>
-          <div className="space-y-3">
-            {config.faqs.map((faq, i) => (
-              <div key={i} className="rounded-xl border border-gray-100 bg-white overflow-hidden shadow-sm">
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between p-5 text-left font-semibold text-gray-900 hover:text-primary transition-colors text-sm">
-                  <span>{faq.q}</span>
-                  <ChevronDown className={`h-4 w-4 flex-shrink-0 ml-4 transition-transform text-gray-400 ${openFaq === i ? "rotate-180" : ""}`} />
-                </button>
-                {openFaq === i && (
-                  <div className="px-5 pb-5 text-gray-500 text-sm leading-relaxed">{faq.a}</div>
-                )}
-              </div>
-            ))}
-          </div>
+          <WhatsAppFAQ
+            faqs={config.faqs.map((f) => ({ question: f.q, answer: f.a }))}
+            intro="Hi 👋 Here are the top questions about this service — tap one to see the answer."
+          />
         </div>
       </section>
 

@@ -350,7 +350,7 @@
     width:min(94vw, 460px);
     z-index:8;
     opacity:0;
-    transition:transform 1.2s cubic-bezier(.2,.85,.25,1), opacity .7s ease;
+    transition:transform 1.8s cubic-bezier(.2,.85,.25,1), opacity 1s ease;
     pointer-events:none;
   }
   .card-wrap.slide{transform:translate(-50%,-50%) scale(1);opacity:1}
@@ -372,7 +372,7 @@
     text-align:center;
     transform-origin:center top;
     transform:scaleY(.02);opacity:.3;
-    transition:transform 1s cubic-bezier(.25,.85,.3,1), opacity .7s ease;
+    transition:transform 1.5s cubic-bezier(.25,.85,.3,1), opacity 1s ease;
     overflow:hidden;
   }
   .card-wrap.unfold .card-fold{transform:scaleY(1);opacity:1}
@@ -401,7 +401,7 @@
     opacity:0;
     transition:opacity .8s ease;
   }
-  .card-wrap.unfold .card-crease{opacity:1;transition-delay:.8s}
+  .card-wrap.unfold .card-crease{opacity:1;transition-delay:1.2s}
   .card-crease::before{
     content:'';position:absolute;top:-3px;left:0;right:0;height:7px;
     background:linear-gradient(180deg, transparent, rgba(90,65,25,.05) 50%, transparent);
@@ -411,16 +411,16 @@
   .card-inner{
     position:relative;z-index:5;
     opacity:0;
-    transition:opacity .7s ease;
+    transition:opacity 1s ease;
   }
-  .card-wrap.unfold .card-inner{opacity:1;transition-delay:.5s}
+  .card-wrap.unfold .card-inner{opacity:1;transition-delay:.8s}
 
   .card-corner{
     position:absolute;width:32px;height:32px;pointer-events:none;
     z-index:4;opacity:0;
     transition:opacity 1s ease;
   }
-  .card-wrap.unfold .card-corner{opacity:.85;transition-delay:1.6s}
+  .card-wrap.unfold .card-corner{opacity:.85;transition-delay:2.4s}
   .card-corner svg{width:100%;height:100%;filter:drop-shadow(0 1px 1px rgba(90,107,76,.2))}
   .card-corner.tl{top:6px;left:6px}
   .card-corner.tr{top:6px;right:6px;transform:scaleX(-1)}
@@ -434,7 +434,7 @@
     opacity:0;
     transition:opacity 1s ease, transform 1s ease;
   }
-  .card-wrap.unfold .sprig{opacity:.9;transform:translateX(-50%) scale(1);transition-delay:1.5s}
+  .card-wrap.unfold .sprig{opacity:.9;transform:translateX(-50%) scale(1);transition-delay:2.2s}
 
   .card-flourish{display:flex;align-items:center;justify-content:center;gap:.7rem;margin-bottom:.4rem;color:var(--gold-deep);width:100%;max-width:200px;margin-left:auto;margin-right:auto}
   .card-flourish .fl{flex:1;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent)}
@@ -1422,19 +1422,19 @@ function openEnvelope(){
     }
   }, 400);
 
-  /* Wax fades, flap lifts, envelope recedes  (compressed → card readable ~4s) */
-  setTimeout(() => { flap.classList.add('open'); slideSound(0.2); }, 550);
-  setTimeout(() => wax.classList.add('gone'), 650);
-  setTimeout(() => env.classList.add('recede'), 1400);
+  /* Wax fades, flap lifts, envelope recedes  (paced → card readable ~6s) */
+  setTimeout(() => { flap.classList.add('open'); slideSound(0.2); }, 900);
+  setTimeout(() => wax.classList.add('gone'), 1100);
+  setTimeout(() => env.classList.add('recede'), 2200);
 
   /* Card slides out then unfolds */
-  setTimeout(() => cardWrap.classList.add('slide'), 1200);
+  setTimeout(() => cardWrap.classList.add('slide'), 1900);
   setTimeout(() => {
     cardWrap.classList.add('unfold');
     cardWrap.style.pointerEvents = 'auto';
     tryStartMusic();
     musicToggleBtn.classList.add('on');
-  }, 2200);
+  }, 3600);
 }
 
 wax.addEventListener('click', e => { e.stopPropagation(); e.preventDefault(); if (!hasSaved()) openEnvelope(); });
