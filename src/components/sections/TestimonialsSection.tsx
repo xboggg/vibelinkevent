@@ -173,7 +173,7 @@ export function TestimonialsSection() {
             <motion.div
               key={testimonial.id}
               variants={itemVariants}
-              className="relative p-6 lg:p-8 rounded-2xl bg-card border border-border hover:border-secondary/30 hover:shadow-lg transition-all duration-300 min-w-[85%] shrink-0 snap-start md:min-w-0 md:shrink"
+              className="relative p-5 lg:p-8 rounded-2xl bg-card border border-border hover:border-secondary/30 hover:shadow-lg transition-all duration-300 w-[72%] max-w-[300px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink"
             >
               {/* Quote Icon */}
               <Quote className="absolute top-6 right-6 h-8 w-8 text-secondary/20" />
