@@ -516,6 +516,18 @@
       <div class="voice-mic" id="voiceMic" data-cursor><i class="fas fa-microphone"></i></div>
       <div class="voice-timer" id="voiceTimer">0:00 / 0:30</div>
       <div class="voice-hint" id="voiceHint" data-i18n>Tap the microphone to start. You have 30 seconds.</div>
+
+      <!-- Mic-permission help panel: hidden until we detect a mic error. Content
+           filled at runtime with browser-specific instructions. -->
+      <div class="voice-help" id="voiceHelp" hidden>
+        <div class="voice-help-title" id="voiceHelpTitle"></div>
+        <ol class="voice-help-steps" id="voiceHelpSteps"></ol>
+        <div class="voice-help-actions">
+          <button type="button" class="voice-btn primary" id="voiceRetryBtn"><i class="fas fa-redo"></i> <span data-i18n>Try Again</span></button>
+          <button type="button" class="voice-btn" id="voiceUseTextBtn"><i class="fas fa-pen"></i> <span data-i18n>Use Written Wish Instead</span></button>
+        </div>
+      </div>
+
       <input type="text" class="voice-name-input" id="voiceName" placeholder="Your name" maxlength="60" />
       <div class="voice-controls">
         <button class="voice-btn primary" id="voiceRecordBtn"><i class="fas fa-circle"></i> <span data-i18n>Record</span></button>

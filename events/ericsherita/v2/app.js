@@ -751,13 +751,155 @@ setInterval(refreshWishes, 30000);
   const mic = $('#voiceMic'); const timer = $('#voiceTimer'); const hint = $('#voiceHint');
   const recBtn = $('#voiceRecordBtn'); const stopBtn = $('#voiceStopBtn'); const sendBtn = $('#voiceSendBtn');
   const preview = $('#voicePreview'); const nameInp = $('#voiceName'); const list = $('#voiceList');
+  const helpEl = $('#voiceHelp'); const helpTitle = $('#voiceHelpTitle'); const helpSteps = $('#voiceHelpSteps');
+  const retryBtn = $('#voiceRetryBtn'); const useTextBtn = $('#voiceUseTextBtn');
   if (!mic) return;
   let recorder = null, chunks = [], blob = null, stream = null, startedAt = 0, tickInt = null;
 
+  /* Detect the running browser + environment so we can offer specific instructions
+     for enabling the microphone. Falls back to a generic guide if unknown. */
+  function detectBrowser(){
+    const ua = navigator.userAgent;
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+    const isInApp = /(FBAN|FBAV|Instagram|Line\/|WhatsApp|Snapchat|Twitter|TikTok)/i.test(ua);
+    // Order matters — Edge/Opera contain "Chrome"
+    let name = 'other';
+    if (/Edg\//i.test(ua)) name = 'edge';
+    else if (/OPR\//i.test(ua)) name = 'opera';
+    else if (/SamsungBrowser/i.test(ua)) name = 'samsung';
+    else if (/Firefox/i.test(ua)) name = 'firefox';
+    else if (/Chrome/i.test(ua)) name = 'chrome';
+    else if (/Safari/i.test(ua)) name = 'safari';
+    return {name, isIOS, isAndroid, isInApp};
+  }
+
+  /* Fill the help panel with browser-specific instructions and show it.
+     Also hides the record controls so it's clear what to do next. */
+  function showHelp(title, steps){
+    if (!helpEl) return;
+    helpTitle.textContent = title;
+    helpSteps.innerHTML = '';
+    steps.forEach(s => { const li = document.createElement('li'); li.innerHTML = s; helpSteps.appendChild(li); });
+    helpEl.hidden = false;
+    // Dim the record button so the eye is drawn to Try Again instead
+    recBtn.disabled = true;
+  }
+  function hideHelp(){
+    if (helpEl) helpEl.hidden = true;
+    recBtn.disabled = false;
+  }
+
+  /* Compose the browser-specific "how to enable mic" steps. */
+  function permissionDeniedSteps(){
+    const b = detectBrowser();
+    if (b.isInApp){
+      return [
+        "You're viewing this inside another app (like Facebook or Instagram) which blocks the microphone.",
+        "Tap the menu (usually <b>&#8942;</b> or <b>&#8943;</b>) at the top of that app &rarr; <b>Open in Browser</b> (Safari on iPhone, Chrome on Android).",
+        "Once the page opens in a real browser, come back to the Voice Tribute tab and try again."
+      ];
+    }
+    if (b.isIOS){
+      return [
+        "Tap the <b>aA</b> icon on the left of the address bar.",
+        "Choose <b>Website Settings</b>.",
+        "Set <b>Microphone</b> to <b>Allow</b>, then reload the page."
+      ];
+    }
+    if (b.isAndroid){
+      return [
+        "Tap the <b>&#128274; lock icon</b> in the address bar.",
+        "Tap <b>Permissions</b> &rarr; <b>Microphone</b> &rarr; <b>Allow</b>.",
+        "Reload the page and try again."
+      ];
+    }
+    // Desktop
+    if (b.name === 'firefox'){
+      return [
+        "Click the <b>shield</b> or <b>microphone</b> icon on the left of the address bar.",
+        "Choose <b>Allow</b> for Microphone.",
+        "Reload the page (Ctrl/Cmd + R) and click <b>Try Again</b>."
+      ];
+    }
+    if (b.name === 'safari'){
+      return [
+        "In the top menu, click <b>Safari</b> &rarr; <b>Settings for This Website</b>.",
+        "Set <b>Microphone</b> to <b>Allow</b>.",
+        "Reload the page and click <b>Try Again</b>."
+      ];
+    }
+    // Chrome / Edge / Opera / Samsung / other
+    return [
+      "Click the <b>&#128274; lock icon</b> on the left of the address bar.",
+      "Set <b>Microphone</b> to <b>Allow</b>.",
+      "Reload the page (Ctrl/Cmd + R) and click <b>Try Again</b>."
+    ];
+  }
+
   async function startRec(){
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ hint.textContent = 'Voice recording is not supported by this browser.'; return; }
+    hideHelp();
+    // Pre-flight checks so we surface useful errors before hitting getUserMedia
+    if (!window.isSecureContext){
+      hint.textContent = 'Voice recording needs a secure (HTTPS) connection.';
+      showHelp('Secure connection required', [
+        'This page must be opened over HTTPS for the microphone to work.',
+        'Make sure the URL in the address bar starts with <b>https://</b>.'
+      ]);
+      return;
+    }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      hint.textContent = 'Your browser does not support voice recording.';
+      showHelp('Browser not supported', [
+        'Try opening this page in <b>Chrome</b>, <b>Safari</b>, or <b>Firefox</b>.',
+        "If you're in a social-media in-app browser (Facebook, Instagram, etc.), tap the menu (<b>&#8942;</b>) &rarr; <b>Open in Browser</b>."
+      ]);
+      return;
+    }
+    // Check current permission state where possible (skip errors silently)
+    try{
+      if (navigator.permissions && navigator.permissions.query){
+        const status = await navigator.permissions.query({ name: 'microphone' });
+        if (status.state === 'denied'){
+          hint.textContent = 'Microphone access is blocked.';
+          showHelp('Microphone blocked', permissionDeniedSteps());
+          return;
+        }
+      }
+    }catch(e){ /* some browsers reject the 'microphone' permission query — ignore */ }
+
     try{ stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
-    catch(e){ hint.textContent = 'Microphone permission denied.'; return; }
+    catch(e){
+      const name = (e && e.name) || '';
+      if (name === 'NotAllowedError' || name === 'PermissionDeniedError' || name === 'SecurityError'){
+        hint.textContent = 'Microphone access was blocked.';
+        showHelp('Microphone blocked', permissionDeniedSteps());
+      } else if (name === 'NotFoundError' || name === 'DevicesNotFoundError'){
+        hint.textContent = 'No microphone was found on this device.';
+        showHelp('No microphone detected', [
+          'Plug in or enable a microphone, then click <b>Try Again</b>.',
+          'On a laptop, check that no other app has taken over the built-in mic.'
+        ]);
+      } else if (name === 'NotReadableError' || name === 'TrackStartError'){
+        hint.textContent = 'Your microphone is being used by another app.';
+        showHelp('Microphone in use', [
+          'Close any other app that might be using the mic (Zoom, Teams, Meet, WhatsApp, etc.).',
+          'Then click <b>Try Again</b>.'
+        ]);
+      } else if (name === 'AbortError'){
+        hint.textContent = 'Recording was interrupted.';
+        showHelp('Recording interrupted', [
+          'Something interrupted the microphone. Please click <b>Try Again</b>.'
+        ]);
+      } else {
+        hint.textContent = 'Could not start recording.';
+        showHelp('Could not start recording', [
+          'Please click <b>Try Again</b>. If the problem persists, try a different browser.',
+          "Or use the <b>Written Wish</b> tab instead — your kind words matter just as much."
+        ]);
+      }
+      return;
+    }
     chunks = []; blob = null;
     const mimeOptions = ['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'];
     let mime = '';
@@ -817,6 +959,22 @@ setInterval(refreshWishes, 30000);
   recBtn.addEventListener('click', startRec);
   stopBtn.addEventListener('click', stopRec);
   sendBtn.addEventListener('click', sendRec);
+
+  /* Help-panel actions */
+  if (retryBtn) retryBtn.addEventListener('click', () => { hideHelp(); startRec(); });
+  if (useTextBtn) useTextBtn.addEventListener('click', () => {
+    hideHelp();
+    // Switch to the Written Wish tab
+    const writtenTab = document.querySelector('.wish-tab[data-panel="written"]');
+    const voiceTab   = document.querySelector('.wish-tab[data-panel="voice"]');
+    const writtenPanel = document.querySelector('.wish-panel[data-panel="written"]');
+    const voicePanel   = document.querySelector('.wish-panel[data-panel="voice"]');
+    if (writtenTab && voiceTab && writtenPanel && voicePanel){
+      writtenTab.classList.add('on'); voiceTab.classList.remove('on');
+      writtenPanel.classList.add('on'); voicePanel.classList.remove('on');
+      writtenPanel.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  });
 
   async function refreshTributes(){
     if (!list) return;
