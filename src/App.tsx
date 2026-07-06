@@ -44,6 +44,7 @@ const InvoiceView = lazy(() => import("./pages/InvoiceView"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Preview = lazy(() => import("./pages/Preview"));
+const StoryPreview = lazy(() => import("./pages/StoryPreview"));
 const BookConsultation = lazy(() => import("./pages/BookConsultation"));
 const Referral = lazy(() => import("./pages/Referral"));
 const WeddingInvitations = lazy(() => import("./pages/events/WeddingInvitations"));
@@ -93,6 +94,7 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/portfolio-preview" element={<Preview />} />
+              <Route path="/story-preview" element={<StoryPreview />} />
               <Route path="/book-consultation" element={<BookConsultation />} />
               <Route path="/ref/:code" element={<Referral />} />
               <Route path="/referral" element={<Referral />} />
