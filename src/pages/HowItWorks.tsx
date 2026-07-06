@@ -373,14 +373,12 @@ const HowItWorks = () => {
 
       {/* Steps Timeline Section — vertical stacked list, single rail, per-step colour */}
       <section className="pt-6 pb-16 lg:pt-10 lg:pb-20 bg-background relative overflow-hidden">
-        {/* Soft ambient background blobs — desktop only. On mobile they'd
-            take up ~90% of the viewport and read as awkward coloured
-            patches rather than ambient tint, so we hide them below md. */}
-        <div aria-hidden className="hidden md:block absolute inset-0 pointer-events-none">
-          <div className="absolute -top-20 -left-20 w-96 h-96 rounded-full bg-rose-400/10 blur-3xl" />
-          <div className="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-violet-500/10 blur-3xl" />
-          <div className="absolute bottom-0 left-1/3 w-96 h-96 rounded-full bg-amber-400/10 blur-3xl" />
-        </div>
+        {/* No ambient blobs — earlier versions had three blur-3xl blobs
+            (rose top-left, violet mid-right, amber bottom) but each one
+            got clipped by the section's overflow-hidden, leaving hard
+            seam lines at the top and bottom boundaries. The per-step
+            colour palette (rose/amber/emerald/violet/sky/yellow) gives
+            the section enough colour on its own. */}
 
         <div className="container mx-auto px-4 lg:px-8 relative">
           {/* Header */}
