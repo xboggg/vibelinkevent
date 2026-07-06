@@ -350,7 +350,7 @@
     width:min(94vw, 460px);
     z-index:8;
     opacity:0;
-    transition:transform 1.8s cubic-bezier(.2,.85,.25,1), opacity 1s ease;
+    transition:transform 2.1s cubic-bezier(.2,.85,.25,1), opacity 1.2s ease;
     pointer-events:none;
   }
   .card-wrap.slide{transform:translate(-50%,-50%) scale(1);opacity:1}
@@ -372,7 +372,7 @@
     text-align:center;
     transform-origin:center top;
     transform:scaleY(.02);opacity:.3;
-    transition:transform 1.5s cubic-bezier(.25,.85,.3,1), opacity 1s ease;
+    transition:transform 1.8s cubic-bezier(.25,.85,.3,1), opacity 1.2s ease;
     overflow:hidden;
   }
   .card-wrap.unfold .card-fold{transform:scaleY(1);opacity:1}
@@ -1430,19 +1430,19 @@ function openEnvelope(){
     }
   }, 400);
 
-  /* Wax fades, flap lifts, envelope recedes  (paced → card readable ~6s) */
-  setTimeout(() => { flap.classList.add('open'); slideSound(0.2); }, 900);
-  setTimeout(() => wax.classList.add('gone'), 1100);
-  setTimeout(() => env.classList.add('recede'), 2200);
+  /* Wax fades, flap lifts, envelope recedes  (paced → card readable ~7s) */
+  setTimeout(() => { flap.classList.add('open'); slideSound(0.2); }, 1250);
+  setTimeout(() => wax.classList.add('gone'), 1500);
+  setTimeout(() => env.classList.add('recede'), 3000);
 
   /* Card slides out then unfolds */
-  setTimeout(() => cardWrap.classList.add('slide'), 1900);
+  setTimeout(() => cardWrap.classList.add('slide'), 2600);
   setTimeout(() => {
     cardWrap.classList.add('unfold');
     cardWrap.style.pointerEvents = 'auto';
     tryStartMusic();
     musicToggleBtn.classList.add('on');
-  }, 3600);
+  }, 5000);
 }
 
 wax.addEventListener('click', e => { e.stopPropagation(); e.preventDefault(); if (!hasSaved()) openEnvelope(); });
