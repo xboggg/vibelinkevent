@@ -271,19 +271,40 @@ const About = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-14 lg:mb-16"
+            className="text-center mb-14 lg:mb-16 max-w-3xl mx-auto"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">Our Story</h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">The evolution of invitations in Ghana</p>
+            <p className="text-primary font-semibold text-sm md:text-base mb-4 uppercase tracking-wider">The evolution of invitations in Ghana</p>
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
+              Ghana celebrates like nowhere else — weddings, naming ceremonies, memorials, engagements. But the way we've invited each other to those moments hasn't kept up with the way we live now.
+            </p>
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed mt-3">
+              Three generations. Three completely different ideas of what an invitation could be. Here's how we got to the third one.
+            </p>
           </motion.div>
 
           <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-4 md:gap-6 items-stretch">
             {/* PAPER — warm amber → orange → rose */}
             <motion.div
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="relative rounded-2xl border-2 border-amber-300/70 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-6 shadow-sm"
+              transition={{ duration: 0.5, delay: 0 }}
+              whileHover={{ y: -6 }}
+              className="relative rounded-2xl border-2 border-amber-300/70 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-6 shadow-sm hover:shadow-lg hover:shadow-amber-500/20 transition-shadow"
             >
+              {/* F · Connector arrow to next card — desktop only */}
+              <div className="hidden md:flex absolute -right-6 top-10 z-10 items-center">
+                <motion.div
+                  initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="h-0.5 w-6 origin-left bg-gradient-to-r from-amber-400 to-emerald-400"
+                />
+                <motion.div
+                  initial={{ opacity: 0, x: -4 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+                  transition={{ delay: 1 }}
+                >
+                  <ChevronRight className="w-4 h-4 text-emerald-500" strokeWidth={3} />
+                </motion.div>
+              </div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 flex items-center justify-center shadow-md shadow-orange-500/30">
                   <FileText className="w-7 h-7 text-white" strokeWidth={2} />
@@ -298,22 +319,47 @@ const About = () => {
               <p className="text-amber-900/70 text-sm leading-relaxed mb-4">
                 For generations, Ghanaians celebrated life's milestones with beautifully printed invitation cards. But paper came with limitations.
               </p>
-              <ul className="space-y-2 text-sm">
+              <motion.ul
+                className="space-y-2 text-sm"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.35 } } }}
+              >
                 {paperProblems.map((item, j) => (
-                  <li key={j} className="flex items-start gap-2 text-amber-900/80">
+                  <motion.li
+                    key={j}
+                    className="flex items-start gap-2 text-amber-900/80"
+                    variants={{ hidden: { opacity: 0, x: -8 }, visible: { opacity: 1, x: 0 } }}
+                  >
                     <X className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
                     <span>{item}</span>
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
             </motion.div>
 
             {/* WHATSAPP — emerald → teal → cyan */}
             <motion.div
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="relative rounded-2xl border-2 border-emerald-300/70 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 p-6 shadow-sm"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{ y: -6 }}
+              className="relative rounded-2xl border-2 border-emerald-300/70 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 p-6 shadow-sm hover:shadow-lg hover:shadow-emerald-500/20 transition-shadow"
             >
+              {/* F · Connector arrow to next card — desktop only */}
+              <div className="hidden md:flex absolute -right-6 top-10 z-10 items-center">
+                <motion.div
+                  initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.7 }}
+                  className="h-0.5 w-6 origin-left bg-gradient-to-r from-emerald-400 to-primary"
+                />
+                <motion.div
+                  initial={{ opacity: 0, x: -4 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+                  transition={{ delay: 1.3 }}
+                >
+                  <ChevronRight className="w-4 h-4 text-primary" strokeWidth={3} />
+                </motion.div>
+              </div>
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600 flex items-center justify-center shadow-md shadow-emerald-500/30">
                   <Smartphone className="w-7 h-7 text-white" strokeWidth={2} />
@@ -329,29 +375,58 @@ const About = () => {
               <p className="text-emerald-900/70 text-sm leading-relaxed mb-4">
                 Then came the digital shift. Designers created invitation flyers — JPEGs and PDFs shared via WhatsApp, email, and social media. Faster and cheaper, but with new problems.
               </p>
-              <ul className="space-y-2 text-sm">
+              <motion.ul
+                className="space-y-2 text-sm"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.55 } } }}
+              >
                 {whatsappProblems.map((item, j) => (
-                  <li key={j} className="flex items-start gap-2 text-emerald-900/80">
+                  <motion.li
+                    key={j}
+                    className="flex items-start gap-2 text-emerald-900/80"
+                    variants={{ hidden: { opacity: 0, x: -8 }, visible: { opacity: 1, x: 0 } }}
+                  >
                     <X className="w-4 h-4 shrink-0 mt-0.5 text-red-500" />
                     <span>{item}</span>
-                  </li>
+                  </motion.li>
                 ))}
-              </ul>
+              </motion.ul>
             </motion.div>
 
-            {/* VIBELINK — dark glass + gradient border */}
+            {/* VIBELINK — dark glass + gradient border + idle float + shimmer */}
             <motion.div
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative rounded-2xl p-[2px] bg-gradient-to-r from-primary via-purple-500 to-secondary shadow-2xl shadow-primary/30 md:scale-105"
+              transition={{ duration: 0.5, delay: 0.4 }}
+              whileHover={{ y: -8, scale: 1.06 }}
+              className="relative rounded-2xl p-[2px] bg-gradient-to-r from-primary via-purple-500 to-secondary shadow-2xl shadow-primary/30 md:scale-105 overflow-visible"
             >
+              {/* B · Shimmer sweep across the gradient border every ~5 s */}
+              <motion.div
+                aria-hidden
+                animate={{ x: ["-100%", "200%"] }}
+                transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 3.5, ease: "easeInOut" }}
+                className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/40 to-transparent -skew-x-12 pointer-events-none"
+              />
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-[10px] font-bold uppercase tracking-widest shadow-lg z-10 whitespace-nowrap">
                 You are here
               </span>
 
               <div className="relative rounded-[calc(1rem-2px)] p-6 bg-gradient-to-br from-purple-950 via-slate-900 to-purple-900 overflow-hidden text-white h-full">
-                <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-primary/30 blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-16 -left-16 w-40 h-40 rounded-full bg-secondary/30 blur-3xl pointer-events-none" />
+                {/* B · Ambient blur blobs slowly drifting to give a 'living' feel */}
+                <motion.div
+                  aria-hidden
+                  animate={{ x: [0, 12, 0], y: [0, 8, 0], scale: [1, 1.15, 1] }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-primary/30 blur-3xl pointer-events-none"
+                />
+                <motion.div
+                  aria-hidden
+                  animate={{ x: [0, -10, 0], y: [0, -6, 0], scale: [1.05, 1, 1.05] }}
+                  transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute -bottom-16 -left-16 w-40 h-40 rounded-full bg-secondary/30 blur-3xl pointer-events-none"
+                />
 
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-4">
@@ -368,7 +443,7 @@ const About = () => {
                         <motion.span animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                         BEST
                       </span>
-                      <p className="text-[11px] text-white/60 mt-1">NOW</p>
+                      <p className="text-[11px] text-white/60 mt-1">2025 → Now</p>
                     </div>
                   </div>
                   <h3 className="text-xl font-bold mb-0.5">
@@ -380,7 +455,13 @@ const About = () => {
                   <p className="text-white/70 text-sm leading-relaxed mb-4">
                     Not a picture. A living, breathing event page. One link that RSVPs, remembers, updates, streams, connects the diaspora.
                   </p>
-                  <ul className="space-y-2 text-sm">
+                  <motion.ul
+                    className="space-y-2 text-sm"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.75 } } }}
+                  >
                     {[
                       "Update details anytime, guests see it instantly",
                       "Track RSVPs in real-time",
@@ -389,14 +470,18 @@ const About = () => {
                       "Works on every phone, no app to download",
                       "Reaches loved ones anywhere in the world",
                     ].map((item, j) => (
-                      <li key={j} className="flex items-start gap-2 text-white/90">
+                      <motion.li
+                        key={j}
+                        className="flex items-start gap-2 text-white/90"
+                        variants={{ hidden: { opacity: 0, x: -8 }, visible: { opacity: 1, x: 0 } }}
+                      >
                         <div className="w-4 h-4 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
                           <Check className="w-2.5 h-2.5 text-emerald-400" strokeWidth={3} />
                         </div>
                         <span>{item}</span>
-                      </li>
+                      </motion.li>
                     ))}
-                  </ul>
+                  </motion.ul>
                 </div>
               </div>
             </motion.div>
