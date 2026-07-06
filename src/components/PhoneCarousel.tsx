@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export interface PhoneCarouselItem {
   id: number | string;
@@ -58,13 +59,19 @@ function PhoneFrame({
         {/* Screen */}
         <div className="relative w-full h-full rounded-[2rem] overflow-hidden bg-white">
           {isLive && liveUrl ? (
-            <iframe
-              src={liveUrl}
-              title={title}
-              className="absolute inset-0 w-full h-full border-0"
-              loading="lazy"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-            />
+            // Render the iframe at a REAL mobile viewport (390x844) then scale
+            // it down with CSS transform. If we let it render at ~220px wide,
+            // the site's mobile styles collapse into unreadable stacks. This
+            // way the layout renders exactly as it would on a real phone.
+            <div className="absolute inset-0 overflow-hidden">
+              <iframe
+                src={liveUrl}
+                title={title}
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                className="border-0 origin-top-left w-[390px] h-[820px] scale-[0.472] md:scale-[0.574]"
+              />
+            </div>
           ) : (
             <>
               <img
@@ -129,7 +136,10 @@ export function PhoneCarousel({
 }: PhoneCarouselProps) {
   const [active, setActive] = useState(0);
   const [liveIdx, setLiveIdx] = useState<number | null>(null);
-  const paused = liveIdx !== null;
+  const [userInteracted, setUserInteracted] = useState(false);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+
+  const paused = liveIdx !== null || userInteracted;
 
   useEffect(() => {
     if (paused || autoRotateMs <= 0 || items.length < 2) return;
@@ -137,10 +147,39 @@ export function PhoneCarousel({
     return () => clearInterval(id);
   }, [paused, autoRotateMs, items.length]);
 
+  const goNext = () => {
+    setUserInteracted(true);
+    setLiveIdx(null);
+    setActive((p) => (p + 1) % items.length);
+  };
+  const goPrev = () => {
+    setUserInteracted(true);
+    setLiveIdx(null);
+    setActive((p) => (p - 1 + items.length) % items.length);
+  };
+
+  // Swipe detection
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart.current) return;
+    const dx = e.changedTouches[0].clientX - touchStart.current.x;
+    const dy = e.changedTouches[0].clientY - touchStart.current.y;
+    touchStart.current = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      dx > 0 ? goPrev() : goNext();
+    }
+  };
+
   if (items.length === 0) return null;
 
   return (
-    <div className={`relative h-[520px] md:h-[600px] flex items-center justify-center ${className}`}>
+    <div
+      className={`relative h-[520px] md:h-[600px] flex items-center justify-center ${className}`}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       {items.map((item, i) => {
         const offset = i - active;
         const abs = Math.abs(offset);
@@ -194,12 +233,33 @@ export function PhoneCarousel({
         </button>
       )}
 
+      {/* Prev / Next arrow buttons — outside the phone stack, always visible */}
+      {liveIdx === null && items.length > 1 && (
+        <>
+          <button
+            onClick={goPrev}
+            aria-label="Previous invitation"
+            className="absolute left-1 md:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur border border-border shadow-lg text-foreground flex items-center justify-center hover:scale-110 hover:bg-white transition-all"
+          >
+            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+          <button
+            onClick={goNext}
+            aria-label="Next invitation"
+            className="absolute right-1 md:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/90 dark:bg-black/60 backdrop-blur border border-border shadow-lg text-foreground flex items-center justify-center hover:scale-110 hover:bg-white transition-all"
+          >
+            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+        </>
+      )}
+
       {/* Dot indicators */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2">
         {items.map((_, i) => (
           <button
             key={i}
             onClick={() => {
+              setUserInteracted(true);
               setLiveIdx(null);
               setActive(i);
             }}
