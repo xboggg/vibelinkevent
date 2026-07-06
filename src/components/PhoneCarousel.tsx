@@ -177,7 +177,15 @@ export function PhoneCarousel({
       onTouchEnd={onTouchEnd}
     >
       {items.map((item, i) => {
-        const offset = i - active;
+        // Circular offset: treat the carousel as a ring, not a line.
+        // The shortest-path distance from `active` to `i` (positive = to
+        // the right, negative = to the left, wraps at +/- N/2). This
+        // way going from item N-1 -> 0 slides in from the right instead
+        // of sweeping backwards across every other phone.
+        const N = items.length;
+        const raw = i - active;
+        const wrapped = ((raw % N) + N) % N;
+        const offset = wrapped > N / 2 ? wrapped - N : wrapped;
         const abs = Math.abs(offset);
         const isVisible = abs <= 2;
         const isFront = offset === 0;
