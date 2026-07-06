@@ -461,37 +461,39 @@ a:hover i.fa-chevron-down{transform:translateY(3px)}
 /* Ghost dove — flies once across the upper hero, triggered by JS after the
    splash finishes. Idle state: off-screen, invisible. */
 .hero-dove{
-  position:absolute;top:14%;left:-16%;z-index:2;
+  /* Positioned at the top-left corner. All motion is done with transform
+     (compositor-only, GPU-accelerated) instead of animating left/top —
+     which caused the desktop stutter + occasional invisibility on mobile
+     because they trigger layout every frame. */
+  position:absolute;top:0;left:0;z-index:2;
   width:110px;height:80px;pointer-events:none;
   opacity:0;
+  transform:translate3d(-140px, 90px, 0);
   filter:drop-shadow(0 4px 14px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(255,240,200,.4));
-  will-change:transform,left,top,opacity;
+  will-change:transform,opacity;
 }
 .hero-dove.fly{
-  animation:heroDoveFly 9s cubic-bezier(.4,.05,.5,1) forwards;
+  animation:heroDoveFly 11s linear forwards;
 }
 .hero-dove svg{width:100%;height:100%;display:block}
-.hero-dove-wing{
-  transform-origin:60% 55%;
-}
+.hero-dove-wing{transform-origin:60% 55%}
 .hero-dove.fly .hero-dove-wing{
-  animation:heroDoveWing .65s ease-in-out infinite;
+  animation:heroDoveWing .7s ease-in-out infinite;
 }
+/* Fly path uses viewport-relative distances so it works at any width. */
 @keyframes heroDoveFly{
-   0%  {left:-16%;  top:14%; opacity:0}
-   8%  {opacity:.9}
-  50%  {           top:8%}
-  92%  {opacity:.8}
-  100% {left:116%;  top:16%; opacity:0}
+   0%  {transform:translate3d(-140px, 90px, 0); opacity:0}
+   6%  {opacity:.9}
+  50%  {transform:translate3d(calc(50vw - 55px), 50px, 0)}
+  94%  {opacity:.85}
+  100% {transform:translate3d(calc(100vw + 140px), 100px, 0); opacity:0}
 }
 @keyframes heroDoveWing{
-  0%,100%{transform:rotate(-8deg)}
-  50%    {transform:rotate(18deg)}
+  0%,100%{transform:rotate(-10deg)}
+  50%    {transform:rotate(20deg)}
 }
 @media(max-width:640px){
-  /* Mobile: keep dove almost as big as desktop and give it a shorter flight
-     path so it's clearly visible against the tighter mobile hero. */
-  .hero-dove{width:88px;height:64px;top:10%}
+  .hero-dove{width:82px;height:60px;transform:translate3d(-110px, 70px, 0)}
 }
 @media(prefers-reduced-motion:reduce){
   .hero-dove{display:none}
