@@ -371,14 +371,17 @@ const HowItWorks = () => {
             </p>
           </motion.div>
 
-          {/* Timeline */}
+          {/* Timeline. The rail lives inside a wrapper that reserves space
+              only for steps 1-5 (which have padding-bottom = pb-10/pb-8), so
+              it stops naturally at the last step's badge — no orphan bottom. */}
           <div ref={stepsRef} className="relative max-w-3xl mx-auto">
             {/* Rail — grey base */}
-            <div aria-hidden className="absolute left-6 md:left-8 top-2 bottom-8 w-[3px] rounded-full bg-border/60" />
+            <div aria-hidden className="absolute left-6 md:left-8 top-2 w-[3px] rounded-full bg-border/60"
+                 style={{ height: 'calc(100% - 3.5rem)' }} />
             {/* Rail — coloured progress fill, height driven by scroll */}
             <motion.div
               aria-hidden
-              style={{ height: railHeight }}
+              style={{ height: railHeight, maxHeight: 'calc(100% - 3.5rem)' }}
               className="absolute left-6 md:left-8 top-2 w-[3px] rounded-full bg-gradient-to-b from-rose-400 via-violet-500 to-amber-400 shadow-[0_0_16px_rgba(147,51,234,0.35)] origin-top"
             />
 
@@ -440,15 +443,6 @@ const HowItWorks = () => {
               );
             })}
 
-            {/* Finish flag at rail bottom — subtle "you made it" beat */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.6 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="absolute left-0 md:left-0 -bottom-2 w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-yellow-400 via-amber-500 to-orange-500 flex items-center justify-center shadow-lg ring-4 ring-background"
-            >
-              <Sparkles className="h-5 w-5 md:h-6 md:w-6 text-white" strokeWidth={2.25} />
-            </motion.div>
           </div>
 
           {/* CTA */}
