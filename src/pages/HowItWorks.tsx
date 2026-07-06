@@ -358,9 +358,11 @@ const HowItWorks = () => {
           </motion.div>
         </motion.div>
 
-        {/* Wave divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        {/* Wave divider — width="100%" preserveAspectRatio="none" so it
+            fills the viewport instead of rendering at intrinsic 300 px
+            and leaving a visible gap on mobile. */}
+        <div className="absolute bottom-0 left-0 right-0 leading-none">
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" preserveAspectRatio="none" className="block w-full h-[60px] md:h-[120px]">
             <path
               d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
               className="fill-background"
@@ -371,9 +373,10 @@ const HowItWorks = () => {
 
       {/* Steps Timeline Section — vertical stacked list, single rail, per-step colour */}
       <section className="py-12 lg:py-20 bg-background relative overflow-hidden">
-        {/* Soft ambient background blobs — same colours as the step palette so
-            the whole section feels colourful even before you look at a card. */}
-        <div aria-hidden className="absolute inset-0 pointer-events-none">
+        {/* Soft ambient background blobs — desktop only. On mobile they'd
+            take up ~90% of the viewport and read as awkward coloured
+            patches rather than ambient tint, so we hide them below md. */}
+        <div aria-hidden className="hidden md:block absolute inset-0 pointer-events-none">
           <div className="absolute -top-20 -left-20 w-96 h-96 rounded-full bg-rose-400/10 blur-3xl" />
           <div className="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-violet-500/10 blur-3xl" />
           <div className="absolute bottom-0 left-1/3 w-96 h-96 rounded-full bg-amber-400/10 blur-3xl" />
