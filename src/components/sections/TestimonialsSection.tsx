@@ -79,10 +79,30 @@ const fallbackTestimonials: Testimonial[] = [
 export function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(fallbackTestimonials);
   const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
   const headerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const isHeaderInView = useInView(headerRef, { once: true, amount: 0.3 });
   const isGridInView = useInView(gridRef, { once: true, amount: 0.2 });
+
+  // Track which card is centred while the user swipes (mobile only)
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const idx = Math.round(el.scrollLeft / el.clientWidth);
+      setActiveIndex(idx);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [testimonials.length]);
+
+  const scrollToIndex = (i: number) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -161,10 +181,13 @@ export function TestimonialsSection() {
           </AnimatedHeading>
         </motion.div>
 
-        {/* Testimonials — horizontal snap-scroll on mobile, grid on md+ */}
+        {/* Testimonials — one-at-a-time snap-scroll on mobile, grid on md+ */}
         <motion.div
-          ref={gridRef}
-          className="flex md:grid md:grid-cols-3 gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none -mx-4 md:mx-0 px-4 md:px-0 pb-4 md:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          ref={(el) => {
+            gridRef.current = el;
+            scrollerRef.current = el;
+          }}
+          className="flex md:grid md:grid-cols-3 gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory md:snap-none -mx-4 md:mx-0 px-4 md:px-0 pb-2 md:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           variants={containerVariants}
           initial="hidden"
           animate={isGridInView ? "visible" : "hidden"}
@@ -173,7 +196,7 @@ export function TestimonialsSection() {
             <motion.div
               key={testimonial.id}
               variants={itemVariants}
-              className="relative p-5 lg:p-8 rounded-2xl bg-card border border-border hover:border-secondary/30 hover:shadow-lg transition-all duration-300 w-[72%] max-w-[300px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink"
+              className="relative p-6 lg:p-8 rounded-2xl bg-card border border-border hover:border-secondary/30 hover:shadow-lg transition-all duration-300 w-[calc(100vw-2rem)] shrink-0 snap-center md:w-auto md:shrink"
             >
               {/* Quote Icon */}
               <Quote className="absolute top-6 right-6 h-8 w-8 text-secondary/20" />
@@ -212,6 +235,22 @@ export function TestimonialsSection() {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Dot indicators — mobile only */}
+        <div className="flex md:hidden justify-center gap-2 mt-6">
+          {testimonials.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToIndex(i)}
+              aria-label={`Go to testimonial ${i + 1}`}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                i === activeIndex
+                  ? "w-6 bg-secondary"
+                  : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
