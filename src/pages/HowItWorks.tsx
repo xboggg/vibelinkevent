@@ -27,7 +27,7 @@ import {
   Heart,
   Star,
 } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useLayoutEffect } from "react";
 
 const steps = [
   {
@@ -201,14 +201,41 @@ const HowItWorks = () => {
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  // Scroll-linked rail fill for the Steps timeline — rail fills as user
-  // reads through the section, so it visually connects the completed steps.
+  // Scroll-linked rail fill for the Steps timeline. The rail must span
+  // from FIRST badge center to LAST badge center — we can't express that
+  // in CSS because we don't know the last card's height statically. So
+  // we measure with useLayoutEffect and a ResizeObserver.
   const stepsRef = useRef<HTMLDivElement>(null);
+  const [rail, setRail] = useState({ top: 0, height: 0 });
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const el = stepsRef.current;
+      if (!el) return;
+      const badges = el.querySelectorAll<HTMLElement>("[data-step-badge]");
+      if (badges.length < 2) return;
+      const containerRect = el.getBoundingClientRect();
+      const first = badges[0].getBoundingClientRect();
+      const last = badges[badges.length - 1].getBoundingClientRect();
+      const top = first.top - containerRect.top + first.height / 2;
+      const bottom = last.top - containerRect.top + last.height / 2;
+      setRail({ top, height: Math.max(0, bottom - top) });
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (stepsRef.current) ro.observe(stepsRef.current);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
   const { scrollYProgress: stepsProgress } = useScroll({
     target: stepsRef,
     offset: ["start 80%", "end 30%"],
   });
-  const railHeight = useTransform(stepsProgress, [0, 1], ["0%", "100%"]);
+  const railHeight = useTransform(stepsProgress, [0, 1], [0, rail.height]);
 
   return (
     <Layout>
@@ -371,18 +398,21 @@ const HowItWorks = () => {
             </p>
           </motion.div>
 
-          {/* Timeline. The rail lives inside a wrapper that reserves space
-              only for steps 1-5 (which have padding-bottom = pb-10/pb-8), so
-              it stops naturally at the last step's badge — no orphan bottom. */}
+          {/* Timeline. Rail top/height are measured in JS (useLayoutEffect
+              above) so it terminates precisely at the last badge center,
+              regardless of how tall step 06's card ends up. */}
           <div ref={stepsRef} className="relative max-w-3xl mx-auto">
             {/* Rail — grey base */}
-            <div aria-hidden className="absolute left-6 md:left-8 top-2 w-[3px] rounded-full bg-border/60"
-                 style={{ height: 'calc(100% - 3.5rem)' }} />
+            <div
+              aria-hidden
+              className="absolute left-6 md:left-8 w-[3px] rounded-full bg-border/60"
+              style={{ top: rail.top, height: rail.height }}
+            />
             {/* Rail — coloured progress fill, height driven by scroll */}
             <motion.div
               aria-hidden
-              style={{ height: railHeight, maxHeight: 'calc(100% - 3.5rem)' }}
-              className="absolute left-6 md:left-8 top-2 w-[3px] rounded-full bg-gradient-to-b from-rose-400 via-violet-500 to-amber-400 shadow-[0_0_16px_rgba(147,51,234,0.35)] origin-top"
+              style={{ top: rail.top, height: railHeight }}
+              className="absolute left-6 md:left-8 w-[3px] rounded-full bg-gradient-to-b from-rose-400 via-violet-500 to-amber-400 shadow-[0_0_16px_rgba(147,51,234,0.35)] origin-top"
             />
 
             {steps.map((step, index) => {
@@ -400,6 +430,7 @@ const HowItWorks = () => {
                 >
                   {/* Badge — anchors on the rail */}
                   <div
+                    data-step-badge
                     className={`absolute left-0 top-0 w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br ${palette.grad} flex items-center justify-center shadow-lg ${palette.shadow} ring-4 ring-background z-10`}
                   >
                     <StepIcon className="h-5 w-5 md:h-7 md:w-7 text-white" strokeWidth={2.25} />
