@@ -265,7 +265,7 @@ const About = () => {
       </section>
 
       {/* Our Story — 3-column then/better/now comparison */}
-      <section className="py-20 bg-background">
+      <section className="py-20 bg-background overflow-x-hidden">
         <div className="container mx-auto px-4 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -399,8 +399,8 @@ const About = () => {
             <motion.div
               initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              whileHover={{ y: -8, scale: 1.06 }}
-              className="relative rounded-2xl p-[2px] bg-gradient-to-r from-primary via-purple-500 to-secondary shadow-2xl shadow-primary/30 md:scale-105 overflow-visible"
+              whileHover={{ y: -8 }}
+              className="relative rounded-2xl p-[2px] bg-gradient-to-r from-primary via-purple-500 to-secondary shadow-2xl shadow-primary/30 md:scale-105"
             >
               {/* B · Shimmer sweep across the gradient border every ~5 s */}
               <motion.div
