@@ -98,6 +98,17 @@ const steps = [
   },
 ];
 
+// Per-step colour palette — the timeline section uses this so every step
+// has its own visual identity while sitting inside the brand purple/gold.
+const stepPalettes = [
+  { grad: "from-rose-400 to-rose-600",       tint: "bg-rose-50 dark:bg-rose-950/40",         text: "text-rose-600 dark:text-rose-400",       border: "border-rose-200/70 dark:border-rose-900/50",       shadow: "shadow-rose-500/20" },
+  { grad: "from-amber-400 to-orange-500",    tint: "bg-amber-50 dark:bg-amber-950/40",       text: "text-amber-600 dark:text-amber-400",     border: "border-amber-200/70 dark:border-amber-900/50",     shadow: "shadow-amber-500/20" },
+  { grad: "from-emerald-400 to-emerald-600", tint: "bg-emerald-50 dark:bg-emerald-950/40",   text: "text-emerald-600 dark:text-emerald-400", border: "border-emerald-200/70 dark:border-emerald-900/50", shadow: "shadow-emerald-500/20" },
+  { grad: "from-violet-500 to-purple-600",   tint: "bg-violet-50 dark:bg-violet-950/40",     text: "text-violet-600 dark:text-violet-400",   border: "border-violet-200/70 dark:border-violet-900/50",   shadow: "shadow-violet-500/20" },
+  { grad: "from-sky-400 to-blue-600",        tint: "bg-sky-50 dark:bg-sky-950/40",           text: "text-sky-600 dark:text-sky-400",         border: "border-sky-200/70 dark:border-sky-900/50",         shadow: "shadow-sky-500/20" },
+  { grad: "from-yellow-400 to-amber-500",    tint: "bg-yellow-50 dark:bg-yellow-950/40",     text: "text-yellow-600 dark:text-yellow-500",   border: "border-yellow-200/70 dark:border-yellow-900/50",   shadow: "shadow-yellow-500/20" },
+];
+
 const deliverables = [
   { icon: Palette, text: "Custom-designed digital invitation" },
   { icon: Share2, text: "Unique shareable link" },
@@ -189,6 +200,15 @@ const HowItWorks = () => {
   });
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  // Scroll-linked rail fill for the Steps timeline — rail fills as user
+  // reads through the section, so it visually connects the completed steps.
+  const stepsRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: stepsProgress } = useScroll({
+    target: stepsRef,
+    offset: ["start 80%", "end 30%"],
+  });
+  const railHeight = useTransform(stepsProgress, [0, 1], ["0%", "100%"]);
 
   return (
     <Layout>
@@ -319,155 +339,124 @@ const HowItWorks = () => {
         </div>
       </section>
 
-      {/* Steps Timeline Section */}
-      <section className="py-20 lg:py-28 bg-background relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-transparent via-primary/20 to-transparent" />
+      {/* Steps Timeline Section — vertical stacked list, single rail, per-step colour */}
+      <section className="py-12 lg:py-20 bg-background relative overflow-hidden">
+        {/* Soft ambient background blobs — same colours as the step palette so
+            the whole section feels colourful even before you look at a card. */}
+        <div aria-hidden className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-20 -left-20 w-96 h-96 rounded-full bg-rose-400/10 blur-3xl" />
+          <div className="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-violet-500/10 blur-3xl" />
+          <div className="absolute bottom-0 left-1/3 w-96 h-96 rounded-full bg-amber-400/10 blur-3xl" />
+        </div>
 
-        <div className="container mx-auto px-4 lg:px-8">
+        <div className="container mx-auto px-4 lg:px-8 relative">
+          {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-10 lg:mb-14"
           >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-4">
+              6 Simple Steps
+            </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               Your Journey to the{" "}
-              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
                 Perfect Invitation
               </span>
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Follow these 6 simple steps and watch your event invitation come to life.
+            <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto">
+              From a 2-minute form to sharing your invitation with the world — here's the whole flow, step by step.
             </p>
           </motion.div>
 
-          <div className="max-w-5xl mx-auto">
+          {/* Timeline */}
+          <div ref={stepsRef} className="relative max-w-3xl mx-auto">
+            {/* Rail — grey base */}
+            <div aria-hidden className="absolute left-6 md:left-8 top-2 bottom-8 w-[3px] rounded-full bg-border/60" />
+            {/* Rail — coloured progress fill, height driven by scroll */}
+            <motion.div
+              aria-hidden
+              style={{ height: railHeight }}
+              className="absolute left-6 md:left-8 top-2 w-[3px] rounded-full bg-gradient-to-b from-rose-400 via-violet-500 to-amber-400 shadow-[0_0_16px_rgba(147,51,234,0.35)] origin-top"
+            />
+
             {steps.map((step, index) => {
               const StepIcon = step.icon;
-              const isEven = index % 2 === 0;
+              const palette = stepPalettes[index % stepPalettes.length];
 
               return (
                 <motion.div
                   key={step.number}
-                  initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+                  initial={{ opacity: 0, x: 24 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`relative flex items-center gap-8 mb-12 last:mb-0 ${
-                    isEven ? "flex-row" : "flex-row-reverse"
-                  }`}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="relative pl-16 md:pl-24 pb-8 md:pb-10 last:pb-0 group"
                 >
-                  {/* Timeline connector */}
-                  <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[3px]">
-                    {index < steps.length - 1 && (
-                      <motion.div
-                        className="w-full h-full bg-gradient-to-b from-primary via-secondary to-primary opacity-40"
-                        initial={{ scaleY: 0 }}
-                        whileInView={{ scaleY: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        style={{ originY: 0 }}
-                      />
-                    )}
+                  {/* Badge — anchors on the rail */}
+                  <div
+                    className={`absolute left-0 top-0 w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br ${palette.grad} flex items-center justify-center shadow-lg ${palette.shadow} ring-4 ring-background z-10`}
+                  >
+                    <StepIcon className="h-5 w-5 md:h-7 md:w-7 text-white" strokeWidth={2.25} />
+                    {/* Tiny step number chip clipped onto the badge */}
+                    <span className="absolute -bottom-1.5 -right-1.5 h-5 min-w-[20px] px-1 rounded-full bg-background border border-border text-[10px] font-bold text-foreground/80 flex items-center justify-center shadow-sm">
+                      {step.number}
+                    </span>
                   </div>
 
-                  {/* Content Card */}
-                  <motion.div
-                    className={`flex-1 ${isEven ? "lg:pr-16" : "lg:pl-16"}`}
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.3 }}
+                  {/* Card */}
+                  <div
+                    className={`relative p-5 md:p-6 rounded-2xl bg-card border ${palette.border} shadow-sm group-hover:shadow-lg group-hover:-translate-y-0.5 transition-all duration-300 overflow-hidden`}
                   >
-                    <div
-                      className={`relative p-6 lg:p-8 rounded-3xl ${step.lightBg} border border-border/50 overflow-hidden group hover:shadow-xl transition-shadow duration-500`}
+                    {/* Watermark number — bleeds off the top-right corner */}
+                    <span
+                      aria-hidden
+                      className={`absolute -top-6 -right-3 text-8xl md:text-9xl font-black ${palette.text} opacity-[0.08] pointer-events-none select-none leading-none tracking-tighter`}
                     >
-                      {/* Gradient accent */}
-                      <motion.div
-                        className={`absolute top-0 ${isEven ? "right-0" : "left-0"} w-2 h-full bg-gradient-to-b ${step.color}`}
-                        initial={{ scaleY: 0 }}
-                        whileInView={{ scaleY: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        style={{ originY: 0 }}
-                      />
+                      {step.number}
+                    </span>
 
-                      <div className="flex items-start gap-5">
-                        {/* Icon */}
-                        <motion.div
-                          className={`relative flex-shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg`}
-                          animate={{
-                            y: [0, -5, 0],
-                            rotate: [0, 2, -2, 0],
-                          }}
-                          transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: index * 0.2,
-                          }}
-                        >
-                          <StepIcon className="h-8 w-8 text-white" />
-                          {/* Pulse effect */}
-                          <motion.div
-                            className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${step.color}`}
-                            animate={{
-                              scale: [1, 1.3, 1],
-                              opacity: [0.5, 0, 0.5],
-                            }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                            }}
-                          />
-                        </motion.div>
-
-                        {/* Text content */}
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <span className={`text-sm font-bold bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}>
-                              STEP {step.number}
-                            </span>
-                            <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs font-medium flex items-center gap-1">
-                              <Clock className="w-3 h-3" />
-                              {step.duration}
-                            </span>
-                          </div>
-                          <h3 className="text-xl lg:text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                            {step.title}
-                          </h3>
-                          <p className="text-muted-foreground mb-3">{step.description}</p>
-                          <p className="text-foreground/70 text-sm leading-relaxed">{step.details}</p>
-                        </div>
-                      </div>
+                    {/* Meta row: STEP label + duration pill */}
+                    <div className="flex items-center gap-2 mb-2 relative">
+                      <span className={`text-[11px] font-bold uppercase tracking-[0.15em] bg-gradient-to-r ${palette.grad} bg-clip-text text-transparent`}>
+                        Step {step.number}
+                      </span>
+                      <span className="text-muted-foreground/50">·</span>
+                      <span className={`inline-flex items-center gap-1 ${palette.tint} ${palette.text} text-[11px] font-semibold px-2 py-0.5 rounded-full`}>
+                        <Clock className="w-3 h-3" />
+                        {step.duration}
+                      </span>
                     </div>
-                  </motion.div>
 
-                  {/* Center number circle */}
-                  <motion.div
-                    className="hidden lg:flex absolute left-1/2 -translate-x-1/2 w-14 h-14 rounded-full bg-gradient-to-br from-primary to-secondary items-center justify-center shadow-xl z-10"
-                    initial={{ scale: 0, rotate: -180 }}
-                    whileInView={{ scale: 1, rotate: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, type: "spring", stiffness: 200, delay: index * 0.1 }}
-                    whileHover={{ scale: 1.2 }}
-                  >
-                    <span className="text-white font-bold text-lg">{step.number.slice(1)}</span>
-                  </motion.div>
-
-                  {/* Spacer for alignment */}
-                  <div className="hidden lg:block flex-1" />
+                    <h3 className="text-lg md:text-xl font-bold text-foreground mb-2 relative">
+                      {step.title}
+                    </h3>
+                    <p className="text-foreground/85 font-medium mb-2 relative">{step.description}</p>
+                    <p className="text-muted-foreground text-sm leading-relaxed relative">{step.details}</p>
+                  </div>
                 </motion.div>
               );
             })}
+
+            {/* Finish flag at rail bottom — subtle "you made it" beat */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.6 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="absolute left-0 md:left-0 -bottom-2 w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br from-yellow-400 via-amber-500 to-orange-500 flex items-center justify-center shadow-lg ring-4 ring-background"
+            >
+              <Sparkles className="h-5 w-5 md:h-6 md:w-6 text-white" strokeWidth={2.25} />
+            </motion.div>
           </div>
 
-          {/* CTA after steps */}
+          {/* CTA */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mt-16"
+            className="text-center mt-16 md:mt-20"
           >
             <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 px-10 py-6 text-lg">
               <Link to="/get-started">
