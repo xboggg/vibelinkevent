@@ -11,6 +11,8 @@
 <meta property="og:url" content="https://ericsherita.vibelinkevent.com/" />
 <meta property="og:image" content="https://ericsherita.vibelinkevent.com/og-image.jpg" />
 <meta name="theme-color" content="#f5f2e8" />
+<link rel="icon" type="image/png" href="img/favicon.png" />
+<link rel="apple-touch-icon" href="img/logo-256.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cinzel:wght@400;500;600;700&family=Great+Vibes&family=Tangerine:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -29,6 +31,12 @@
     </linearGradient>
   </defs>
 </svg>
+
+<!-- Intro overlay -->
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-line"></div>
+  <div class="intro-diamond"></div>
+</div>
 
 <!-- Custom cursor -->
 <div class="cursor" id="cursor"></div>
@@ -49,10 +57,53 @@
   <button class="milestone-close" id="milestoneClose" aria-label="Dismiss"><i class="fas fa-times"></i></button>
 </div>
 
+<!-- Nav bar -->
+<nav class="nav-bar" id="navBar" aria-label="Site navigation">
+  <a href="#top" class="nav-brand" aria-label="Eric &amp; Sherita — home">
+    <img src="img/logo-96.png" alt="Eric &amp; Sherita" class="nav-brand-logo" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="#timeline" data-nav="timeline"><span data-i18n>The Day</span></a></li>
+    <li><a href="#venues" data-nav="venues"><span data-i18n>Venues</span></a></li>
+    <li><a href="#hotels" data-nav="hotels"><span data-i18n>Stay</span></a></li>
+    <li><a href="#gifts" data-nav="gifts"><span data-i18n>Gifts</span></a></li>
+    <li><a href="#wishes" data-nav="wishes"><span data-i18n>Wishes</span></a></li>
+    <li><a href="#contact" data-nav="contact"><span data-i18n>Contact</span></a></li>
+    <li><a href="#rsvp" data-nav="rsvp" class="rsvp-pill"><i class="fas fa-heart"></i> RSVP</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+</nav>
+
+<!-- Compact mobile nav overlay — everything present -->
+<div class="nav-overlay" id="navOverlay" aria-hidden="true">
+  <button class="nav-overlay-close" id="navOverlayClose" aria-label="Close menu"><i class="fas fa-times"></i></button>
+  <div class="nav-overlay-header">
+    <img src="img/logo-256.png" alt="Eric &amp; Sherita" class="nav-overlay-logo" />
+    <div class="nav-overlay-date">SAT &middot; 28 NOV 2026</div>
+  </div>
+  <ul class="nav-overlay-links">
+    <li><a href="#timeline" data-nav="timeline"><i class="fas fa-clock"></i> <span data-i18n>The Day</span></a></li>
+    <li><a href="#venues" data-nav="venues"><i class="fas fa-map-marker-alt"></i> <span data-i18n>Venues</span></a></li>
+    <li><a href="#hotels" data-nav="hotels"><i class="fas fa-hotel"></i> <span data-i18n>Stay</span></a></li>
+    <li><a href="#gifts" data-nav="gifts"><i class="fas fa-heart"></i> <span data-i18n>Gifts</span></a></li>
+    <li><a href="#wishes" data-nav="wishes"><i class="fas fa-comment-dots"></i> <span data-i18n>Wishes</span></a></li>
+    <li><a href="#contact" data-nav="contact"><i class="fas fa-phone"></i> <span data-i18n>Contact</span></a></li>
+    <li><a href="#rsvp" data-nav="rsvp" class="rsvp-pill"><i class="fas fa-heart"></i> RSVP Now</a></li>
+  </ul>
+  <div class="nav-overlay-footer">
+    <div class="nav-overlay-lang">
+      <button data-lang="en">EN</button>
+      <button data-lang="tw">TW</button>
+    </div>
+    <div class="nav-overlay-note">See you on 28 November</div>
+  </div>
+</div>
+
 <!-- ================= HERO ================= -->
 <header class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-bg" id="heroBg"></div>
   <div class="hero-veil"></div>
+  <div class="hero-glow" id="heroGlow"></div>
   <div class="hero-particles" id="heroParticles"></div>
   <div class="hero-content">
     <div class="hero-eyebrow" data-i18n>You Are Invited</div>
@@ -118,7 +169,7 @@
 </div>
 
 <!-- ================= VENUES ================= -->
-<section class="chapter venues-section">
+<section class="chapter venues-section" id="venues">
   <div class="chapter-head reveal">
     <div class="eyebrow" data-i18n>The Two Venues</div>
     <h2 class="chapter-title"><span data-i18n>Where It Happens</span></h2>
@@ -159,38 +210,43 @@
 <div class="section-divider" aria-hidden="true"><svg viewBox="0 0 800 60" preserveAspectRatio="none"><path d="M 200 30 Q 350 5 400 30 Q 450 55 600 30"/><circle cx="400" cy="30" r="3"/><ellipse cx="330" cy="30" rx="4" ry="7" transform="rotate(-30 330 30)"/><ellipse cx="470" cy="30" rx="4" ry="7" transform="rotate(30 470 30)"/></svg></div>
 
 <!-- ================= ACCOMMODATIONS ================= -->
-<section class="chapter hotels-section">
+<section class="chapter hotels-section" id="hotels">
   <div class="chapter-head reveal">
     <div class="eyebrow" data-i18n>Where to Stay</div>
     <h2 class="chapter-title"><span data-i18n>Diaspora Guide</span></h2>
     <div class="diamond-line" aria-hidden="true"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
     <p class="chapter-sub">Recommended hotels within a short drive of both venues. Book early — late November is peak travel around Thanksgiving.</p>
   </div>
-  <div class="hotel-grid">
+  <button class="hotel-nav-btn prev" id="hotelPrev" aria-label="Previous hotel"><i class="fas fa-chevron-left"></i></button>
+  <button class="hotel-nav-btn next" id="hotelNext" aria-label="Next hotel"><i class="fas fa-chevron-right"></i></button>
+  <div class="hotel-grid" id="hotelGrid">
     <div class="hotel-card reveal">
-      <img class="hotel-photo" src="img/hotel-hilton.jpg" alt="Hilton Garden Inn" loading="lazy">
+      <img class="hotel-photo" src="img/hotel-holiday-inn.jpg" alt="Holiday Inn Express & Suites North Brunswick" loading="lazy">
       <div class="hotel-body">
-        <div class="hotel-name">Hilton Garden Inn Edison/Raritan Center</div>
-        <div class="hotel-meta"><i class="fas fa-map-marker-alt"></i> 7 mi from ceremony, 4 mi from reception</div>
-        <a class="hotel-book" href="https://www.hilton.com/en/hotels/ewredgi-hilton-garden-inn-edison-raritan-center/" target="_blank" rel="noopener"><span data-i18n>BOOK NOW</span> <i class="fas fa-arrow-right"></i></a>
+        <div class="hotel-name">Holiday Inn Express &amp; Suites North Brunswick</div>
+        <div class="hotel-meta"><i class="fas fa-map-marker-alt"></i> Minutes from the ceremony venue</div>
+        <a class="hotel-book" href="https://www.ihg.com/holidayinnexpress/hotels/us/en/north-brunswick/nbkse/hoteldetail?cm_mmc=GoogleMaps-_-EX-_-US-_-NBKSE" target="_blank" rel="noopener"><span data-i18n>BOOK NOW</span> <i class="fas fa-arrow-right"></i></a>
       </div>
     </div>
     <div class="hotel-card reveal reveal-delay-1">
-      <img class="hotel-photo" src="img/hotel-renaissance.jpg" alt="Renaissance Woodbridge Hotel" loading="lazy">
+      <img class="hotel-photo" src="img/hotel-staybridge.jpg" alt="Staybridge Suites North Brunswick" loading="lazy">
       <div class="hotel-body">
-        <div class="hotel-name">Renaissance Woodbridge Hotel</div>
-        <div class="hotel-meta"><i class="fas fa-map-marker-alt"></i> 1.5 mi from reception venue</div>
-        <a class="hotel-book" href="https://www.marriott.com/hotels/travel/ewrwb-renaissance-woodbridge-hotel/" target="_blank" rel="noopener"><span data-i18n>BOOK NOW</span> <i class="fas fa-arrow-right"></i></a>
+        <div class="hotel-name">Staybridge Suites North Brunswick</div>
+        <div class="hotel-meta"><i class="fas fa-map-marker-alt"></i> Extended-stay suites near ceremony venue</div>
+        <a class="hotel-book" href="https://www.ihg.com/staybridge/hotels/us/en/north-brunswick/nbkts/hoteldetail" target="_blank" rel="noopener"><span data-i18n>BOOK NOW</span> <i class="fas fa-arrow-right"></i></a>
       </div>
     </div>
     <div class="hotel-card reveal reveal-delay-2">
-      <img class="hotel-photo" src="img/hotel-courtyard.jpg" alt="Courtyard Marriott Woodbridge" loading="lazy">
+      <img class="hotel-photo" src="img/hotel-avenel.jpg" alt="Americas Best Value Inn Avenel Woodbridge" loading="lazy">
       <div class="hotel-body">
-        <div class="hotel-name">Courtyard Marriott Woodbridge</div>
-        <div class="hotel-meta"><i class="fas fa-map-marker-alt"></i> 2.4 mi from reception venue</div>
-        <a class="hotel-book" href="https://www.marriott.com/en-us/hotels/ewrcw-courtyard-edison-woodbridge/overview/" target="_blank" rel="noopener"><span data-i18n>BOOK NOW</span> <i class="fas fa-arrow-right"></i></a>
+        <div class="hotel-name">Americas Best Value Inn Avenel Woodbridge</div>
+        <div class="hotel-meta"><i class="fas fa-map-marker-alt"></i> Close to the reception venue</div>
+        <a class="hotel-book" href="https://www.sonesta.com/americas-best-value-inn/nj/avenel/americas-best-value-inn-avenel-woodbridge" target="_blank" rel="noopener"><span data-i18n>BOOK NOW</span> <i class="fas fa-arrow-right"></i></a>
       </div>
     </div>
+  </div>
+  <div class="hotel-dots" id="hotelDots" aria-hidden="true">
+    <span class="on"></span><span></span><span></span>
   </div>
   <!-- Flight + hotel deals strip -->
   <div class="deals-strip">
@@ -307,7 +363,7 @@
 <div class="section-divider" aria-hidden="true"><svg viewBox="0 0 800 60" preserveAspectRatio="none"><path d="M 200 30 Q 350 5 400 30 Q 450 55 600 30"/><circle cx="400" cy="30" r="3"/><ellipse cx="330" cy="30" rx="4" ry="7" transform="rotate(-30 330 30)"/><ellipse cx="470" cy="30" rx="4" ry="7" transform="rotate(30 470 30)"/></svg></div>
 
 <!-- ================= SHOW LOVE — Colorful Zelle Card ================= -->
-<section class="chapter love-section">
+<section class="chapter love-section" id="gifts">
   <div class="chapter-head reveal">
     <div class="eyebrow" data-i18n>In Lieu of a Registry</div>
     <h2 class="chapter-title"><span data-i18n>Show Love to the Couple</span></h2>
@@ -317,7 +373,7 @@
     <div class="love-heart-icon"><i class="fas fa-heart"></i></div>
     <p class="love-quote" data-i18n>In lieu of a traditional gift registry, we welcome your love in any form. Should you wish to bless our journey, our Zelle details are below.</p>
   </div>
-  <div class="gift-cards">
+  <div class="love-side-by-side">
     <div class="gift-card zelle reveal">
       <div class="gift-card-brand">
         <span class="gift-card-tag">ZELLE</span>
@@ -329,17 +385,16 @@
       <div class="gift-card-copied" id="zelleCopied"><i class="fas fa-check-circle"></i> <span data-i18n>Copied to clipboard</span></div>
       <div class="gift-card-icon"><i class="fas fa-heart"></i></div>
     </div>
-  </div>
-  <!-- Currency Converter -->
-  <div class="love-converter reveal reveal-delay-1">
-    <div class="love-converter-title" data-i18n>Currency Converter</div>
-    <div class="love-converter-row">
-      <span>USD</span>
-      <input type="number" id="convUsd" value="50" min="0" step="10">
-      <span class="love-converter-eq">≈</span>
-      <span class="love-converter-result" id="convGhs">GHS 775</span>
+    <div class="love-converter reveal reveal-delay-1">
+      <div class="love-converter-title" data-i18n>Currency Converter</div>
+      <div class="love-converter-row">
+        <span>USD</span>
+        <input type="number" id="convUsd" value="50" min="0" step="10">
+        <span class="love-converter-eq">≈</span>
+        <span class="love-converter-result" id="convGhs">GHS 775</span>
+      </div>
+      <div class="love-converter-rate" id="convRate">Loading rate…</div>
     </div>
-    <div class="love-converter-rate" id="convRate">Loading rate…</div>
   </div>
   <div class="love-thanks" data-i18n>Thank you, with all our hearts</div>
 </section>
@@ -385,42 +440,6 @@
 </section>
 
 <div class="section-divider" aria-hidden="true"><svg viewBox="0 0 800 60" preserveAspectRatio="none"><path d="M 200 30 Q 350 5 400 30 Q 450 55 600 30"/><circle cx="400" cy="30" r="3"/><ellipse cx="330" cy="30" rx="4" ry="7" transform="rotate(-30 330 30)"/><ellipse cx="470" cy="30" rx="4" ry="7" transform="rotate(30 470 30)"/></svg></div>
-
-<!-- ================= PHOTO BOOTH ================= -->
-<section class="chapter booth-section">
-  <div class="chapter-head reveal">
-    <div class="eyebrow" data-i18n>Photo Booth</div>
-    <h2 class="chapter-title"><span data-i18n>Frame Your Selfie</span></h2>
-    <div class="diamond-line" aria-hidden="true"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
-    <p class="chapter-sub" data-i18n>Take a photo with the couple's branded frame and share with everyone.</p>
-  </div>
-  <div class="booth-wrap reveal">
-    <div class="booth-stage">
-      <div class="booth-placeholder" id="boothPlaceholder">
-        <i class="fas fa-camera"></i>
-        <p>Tap "Start Camera" to open your camera and take a framed keepsake photo.</p>
-      </div>
-      <video id="boothVideo" class="booth-video" autoplay playsinline muted style="display:none"></video>
-      <canvas id="boothCanvas" class="booth-canvas"></canvas>
-      <div class="booth-frame-overlay" aria-hidden="true">
-        <svg viewBox="0 0 400 400" preserveAspectRatio="none">
-          <rect x="12" y="12" width="376" height="376" fill="none" stroke="#c9a24a" stroke-width="2"/>
-          <rect x="20" y="20" width="360" height="360" fill="none" stroke="#8a6a23" stroke-width="1"/>
-          <text x="200" y="42" text-anchor="middle" font-family="Cormorant Garamond" font-style="italic" font-weight="700" font-size="30" fill="#fff" stroke="rgba(0,0,0,.5)" stroke-width="1.5">Eric &amp; Sherita</text>
-          <text x="200" y="378" text-anchor="middle" font-family="Cinzel" font-weight="600" font-size="11" letter-spacing="4" fill="#fff" stroke="rgba(0,0,0,.4)" stroke-width="1">28 NOVEMBER 2026 · NEW JERSEY</text>
-        </svg>
-      </div>
-    </div>
-    <div class="booth-controls">
-      <button class="booth-btn primary" id="boothStart" data-cursor><i class="fas fa-video"></i> <span data-i18n>Start Camera</span></button>
-      <button class="booth-btn primary" id="boothCapture" disabled data-cursor><i class="fas fa-camera"></i> <span data-i18n>Capture</span></button>
-      <button class="booth-btn secondary" id="boothRetake" disabled data-cursor><i class="fas fa-redo"></i> <span data-i18n>Retake</span></button>
-      <button class="booth-btn primary" id="boothDownload" disabled data-cursor><i class="fas fa-download"></i> <span data-i18n>Download</span></button>
-      <button class="booth-btn secondary" id="boothShare" disabled data-cursor><i class="fab fa-whatsapp"></i> <span data-i18n>Share</span></button>
-    </div>
-    <p class="booth-hint">Your camera stream is not uploaded anywhere — the photo is composed only in your browser.</p>
-  </div>
-</section>
 
 <!-- ================= DIASPORA GUIDE ================= -->
 <section class="chapter diaspora-section">
@@ -471,15 +490,6 @@
   </div>
 </section>
 
-<!-- ================= TABLE PLAN placeholder ================= -->
-<section class="chapter tableplan-section">
-  <div class="tableplan-card reveal">
-    <div class="tableplan-icon"><i class="fas fa-utensils"></i></div>
-    <div class="tableplan-title" data-i18n>Your Table Assignment</div>
-    <div class="tableplan-note" data-i18n>Your table will be shared closer to the day.</div>
-  </div>
-</section>
-
 <!-- ================= THANK YOU (post-wedding) ================= -->
 <section class="thankyou-section" id="thankyou">
   <div class="thankyou-card">
@@ -494,7 +504,7 @@
 </section>
 
 <!-- ================= CONTACT ================= -->
-<section class="chapter contact-section">
+<section class="chapter contact-section" id="contact">
   <div class="chapter-head reveal">
     <div class="eyebrow" data-i18n>For Enquiries</div>
     <h2 class="chapter-title"><span data-i18n>Speak to Us</span></h2>
@@ -536,13 +546,10 @@
   <div class="foot-credit">Designed by <a href="https://vibelinkevent.com" target="_blank" rel="noopener">VibeLink Event</a></div>
 </footer>
 
-<!-- ================= MUSIC PICKER ================= -->
-<div class="music-pill" id="musicPill" aria-label="Music">
-  <button class="music-toggle" id="musicToggle" data-cursor title="Play / pause"><i class="fas fa-music" id="musicIcon"></i></button>
-  <button data-track="0" class="on" title="VibeLink track"><i class="fas fa-heart"></i></button>
-  <button data-track="1" disabled title="Coming soon"><i class="fas fa-guitar"></i></button>
-  <button data-track="2" disabled title="Coming soon"><i class="fas fa-drum"></i></button>
-</div>
+<!-- ================= MUSIC TOGGLE ================= -->
+<button class="music-toggle-standalone" id="musicToggle" data-cursor aria-label="Play / pause music" title="Play / pause music">
+  <i class="fas fa-music" id="musicIcon"></i>
+</button>
 <audio id="siteAudio" loop preload="none"><source src="../music.mp3" type="audio/mpeg"></audio>
 
 <script src="app.js"></script>

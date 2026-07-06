@@ -105,7 +105,7 @@ export function PortfolioPreviewSection() {
                 {/* Image */}
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <OptimizedImage
-                    src={item.image}
+                    src={(item as any).thumbnail || item.image}
                     alt={item.title}
                     containerClassName="w-full h-full"
                     className="group-hover:scale-110 transition-transform duration-500"

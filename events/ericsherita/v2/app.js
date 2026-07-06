@@ -39,6 +39,137 @@ const TARGET = new Date('2026-11-28T17:00:00+00:00').getTime();
   $$('.section-divider').forEach(r => io2.observe(r));
 })();
 
+/* ============ NAV BAR + HAMBURGER + SCROLL SPY ============ */
+(function(){
+  const bar = $('#navBar');
+  const overlay = $('#navOverlay');
+  const hamburger = $('#navHamburger');
+  const closeBtn = $('#navOverlayClose');
+  if (!bar) return;
+
+  // Solid state after scroll past first 80% of viewport height
+  function updateBarState(){
+    const scrolled = window.scrollY > window.innerHeight * 0.7;
+    bar.classList.toggle('solid', scrolled);
+  }
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking){
+      requestAnimationFrame(() => { updateBarState(); updateActiveSection(); ticking = false; });
+      ticking = true;
+    }
+  }, { passive: true });
+  updateBarState();
+
+  // Hamburger open/close
+  function openMenu(){
+    overlay.classList.add('on');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+  }
+  function closeMenu(){
+    overlay.classList.remove('on');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+  }
+  hamburger?.addEventListener('click', openMenu);
+  closeBtn?.addEventListener('click', closeMenu);
+  // Close on link click
+  $$('#navOverlay a').forEach(a => a.addEventListener('click', () => setTimeout(closeMenu, 100)));
+  // ESC key
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('on')) closeMenu(); });
+
+  // Smooth scroll with offset for the fixed nav
+  function smoothScrollTo(hash){
+    const el = document.querySelector(hash);
+    if (!el) return;
+    const barHeight = bar.getBoundingClientRect().height;
+    const y = window.scrollY + el.getBoundingClientRect().top - barHeight - 8;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
+  $$('.nav-bar a[href^="#"], .nav-overlay a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const hash = a.getAttribute('href');
+      if (hash === '#top'){ e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+      if (hash && hash.startsWith('#')){
+        const target = document.querySelector(hash);
+        if (target){ e.preventDefault(); smoothScrollTo(hash); }
+      }
+    });
+  });
+
+  // Scroll-spy: highlight active section based on which one is in view
+  const sections = ['timeline','venues','hotels','rsvp','gifts','wishes','contact'];
+  function updateActiveSection(){
+    const y = window.scrollY + window.innerHeight * 0.3;
+    let current = '';
+    for (const id of sections){
+      const el = document.getElementById(id);
+      if (!el) continue;
+      const top = window.scrollY + el.getBoundingClientRect().top;
+      if (y >= top) current = id;
+    }
+    $$('.nav-bar a[data-nav], .nav-overlay a[data-nav]').forEach(a => {
+      a.classList.toggle('active', a.dataset.nav === current);
+    });
+  }
+  updateActiveSection();
+
+  // Overlay language buttons — sync with main handler
+  $$('#navOverlay .nav-overlay-lang button').forEach(b => {
+    b.addEventListener('click', () => {
+      const langBtn = document.querySelector('.lang-toggle button[data-lang="' + b.dataset.lang + '"]');
+      if (langBtn) langBtn.click();
+      // Also update overlay buttons state
+      $$('#navOverlay .nav-overlay-lang button').forEach(bb => bb.classList.toggle('on', bb.dataset.lang === b.dataset.lang));
+    });
+  });
+  // Init overlay lang state to match stored
+  const storedLang = localStorage.getItem('ericsherita:lang') || 'en';
+  $$('#navOverlay .nav-overlay-lang button').forEach(b => b.classList.toggle('on', b.dataset.lang === storedLang));
+})();
+
+/* ============ INTRO OVERLAY DISMISS ============ */
+(function(){
+  const overlay = $('#introOverlay');
+  if (!overlay) return;
+  setTimeout(() => overlay.classList.add('gone'), 1600);
+  setTimeout(() => overlay.remove(), 3000);
+})();
+
+/* ============ HERO GLOW cursor follow ============ */
+(function(){
+  const glow = $('#heroGlow');
+  const hero = document.querySelector('.hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', e => {
+    const r = hero.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width) * 100;
+    const y = ((e.clientY - r.top) / r.height) * 100;
+    glow.style.setProperty('--gx', x + '%');
+    glow.style.setProperty('--gy', y + '%');
+  });
+})();
+
+/* ============ HERO PARALLAX ============ */
+(function(){
+  const bg = $('#heroBg');
+  if (!bg) return;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking){
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (y < window.innerHeight * 1.2){
+          bg.style.transform = `translate3d(0, ${y * 0.3}px, 0)`;
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
 /* ============ HERO PARTICLES ============ */
 (function(){
   const box = $('#heroParticles');
@@ -133,6 +264,52 @@ const TARGET = new Date('2026-11-28T17:00:00+00:00').getTime();
   function play(){ audio.play().then(() => { playing = true; icon.className = 'fas fa-volume-up'; toggle.classList.add('playing'); }).catch(() => {}); }
   function pause(){ audio.pause(); playing = false; icon.className = 'fas fa-music'; toggle.classList.remove('playing'); }
   toggle.addEventListener('click', () => { playing ? pause() : play(); });
+})();
+
+/* ============ HOTEL SLIDER (mobile, one card at a time) ============ */
+(function(){
+  const grid = $('#hotelGrid'); const dotBox = $('#hotelDots');
+  const prevBtn = $('#hotelPrev'); const nextBtn = $('#hotelNext');
+  if (!grid || !dotBox) return;
+  const cards = $$('.hotel-card', grid);
+  const dots = $$('span', dotBox);
+  function cardStep(){
+    const c = cards[0]; if (!c) return 340;
+    const r = c.getBoundingClientRect();
+    // card width + horizontal margin (24px on each side = 48 total but we snap by card center)
+    return r.width + 24;
+  }
+  function currentIndex(){
+    const w = cardStep();
+    return Math.round(grid.scrollLeft / w);
+  }
+  function update(){
+    const isMobile = window.matchMedia('(max-width:720px)').matches;
+    if (!isMobile){
+      dotBox.style.display = 'none';
+      if (prevBtn) prevBtn.style.display = 'none';
+      if (nextBtn) nextBtn.style.display = 'none';
+      return;
+    }
+    dotBox.style.display = 'flex';
+    if (prevBtn) prevBtn.style.display = 'flex';
+    if (nextBtn) nextBtn.style.display = 'flex';
+    const idx = currentIndex();
+    dots.forEach((d, i) => d.classList.toggle('on', i === Math.min(dots.length - 1, Math.max(0, idx))));
+    if (prevBtn) prevBtn.disabled = idx <= 0;
+    if (nextBtn) nextBtn.disabled = idx >= cards.length - 1;
+  }
+  function goTo(i){
+    const w = cardStep();
+    grid.scrollTo({ left: i * w, behavior: 'smooth' });
+  }
+  let ticking = false;
+  grid.addEventListener('scroll', () => { if (!ticking){ requestAnimationFrame(() => { update(); ticking = false; }); ticking = true; } }, { passive: true });
+  window.addEventListener('resize', update);
+  dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+  prevBtn?.addEventListener('click', () => goTo(Math.max(0, currentIndex() - 1)));
+  nextBtn?.addEventListener('click', () => goTo(Math.min(cards.length - 1, currentIndex() + 1)));
+  update();
 })();
 
 /* ============ ACCORDION ============ */
@@ -282,13 +459,27 @@ function bumpTicker(n){
   el.textContent = n;
   el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
 }
+let progressCurrent = 0;
 function refreshProgress(n){
   const fill = $('#progressFill');
   const label = $('#progressLabel');
   if (!fill) return;
   const pct = Math.min(100, Math.round((n / RSVP_TARGET) * 100));
   fill.style.width = pct + '%';
-  if (label) label.textContent = n + ' of ' + RSVP_TARGET + ' guests confirmed · ' + pct + '%';
+  // Animate the number counting up
+  const start = progressCurrent;
+  const end = n;
+  const dur = 900;
+  const t0 = performance.now();
+  function step(t){
+    const p = Math.min(1, (t - t0) / dur);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const cur = Math.round(start + (end - start) * eased);
+    if (label) label.textContent = cur + ' of ' + RSVP_TARGET + ' guests confirmed · ' + Math.round((cur / RSVP_TARGET) * 100) + '%';
+    if (p < 1) requestAnimationFrame(step);
+    else progressCurrent = end;
+  }
+  requestAnimationFrame(step);
 }
 refreshTickerAndProgress();
 setInterval(refreshTickerAndProgress, 30000);
@@ -348,6 +539,28 @@ function confettiBurst(){
   setTimeout(() => { box.classList.remove('on'); box.innerHTML = ''; }, 5200);
 }
 
+/* ============ SPARKLE BURST helper ============ */
+function sparkleBurst(x, y, count){
+  count = count || 10;
+  const box = document.createElement('div');
+  box.className = 'sparkle-burst';
+  box.style.top = y + 'px'; box.style.left = x + 'px';
+  document.body.appendChild(box);
+  for (let i = 0; i < count; i++){
+    const s = document.createElement('div');
+    s.className = 'sparkle-star';
+    const angle = (i / count) * Math.PI * 2;
+    const dist = 40 + Math.random() * 40;
+    s.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    s.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+    s.style.animationDelay = (i * 0.03) + 's';
+    const sc = 0.6 + Math.random() * 0.7;
+    s.style.width = (8 * sc) + 'px'; s.style.height = (8 * sc) + 'px';
+    box.appendChild(s);
+  }
+  setTimeout(() => box.remove(), 1400);
+}
+
 /* ============ ZELLE COPY ============ */
 (function(){
   const btn = $('#zelleCopyBtn');
@@ -355,7 +568,7 @@ function confettiBurst(){
   const msg = $('#zelleCopied');
   if (!btn || !phoneEl) return;
   const phone = phoneEl.textContent.trim();
-  btn.addEventListener('click', async () => {
+  btn.addEventListener('click', async (e) => {
     try{ await navigator.clipboard.writeText(phone); }
     catch(e){
       const ta = document.createElement('textarea');
@@ -364,6 +577,8 @@ function confettiBurst(){
       document.body.removeChild(ta);
     }
     if (msg){ msg.classList.add('on'); setTimeout(() => msg.classList.remove('on'), 2400); }
+    const r = btn.getBoundingClientRect();
+    sparkleBurst(r.left + r.width / 2, r.top + r.height / 2, 14);
   });
 })();
 
@@ -606,8 +821,10 @@ setInterval(refreshWishes, 30000);
   setInterval(refreshTributes, 45000);
 })();
 
-/* ============ PHOTO BOOTH ============ */
-(function(){
+/* ============ PHOTO BOOTH — REMOVED ============ */
+/* (Section removed 2026-07-05 per Edmund's feedback: camera permission was
+   unreliable across browsers/in-app WebViews.) */
+if (false) (function(){
   const video = $('#boothVideo');
   const canvas = $('#boothCanvas');
   const placeholder = $('#boothPlaceholder');
@@ -619,19 +836,79 @@ setInterval(refreshWishes, 30000);
   if (!video) return;
   let stream = null; let captured = null;
 
+  function boothMessage(text, isError){
+    placeholder.style.display = 'flex';
+    const p = placeholder.querySelector('p');
+    p.textContent = text;
+    const icon = placeholder.querySelector('i');
+    if (icon) icon.className = isError ? 'fas fa-exclamation-triangle' : 'fas fa-camera';
+    if (icon) icon.style.color = isError ? '#e0a040' : 'var(--gold-bright)';
+  }
+
   async function startCamera(){
+    // Pre-flight checks BEFORE calling getUserMedia so we surface useful errors
+    if (!window.isSecureContext){
+      boothMessage('Camera requires a secure (HTTPS) connection. Please open the site via https://', true);
+      return;
+    }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      boothMessage('Your browser does not support the camera API. Try Chrome, Safari, or Firefox.', true);
+      return;
+    }
+    // Check current permission state (Chrome/Edge)
     try{
-      stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 1280 } },
-        audio: false
-      });
+      if (navigator.permissions && navigator.permissions.query){
+        const status = await navigator.permissions.query({ name: 'camera' });
+        if (status.state === 'denied'){
+          boothMessage('Camera access was blocked. Tap the lock icon in your browser bar → Site settings → Camera → Allow, then reload.', true);
+          return;
+        }
+      }
+    }catch(e){ /* not all browsers support the permissions API for camera; continue */ }
+
+    boothMessage('Requesting camera…');
+    // Try user-facing camera first with sensible constraints
+    const attempts = [
+      { video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 1280 } }, audio: false },
+      { video: { facingMode: 'user' }, audio: false },
+      { video: true, audio: false }
+    ];
+    let lastErr = null;
+    for (const constraints of attempts){
+      try{
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        break;
+      }catch(e){ lastErr = e; }
+    }
+    if (!stream){
+      const name = (lastErr && lastErr.name) || '';
+      let msg = 'Could not open the camera.';
+      if (name === 'NotAllowedError' || name === 'PermissionDeniedError'){
+        msg = 'You blocked camera access. Tap the lock icon in the address bar → Site settings → Camera → Allow, then reload.';
+      } else if (name === 'NotFoundError' || name === 'DevicesNotFoundError'){
+        msg = 'No camera was found on this device.';
+      } else if (name === 'NotReadableError' || name === 'TrackStartError'){
+        msg = 'Camera is being used by another app. Close it and try again.';
+      } else if (name === 'OverconstrainedError'){
+        msg = 'Camera does not support the requested settings.';
+      } else if (name === 'SecurityError'){
+        msg = 'Camera blocked by browser security. Open the page directly, not inside another app or embedded frame.';
+      }
+      boothMessage(msg, true);
+      return;
+    }
+
+    try{
       video.srcObject = stream;
+      video.setAttribute('playsinline', 'true');
+      video.muted = true;
+      video.style.display = 'block';
       await video.play();
       placeholder.style.display = 'none';
       startBtn.disabled = true;
       captureBtn.disabled = false;
     }catch(e){
-      placeholder.querySelector('p').textContent = 'Camera permission denied. Please allow camera access to use the photo booth.';
+      boothMessage('Camera opened but could not start playback. Try again.', true);
     }
   }
   function capture(){

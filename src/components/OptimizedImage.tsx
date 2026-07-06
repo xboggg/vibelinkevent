@@ -18,8 +18,8 @@ export function OptimizedImage({
   alt,
   className = "",
   containerClassName = "",
-  blurAmount = 20,
-  transitionDuration = 0.6,
+  blurAmount = 12,
+  transitionDuration = 0.25,
   aspectRatio,
   objectFit = "cover"
 }: OptimizedImageProps) {
@@ -36,7 +36,7 @@ export function OptimizedImage({
           observer.disconnect();
         }
       },
-      { rootMargin: "100px", threshold: 0.1 }
+      { rootMargin: "400px", threshold: 0 }
     );
 
     if (containerRef.current) {
