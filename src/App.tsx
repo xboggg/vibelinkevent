@@ -45,6 +45,7 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Preview = lazy(() => import("./pages/Preview"));
 const StoryPreview = lazy(() => import("./pages/StoryPreview"));
+const ServicesPreview = lazy(() => import("./pages/ServicesPreview"));
 const BookConsultation = lazy(() => import("./pages/BookConsultation"));
 const Referral = lazy(() => import("./pages/Referral"));
 const WeddingInvitations = lazy(() => import("./pages/events/WeddingInvitations"));
@@ -95,6 +96,7 @@ const App = () => (
               <Route path="/faq" element={<FAQ />} />
               <Route path="/portfolio-preview" element={<Preview />} />
               <Route path="/story-preview" element={<StoryPreview />} />
+              <Route path="/services-preview" element={<ServicesPreview />} />
               <Route path="/book-consultation" element={<BookConsultation />} />
               <Route path="/ref/:code" element={<Referral />} />
               <Route path="/referral" element={<Referral />} />
