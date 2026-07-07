@@ -20,7 +20,7 @@ const features = [
     n: "03",
     tag: "CULTURE",
     title: "Made for How We Celebrate.",
-    description: "Kente palettes, outdoorings, funeral programs, one-week announcements — every feature is designed around Ghanaian events, not adapted from someone else's template.",
+    description: "Kente palettes, outdoorings, funeral programs, one-week ceremonies — every feature is designed around Ghanaian events, not adapted from someone else's playbook.",
     pill: "🇬🇭 Built for Ghana",
   },
   {

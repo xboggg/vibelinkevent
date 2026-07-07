@@ -539,8 +539,8 @@ const About = () => {
               },
               {
                 n: "03",
-                value: "Culture first. Template never.",
-                body: "Kente palettes, one-week formats, funeral programs, outdoorings — every feature comes from watching how Ghanaian families actually celebrate. Not from adapting a global template.",
+                value: "Ghanaian by design.",
+                body: "Kente palettes, one-week ceremonies, funeral programs, outdoorings — every feature comes from watching how Ghanaian families actually celebrate. Not adapted from someone else's playbook.",
                 accent: "from-emerald-500 via-teal-500 to-emerald-600",
                 shadow: "hover:shadow-emerald-500/20",
                 bar: "from-emerald-500 via-teal-500 to-emerald-600",
