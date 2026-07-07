@@ -4,7 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import SEO from "@/components/SEO";
 import {
   Calendar, MapPin, Users, Camera, MessageSquare, Video,
-  Check, Play, Clock, Bell, Send, Heart, Sparkles,
+  Check, Play, Clock, Bell, Send, Heart, Sparkles, Globe, Gift,
 } from "lucide-react";
 
 // Real service categories (same as production Services page) + demoKey.
@@ -94,6 +94,51 @@ const categories = [
     ],
     demoKey: "livestream",
   },
+  {
+    icon: Heart,
+    title: "Funeral & Memorial",
+    tint: "from-slate-500 to-slate-700",
+    soft: "bg-slate-100",
+    accent: "text-slate-700",
+    features: [
+      { name: "Memory Tribute Wall", description: "Collect condolences and remembrance messages" },
+      { name: "Respectful Design", description: "Dignified layouts specifically for memorial services" },
+      { name: "Donation Links", description: "Allow guests to contribute to family or charity" },
+      { name: "Memorial Page Renewal", description: "Keep memories alive with annual renewals" },
+      { name: "Obituary Section", description: "Share the life story and achievements of your loved one" },
+    ],
+    demoKey: "memorial",
+  },
+  {
+    icon: Globe,
+    title: "Multi-Language Support",
+    tint: "from-teal-400 to-cyan-600",
+    soft: "bg-teal-50",
+    accent: "text-teal-700",
+    features: [
+      { name: "English + Twi", description: "Reach your local Ghanaian audience" },
+      { name: "English + French", description: "Perfect for Francophone guests" },
+      { name: "Additional Languages", description: "Custom translations available on request" },
+      { name: "International Families", description: "Great for mixed-culture celebrations" },
+      { name: "RTL Support", description: "Arabic, Hebrew & other right-to-left languages" },
+    ],
+    demoKey: "languages",
+  },
+  {
+    icon: Gift,
+    title: "Post-Event & Extras",
+    tint: "from-amber-400 to-orange-500",
+    soft: "bg-amber-50",
+    accent: "text-amber-700",
+    features: [
+      { name: "Thank You Page", description: "Express gratitude after your event beautifully" },
+      { name: "Calendar Integration", description: "Guests can add your event to their calendar" },
+      { name: "Custom Domain", description: "Get a personalized URL" },
+      { name: "Host Dashboard", description: "Manage your event from one central place" },
+      { name: "Lost & Found", description: "Report and recover misplaced items after your event" },
+    ],
+    demoKey: "thankyou",
+  },
 ];
 
 // —— Animated micro-demos ———————————————————————————————————
@@ -104,6 +149,9 @@ function Demo({ demoKey, tint }: { demoKey: string; tint: string }) {
   if (demoKey === "gallery") return <GalleryDemo tint={tint} />;
   if (demoKey === "messages") return <MessagesDemo tint={tint} />;
   if (demoKey === "livestream") return <LivestreamDemo tint={tint} />;
+  if (demoKey === "memorial") return <MemorialDemo tint={tint} />;
+  if (demoKey === "languages") return <LanguagesDemo tint={tint} />;
+  if (demoKey === "thankyou") return <ThankYouDemo tint={tint} />;
   return null;
 }
 
@@ -278,6 +326,106 @@ function MessagesDemo({ tint }: { tint: string }) {
   );
 }
 
+function MemorialDemo({ tint }: { tint: string }) {
+  return (
+    <div className="w-full rounded-xl bg-gradient-to-br from-slate-100 to-stone-100 p-4 shadow-md border border-slate-300 min-h-[140px] relative overflow-hidden">
+      {/* Candle */}
+      <div className="flex flex-col items-center mb-3">
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], opacity: [1, 0.7, 1] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          className="w-3 h-4 rounded-full bg-gradient-to-t from-orange-400 to-yellow-200 shadow-[0_0_16px_4px_rgba(251,191,36,0.6)]"
+        />
+        <div className="w-1.5 h-8 bg-slate-200 border border-slate-400" />
+      </div>
+      <p className="text-[10px] font-serif italic text-slate-600 text-center leading-snug mb-2">"In loving memory of Mr. Wilson Atta Krofah"</p>
+      <div className="space-y-1">
+        {[
+          { who: "Rev. Owusu", text: "May his soul rest in perfect peace 🙏" },
+          { who: "Ama K.", text: "Grateful for his life and legacy." },
+        ].map((m, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 + i * 0.4 }}
+            className="text-[10px] bg-white/70 rounded-lg px-2 py-1 shadow-sm"
+          >
+            <span className={`font-bold ${tint.includes("slate") ? "text-slate-800" : "text-slate-700"}`}>{m.who}: </span>
+            <span className="text-slate-600">{m.text}</span>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function LanguagesDemo({ tint }: { tint: string }) {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setIdx((p) => (p + 1) % 4), 1600);
+    return () => clearInterval(id);
+  }, []);
+  const langs = [
+    { code: "EN", flag: "🇬🇧", label: "English", sample: "You are cordially invited to our wedding" },
+    { code: "TWI", flag: "🇬🇭", label: "Twi", sample: "Yɛfrɛ wo bɛka yɛn ayɛforohyia" },
+    { code: "FR", flag: "🇫🇷", label: "French", sample: "Vous êtes cordialement invité à notre mariage" },
+    { code: "AR", flag: "🇸🇦", label: "Arabic", sample: "أنت مدعو بأدب إلى حفل زفافنا" },
+  ];
+  const cur = langs[idx];
+  return (
+    <div className="w-full rounded-xl bg-white p-4 shadow-md border border-teal-200 min-h-[140px]">
+      <div className="flex gap-1.5 mb-3 flex-wrap">
+        {langs.map((l, i) => (
+          <button
+            key={i}
+            onClick={() => setIdx(i)}
+            className={`px-2.5 py-1 rounded-full text-[10px] font-bold flex items-center gap-1 transition-all ${
+              i === idx ? `bg-gradient-to-r ${tint} text-white shadow-md` : "bg-slate-100 text-slate-600"
+            }`}
+          >
+            <span>{l.flag}</span>
+            <span>{l.code}</span>
+          </button>
+        ))}
+      </div>
+      <AnimatePresence mode="wait">
+        <motion.p
+          key={idx}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.3 }}
+          className={`text-sm font-serif italic text-slate-700 text-center ${cur.code === "AR" ? "text-right" : ""}`}
+          dir={cur.code === "AR" ? "rtl" : "ltr"}
+        >
+          "{cur.sample}"
+        </motion.p>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function ThankYouDemo({ tint }: { tint: string }) {
+  return (
+    <div className="w-full rounded-xl bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 p-5 shadow-md border border-amber-200 min-h-[140px] relative overflow-hidden text-center">
+      <motion.div
+        animate={{ y: [0, -4, 0] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        className={`inline-flex w-12 h-12 rounded-full bg-gradient-to-br ${tint} items-center justify-center shadow-lg mb-2`}
+      >
+        <Heart className="w-6 h-6 text-white fill-white" strokeWidth={0} />
+      </motion.div>
+      <p className="text-sm font-serif italic text-amber-900 mb-1">"Thank you for celebrating with us."</p>
+      <p className="text-[10px] text-amber-800/70 mb-3">— Kofi & Ama</p>
+      <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-amber-300 text-[10px] font-semibold text-amber-800 shadow-sm">
+        <Calendar className="w-3 h-3" />
+        Add to calendar
+      </div>
+    </div>
+  );
+}
+
 function LivestreamDemo({ tint }: { tint: string }) {
   return (
     <div className="w-full aspect-video rounded-xl overflow-hidden relative bg-gradient-to-br from-slate-900 to-slate-800 shadow-md">
@@ -429,19 +577,20 @@ function SampleA() {
 
 // —— B · Bento grid with mixed sizes ——————————————————————
 function SampleB() {
+  // Pattern repeats every 6 tiles: hero → wide → std → tall → std → std
+  const pattern = [
+    "col-span-2 row-span-2 md:col-span-2 md:row-span-2", // hero
+    "col-span-2 md:col-span-2 md:row-span-1",             // wide
+    "col-span-1 md:col-span-1 md:row-span-1",             // standard
+    "col-span-1 md:col-span-1 md:row-span-2",             // tall
+    "col-span-1 md:col-span-1 md:row-span-1",             // standard
+    "col-span-1 md:col-span-1 md:row-span-1",             // standard
+  ];
   return (
     <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[180px]">
-      {categories.slice(0, 6).map((c, i) => {
+      {categories.map((c, i) => {
         const Icon = c.icon;
-        // Bento layout: item 0 is hero (2x2), item 3 is tall (row-span-2)
-        const span = [
-          "col-span-2 row-span-2 md:col-span-2 md:row-span-2", // hero
-          "col-span-2 md:col-span-2 md:row-span-1",             // wide
-          "col-span-1 md:col-span-1 md:row-span-1",             // standard
-          "col-span-1 md:col-span-1 md:row-span-2",             // tall
-          "col-span-1 md:col-span-1 md:row-span-1",             // standard
-          "col-span-1 md:col-span-1 md:row-span-1",             // standard
-        ][i];
+        const span = pattern[i % pattern.length];
         const isHero = i === 0;
         return (
           <motion.div
@@ -680,12 +829,14 @@ function SampleE() {
 
 // —— F · Feature comparison table ————————————————————————
 function SampleF() {
+  const maxRows = Math.max(...categories.map((c) => c.features.length));
+  const cols = categories.length; // 9
   return (
     <div className="max-w-6xl mx-auto overflow-x-auto">
-      <div className="min-w-[720px] rounded-2xl border border-border bg-card shadow-md overflow-hidden">
+      <div className="min-w-[1100px] rounded-2xl border border-border bg-card shadow-md overflow-hidden">
         {/* Header row */}
-        <div className="grid grid-cols-6 border-b-2 border-border">
-          {categories.slice(0, 6).map((c, i) => {
+        <div className="grid border-b-2 border-border" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+          {categories.map((c, i) => {
             const Icon = c.icon;
             return (
               <div key={i} className={`p-4 text-center border-r border-border last:border-r-0 ${c.soft}`}>
@@ -697,10 +848,10 @@ function SampleF() {
             );
           })}
         </div>
-        {/* Feature rows: 4 rows, each shows one feature index across all 6 categories */}
-        {[0, 1, 2, 3].map((rowIdx) => (
-          <div key={rowIdx} className="grid grid-cols-6 border-b border-border last:border-b-0">
-            {categories.slice(0, 6).map((c, i) => {
+        {/* Feature rows: up to maxRows (5), each shows one feature index across all categories */}
+        {Array.from({ length: maxRows }).map((_, rowIdx) => (
+          <div key={rowIdx} className="grid border-b border-border last:border-b-0" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+            {categories.map((c, i) => {
               const feature = c.features[rowIdx];
               return (
                 <div key={i} className="p-3 text-center border-r border-border last:border-r-0 hover:bg-muted/40 transition-colors">
@@ -803,8 +954,8 @@ function SampleH() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 overflow-hidden">
       {/* Category headers grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 max-w-5xl mx-auto">
-        {categories.slice(0, 6).map((c, i) => {
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-9 gap-3 max-w-6xl mx-auto">
+        {categories.map((c, i) => {
           const Icon = c.icon;
           return (
             <motion.div
