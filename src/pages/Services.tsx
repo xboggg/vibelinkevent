@@ -35,6 +35,15 @@ import {
   Frame,
   Wallet,
   Search,
+  Shield,
+  Award,
+  CloudSun,
+  HelpCircle,
+  BookHeart,
+  Languages as LanguagesIcon,
+  PartyPopper,
+  Rewind,
+  MonitorPlay,
 } from "lucide-react";
 
 import weddingImg from "@/assets/service-wedding.jpg";
@@ -215,7 +224,12 @@ const featureCategories = [
       { name: "Date, Time & Venue", description: "Display all essential event information beautifully" },
       { name: "Dress Code Display", description: "Let guests know the appropriate attire" },
       { name: "Event Timeline", description: "Display the full program schedule for your event" },
-      { name: "Live Countdown", description: "Build excitement with a countdown to your event" },
+      { name: "Live Countdown", description: "Build excitement with a main countdown to your event" },
+      { name: "Moment Countdowns", description: "Separate mini-countdowns for reception, first dance, cake cutting" },
+      { name: "Story of Us", description: "Your love story timeline — how you met, the proposal, the journey" },
+      { name: "Meet the Wedding Party", description: "Cards for bridesmaids, groomsmen, ring bearers, flower girls" },
+      { name: "Q&A / FAQ Section", description: "Answer the questions guests always ask before they ask" },
+      { name: "Weather Forecast", description: "Live weather forecast for your venue on the event day" },
     ]
   },
   {
@@ -238,6 +252,8 @@ const featureCategories = [
       { name: "Meal Preferences", description: "Collect dietary requirements and food choices" },
       { name: "Guest Analytics", description: "See views, RSVPs, and engagement in real-time" },
       { name: "Better Planning", description: "Helps families, churches, and planners prepare accurately" },
+      { name: "RSVP Progress Bar", description: "'42 of 100 guests have said yes' — a gold progress bar guests can see" },
+      { name: "Live Attending Ticker", description: "Scrolling ticker of new RSVPs — 'The Boateng family just RSVP'd'" },
     ]
   },
   {
@@ -245,10 +261,13 @@ const featureCategories = [
     title: "Media & Experience",
     color: "bg-pink-100 text-pink-600",
     features: [
-      { name: "Photo Gallery", description: "Showcase beautiful images before and after your event" },
+      { name: "Photo Gallery", description: "Showcase beautiful pre-event images on your invitation" },
       { name: "Background Music", description: "Set the mood with ambient music that plays automatically" },
       { name: "Video Background", description: "Add cinematic videos to your invitation" },
       { name: "Photo Booth Frame", description: "Custom frames for event photos guests can share" },
+      { name: "Live Photo Wall", description: "Guest photos taken during the event stream onto the invitation in real time" },
+      { name: "Video Guestbook", description: "Guests record 15-second video wishes that stack on a memory reel" },
+      { name: "Post-Event Gallery", description: "A curated album delivered to guests after the day — download and re-live" },
     ]
   },
   {
@@ -257,9 +276,12 @@ const featureCategories = [
     color: "bg-orange-100 text-orange-600",
     features: [
       { name: "Guest Messaging Wall", description: "Collect wishes, prayers, and heartfelt messages" },
-      { name: "Digital Guestbook", description: "Guest messages & photos" },
+      { name: "Digital Guestbook", description: "Guest messages & photos in one shareable book" },
       { name: "Contact Cards", description: "Let guests save your details directly to their phones" },
       { name: "WhatsApp Sharing", description: "Easy one-click sharing to family and friends" },
+      { name: "Prayer Wall", description: "A dedicated space for prayer requests — church events, memorials, thanksgivings" },
+      { name: "Reactions & Emojis", description: "Guests tap hearts, prayers, celebrations — the counter increments live" },
+      { name: "Social Share Pack", description: "Pre-designed Instagram Stories and WhatsApp Status templates guests can post" },
     ]
   },
   {
@@ -271,6 +293,9 @@ const featureCategories = [
       { name: "Diaspora Friendly", description: "Perfect for family members abroad" },
       { name: "International Reach", description: "Connect with guests anywhere in the world" },
       { name: "Video Integration", description: "Add event videos and highlights" },
+      { name: "Time Zone Converter", description: "Auto-shows every guest's local time — Accra 12pm = London 12pm = NY 8am" },
+      { name: "Watch Party Rooms", description: "Diaspora guests join a virtual room to watch the stream together with live chat" },
+      { name: "Rewind & Replay", description: "Missed the vows? Rewind the livestream and catch every moment" },
     ]
   },
   {
@@ -283,6 +308,9 @@ const featureCategories = [
       { name: "Donation Links", description: "Allow guests to contribute to family or charity" },
       { name: "Memorial Page Renewal", description: "Keep memories alive with annual renewals" },
       { name: "Obituary Section", description: "Share the life story and achievements of your loved one" },
+      { name: "Photo Timeline", description: "Life in pictures — birth, key milestones, the whole journey" },
+      { name: "One-Week & 40-Day Announcements", description: "Auto-schedule follow-up ceremonies with new details as they're set" },
+      { name: "Grave Location Map", description: "Google Maps pin for the cemetery — for family who need to visit" },
     ]
   },
   {
@@ -295,6 +323,7 @@ const featureCategories = [
       { name: "Additional Languages", description: "Custom translations available on request" },
       { name: "International Families", description: "Great for mixed-culture celebrations" },
       { name: "RTL Support", description: "Arabic, Hebrew & other right-to-left languages" },
+      { name: "Auto-Translate Guest Messages", description: "Aunty writes in Twi, cousin in London reads in English — automatic" },
     ]
   },
   {
@@ -307,6 +336,52 @@ const featureCategories = [
       { name: "Custom Domain", description: "Get a personalized URL" },
       { name: "Host Dashboard", description: "Manage your event from one central place" },
       { name: "Lost & Found", description: "Report and recover misplaced items after your event" },
+      { name: "Anniversary Reminders", description: "Yearly notification with your original invitation revisited — every year" },
+      { name: "Post-Event Analytics Report", description: "1-week summary emailed to you: total views, RSVPs, top-viewed sections" },
+    ]
+  },
+  {
+    icon: Wallet,
+    title: "Gifts & Contributions",
+    color: "bg-yellow-100 text-yellow-600",
+    features: [
+      { name: "MoMo Registry", description: "Guests contribute directly via Mobile Money — MTN, Vodafone, AirtelTigo — with real-time tracking" },
+      { name: "Wishlist Link", description: "Direct link to your online registry — Amazon, Zola, or your favourite store" },
+      { name: "Dowry Contribution", description: "A private, family-only page for traditional dowry — kept off the public invitation" },
+      { name: "Physical Gift Registry", description: "A curated list of physical gifts guests can bring or send" },
+    ]
+  },
+  {
+    icon: Baby,
+    title: "Kids & Family",
+    color: "bg-cyan-100 text-cyan-600",
+    features: [
+      { name: "Kids Activity Zone", description: "Info on the play area, entertainment schedule, and supervision" },
+      { name: "Child-Friendly Menu", description: "Meal options designed for children — nut-free, allergy-aware" },
+      { name: "Breastfeeding Room", description: "Location and availability of a private, comfortable space for mothers" },
+      { name: "Changing Facilities", description: "Where to find nappy-changing tables and family bathrooms" },
+    ]
+  },
+  {
+    icon: Shield,
+    title: "Safety & Emergency",
+    color: "bg-rose-100 text-rose-600",
+    features: [
+      { name: "Emergency Contacts", description: "Quick access to venue security, event coordinator, and family contacts" },
+      { name: "On-Site Medic", description: "Location and hours of medical support during the event" },
+      { name: "Allergy Alerts", description: "Nut-free, gluten-free, or specific allergy warnings for the venue" },
+      { name: "Late-Night Transport", description: "Safe transport options for guests staying past midnight" },
+    ]
+  },
+  {
+    icon: Award,
+    title: "Vendors & Credits",
+    color: "bg-indigo-100 text-indigo-600",
+    features: [
+      { name: "Photographer & Videographer", description: "Credits for the team capturing your day, with their booking info" },
+      { name: "Caterer", description: "Recognise your catering team — their menu and contact details" },
+      { name: "MC & DJ", description: "Featured MC and DJ with their portfolios and booking links" },
+      { name: "Decorator & Florist", description: "Highlight the team behind the beautiful decor" },
     ]
   },
 ];
