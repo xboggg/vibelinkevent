@@ -4,6 +4,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { CTASection } from "@/components/sections/CTASection";
 import SEO, { createServiceSchema, createBreadcrumbSchema } from "@/components/SEO";
+import { InvitationFeaturesTabs } from "@/components/services/InvitationFeaturesTabs";
 import {
   Heart,
   Gem,
@@ -220,6 +221,10 @@ const featureCategories = [
     icon: Calendar,
     title: "Event Details & Timeline",
     color: "bg-blue-100 text-blue-600",
+    tint: "from-blue-400 to-blue-600",
+    soft: "bg-blue-50",
+    accent: "text-blue-700",
+    demoKey: "countdown",
     features: [
       { name: "Date, Time & Venue", description: "Display all essential event information beautifully" },
       { name: "Dress Code Display", description: "Let guests know the appropriate attire" },
@@ -236,6 +241,10 @@ const featureCategories = [
     icon: MapPin,
     title: "Directions & Access",
     color: "bg-green-100 text-green-600",
+    tint: "from-emerald-400 to-emerald-600",
+    soft: "bg-emerald-50",
+    accent: "text-emerald-700",
+    demoKey: "map",
     features: [
       { name: "Google Maps Integration", description: "One-tap navigation to your venue" },
       { name: "Multiple Venue Support", description: "Separate directions for ceremony and reception" },
@@ -247,6 +256,10 @@ const featureCategories = [
     icon: Users,
     title: "RSVP & Guest Management",
     color: "bg-purple-100 text-purple-600",
+    tint: "from-purple-500 to-purple-700",
+    soft: "bg-purple-50",
+    accent: "text-purple-700",
+    demoKey: "rsvp",
     features: [
       { name: "RSVP Tracking", description: "Know exactly who is attending your event" },
       { name: "Meal Preferences", description: "Collect dietary requirements and food choices" },
@@ -260,6 +273,10 @@ const featureCategories = [
     icon: Camera,
     title: "Media & Experience",
     color: "bg-pink-100 text-pink-600",
+    tint: "from-pink-400 to-rose-500",
+    soft: "bg-pink-50",
+    accent: "text-pink-700",
+    demoKey: "gallery",
     features: [
       { name: "Photo Gallery", description: "Showcase beautiful pre-event images on your invitation" },
       { name: "Background Music", description: "Set the mood with ambient music that plays automatically" },
@@ -274,6 +291,10 @@ const featureCategories = [
     icon: MessageSquare,
     title: "Guest Interaction",
     color: "bg-orange-100 text-orange-600",
+    tint: "from-orange-400 to-amber-500",
+    soft: "bg-orange-50",
+    accent: "text-orange-700",
+    demoKey: "messages",
     features: [
       { name: "Guest Messaging Wall", description: "Collect wishes, prayers, and heartfelt messages" },
       { name: "Digital Guestbook", description: "Guest messages & photos in one shareable book" },
@@ -288,6 +309,10 @@ const featureCategories = [
     icon: Video,
     title: "Live & Hybrid Events",
     color: "bg-red-100 text-red-600",
+    tint: "from-red-500 to-rose-600",
+    soft: "bg-red-50",
+    accent: "text-red-700",
+    demoKey: "livestream",
     features: [
       { name: "Live Stream Embed", description: "Let guests who cannot attend watch in real-time" },
       { name: "Diaspora Friendly", description: "Perfect for family members abroad" },
@@ -302,6 +327,10 @@ const featureCategories = [
     icon: Heart,
     title: "Funeral & Memorial",
     color: "bg-slate-100 text-slate-600",
+    tint: "from-slate-500 to-slate-700",
+    soft: "bg-slate-100",
+    accent: "text-slate-700",
+    demoKey: "memorial",
     features: [
       { name: "Memory Tribute Wall", description: "Collect condolences and remembrance messages" },
       { name: "Respectful Design", description: "Dignified layouts specifically for memorial services" },
@@ -317,6 +346,10 @@ const featureCategories = [
     icon: Globe,
     title: "Multi-Language Support",
     color: "bg-teal-100 text-teal-600",
+    tint: "from-teal-400 to-cyan-600",
+    soft: "bg-teal-50",
+    accent: "text-teal-700",
+    demoKey: "languages",
     features: [
       { name: "English + Twi", description: "Reach your local Ghanaian audience" },
       { name: "English + French", description: "Perfect for Francophone guests" },
@@ -330,6 +363,10 @@ const featureCategories = [
     icon: Gift,
     title: "Post-Event & Extras",
     color: "bg-amber-100 text-amber-600",
+    tint: "from-amber-400 to-orange-500",
+    soft: "bg-amber-50",
+    accent: "text-amber-700",
+    demoKey: "thankyou",
     features: [
       { name: "Thank You Page", description: "Express gratitude after your event beautifully" },
       { name: "Calendar Integration", description: "Guests can add your event to their calendar" },
@@ -344,6 +381,10 @@ const featureCategories = [
     icon: Wallet,
     title: "Gifts & Contributions",
     color: "bg-yellow-100 text-yellow-600",
+    tint: "from-yellow-400 to-amber-500",
+    soft: "bg-yellow-50",
+    accent: "text-yellow-700",
+    demoKey: "rsvp",
     features: [
       { name: "MoMo Registry", description: "Guests contribute directly via Mobile Money — MTN, Vodafone, AirtelTigo — with real-time tracking" },
       { name: "Wishlist Link", description: "Direct link to your online registry — Amazon, Zola, or your favourite store" },
@@ -355,6 +396,10 @@ const featureCategories = [
     icon: Baby,
     title: "Kids & Family",
     color: "bg-cyan-100 text-cyan-600",
+    tint: "from-cyan-400 to-sky-500",
+    soft: "bg-cyan-50",
+    accent: "text-cyan-700",
+    demoKey: "messages",
     features: [
       { name: "Kids Activity Zone", description: "Info on the play area, entertainment schedule, and supervision" },
       { name: "Child-Friendly Menu", description: "Meal options designed for children — nut-free, allergy-aware" },
@@ -366,6 +411,10 @@ const featureCategories = [
     icon: Shield,
     title: "Safety & Emergency",
     color: "bg-rose-100 text-rose-600",
+    tint: "from-rose-500 to-red-600",
+    soft: "bg-rose-50",
+    accent: "text-rose-700",
+    demoKey: "map",
     features: [
       { name: "Emergency Contacts", description: "Quick access to venue security, event coordinator, and family contacts" },
       { name: "On-Site Medic", description: "Location and hours of medical support during the event" },
@@ -377,6 +426,10 @@ const featureCategories = [
     icon: Award,
     title: "Vendors & Credits",
     color: "bg-indigo-100 text-indigo-600",
+    tint: "from-indigo-500 to-purple-600",
+    soft: "bg-indigo-50",
+    accent: "text-indigo-700",
+    demoKey: "gallery",
     features: [
       { name: "Photographer & Videographer", description: "Credits for the team capturing your day, with their booking info" },
       { name: "Caterer", description: "Recognise your catering team — their menu and contact details" },
@@ -538,42 +591,7 @@ const Services = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featureCategories.map((category, catIndex) => {
-              const IconComponent = category.icon;
-              return (
-                <motion.div
-                  key={category.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: catIndex * 0.1 }}
-                  className="bg-card rounded-2xl p-6 border border-border hover:shadow-lg transition-shadow duration-300"
-                >
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className={`w-12 h-12 rounded-xl ${category.color} flex items-center justify-center`}>
-                      <IconComponent className="w-6 h-6" />
-                    </div>
-                    <h3 className="font-bold text-lg text-foreground">{category.title}</h3>
-                  </div>
-
-                  <ul className="space-y-4">
-                    {category.features.map((feature) => (
-                      <li key={feature.name} className="group">
-                        <div className="flex items-start gap-3">
-                          <Check className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                          <div>
-                            <span className="font-semibold text-foreground block">{feature.name}</span>
-                            <span className="text-sm text-muted-foreground">{feature.description}</span>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              );
-            })}
-          </div>
+          <InvitationFeaturesTabs categories={featureCategories} />
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
