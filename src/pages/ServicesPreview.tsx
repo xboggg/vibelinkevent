@@ -7,8 +7,8 @@ import {
   Check, Play, Clock, Bell, Send, Heart, Sparkles,
 } from "lucide-react";
 
-// Real service categories (same as production Services page) + a small
-// "demoKey" so each layout can render the matching animated demo.
+// Real service categories (same as production Services page) + demoKey.
+// Each feature is now { name, description } so samples can show the sub-copy.
 const categories = [
   {
     icon: Calendar,
@@ -17,10 +17,10 @@ const categories = [
     soft: "bg-blue-50",
     accent: "text-blue-700",
     features: [
-      "Date, Time & Venue",
-      "Dress Code Display",
-      "Event Timeline",
-      "Live Countdown",
+      { name: "Date, Time & Venue", description: "Display all essential event information beautifully" },
+      { name: "Dress Code Display", description: "Let guests know the appropriate attire" },
+      { name: "Event Timeline", description: "Display the full program schedule for your event" },
+      { name: "Live Countdown", description: "Build excitement with a countdown to your event" },
     ],
     demoKey: "countdown",
   },
@@ -31,10 +31,10 @@ const categories = [
     soft: "bg-emerald-50",
     accent: "text-emerald-700",
     features: [
-      "Google Maps Integration",
-      "Multiple Venue Support",
-      "Book a Ride",
-      "Nearby Accommodation",
+      { name: "Google Maps Integration", description: "One-tap navigation to your venue" },
+      { name: "Multiple Venue Support", description: "Separate directions for ceremony and reception" },
+      { name: "Book a Ride", description: "Quick access to Uber, Bolt, Yango & more" },
+      { name: "Nearby Accommodation", description: "Hotel suggestions for out-of-town guests" },
     ],
     demoKey: "map",
   },
@@ -45,10 +45,10 @@ const categories = [
     soft: "bg-purple-50",
     accent: "text-purple-700",
     features: [
-      "RSVP Tracking",
-      "Meal Preferences",
-      "Guest Analytics",
-      "Better Planning",
+      { name: "RSVP Tracking", description: "Know exactly who is attending your event" },
+      { name: "Meal Preferences", description: "Collect dietary requirements and food choices" },
+      { name: "Guest Analytics", description: "See views, RSVPs, and engagement in real-time" },
+      { name: "Better Planning", description: "Helps families, churches, and planners prepare accurately" },
     ],
     demoKey: "rsvp",
   },
@@ -59,10 +59,10 @@ const categories = [
     soft: "bg-pink-50",
     accent: "text-pink-700",
     features: [
-      "Photo Gallery",
-      "Background Music",
-      "Video Background",
-      "Photo Booth Frame",
+      { name: "Photo Gallery", description: "Showcase beautiful images before and after your event" },
+      { name: "Background Music", description: "Set the mood with ambient music that plays automatically" },
+      { name: "Video Background", description: "Add cinematic videos to your invitation" },
+      { name: "Photo Booth Frame", description: "Custom frames for event photos guests can share" },
     ],
     demoKey: "gallery",
   },
@@ -73,10 +73,10 @@ const categories = [
     soft: "bg-orange-50",
     accent: "text-orange-700",
     features: [
-      "Guest Messaging Wall",
-      "Digital Guestbook",
-      "Contact Cards",
-      "WhatsApp Sharing",
+      { name: "Guest Messaging Wall", description: "Collect wishes, prayers, and heartfelt messages" },
+      { name: "Digital Guestbook", description: "Guest messages & photos" },
+      { name: "Contact Cards", description: "Let guests save your details directly to their phones" },
+      { name: "WhatsApp Sharing", description: "Easy one-click sharing to family and friends" },
     ],
     demoKey: "messages",
   },
@@ -87,10 +87,10 @@ const categories = [
     soft: "bg-red-50",
     accent: "text-red-700",
     features: [
-      "Live Stream Embed",
-      "Diaspora Friendly",
-      "International Reach",
-      "Video Integration",
+      { name: "Live Stream Embed", description: "Let guests who cannot attend watch in real-time" },
+      { name: "Diaspora Friendly", description: "Perfect for family members abroad" },
+      { name: "International Reach", description: "Connect with guests anywhere in the world" },
+      { name: "Video Integration", description: "Add event videos and highlights" },
     ],
     demoKey: "livestream",
   },
@@ -373,19 +373,22 @@ function SampleA() {
                 <Icon className="w-3.5 h-3.5" /> Category
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-5">{cur.title}</h3>
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {cur.features.map((f, j) => (
                   <motion.li
                     key={j}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 + j * 0.06 }}
-                    className="flex items-start gap-3 text-foreground/85"
+                    className="flex items-start gap-3"
                   >
-                    <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${cur.tint} flex items-center justify-center shrink-0 mt-0.5`}>
+                    <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${cur.tint} flex items-center justify-center shrink-0 mt-1`}>
                       <Check className="w-3 h-3 text-white" strokeWidth={3} />
                     </div>
-                    <span className="text-sm md:text-base">{f}</span>
+                    <div>
+                      <p className="font-semibold text-foreground text-sm md:text-base leading-tight">{f.name}</p>
+                      <p className="text-muted-foreground text-xs md:text-sm mt-0.5 leading-snug">{f.description}</p>
+                    </div>
                   </motion.li>
                 ))}
               </ul>
@@ -462,11 +465,14 @@ function SampleB() {
                 </div>
               </>
             ) : (
-              <ul className="space-y-1 text-xs text-muted-foreground">
+              <ul className="space-y-2 text-xs">
                 {c.features.slice(0, 3).map((f, j) => (
-                  <li key={j} className="flex items-center gap-1.5">
-                    <Check className={`w-3 h-3 shrink-0 ${c.accent}`} strokeWidth={3} />
-                    <span className="truncate">{f}</span>
+                  <li key={j} className="flex items-start gap-1.5">
+                    <Check className={`w-3 h-3 shrink-0 mt-0.5 ${c.accent}`} strokeWidth={3} />
+                    <div className="min-w-0">
+                      <p className="font-semibold text-foreground leading-tight">{f.name}</p>
+                      <p className="text-muted-foreground text-[10px] leading-snug line-clamp-1">{f.description}</p>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -501,13 +507,16 @@ function SampleC() {
                 <Icon className="w-3.5 h-3.5" /> {String(i + 1).padStart(2, "0")}
               </div>
               <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-4">{c.title}</h3>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {c.features.map((f, j) => (
-                  <li key={j} className="flex items-start gap-2 text-foreground/80 text-sm md:text-base">
-                    <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${c.tint} flex items-center justify-center shrink-0 mt-0.5`}>
+                  <li key={j} className="flex items-start gap-3">
+                    <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${c.tint} flex items-center justify-center shrink-0 mt-1`}>
                       <Check className="w-3 h-3 text-white" strokeWidth={3} />
                     </div>
-                    <span>{f}</span>
+                    <div>
+                      <p className="font-semibold text-foreground text-sm md:text-base leading-tight">{f.name}</p>
+                      <p className="text-muted-foreground text-xs md:text-sm mt-0.5 leading-snug">{f.description}</p>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -565,19 +574,22 @@ function SampleD() {
                     transition={{ duration: 0.3 }}
                     className="overflow-hidden"
                   >
-                    <ul className="space-y-2 mt-3">
+                    <ul className="space-y-2.5 mt-3">
                       {c.features.map((f, j) => (
                         <motion.li
                           key={j}
                           initial={{ opacity: 0, x: -6 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.05 + j * 0.05 }}
-                          className="flex items-center gap-2 text-xs md:text-sm text-foreground/80"
+                          className="flex items-start gap-2"
                         >
-                          <div className={`w-4 h-4 rounded-full bg-gradient-to-br ${c.tint} flex items-center justify-center shrink-0`}>
+                          <div className={`w-4 h-4 rounded-full bg-gradient-to-br ${c.tint} flex items-center justify-center shrink-0 mt-0.5`}>
                             <Check className="w-2.5 h-2.5 text-white" strokeWidth={3} />
                           </div>
-                          {f}
+                          <div className="min-w-0">
+                            <p className="font-semibold text-foreground text-xs md:text-sm leading-tight">{f.name}</p>
+                            <p className="text-muted-foreground text-[11px] mt-0.5 leading-snug">{f.description}</p>
+                          </div>
                         </motion.li>
                       ))}
                     </ul>
@@ -622,8 +634,12 @@ function SampleE() {
                 <Icon className="w-7 h-7 md:w-8 md:h-8 text-white" />
               </div>
               <h3 className="text-sm md:text-base font-bold text-foreground leading-tight mb-2">{cur.title}</h3>
-              <ul className="text-[10px] md:text-xs text-muted-foreground space-y-0.5">
-                {cur.features.slice(0, 3).map((f, j) => <li key={j}>· {f}</li>)}
+              <ul className="text-[10px] md:text-xs text-muted-foreground space-y-1 text-left">
+                {cur.features.slice(0, 3).map((f, j) => (
+                  <li key={j} className="leading-tight">
+                    <span className="text-foreground font-semibold">· {f.name}</span>
+                  </li>
+                ))}
               </ul>
             </motion.div>
           </AnimatePresence>
@@ -693,7 +709,8 @@ function SampleF() {
                       <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${c.tint} flex items-center justify-center shadow-sm`}>
                         <Check className="w-3 h-3 text-white" strokeWidth={3} />
                       </div>
-                      <span className="text-[11px] text-foreground/85 leading-tight">{feature}</span>
+                      <p className="text-[11px] font-semibold text-foreground leading-tight">{feature.name}</p>
+                      <p className="text-[10px] text-muted-foreground leading-snug line-clamp-2">{feature.description}</p>
                     </div>
                   ) : (
                     <span className="text-muted-foreground/50 text-xs">—</span>
@@ -757,10 +774,13 @@ function SampleG() {
                 <ul className="space-y-3">
                   {cur.features.map((f, j) => (
                     <li key={j} className="flex items-start gap-3">
-                      <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${cur.tint} flex items-center justify-center shrink-0 mt-0.5`}>
+                      <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${cur.tint} flex items-center justify-center shrink-0 mt-1`}>
                         <Check className="w-3 h-3 text-white" strokeWidth={3} />
                       </div>
-                      <span className="text-sm text-foreground/85">{f}</span>
+                      <div>
+                        <p className="font-semibold text-foreground text-sm leading-tight">{f.name}</p>
+                        <p className="text-muted-foreground text-xs mt-0.5 leading-snug">{f.description}</p>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -809,19 +829,18 @@ function SampleH() {
           animate={{ x: [0, "-50%"] }}
           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
         >
-          {all.flatMap((c) => c.features).map((f, i) => {
-            const catIdx = i % categories.length;
-            const c = categories[catIdx];
-            return (
-              <div
-                key={i}
-                className={`shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-full ${c.soft} ${c.accent} border border-current/20`}
-              >
-                <Check className={`w-3.5 h-3.5 ${c.accent}`} strokeWidth={3} />
-                <span className="text-xs md:text-sm font-semibold whitespace-nowrap">{f}</span>
+          {all.flatMap((c) => c.features.map((f) => ({ f, c }))).map((item, i) => (
+            <div
+              key={i}
+              className={`shrink-0 inline-flex items-start gap-2 px-4 py-2.5 rounded-2xl ${item.c.soft} border border-current/20 ${item.c.accent} max-w-[280px]`}
+            >
+              <Check className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${item.c.accent}`} strokeWidth={3} />
+              <div className="text-left">
+                <p className="text-xs md:text-sm font-bold whitespace-nowrap text-foreground">{item.f.name}</p>
+                <p className="text-[10px] text-foreground/70 whitespace-nowrap">{item.f.description}</p>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </motion.div>
       </div>
 
@@ -832,19 +851,18 @@ function SampleH() {
           animate={{ x: ["-50%", 0] }}
           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
         >
-          {all.flatMap((c) => c.features).reverse().map((f, i) => {
-            const catIdx = (categories.length - 1 - (i % categories.length) + categories.length) % categories.length;
-            const c = categories[catIdx];
-            return (
-              <div
-                key={i}
-                className={`shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-full ${c.soft} ${c.accent} border border-current/20`}
-              >
-                <Check className={`w-3.5 h-3.5 ${c.accent}`} strokeWidth={3} />
-                <span className="text-xs md:text-sm font-semibold whitespace-nowrap">{f}</span>
+          {all.flatMap((c) => c.features.map((f) => ({ f, c }))).reverse().map((item, i) => (
+            <div
+              key={i}
+              className={`shrink-0 inline-flex items-start gap-2 px-4 py-2.5 rounded-2xl ${item.c.soft} border border-current/20 ${item.c.accent} max-w-[280px]`}
+            >
+              <Check className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${item.c.accent}`} strokeWidth={3} />
+              <div className="text-left">
+                <p className="text-xs md:text-sm font-bold whitespace-nowrap text-foreground">{item.f.name}</p>
+                <p className="text-[10px] text-foreground/70 whitespace-nowrap">{item.f.description}</p>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </motion.div>
       </div>
     </div>
