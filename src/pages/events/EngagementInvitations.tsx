@@ -1,62 +1,260 @@
-import { EventPageTemplate } from "@/components/EventPageTemplate";
+// Rebuilt from scratch 2026-07-09 — matches /wedding-invitations pattern.
+// Structure: CinematicHero → SpecialFeaturesCarousel (10 engagement-only)
+//   → CommonFeaturesGrid → EventTestimonials → Recommended package → FAQ → CTA
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Layout } from "@/components/layout/Layout";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import SEO from "@/components/SEO";
+import { WhatsAppFAQ } from "@/components/WhatsAppFAQ";
+import { CinematicHero } from "@/components/events/CinematicHero";
+import { SpecialFeaturesCarousel, type SpecialFeature } from "@/components/events/SpecialFeaturesCarousel";
+import { CommonFeaturesGrid } from "@/components/events/CommonFeaturesGrid";
+import { EventTestimonials } from "@/components/events/EventTestimonials";
+import {
+  DoorOpen,
+  ListOrdered,
+  Mic,
+  Heart,
+  Users,
+  Camera,
+  Frame,
+  MessageSquare,
+  Bell,
+  Music,
+} from "lucide-react";
 import heroImg from "@/assets/hero-engagement.jpg";
 
+const engagementSpecialFeatures: SpecialFeature[] = [
+  {
+    n: 1, icon: DoorOpen,
+    category: "Tradition",
+    shortLabel: "Knocking",
+    title: "Knocking Ceremony Page",
+    short: "The formal 'kokooko' rite, given its own home.",
+    description: "A dedicated section for the knocking ceremony — dates, times, families invited, order of the rite. Keep this respectful moment separate from the celebration but stitched into the same invitation.",
+    tint: "from-amber-500 to-orange-600", soft: "bg-amber-50", accent: "text-amber-700", emoji: "🚪",
+  },
+  {
+    n: 3, icon: ListOrdered,
+    category: "Order",
+    shortLabel: "Schedule",
+    title: "Cultural Rites Schedule",
+    short: "Knocking, prayer, introductions, presentation, celebration.",
+    description: "A clear, timed order of events — so uncles, aunties and young ones know exactly what happens and when. Presented beautifully, not as a boring PDF.",
+    tint: "from-yellow-500 to-amber-600", soft: "bg-yellow-50", accent: "text-yellow-700", emoji: "📜",
+  },
+  {
+    n: 8, icon: Mic,
+    category: "Spokesperson",
+    shortLabel: "Linguist",
+    title: "Family Spokesperson (Abusuapanin) Bio",
+    short: "Who's speaking for which side, and why.",
+    description: "A dedicated card for the family spokesperson or linguist on each side — with their photo, role and a short note explaining the honour of the position.",
+    tint: "from-purple-500 to-indigo-600", soft: "bg-purple-50", accent: "text-purple-700", emoji: "🎙️",
+  },
+  {
+    n: 11, icon: Heart,
+    category: "Parents",
+    shortLabel: "Parents",
+    title: "Meet the Parents Cards",
+    short: "Both sets of parents, honoured properly.",
+    description: "Beautiful cards for each set of parents — with photos, names, and a short line from the couple thanking them for making this day possible.",
+    tint: "from-rose-400 to-pink-600", soft: "bg-rose-50", accent: "text-rose-700", emoji: "💗",
+  },
+  {
+    n: 12, icon: Users,
+    category: "Family",
+    shortLabel: "Family",
+    title: "Family Tree",
+    short: "Both families, side by side, with photos and roles.",
+    description: "A shared family tree section — parents, siblings, uncles, aunties, grandparents — from both families. So no guest is ever confused about who's who at the ceremony.",
+    tint: "from-emerald-500 to-teal-600", soft: "bg-emerald-50", accent: "text-emerald-700", emoji: "👨‍👩‍👧‍👦",
+  },
+  {
+    n: 15, icon: Camera,
+    category: "Gallery",
+    shortLabel: "Pre-Shoot",
+    title: "Pre-Engagement Photos Gallery",
+    short: "Your couple shoot, front and centre.",
+    description: "A cinematic gallery of your pre-engagement shoot — full-screen, tap-to-zoom, background music optional — so guests see the love before they show up to celebrate it.",
+    tint: "from-cyan-500 to-blue-600", soft: "bg-cyan-50", accent: "text-cyan-700", emoji: "📸",
+  },
+  {
+    n: 24, icon: Frame,
+    category: "Guest Fun",
+    shortLabel: "Frame",
+    title: "Photo Booth Frame",
+    short: "Custom frames for engagement selfies.",
+    description: "A shareable, custom-designed photo frame guests overlay on their selfies at the ceremony — turning every guest's phone into a walking piece of your engagement branding.",
+    tint: "from-fuchsia-400 to-purple-500", soft: "bg-fuchsia-50", accent: "text-fuchsia-700", emoji: "🖼️",
+  },
+  {
+    n: 25, icon: MessageSquare,
+    category: "Guest Book",
+    shortLabel: "Wishes",
+    title: "Live Guestbook Wall",
+    short: "Wishes and blessings, live on the invitation.",
+    description: "Guests leave real-time wishes, prayers and blessings that stream onto the invitation. Every kind word from every family member — kept forever, in one place.",
+    tint: "from-orange-400 to-amber-500", soft: "bg-orange-50", accent: "text-orange-700", emoji: "💌",
+  },
+  {
+    n: 26, icon: Bell,
+    category: "What's Next",
+    shortLabel: "Wedding",
+    title: "Save-the-Date for the Wedding",
+    short: "The engagement invite links to what's next.",
+    description: "A linked teaser for the wedding day — dates, countdown, one-tap to the full wedding invitation once it drops. Guests never miss the follow-up.",
+    tint: "from-yellow-400 to-amber-500", soft: "bg-yellow-50", accent: "text-yellow-700", emoji: "📅",
+  },
+  {
+    n: 32, icon: Music,
+    category: "Private",
+    shortLabel: "After-Party",
+    title: "After-Party Page",
+    short: "A private link for the reception.",
+    description: "A separate, unlisted page for the after-party or reception — details, dress code, playlist request — shared only with the close friends and cousins invited to stay on.",
+    tint: "from-indigo-500 to-purple-600", soft: "bg-indigo-50", accent: "text-indigo-700", emoji: "🎶",
+  },
+];
+
+const testimonials = [
+  { name: "Nana & Kojo Boateng", location: "Kumasi", quote: "The knocking ceremony page was exactly what our families needed. Both sides felt honoured, and the elders were impressed with how organised it looked." },
+  { name: "Efua Owusu", location: "Cape Coast", quote: "My aunties in the UK could see everything — even the pre-engagement photos. They felt like they were part of the day." },
+  { name: "Kwabena Asare", location: "Accra", quote: "The family spokesperson bios were a beautiful touch. Our okyeame was so proud to see himself featured on the invitation." },
+];
+
+const faqs = [
+  { question: "How long does an engagement invitation take?", answer: "Standard delivery is 4–6 business days. Rush delivery in 48 hours is available for an additional fee." },
+  { question: "Can we separate the knocking from the main engagement?", answer: "Yes. We build a dedicated page for the knocking ceremony that's clearly distinct from the main engagement day, with its own schedule and family listing." },
+  { question: "Can we hide the after-party page from the general invite?", answer: "Absolutely. The after-party page is unlisted — only guests you share the private link with can access it." },
+  { question: "Can family abroad access it?", answer: "Yes. The link works on any device anywhere. Aunties in London or cousins in New York can view every detail and RSVP." },
+  { question: "Can we update details after it goes live?", answer: "Yes. Venue, time, dress code — any change is updated once and every guest sees the latest." },
+];
+
 export default function EngagementInvitations() {
-  return <EventPageTemplate config={{
-    seoTitle: "Engagement Invitations Ghana — Customary Marriage & Knocking",
-    seoDesc: "Beautiful digital engagement invitations for Ghanaian customary marriages and knocking ceremonies. Kente-inspired designs, respectful family acknowledgement, dress code, RSVP tracking — one link, every relative.",
-    seoKeywords: "engagement invitations Ghana, customary marriage invitation, knocking ceremony invite, traditional wedding invitation Ghana, digital engagement invitation Accra",
-    canonical: "/engagement-invitations",
-    eventLabel: "💍 Engagement Invitations",
-    heroHeading: "Two families.",
-    heroHeadingHighlight: "One dignified invite.",
-    heroSubheading: "For the knocking, the customary, the engagement.",
-    heroDescription: "VibeLink builds an interactive engagement invitation that honours the customary side of your union — kente-inspired design, respectful family acknowledgement, dress code display, wish wall and RSVP tracking, shared in one link every uncle and aunty can open.",
-    heroImage: heroImg,
-    heroImageAlt: "Ghanaian traditional engagement ceremony",
-    blob1Color: "linear-gradient(135deg,#D4AF37,#fbbf24)",
-    blob2Color: "linear-gradient(135deg,#B76E79,#f472b6)",
-    blob3Color: "linear-gradient(135deg,#9333ea,#7c3aed)",
-    badgeBg: "rgba(212,175,55,0.10)",
-    badgeText: "#8B7355",
-    badgeBorder: "rgba(212,175,55,0.3)",
-    highlightGradient: "linear-gradient(135deg,#D4AF37,#B76E79,#9333ea)",
-    pillBg: "rgba(212,175,55,0.08)",
-    pillBorder: "rgba(212,175,55,0.25)",
-    pillText: "#8B7355",
-    cardTopGradient: "linear-gradient(90deg,#D4AF37,#B76E79,#9333ea)",
-    ctaBtnClass: "engagement",
-    ctaBtnShadow: "0 10px 30px rgba(212,175,55,0.35)",
-    getStartedEventType: "Engagement",
-    features: [
-      { icon: "🌟", title: "Adinkra Symbol Design", desc: "Osrane ne Nsoromma, Sankofa, Gye Nyame — the symbol that carries your story." },
-      { icon: "🧵", title: "Kente-inspired Palette", desc: "Traditional colour combinations chosen to honour the two families." },
-      { icon: "🤝", title: "Family Acknowledgement", desc: "Both sides honoured respectfully — as much or as little detail as your elders prefer." },
-      { icon: "📅", title: "Save the Date", desc: "One tap adds the ceremony to every guest's calendar." },
-      { icon: "📍", title: "Venue Map", desc: "House address or hall — guests tap and Google Maps opens directly." },
-      { icon: "💌", title: "RSVP Tracking", desc: "Know exactly how many relatives, how many meals, before the day." },
-      { icon: "💐", title: "Wish Wall", desc: "Every guest leaves a blessing for the couple — kept as a digital keepsake, forever." },
-      { icon: "👗", title: "Dress Code Display", desc: "Colour of the day, cloth pattern, style — everyone dresses to the theme." },
-      { icon: "📸", title: "Pre-engagement Gallery", desc: "Photos of the couple and both families — introduces guests to the story." },
-      { icon: "📋", title: "Ceremony Programme", desc: "Order of proceedings, from knocking to closing prayers." },
-      { icon: "📺", title: "Livestream Ready", desc: "Diaspora relatives watch the ceremony live — no app, no login." },
-      { icon: "🔗", title: "One Beautiful Link", desc: "Share on WhatsApp, on the family group — works on every phone." },
-    ],
-    recommendedPackage: "Classic Vibe — GHS 1,500",
-    recommendedDesc: "For most Ghanaian engagements, Classic Vibe covers what matters — Adinkra design, respectful family acknowledgement, RSVP tracking, dress-code display, wish wall and 2 revisions. For larger customary ceremonies with livestream and Prestige styling, upgrade to Prestige Vibe.",
-    testimonials: [
-      { name: "Akosua & Yaw", location: "Kumasi", quote: "Our elders were sceptical of a digital invitation for the knocking. When they saw the Adinkra design and how respectfully our two families were introduced, they were the ones sharing it." },
-      { name: "Ama Boateng", location: "Accra", quote: "The wish wall filled up with blessings from aunties in London and Frankfurt within a day. The whole family felt part of the ceremony even before it started." },
-      { name: "Kwame Mensah", location: "Berlin", quote: "I'm in Germany, my fiancée is in Ghana. The livestream let my whole family here watch the customary — like being in the room." },
-    ],
-    faqs: [
-      { q: "Can you design in a specific Adinkra symbol?", a: "Yes. Tell us the symbol — Osrane ne Nsoromma, Sankofa, Gye Nyame, Nkyinkyim — and we integrate it into the invitation as the central motif." },
-      { q: "Can we mention both families on the invitation?", a: "Yes — respectfully, and as much or as little as your elders decide. Some families prefer just the two heads of family named; others want a fuller acknowledgement. We follow your guidance." },
-      { q: "Do you handle any money on the invitation?", a: "No. Traditional dowry / bride price is a private matter between the two families — we deliberately keep money off the invitation. What we do include is a wish wall so guests can leave blessings publicly." },
-      { q: "How do we handle two ceremonies (engagement + wedding)?", a: "Most couples order two separate invitations — one for the customary/engagement, one for the white wedding. Different designs, different guest lists, different links. We offer a bundle discount." },
-      { q: "Can we display the dress code and cloth pattern?", a: "Absolutely. Colour of the day, kente pattern, style guidance — displayed clearly so every guest arrives in the right cloth." },
-      { q: "Is livestream included?", a: "Livestream embedding is included from Prestige Vibe upwards. For Classic Vibe, we can add it as a small upgrade. Family abroad watches on any device." },
-    ],
-    ctaHeadline: "Honour the two families with a proper digital invitation.",
-  }} />;
+  return (
+    <Layout>
+      <SEO
+        title="Engagement Invitations Ghana — Customary Marriage & Knocking Ceremonies"
+        description="Beautiful digital engagement invitations for Ghanaian customary marriages and knocking ceremonies. Family spokesperson cards, dowry lists, kente-inspired designs, RSVP tracking — one link, every relative."
+        keywords="engagement invitations Ghana, customary marriage invitation, knocking ceremony invite, traditional wedding invitation Ghana, digital engagement invitation Accra, abusuapanin, okyeame"
+        canonical="/engagement-invitations"
+        ogImage="https://vibelinkevent.com/og-image.jpg"
+      />
+
+      {/* 1. Cinematic hero */}
+      <CinematicHero
+        image={heroImg}
+        imageAlt="Ghanaian engagement ceremony"
+        imageObjectPos="center 30%"
+        chip="For Ghanaian Engagements"
+        heading="Two Families."
+        headingHighlight="One Dignified Invite."
+        subheading="From the knocking to the customary — kente-honoured, family-first, and elder-approved. One link, every uncle and aunty can open."
+        primaryCta={{ label: "Start Your Engagement Invitation", href: "/get-started?eventType=Engagement" }}
+        secondaryCta={{ label: "See Engagement Examples", href: "/portfolio?type=engagement" }}
+        trustRow={["150+ Ghanaian couples", "Kente-honoured designs", "Every family, every uncle"]}
+      />
+
+      {/* 2. Special features carousel */}
+      <SpecialFeaturesCarousel
+        features={engagementSpecialFeatures}
+        chip="Engagement-only features"
+        heading="Built for Ghanaian Engagements"
+        subheading="Ten features that honour the tradition — from the knocking to the after-party — each one shaped around how our families actually do it."
+      />
+
+      {/* 3. Common features grid */}
+      <CommonFeaturesGrid
+        chip="Also included in every engagement invitation"
+        heading="The Essentials, Built In"
+        subheading="Six features every VibeLink invitation ships with — no matter the event type."
+      />
+
+      {/* 4. Testimonials */}
+      <EventTestimonials
+        testimonials={testimonials}
+        heading="From families who chose VibeLink"
+        subheading="Real feedback from real Ghanaian engagement ceremonies."
+      />
+
+      {/* 5. Recommended package */}
+      <section className="py-16 bg-white border-y border-gray-100">
+        <div className="container mx-auto px-4 lg:px-8 max-w-3xl text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-amber-100 text-amber-800">
+              Our Recommendation
+            </span>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Prestige Vibe — GHS 2,500</h3>
+            <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
+              Ideal for engagements: kente-inspired design, family cards, knocking ceremony page, RSVP tracking, MoMo contributions and 5 revisions. Perfect for both the knocking and the customary day.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700">
+                <Link to="/get-started?eventType=Engagement">
+                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link to="/pricing">Compare All Packages</Link>
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 6. FAQ */}
+      <section className="py-20 bg-slate-50/50">
+        <div className="container mx-auto px-4 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10 max-w-2xl mx-auto"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Frequently Asked</h2>
+            <p className="text-muted-foreground text-sm md:text-base">Tap a question — we'll reply below.</p>
+          </motion.div>
+          <WhatsAppFAQ
+            faqs={faqs}
+            intro="Hi 👋 Here are the top questions couples ask about engagement invitations — tap one to see the answer."
+          />
+        </div>
+      </section>
+
+      {/* 7. Final CTA */}
+      <section className="py-20 relative overflow-hidden bg-gradient-to-br from-amber-100 via-orange-50 to-white">
+        <div className="container mx-auto px-4 lg:px-8 relative text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-4 leading-tight">
+              Honour the tradition. Impress every family.
+            </h2>
+            <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
+              A digital engagement invitation your uncles and aunties will actually be proud to share. Starting from GHS 1,000.
+            </p>
+            <Button
+              asChild
+              size="lg"
+              className="font-bold text-white px-10 py-6 text-lg bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 shadow-2xl shadow-amber-900/30"
+            >
+              <Link to="/get-started?eventType=Engagement">
+                Create My Invitation <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <p className="text-gray-500 text-sm mt-4">Free consultation · Draft in 24 hours · Money-back guarantee</p>
+          </motion.div>
+        </div>
+      </section>
+    </Layout>
+  );
 }

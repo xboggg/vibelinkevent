@@ -86,7 +86,7 @@ Deno.serve(async (req) => {
           try {
             const resend = new Resend(resendApiKey);
             await resend.emails.send({
-              from: 'VibeLink Blog <onboarding@resend.dev>',
+              from: 'VibeLink Blog <hello@vibelinkevent.com>',
               to: adminEmails,
               subject: `📝 Blog Post Published: ${post.title}`,
               html: `

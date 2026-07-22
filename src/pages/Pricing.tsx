@@ -443,14 +443,14 @@ const Pricing = () => {
             <div className="flex items-center gap-3">
               <Sparkles className="h-6 w-6 text-amber-600 flex-shrink-0" />
               <p className="text-sm lg:text-base text-amber-900">
-                <strong className="font-bold">Already know the look you want?</strong> Browse 15 ready-made templates, pick addons, see your total.
+                <strong className="font-bold">Already know the look you want?</strong> Browse all our designs by event type, preview live, and order.
               </p>
             </div>
             <Link
-              to="/templates"
+              to="/designs"
               className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm shadow-md transition-colors whitespace-nowrap"
             >
-              Browse Templates <ArrowRight className="h-4 w-4" />
+              Browse Designs <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>

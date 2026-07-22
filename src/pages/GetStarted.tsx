@@ -1,17 +1,31 @@
 import { motion } from "framer-motion";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { OrderFormWizard } from "@/components/order-form/OrderFormWizard";
 import { OrderFormData } from "@/data/orderFormData";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
-import { Gift, Clock, MessageCircle, Shield, Sparkles } from "lucide-react";
+import { Gift, Clock, MessageCircle, Shield, Sparkles, CheckCircle2, ArrowLeft } from "lucide-react";
+import { portfolioItems } from "@/data/portfolioItems";
+import { templates as tieredTemplates } from "@/data/templatesData";
+
+// Look up a design by slug across both data sources so we can show a friendly
+// "You picked X" banner when the visitor came from /designs.
+function findDesignBySlug(slug: string) {
+  const fromPortfolio = portfolioItems.find((p) => p.slug === slug);
+  if (fromPortfolio) return { title: fromPortfolio.title, image: fromPortfolio.image };
+  const fromTemplates = tieredTemplates.find((t) => t.slug === slug);
+  if (fromTemplates) return { title: fromTemplates.name, image: fromTemplates.thumbnail };
+  return null;
+}
 
 const GetStarted = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const referralCode = searchParams.get("ref") || "";
   const preselectedPackage = searchParams.get("package") || "";
+  const templateSlug = searchParams.get("template") || "";
+  const pickedDesign = templateSlug ? findDesignBySlug(templateSlug) : null;
 
   const handleFormComplete = (data: OrderFormData) => {
     toast.success("Order submitted successfully! We'll contact you within 2 hours.");
@@ -85,6 +99,39 @@ const GetStarted = () => {
               <Sparkles className="h-4 w-4 text-secondary flex-shrink-0" />
               <span className="text-sm text-foreground">Package pre-selected: <strong className="text-secondary">{preselectedPackage}</strong> — you can change it at step 4.</span>
             </div>
+          )}
+
+          {pickedDesign && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="mb-6 max-w-2xl mx-auto rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 overflow-hidden shadow-sm"
+            >
+              <div className="flex items-center gap-3 p-4">
+                <div className="shrink-0 w-14 h-14 rounded-lg bg-white shadow-sm overflow-hidden border border-emerald-200">
+                  <img
+                    src={pickedDesign.image}
+                    alt={pickedDesign.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 text-emerald-700 text-[10px] font-bold uppercase tracking-widest mb-0.5">
+                    <CheckCircle2 className="h-3 w-3" /> You picked
+                  </div>
+                  <p className="font-bold text-emerald-900 text-sm md:text-base truncate">{pickedDesign.title}</p>
+                  <p className="text-emerald-800/70 text-xs">Let's get your details — we'll build this design for you.</p>
+                </div>
+                <Link
+                  to="/designs"
+                  className="shrink-0 hidden sm:inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-900 text-xs font-semibold underline underline-offset-2"
+                >
+                  <ArrowLeft className="h-3 w-3" /> Change
+                </Link>
+              </div>
+            </motion.div>
           )}
           <OrderFormWizard onComplete={handleFormComplete} initialReferralCode={referralCode} initialPackage={preselectedPackage} />
         </div>

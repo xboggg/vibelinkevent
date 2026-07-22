@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { CTASection } from "@/components/sections/CTASection";
-import { Clock, ArrowRight, BookOpen, Search, X, ChevronDown, Loader2, Tag, Sparkles, TrendingUp, Calendar } from "lucide-react";
+import { Clock, ArrowRight, BookOpen, Search, X, ChevronDown, ChevronUp, Loader2, Tag, Sparkles, TrendingUp, Calendar } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
@@ -11,6 +11,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 
 const POSTS_PER_LOAD = 9;
+// First render pulls a small window so the page paints fast. The rest of the
+// posts are then pulled quietly in the background so the search/filter still
+// works across the whole archive without changing the UX.
+const INITIAL_FETCH = 24;
 
 const categories = [
   { name: "All",               icon: "✨", color: "bg-[#6B46C1] text-white",        inactive: "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100" },
@@ -38,73 +42,166 @@ interface BlogPost {
   published_at: string | null;
   created_at: string;
   tags: string[];
+  view_count?: number;
 }
 
 const Blog = () => {
-  const [searchParams] = useSearchParams();
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [searchParams, setSearchParams] = useSearchParams();
+  // Initialise from URL params — makes deep-links shareable
+  // (?category=Wedding&tag=diaspora&search=guest+list all work).
+  const [activeCategory, setActiveCategory] = useState(
+    searchParams.get("category") || "All"
+  );
   const [activeTag, setActiveTag] = useState<string | null>(searchParams.get("tag"));
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_LOAD);
+  const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
+  // Show back-to-top button after scrolling past the hero
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 600);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Sync internal state → URL params so refresh/deep-links persist.
+  // Debounced so typing in search doesn't spam the history stack.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const params: Record<string, string> = {};
+      if (activeCategory !== "All") params.category = activeCategory;
+      if (activeTag) params.tag = activeTag;
+      if (searchQuery.trim()) params.search = searchQuery.trim();
+      setSearchParams(params, { replace: true });
+    }, 300);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeCategory, activeTag, searchQuery]);
+
+  // Also react to URL param changes from outside (e.g. tag link on article page)
   useEffect(() => {
     const tag = searchParams.get("tag");
-    if (tag) setActiveTag(tag);
+    if (tag && tag !== activeTag) setActiveTag(tag);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const fetchPosts = async () => {
     try {
       // Posts with published=true AND published_at in the future are scheduled —
       // we filter them out on the public page until their release time arrives.
-      const { data, error } = await supabase
+      // Phase 1: pull the first INITIAL_FETCH posts and paint the page.
+      const nowIso = new Date().toISOString();
+      const columns = "id, slug, title, excerpt, category, image_url, read_time, featured, published_at, created_at, tags, view_count";
+      const { data: firstPage, error } = await supabase
         .from("blog_posts")
-        .select("id, slug, title, excerpt, category, image_url, read_time, featured, published_at, created_at, tags")
+        .select(columns)
         .eq("published", true)
-        .lte("published_at", new Date().toISOString())
-        .order("published_at", { ascending: false });
+        .lte("published_at", nowIso)
+        .order("published_at", { ascending: false })
+        .range(0, INITIAL_FETCH - 1);
 
       if (error) throw error;
-      setPosts(data || []);
+      setPosts(firstPage || []);
+      setLoading(false);
+
+      // Phase 2: if the first page filled up, keep pulling the rest in the
+      // background so search/filter can reach the whole archive without
+      // blocking the initial paint.
+      if ((firstPage?.length || 0) === INITIAL_FETCH) {
+        const { data: rest, error: restErr } = await supabase
+          .from("blog_posts")
+          .select(columns)
+          .eq("published", true)
+          .lte("published_at", nowIso)
+          .order("published_at", { ascending: false })
+          .range(INITIAL_FETCH, INITIAL_FETCH + 999);
+        if (!restErr && rest && rest.length > 0) {
+          setPosts((prev) => [...prev, ...rest]);
+        }
+      }
     } catch (error) {
       console.error("Error fetching blog posts:", error);
-    } finally {
       setLoading(false);
     }
   };
 
-  const allTags = useMemo(() => {
-    const tags = new Set<string>();
-    posts.forEach(post => {
-      (post.tags || []).forEach(tag => tags.add(tag));
+  // Tag frequency map — used to size the tag cloud (most-used tags render
+  // largest). Returns [{ tag, count }] sorted by count desc.
+  const tagCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    posts.forEach((p) => (p.tags || []).forEach((t) => counts.set(t, (counts.get(t) || 0) + 1)));
+    return [...counts.entries()]
+      .map(([tag, count]) => ({ tag, count }))
+      .sort((a, b) => b.count - a.count);
+  }, [posts]);
+
+  const allTags = useMemo(() => tagCounts.map((t) => t.tag), [tagCounts]);
+
+  // Popular this week — top 3 published in the last 7 days by view_count.
+  // If no posts have any views yet, we fall back to "most-recent 3" so the
+  // section is never empty. `featured` posts get an extra weight bonus.
+  const popularPosts = useMemo(() => {
+    const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const recent = posts.filter((p) => {
+      const t = new Date(p.published_at || p.created_at).getTime();
+      return t > oneWeekAgo;
     });
-    return Array.from(tags).sort();
+    const withViews = (recent.length ? recent : posts).map((p) => ({
+      ...p,
+      _score: (p.view_count || 0) + (p.featured ? 5 : 0),
+    }));
+    withViews.sort((a, b) => b._score - a._score);
+    // If nothing has views (all 0), degrade to recency
+    if (withViews.every((p) => p._score === 0)) {
+      return posts.slice(0, 3);
+    }
+    return withViews.slice(0, 3);
   }, [posts]);
 
   const filteredPosts = useMemo(() => {
     let filtered = posts;
 
+    // Word-by-word matching so "ghana wedding" matches an article that has
+    // "ghanaian" AND "weddings" separately. Each token must be found in one
+    // of: title, excerpt, category, or any tag.
     if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (post) =>
-          post.title.toLowerCase().includes(query) ||
-          post.excerpt.toLowerCase().includes(query) ||
-          post.category.toLowerCase().includes(query) ||
-          (post.tags || []).some(tag => tag.toLowerCase().includes(query))
-      );
+      const tokens = searchQuery
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((t) => t.length > 1);
+      if (tokens.length > 0) {
+        filtered = filtered.filter((post) => {
+          const haystack = [
+            post.title,
+            post.excerpt,
+            post.category,
+            ...(post.tags || []),
+          ]
+            .join(" ")
+            .toLowerCase();
+          return tokens.every((t) => haystack.includes(t));
+        });
+
+        // Title-hit boost: matches in the title bubble up first
+        filtered = [...filtered].sort((a, b) => {
+          const aTitle = tokens.filter((t) => a.title.toLowerCase().includes(t)).length;
+          const bTitle = tokens.filter((t) => b.title.toLowerCase().includes(t)).length;
+          return bTitle - aTitle;
+        });
+      }
     }
 
+    // Category + tag can now stack together (Phase 4.4 combined filters)
     if (activeCategory !== "All") {
       filtered = filtered.filter((post) => post.category === activeCategory);
     }
-
     if (activeTag) {
       filtered = filtered.filter((post) => (post.tags || []).includes(activeTag));
     }
@@ -153,6 +250,8 @@ const Blog = () => {
         description="Tips, guides and inspiration for planning your Ghanaian wedding, funeral, naming ceremony and more. Learn about traditions and modern event planning."
         keywords="Ghana event planning blog, wedding traditions Ghana, funeral planning tips, naming ceremony guide"
         canonical="/blog"
+        rssUrl="https://vibelinkevent.com/blog/rss.xml"
+        rssTitle="VibeLink Event Blog"
       />
 
       {/* Hero — clean, just title + search */}
@@ -175,9 +274,18 @@ const Blog = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
               Event Planning <span className="text-secondary">Resources</span> & Inspiration
             </h1>
-            <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">
+            <p className="text-white/70 text-lg max-w-2xl mx-auto mb-6">
               Your guide to beautiful Ghanaian ceremonies. Tips, traditions, and inspiration for every occasion.
             </p>
+            <div className="mb-8">
+              <Link
+                to="/blog/series"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/15 border border-secondary/30 text-secondary text-sm font-semibold hover:bg-secondary/25 transition-colors"
+              >
+                <BookOpen className="h-4 w-4" /> Browse multi-part series
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
             {/* Search bar in hero */}
             <div className="max-w-lg mx-auto">
               <div className="relative">
@@ -207,7 +315,7 @@ const Blog = () => {
             {categories.map((category, i) => (
               <motion.button
                 key={category.name}
-                onClick={() => { setActiveCategory(category.name); setActiveTag(null); }}
+                onClick={() => setActiveCategory(category.name)}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: i * 0.04 }}
@@ -224,21 +332,101 @@ const Blog = () => {
               </motion.button>
             ))}
           </div>
-          {activeTag && (
-            <div className="flex justify-center mt-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 text-secondary">
-                <Tag className="h-4 w-4" />
-                <span className="text-sm font-medium">{activeTag}</span>
-                <button onClick={() => setActiveTag(null)} className="ml-1 hover:bg-secondary/20 rounded-full p-0.5">
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+          {(activeTag || activeCategory !== "All") && (
+            <div className="flex justify-center items-center gap-2 mt-4 flex-wrap">
+              <span className="text-xs text-muted-foreground uppercase tracking-widest font-bold">Filters:</span>
+              {activeCategory !== "All" && (
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/15 text-primary text-sm font-medium">
+                  <span>{activeCategory}</span>
+                  <button
+                    onClick={() => setActiveCategory("All")}
+                    className="hover:bg-primary/20 rounded-full p-0.5"
+                    aria-label={`Remove ${activeCategory} filter`}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
+              {activeTag && (
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/20 text-secondary text-sm font-medium">
+                  <Tag className="h-3.5 w-3.5" />
+                  <span>{activeTag}</span>
+                  <button
+                    onClick={() => setActiveTag(null)}
+                    className="hover:bg-secondary/20 rounded-full p-0.5"
+                    aria-label={`Remove ${activeTag} filter`}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
+              <button
+                onClick={() => { setActiveCategory("All"); setActiveTag(null); }}
+                className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+              >
+                Clear all
+              </button>
             </div>
           )}
         </div>
       </section>
 
       {/* Featured Posts — Style B Editorial Split */}
+      {/* Popular this week — top 3 by view count, falls back to featured/recent */}
+      {!loading && popularPosts.length > 0 && (
+        <section className="py-10 bg-background border-b border-border">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="flex items-center gap-3 mb-6">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <h2 className="text-lg font-bold text-foreground uppercase tracking-widest">Popular This Week</h2>
+              <span className="ml-auto text-muted-foreground text-xs hidden md:block">
+                What Ghanaian families are reading right now
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+              {popularPosts.map((p, i) => (
+                <motion.article
+                  key={p.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.08, duration: 0.4 }}
+                >
+                  <Link
+                    to={`/blog/${p.slug}`}
+                    className="group flex gap-3 items-start rounded-2xl bg-card border border-border p-4 hover:border-primary/40 hover:shadow-md transition-all"
+                  >
+                    <div
+                      className="text-3xl md:text-4xl font-black shrink-0 leading-none bg-gradient-to-b from-primary to-secondary bg-clip-text text-transparent select-none"
+                      aria-hidden
+                      style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </div>
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-muted shrink-0">
+                      <img
+                        src={p.image_url}
+                        alt={p.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { (e.target as HTMLImageElement).src = '/blog/adinkra-symbols-ghana.jpg'; }}
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{p.category}</p>
+                      <p className="text-sm font-semibold text-foreground line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                        {p.title}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+                        <Clock className="h-3 w-3" />{p.read_time}
+                      </p>
+                    </div>
+                  </Link>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {!loading && featuredPosts.length > 0 && (
         <section className="py-12 bg-gradient-to-b from-[#322659] to-background">
           <div className="container mx-auto px-4 lg:px-8">
@@ -256,8 +444,7 @@ const Blog = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="lg:col-span-3 group relative rounded-3xl overflow-hidden shadow-2xl"
-                  style={{ minHeight: '520px' }}
+                  className="lg:col-span-3 group relative rounded-3xl overflow-hidden shadow-2xl min-h-[380px] md:min-h-[440px] lg:min-h-[520px]"
                 >
                   <Link to={`/blog/${featuredPosts[0].slug}`} className="block h-full">
                     <img
@@ -283,7 +470,7 @@ const Blog = () => {
                       <h3 className="text-2xl lg:text-3xl font-bold text-white mb-3 group-hover:text-secondary transition-colors leading-snug">
                         {featuredPosts[0].title}
                       </h3>
-                      <p className="text-white/70 text-sm lg:text-base line-clamp-2 mb-5 hidden sm:block">
+                      <p className="text-white/70 text-sm lg:text-base line-clamp-2 mb-5">
                         {featuredPosts[0].excerpt}
                       </p>
                       <div className="flex items-center justify-between">
@@ -352,7 +539,49 @@ const Blog = () => {
         </section>
       )}
 
-      {/* spacer removed — search/categories now in hero */}
+      {/* Tag cloud — most-used tags size largest, click to filter */}
+      {!loading && tagCounts.length > 0 && (
+        <section className="py-10 bg-muted/30 border-b border-border">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="flex items-center gap-3 mb-4 max-w-4xl mx-auto">
+              <Tag className="h-4 w-4 text-primary" />
+              <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+                Browse by topic
+              </h2>
+              <span className="ml-auto text-xs text-muted-foreground hidden sm:block">
+                {tagCounts.length} topics
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center max-w-4xl mx-auto">
+              {tagCounts.map(({ tag, count }) => {
+                // Size buckets: 1 use = xs, 2-3 = sm, 4-5 = base, 6+ = lg
+                const sizeClass =
+                  count >= 6 ? "text-base font-bold px-4 py-2" :
+                  count >= 4 ? "text-sm font-semibold px-3.5 py-1.5" :
+                  count >= 2 ? "text-xs font-semibold px-3 py-1" :
+                  "text-xs font-medium px-2.5 py-1 opacity-75";
+                const isActive = activeTag === tag;
+                return (
+                  <button
+                    key={tag}
+                    onClick={() => setActiveTag(isActive ? null : tag)}
+                    className={`inline-flex items-center gap-1 rounded-full transition-all ${sizeClass} ${
+                      isActive
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "bg-card border border-border hover:bg-primary/10 hover:border-primary/40 text-foreground/80"
+                    }`}
+                  >
+                    <span>{tag}</span>
+                    <span className={`text-[10px] ${isActive ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Blog Grid */}
       <section id="articles-section" className="py-16 bg-background">
@@ -360,7 +589,15 @@ const Blog = () => {
           <div className="flex items-center justify-between mb-10">
             <div>
               <h2 className="text-2xl font-bold text-foreground">
-                {activeCategory === "All" ? "All Articles" : activeCategory}
+                {searchQuery.trim()
+                  ? `Results for "${searchQuery.trim()}"`
+                  : activeTag && activeCategory !== "All"
+                  ? `${activeCategory} · ${activeTag}`
+                  : activeTag
+                  ? `Tagged "${activeTag}"`
+                  : activeCategory === "All"
+                  ? "All Articles"
+                  : activeCategory}
               </h2>
               <p className="text-muted-foreground text-sm mt-1">
                 {filteredPosts.length} article{filteredPosts.length !== 1 ? "s" : ""} found
@@ -369,32 +606,83 @@ const Blog = () => {
           </div>
 
           {loading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="h-10 w-10 animate-spin text-primary" />
+            // Skeleton grid — 6 shimmering placeholder cards while we fetch.
+            // Feels lighter and communicates content is coming, better than
+            // a lone spinner.
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-2xl bg-card border border-border overflow-hidden animate-pulse"
+                >
+                  <div className="aspect-[16/10] bg-muted" />
+                  <div className="p-5 space-y-3">
+                    <div className="h-3 w-24 bg-muted rounded-full" />
+                    <div className="h-5 bg-muted rounded" />
+                    <div className="h-5 w-2/3 bg-muted rounded" />
+                    <div className="h-3 w-32 bg-muted rounded mt-4" />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : filteredPosts.length === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-20"
+              className="text-center py-20 max-w-lg mx-auto"
             >
               <div className="w-20 h-20 mx-auto rounded-full bg-muted flex items-center justify-center mb-6">
                 <Search className="h-10 w-10 text-muted-foreground/50" />
               </div>
-              <h3 className="text-xl font-semibold text-foreground mb-2">No articles found</h3>
-              <p className="text-muted-foreground mb-6">
-                Try adjusting your search or browse our categories.
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                {searchQuery.trim()
+                  ? `No articles match "${searchQuery.trim()}"`
+                  : activeTag && activeCategory !== "All"
+                  ? `No ${activeCategory} articles tagged "${activeTag}"`
+                  : activeTag
+                  ? `No articles tagged "${activeTag}" yet`
+                  : `No ${activeCategory} articles yet`}
+              </h3>
+              <p className="text-muted-foreground mb-6 text-sm">
+                {searchQuery.trim()
+                  ? "Try a shorter phrase, single keyword, or browse the tag cloud above."
+                  : activeCategory !== "All" && activeTag
+                  ? "Try removing one filter to widen your search."
+                  : "New posts land here every week. In the meantime, explore other categories."}
               </p>
-              <Button
-                onClick={() => {
-                  setSearchQuery("");
-                  setActiveCategory("All");
-                  setActiveTag(null);
-                }}
-                variant="outline"
-              >
-                Clear all filters
-              </Button>
+              <div className="flex flex-wrap justify-center gap-2">
+                {searchQuery.trim() && (
+                  <Button
+                    onClick={() => setSearchQuery("")}
+                    variant="outline"
+                    size="sm"
+                  >
+                    Clear search
+                  </Button>
+                )}
+                {(activeCategory !== "All" || activeTag) && (
+                  <Button
+                    onClick={() => {
+                      setActiveCategory("All");
+                      setActiveTag(null);
+                    }}
+                    variant="outline"
+                    size="sm"
+                  >
+                    Clear filters
+                  </Button>
+                )}
+                <Button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setActiveCategory("All");
+                    setActiveTag(null);
+                  }}
+                  size="sm"
+                >
+                  See all articles
+                </Button>
+              </div>
             </motion.div>
           ) : (
             <>
@@ -576,6 +864,19 @@ const Blog = () => {
       </section>
 
       <CTASection />
+
+      {/* Back-to-top button — appears after 600px scroll. Positioned bottom-left
+          so it doesn't fight with the WhatsApp / chat widgets on the right. */}
+      <motion.button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        initial={false}
+        animate={{ opacity: showTop ? 1 : 0, scale: showTop ? 1 : 0.8 }}
+        className="fixed bottom-6 left-5 md:left-7 z-40 w-11 h-11 rounded-full bg-white/95 backdrop-blur border border-border text-foreground shadow-lg hover:shadow-xl hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all flex items-center justify-center"
+        aria-label="Back to top"
+        style={{ pointerEvents: showTop ? "auto" : "none" }}
+      >
+        <ChevronUp className="w-5 h-5" />
+      </motion.button>
     </Layout>
   );
 };

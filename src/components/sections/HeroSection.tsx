@@ -273,11 +273,24 @@ export function HeroSection() {
     preloadImages();
   }, []);
 
+  // Pause auto-cycle when hero is scrolled off-screen — prevents subtle
+  // repaints while the user is looking at content below.
+  const [inView, setInView] = useState(true);
   useEffect(() => {
-    if (isPaused) return;
+    if (!sectionRef.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (isPaused || !inView) return;
     const interval = setInterval(nextSlide, 7000);
     return () => clearInterval(interval);
-  }, [nextSlide, isPaused]);
+  }, [nextSlide, isPaused, inView]);
 
   const handleImageLoad = (index: number) => {
     setImagesLoaded((prev) => {

@@ -9,9 +9,10 @@ import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { 
-  UserPlus, Shield, Trash2, RefreshCw, Mail, Key, 
-  User, Crown, Users, AlertTriangle, CheckCircle, ShieldCheck, ShieldOff
+import {
+  UserPlus, Shield, Trash2, RefreshCw, Mail, Key,
+  User, Crown, Users, AlertTriangle, CheckCircle, ShieldCheck, ShieldOff,
+  Pencil, Check, X as XIcon, Send, Loader2
 } from 'lucide-react';
 import { z } from 'zod';
 import { useTOTP } from '@/hooks/useTOTP';
@@ -67,6 +68,103 @@ export function UserManagement() {
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [editingUserId, setEditingUserId] = useState<string | null>(null);
+  const [editName, setEditName] = useState('');
+  const [rowActing, setRowActing] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setCurrentUserId(data.user?.id ?? null));
+  }, []);
+
+  // Call admin-manage-users via raw fetch — supabase.functions.invoke has quirks
+  // with the apikey/Authorization header combination that were causing 401s.
+  const callAdminApi = async (body: Record<string, unknown>) => {
+    const { data: sess } = await supabase.auth.getSession();
+    const token = sess.session?.access_token;
+    if (!token) throw new Error('Not authenticated');
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const res = await fetch(`${supabaseUrl}/functions/v1/admin-manage-users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+        'apikey': anonKey,
+      },
+      body: JSON.stringify(body),
+    });
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error((json as any)?.detail || (json as any)?.error || `HTTP ${res.status}`);
+    }
+    return json;
+  };
+
+  const startEditName = (userId: string, currentName: string | null) => {
+    setEditingUserId(userId);
+    setEditName(currentName || '');
+  };
+  const cancelEditName = () => {
+    setEditingUserId(null);
+    setEditName('');
+  };
+  const saveEditName = async (userId: string) => {
+    const trimmed = editName.trim();
+    if (!trimmed) {
+      toast.error('Name cannot be empty');
+      return;
+    }
+    setRowActing(userId);
+    try {
+      await callAdminApi({ action: 'update_metadata', target_user_id: userId, full_name: trimmed });
+      toast.success('Name updated');
+      setEditingUserId(null);
+      fetchUsers();
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to update name');
+    } finally {
+      setRowActing(null);
+    }
+  };
+
+  const sendPasswordResetForUser = async (email: string) => {
+    if (!confirm(`Send a password-reset link to ${email}?`)) return;
+    setRowActing(email);
+    try {
+      await callAdminApi({ action: 'send_password_reset', target_email: email });
+      toast.success(`Reset link sent to ${email}`);
+    } catch (e: any) {
+      toast.error(e?.message || 'Failed to send reset link');
+    } finally {
+      setRowActing(null);
+    }
+  };
+
+  const deleteUserAction = async (userId: string, email: string) => {
+    if (userId === currentUserId) {
+      toast.error("You can't delete your own account");
+      return;
+    }
+    if (!confirm(`Delete ${email}? This removes the account permanently and cannot be undone.`)) return;
+    setRowActing(userId);
+    try {
+      await callAdminApi({ action: 'delete_user', target_user_id: userId });
+      toast.success(`Deleted ${email}`);
+      fetchUsers();
+    } catch (e: any) {
+      const msg = e?.message || 'Failed to delete';
+      if (msg.includes('cannot_delete_only_admin')) {
+        toast.error("Can't delete — this is the only admin account");
+      } else if (msg.includes('cannot_delete_self')) {
+        toast.error("You can't delete your own account");
+      } else {
+        toast.error(msg);
+      }
+    } finally {
+      setRowActing(null);
+    }
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -554,25 +652,86 @@ export function UserManagement() {
                         <User className="h-5 w-5 text-muted-foreground" />
                       )}
                     </div>
-                    <div>
-                      <div className="font-medium">{user.full_name || 'Unnamed User'}</div>
-                      <div className="text-sm text-muted-foreground flex items-center gap-2">
+                    <div className="min-w-0 flex-1">
+                      {editingUserId === user.id ? (
+                        <div className="flex items-center gap-2">
+                          <Input
+                            value={editName}
+                            onChange={(e) => setEditName(e.target.value)}
+                            placeholder="Full name"
+                            className="h-8 text-sm w-56"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') saveEditName(user.id);
+                              if (e.key === 'Escape') cancelEditName();
+                            }}
+                            autoFocus
+                          />
+                          <button
+                            onClick={() => saveEditName(user.id)}
+                            disabled={rowActing === user.id}
+                            className="p-1.5 rounded text-emerald-600 hover:bg-emerald-500/10 disabled:opacity-40"
+                            title="Save"
+                          >
+                            {rowActing === user.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                          </button>
+                          <button
+                            onClick={cancelEditName}
+                            className="p-1.5 rounded text-muted-foreground hover:bg-muted"
+                            title="Cancel"
+                          >
+                            <XIcon className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5">
+                          <div className="font-medium">{user.full_name || 'Unnamed User'}</div>
+                          <button
+                            onClick={() => startEditName(user.id, user.full_name)}
+                            className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted opacity-50 hover:opacity-100 transition-opacity"
+                            title="Edit name"
+                          >
+                            <Pencil className="h-3 w-3" />
+                          </button>
+                        </div>
+                      )}
+                      <div className="text-sm text-muted-foreground flex items-center gap-2 mt-0.5">
                         <Mail className="h-3 w-3" />
                         {user.email}
+                        {user.id === currentUserId && (
+                          <span className="text-[10px] font-semibold uppercase tracking-widest text-primary bg-primary/10 px-1.5 rounded">You</span>
+                        )}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3">
                     <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
                       {user.role === 'admin' ? 'Admin' : 'User'}
                     </Badge>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground">Admin</span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs text-muted-foreground hidden md:inline">Admin</span>
                       <Switch
                         checked={user.role === 'admin'}
                         onCheckedChange={() => toggleUserRole(user.id, user.role)}
+                        disabled={user.id === currentUserId && user.role === 'admin'}
+                        title={user.id === currentUserId && user.role === 'admin' ? "You can't demote yourself" : undefined}
                       />
                     </div>
+                    <button
+                      onClick={() => sendPasswordResetForUser(user.email)}
+                      disabled={rowActing === user.email}
+                      className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-40"
+                      title="Send password-reset email"
+                    >
+                      {rowActing === user.email ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                    </button>
+                    <button
+                      onClick={() => deleteUserAction(user.id, user.email)}
+                      disabled={rowActing === user.id || user.id === currentUserId}
+                      className="p-1.5 rounded text-rose-600 hover:bg-rose-500/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                      title={user.id === currentUserId ? "You can't delete your own account" : "Delete user"}
+                    >
+                      {rowActing === user.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
               ))}

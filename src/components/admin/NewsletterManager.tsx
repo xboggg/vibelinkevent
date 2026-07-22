@@ -117,8 +117,10 @@ interface Subscriber {
   source: string | null;
 }
 
+// NOTE: Radix Select rejects empty-string values (reserved for "clear selection").
+// Use a sentinel "__all__" instead and convert to null at query time.
 const TOPIC_OPTIONS = [
-  { value: "", label: "All Subscribers", description: "Send to everyone" },
+  { value: "__all__", label: "All Subscribers", description: "Send to everyone" },
   { value: "announcements", label: "Announcements", description: "Subscribers interested in news & updates" },
   { value: "promotions", label: "Promotions", description: "Subscribers interested in deals & offers" },
   { value: "events", label: "Event Tips", description: "Subscribers interested in event ideas" },
@@ -133,7 +135,7 @@ export function NewsletterManager() {
   const [content, setContent] = useState("");
   const [attachments, setAttachments] = useState<File[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>("blank");
-  const [selectedTopic, setSelectedTopic] = useState<string>("");
+  const [selectedTopic, setSelectedTopic] = useState<string>("__all__");
   const [scheduleEnabled, setScheduleEnabled] = useState(false);
   const [scheduledDate, setScheduledDate] = useState<Date | undefined>(undefined);
   const [scheduledHour, setScheduledHour] = useState("09");
@@ -212,16 +214,29 @@ export function NewsletterManager() {
 
   const sendNewsletterMutation = useMutation({
     mutationFn: async () => {
-      const { data, error } = await supabase.functions.invoke('send-newsletter', {
-        body: { 
-          subject, 
+      // Raw fetch instead of supabase.functions.invoke — invoke has a header
+      // conflict quirk that returns 401 even with a valid session.
+      const { data: sess } = await supabase.auth.getSession();
+      const token = sess.session?.access_token;
+      if (!token) throw new Error("Not authenticated — please sign in again");
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      const res = await fetch(`${supabaseUrl}/functions/v1/send-newsletter`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+          "apikey": anonKey,
+        },
+        body: JSON.stringify({
+          subject,
           content,
-          topic: selectedTopic || undefined
-        }
+          topic: selectedTopic && selectedTopic !== "__all__" ? selectedTopic : undefined,
+        }),
       });
-      
-      if (error) throw error;
-      return data;
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((json as any)?.error || `HTTP ${res.status}`);
+      return json;
     },
     onSuccess: (data) => {
       toast.success(data.message || "Newsletter sent successfully!");
@@ -544,7 +559,7 @@ export function NewsletterManager() {
                       <span className="font-medium text-muted-foreground w-16">To:</span>
                       <span className="text-muted-foreground italic">
                         {activeCount} subscriber{activeCount !== 1 ? "s" : ""}
-                        {selectedTopic && ` (filtered by: ${TOPIC_OPTIONS.find(t => t.value === selectedTopic)?.label})`}
+                        {selectedTopic && selectedTopic !== "__all__" && ` (filtered by: ${TOPIC_OPTIONS.find(t => t.value === selectedTopic)?.label})`}
                       </span>
                     </div>
                     <div className="flex gap-2">

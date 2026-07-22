@@ -59,17 +59,21 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    // Use service-role client to verify the JWT directly. This bypasses the
+    // anon-key/JWT-signing mismatch that .auth.getUser() with the caller's
+    // Authorization header was hitting.
+    const jwt = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader;
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-      { global: { headers: { Authorization: authHeader } } }
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+      { auth: { autoRefreshToken: false, persistSession: false } }
     );
 
     // Verify user is admin
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(jwt);
     if (authError || !user) {
       console.error("Auth error:", authError);
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      return new Response(JSON.stringify({ error: "Unauthorized", detail: authError?.message }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

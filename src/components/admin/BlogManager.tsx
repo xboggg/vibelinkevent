@@ -3,6 +3,7 @@ import { BlogBulkImport } from "./BlogBulkImport";
 import { BlogBulkSchedule } from "./BlogBulkSchedule";
 import { BlogImageUpload } from "./BlogImageUpload";
 import { BlogBulkImageManager } from "./BlogBulkImageManager";
+import { BlogAIWriter } from "./BlogAIWriter";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -26,7 +27,7 @@ import {
   Image as ImageIcon, Heading1, Heading2, Heading3,
   Highlighter, Undo, Redo, Eye, EyeOff, Save,
   PlusCircle, Pencil, Trash2, Search, Globe, Clock,
-  Star, Loader2, FileText, X, ExternalLink, CheckCircle2, AlertCircle
+  Star, Loader2, FileText, X, ExternalLink, CheckCircle2, AlertCircle, Sparkles
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -335,6 +336,9 @@ export function BlogManager() {
   const [sortBy, setSortBy] = useState<"title" | "category" | "status" | "created_at">("created_at");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [showAIWriter, setShowAIWriter] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkActing, setBulkActing] = useState(false);
   const { toast } = useToast();
 
   const fetchPosts = useCallback(async () => {
@@ -370,6 +374,52 @@ export function BlogManager() {
   const togglePublish = async (post: BlogPost) => {
     await supabase.from("blog_posts").update({ published: !post.published, published_at: !post.published ? new Date().toISOString() : post.published_at }).eq("id", post.id);
     fetchPosts();
+  };
+
+  // ── Bulk operations ─────────────────────────────────────────────
+  const toggleSelect = (id: string) => {
+    setSelectedIds((s) => {
+      const next = new Set(s);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+  const clearSelection = () => setSelectedIds(new Set());
+  const bulkPublish = async (published: boolean) => {
+    if (!selectedIds.size) return;
+    setBulkActing(true);
+    const ids = [...selectedIds];
+    const patch: any = { published };
+    if (published) patch.published_at = new Date().toISOString();
+    const { error } = await supabase.from("blog_posts").update(patch).in("id", ids);
+    if (error) toast({ title: "Bulk update failed", description: error.message, variant: "destructive" });
+    else toast({ title: `${published ? "Published" : "Unpublished"} ${ids.length} article${ids.length === 1 ? "" : "s"}` });
+    clearSelection();
+    fetchPosts();
+    setBulkActing(false);
+  };
+  const bulkFeature = async (featured: boolean) => {
+    if (!selectedIds.size) return;
+    setBulkActing(true);
+    const ids = [...selectedIds];
+    const { error } = await supabase.from("blog_posts").update({ featured }).in("id", ids);
+    if (error) toast({ title: "Bulk update failed", description: error.message, variant: "destructive" });
+    else toast({ title: `${featured ? "Featured" : "Unfeatured"} ${ids.length} article${ids.length === 1 ? "" : "s"}` });
+    clearSelection();
+    fetchPosts();
+    setBulkActing(false);
+  };
+  const bulkDelete = async () => {
+    if (!selectedIds.size) return;
+    if (!confirm(`Delete ${selectedIds.size} article${selectedIds.size === 1 ? "" : "s"}? This cannot be undone.`)) return;
+    setBulkActing(true);
+    const ids = [...selectedIds];
+    const { error } = await supabase.from("blog_posts").delete().in("id", ids);
+    if (error) toast({ title: "Bulk delete failed", description: error.message, variant: "destructive" });
+    else toast({ title: `Deleted ${ids.length} article${ids.length === 1 ? "" : "s"}` });
+    clearSelection();
+    fetchPosts();
+    setBulkActing(false);
   };
 
   const categoryCounts = posts.reduce<Record<string, number>>((acc, p) => {
@@ -442,7 +492,13 @@ export function BlogManager() {
           <BlogBulkImport onComplete={fetchPosts} />
           <BlogBulkImageManager onComplete={fetchPosts} />
           <BlogBulkSchedule posts={posts} onComplete={fetchPosts} />
-          <Button onClick={() => { setEditPost(null); setView("create"); }} className="gap-2">
+          <Button
+            onClick={() => setShowAIWriter(true)}
+            className="gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90 shadow-md"
+          >
+            <Sparkles className="h-4 w-4" /> AI Write
+          </Button>
+          <Button onClick={() => { setEditPost(null); setView("create"); }} className="gap-2" variant="outline">
             <PlusCircle className="h-4 w-4" /> New Article
           </Button>
         </div>
@@ -504,6 +560,41 @@ export function BlogManager() {
         ))}
       </div>
 
+      {/* Bulk-action toolbar — appears when 1+ post selected */}
+      <AnimatePresence>
+        {selectedIds.size > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="sticky top-4 z-30 bg-primary/10 border border-primary/30 backdrop-blur rounded-xl px-4 py-3 shadow-lg flex items-center gap-3 flex-wrap"
+          >
+            <span className="text-sm font-semibold text-primary">
+              {selectedIds.size} selected
+            </span>
+            <div className="flex-1" />
+            <Button size="sm" variant="outline" onClick={() => bulkPublish(true)} disabled={bulkActing}>
+              <Globe className="h-3.5 w-3.5 mr-1.5" /> Publish
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => bulkPublish(false)} disabled={bulkActing}>
+              <EyeOff className="h-3.5 w-3.5 mr-1.5" /> Unpublish
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => bulkFeature(true)} disabled={bulkActing}>
+              <Star className="h-3.5 w-3.5 mr-1.5" /> Feature
+            </Button>
+            <Button size="sm" variant="outline" onClick={() => bulkFeature(false)} disabled={bulkActing}>
+              Unfeature
+            </Button>
+            <Button size="sm" variant="outline" onClick={bulkDelete} disabled={bulkActing} className="text-rose-600 border-rose-200 hover:bg-rose-50">
+              {bulkActing ? <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5 mr-1.5" />} Delete
+            </Button>
+            <Button size="sm" variant="ghost" onClick={clearSelection}>
+              <X className="h-3.5 w-3.5" />
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="bg-card border border-border rounded-xl overflow-hidden">
         {loading ? (
           <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
@@ -511,6 +602,18 @@ export function BlogManager() {
           <table className="w-full">
             <thead className="bg-muted/50 border-b border-border">
               <tr>
+                <th className="text-left px-3 py-3 w-10">
+                  <input
+                    type="checkbox"
+                    aria-label="Select all"
+                    checked={filtered.length > 0 && filtered.every((p) => selectedIds.has(p.id))}
+                    onChange={(e) => {
+                      if (e.target.checked) setSelectedIds(new Set(filtered.map((p) => p.id)));
+                      else clearSelection();
+                    }}
+                    className="w-4 h-4 rounded accent-primary cursor-pointer"
+                  />
+                </th>
                 <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase">
                   <button onClick={() => toggleSort("title")} className="inline-flex items-center hover:text-foreground transition-colors">
                     Article{sortIndicator("title")}
@@ -537,7 +640,22 @@ export function BlogManager() {
             <tbody className="divide-y divide-border/50">
               <AnimatePresence>
                 {filtered.map(post => (
-                  <motion.tr key={post.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="hover:bg-muted/30 transition-colors">
+                  <motion.tr
+                    key={post.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className={`hover:bg-muted/30 transition-colors ${selectedIds.has(post.id) ? "bg-primary/5" : ""}`}
+                  >
+                    <td className="px-3 py-3 w-10">
+                      <input
+                        type="checkbox"
+                        aria-label={`Select ${post.title}`}
+                        checked={selectedIds.has(post.id)}
+                        onChange={() => toggleSelect(post.id)}
+                        className="w-4 h-4 rounded accent-primary cursor-pointer"
+                      />
+                    </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         {post.image_url && <img src={post.image_url} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />}
@@ -599,7 +717,7 @@ export function BlogManager() {
                 ))}
               </AnimatePresence>
               {filtered.length === 0 && (
-                <tr><td colSpan={5} className="text-center py-12 text-muted-foreground">
+                <tr><td colSpan={6} className="text-center py-12 text-muted-foreground">
                   <FileText className="h-8 w-8 mx-auto mb-3 opacity-40" /><p className="text-sm">No articles found</p>
                 </td></tr>
               )}
@@ -607,6 +725,30 @@ export function BlogManager() {
           </table>
         )}
       </div>
+
+      {/* AI Writer modal */}
+      <AnimatePresence>
+        {showAIWriter && (
+          <BlogAIWriter
+            onClose={() => setShowAIWriter(false)}
+            onDraftReady={(markdown, meta) => {
+              // Prefill editor with the AI draft. content stores raw markdown —
+              // BlogDetail detects the leading '#' and renders via MagazineArticle.
+              setEditPost({
+                ...emptyPost(),
+                title: meta.title,
+                slug: slugify(meta.title),
+                excerpt: meta.excerpt,
+                category: meta.category,
+                content: markdown,
+                read_time: estimateReadTime(markdown),
+                author_name: "Edmund Adjekum",
+              });
+              setView("create");
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

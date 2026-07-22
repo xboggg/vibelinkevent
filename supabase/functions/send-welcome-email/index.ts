@@ -122,7 +122,7 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "VibeLink Event <onboarding@resend.dev>",
+      from: "VibeLink Event <hello@vibelinkevent.com>",
       to: [email],
       subject: "Welcome to VibeLink Event! 🎉",
       html: emailHtml,

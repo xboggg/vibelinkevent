@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,7 @@ import {
   PartyPopper,
   Rewind,
   MonitorPlay,
+  Armchair,
 } from "lucide-react";
 
 import weddingImg from "@/assets/service-wedding.jpg";
@@ -270,6 +272,32 @@ const featureCategories = [
     ]
   },
   {
+    icon: Armchair,
+    title: "Seating & Table Assignments",
+    color: "bg-teal-100 text-teal-600",
+    tint: "from-teal-400 to-teal-600",
+    soft: "bg-teal-50",
+    accent: "text-teal-700",
+    demoKey: "rsvp",
+    features: [
+      { name: "Personal Table Card", description: "Each guest opens their invitation and sees 'You're at Table 7' — no more hunting for the seating board" },
+      { name: "Named or Numbered Tables", description: "Use classic Table 1–20 or give tables warm names like 'The Kente Room', 'Ashanti Corner', 'Family Elders'" },
+      { name: "Seat Numbers", description: "Optional per-seat assignment for formal dinners and weddings that need exact placement" },
+      { name: "See Your Companions", description: "'You're seated with Kwame, Ama & Kofi' — guests know their tablemates before they arrive" },
+      { name: "Head Table & VIP Seating", description: "Mark tables as head, family, VIP, or elder-priority — visible only to those seated there" },
+      { name: "Group Assignments", description: "Assign a whole family or friend group to a table in one click from the RSVP list" },
+      { name: "Live Capacity Tracker", description: "See at a glance which tables are full, which have room, and how many guests are still unassigned" },
+      { name: "Auto-Group by Family", description: "System suggests groupings based on RSVP surnames and shared meal preferences" },
+      { name: "Change Notifications", description: "Guests get a quiet update if their table changes — no confusion on the day" },
+      { name: "Printable Seating Chart", description: "One-tap PDF export for the venue coordinator, ushers, and the entrance display" },
+      { name: "Usher-Friendly Search", description: "On event day, an usher can search a guest name and instantly see their table + companions" },
+      { name: "Multiple Reception Rooms", description: "Split guests across ballroom, garden, and overflow spaces with clear signage per room" },
+      { name: "Accessibility Flags", description: "Mark seats near the door, on ground floor, or away from the speakers for elders and guests with mobility needs" },
+      { name: "Dietary Awareness", description: "Meal preferences from RSVP flow into the seating chart so the kitchen and servers know per table" },
+      { name: "Church & Funeral Seating", description: "Front-pew reservations for immediate family, choir sections, and dignitary rows" },
+    ]
+  },
+  {
     icon: Camera,
     title: "Media & Experience",
     color: "bg-pink-100 text-pink-600",
@@ -429,7 +457,7 @@ const featureCategories = [
     tint: "from-indigo-500 to-purple-600",
     soft: "bg-indigo-50",
     accent: "text-indigo-700",
-    demoKey: "gallery",
+    demoKey: "vendors",
     features: [
       { name: "Photographer & Videographer", description: "Credits for the team capturing your day, with their booking info" },
       { name: "Caterer", description: "Recognise your catering team — their menu and contact details" },
@@ -447,6 +475,27 @@ const breadcrumbSchema = createBreadcrumbSchema([
   { name: "Home", url: "/" },
   { name: "Services", url: "/services" },
 ]);
+
+// Big stat number that counts up from 0 to the target when it enters the viewport.
+function StatNumber({ target, suffix = "", duration = 1500 }: { target: number; suffix?: string; duration?: number }) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!inView) return;
+    const start = performance.now();
+    const tick = () => {
+      const elapsed = performance.now() - start;
+      const p = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setN(Math.floor(eased * target));
+      if (p < 1) requestAnimationFrame(tick);
+      else setN(target);
+    };
+    requestAnimationFrame(tick);
+  }, [inView, target, duration]);
+  return <span ref={ref} className="tabular-nums">{n}{suffix}</span>;
+}
 
 const Services = () => {
   return (
@@ -499,14 +548,52 @@ const Services = () => {
                   transition={{ duration: 0.6 }}
                   className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center`}
                 >
+                  {/* Mobile title (icon + title only) — shows above the image on mobile, hidden on desktop */}
+                  <div className="lg:hidden flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <IconComponent className="h-5 w-5 text-primary" />
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+                      {service.title}
+                    </h2>
+                  </div>
+
+                  {/* Image */}
+                  <div className={`${isEven ? "lg:order-2" : "lg:order-1"}`}>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
+                      className="group relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3] cursor-pointer"
+                    >
+                      <img
+                        src={service.image}
+                        alt={`${service.title} - Ghana`}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent transition-opacity duration-300 group-hover:opacity-0" />
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/70 to-primary/50 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-6">
+                        <div className="text-center text-primary-foreground">
+                          <div className="text-5xl md:text-6xl font-bold mb-2">{service.stats.created}</div>
+                          <div className="text-lg font-medium mb-4 opacity-90">{service.stats.label}</div>
+                          <div className="flex items-center justify-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                            <span className="text-sm">Client Satisfaction:</span>
+                            <span className="text-lg font-bold">{service.stats.satisfaction}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Text content — desktop shows icon+title inline here; mobile skips title (already shown above image) */}
                   <div className={`space-y-6 ${isEven ? "lg:order-1" : "lg:order-2"}`}>
-                    <div className="flex items-center gap-3">
+                    <div className="hidden lg:flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                         <IconComponent className="h-5 w-5 text-primary" />
                       </div>
                     </div>
 
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
+                    <h2 className="hidden lg:block text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
                       {service.title}
                     </h2>
 
@@ -540,32 +627,6 @@ const Services = () => {
                         <Link to="/get-started">Get Quote</Link>
                       </Button>
                     </div>
-                  </div>
-
-                  <div className={`${isEven ? "lg:order-2" : "lg:order-1"}`}>
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.3 }}
-                      className="group relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3] cursor-pointer"
-                    >
-                      <img
-                        src={service.image}
-                        alt={`${service.title} - Ghana`}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent transition-opacity duration-300 group-hover:opacity-0" />
-
-                      <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/70 to-primary/50 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-6">
-                        <div className="text-center text-primary-foreground">
-                          <div className="text-5xl md:text-6xl font-bold mb-2">{service.stats.created}</div>
-                          <div className="text-lg font-medium mb-4 opacity-90">{service.stats.label}</div>
-                          <div className="flex items-center justify-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                            <span className="text-sm">Client Satisfaction:</span>
-                            <span className="text-lg font-bold">{service.stats.satisfaction}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
                   </div>
                 </motion.div>
               );
@@ -659,93 +720,119 @@ const Services = () => {
               <Sparkles className="h-4 w-4" />
               <span className="text-sm font-medium">Packed with Features</span>
             </motion.div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">At a Glance</h2>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">By the Numbers</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Quick overview of what makes VibeLink special
+              The scale behind every VibeLink invitation
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 lg:gap-6">
+          {/* Stats — 4 big animated counters */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto mb-16">
             {[
-              { icon: Timer, label: "Countdown Timer", color: "from-orange-500 to-amber-500", delay: 0 },
-              { icon: Image, label: "Photo Gallery", color: "from-pink-500 to-rose-500", delay: 0.05 },
-              { icon: Music, label: "Background Music", color: "from-purple-500 to-indigo-500", delay: 0.1 },
-              { icon: ClipboardList, label: "RSVP Tracking", color: "from-blue-500 to-cyan-500", delay: 0.15 },
-              { icon: MapPin, label: "Google Maps", color: "from-green-500 to-emerald-500", delay: 0.2 },
-              { icon: Calendar, label: "Calendar Sync", color: "from-teal-500 to-cyan-500", delay: 0.25 },
-              { icon: MessageSquare, label: "Guest Messages", color: "from-yellow-500 to-orange-500", delay: 0.3 },
-              { icon: Link2, label: "Donation Link", color: "from-red-500 to-pink-500", delay: 0.35 },
-              { icon: BarChart3, label: "Analytics", color: "from-indigo-500 to-purple-500", delay: 0.4 },
-              { icon: Globe, label: "Custom Domain", color: "from-cyan-500 to-blue-500", delay: 0.45 },
-              { icon: Smartphone, label: "Mobile Ready", color: "from-emerald-500 to-green-500", delay: 0.5 },
-              { icon: Share2, label: "WhatsApp Share", color: "from-green-600 to-emerald-600", delay: 0.55 },
-              { icon: Search, label: "Lost & Found", color: "from-slate-500 to-gray-600", delay: 0.6 },
-              { icon: Car, label: "Book a Ride", color: "from-yellow-500 to-amber-600", delay: 0.65 },
-              { icon: Radio, label: "Live Streaming", color: "from-red-600 to-rose-600", delay: 0.7 },
-              { icon: Video, label: "Video Background", color: "from-violet-500 to-purple-600", delay: 0.75 },
-              { icon: Frame, label: "Photo Booth Frame", color: "from-fuchsia-500 to-pink-600", delay: 0.8 },
-              { icon: Wallet, label: "QR Check-in", color: "from-orange-600 to-red-500", delay: 0.85 },
-            ].map((item) => {
-              const IconComponent = item.icon;
+              { n: 77, suffix: "", label: "Features included", tint: "from-primary to-purple-600" },
+              { n: 13, suffix: "", label: "Feature categories", tint: "from-secondary to-yellow-400" },
+              { n: 1, suffix: "", label: "Link, every guest", tint: "from-emerald-500 to-teal-600" },
+              { n: 500, suffix: "+", label: "Ghanaian families served", tint: "from-pink-500 to-rose-600" },
+            ].map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, type: "spring", stiffness: 100, damping: 15 }}
+                whileHover={{ y: -4 }}
+                className="text-center p-6 rounded-2xl bg-card border border-border shadow-sm hover:shadow-lg transition-shadow"
+              >
+                <div className={`text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-br ${s.tint} bg-clip-text text-transparent leading-none mb-2`}>
+                  <StatNumber target={s.n} suffix={s.suffix} />
+                </div>
+                <p className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider">{s.label}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Members' picks header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-8 max-w-3xl mx-auto"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/15 text-secondary text-xs md:text-sm font-bold uppercase tracking-widest mb-3">
+              <Sparkles className="h-3.5 w-3.5" />
+              Members' picks
+            </div>
+            <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-2">The features people love most</h3>
+            <p className="text-sm md:text-base text-muted-foreground">Six crowd-favourites from the families we've served</p>
+          </motion.div>
+
+          {/* Members' picks — 6 curated cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5 max-w-6xl mx-auto">
+            {[
+              {
+                icon: Timer,
+                title: "Live Countdown",
+                desc: "Build excitement day-by-day, hour-by-hour — right up to the moment guests arrive.",
+                tint: "from-orange-500 to-amber-500",
+              },
+              {
+                icon: MapPin,
+                title: "Google Maps + Ride",
+                desc: "One-tap navigation to the venue. Book Uber, Bolt or Yango right from the invitation.",
+                tint: "from-emerald-500 to-teal-600",
+              },
+              {
+                icon: Radio,
+                title: "Live Stream Embed",
+                desc: "Family in Berlin joins the church in Kumasi. Live, in real time, on one link.",
+                tint: "from-red-500 to-rose-600",
+              },
+              {
+                icon: ClipboardList,
+                title: "RSVP Tracking",
+                desc: "Know exactly who's coming — attending, meals, plus-ones — no more guesswork or spreadsheets.",
+                tint: "from-purple-500 to-indigo-600",
+              },
+              {
+                icon: Wallet,
+                title: "MoMo Registry",
+                desc: "Guests contribute via MTN, Vodafone or AirtelTigo. Real-time. Zero setup. Zero fees.",
+                tint: "from-yellow-500 to-amber-600",
+              },
+              {
+                icon: Image,
+                title: "Post-Event Gallery",
+                desc: "A curated album delivered to every guest after the day — memories, forever.",
+                tint: "from-pink-500 to-rose-600",
+              },
+            ].map((f, i) => {
+              const IconComponent = f.icon;
               return (
                 <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: 30, rotateX: -15 }}
-                  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    delay: item.delay,
-                    type: "spring",
-                    stiffness: 100,
-                    damping: 15
-                  }}
-                  whileHover={{
-                    scale: 1.08,
-                    y: -8,
-                    transition: { type: "spring", stiffness: 400, damping: 10 }
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  className="group relative cursor-pointer"
+                  key={f.title}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ delay: i * 0.08, type: "spring", stiffness: 120, damping: 18 }}
+                  whileHover={{ y: -6 }}
+                  className="group relative p-6 rounded-2xl bg-card border border-border shadow-sm hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 overflow-hidden"
                 >
-                  <div className="relative flex flex-col items-center gap-3 p-5 bg-card rounded-2xl border border-border overflow-hidden transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10">
-                    {/* Gradient glow on hover */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-
-                    {/* Icon container with gradient */}
-                    <motion.div
-                      className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center shadow-lg`}
-                      whileHover={{
-                        rotate: [0, -10, 10, 0],
-                        transition: { duration: 0.5 }
-                      }}
-                    >
-                      <IconComponent className="h-7 w-7 text-white" />
-
-                      {/* Shine effect */}
-                      <motion.div
-                        className="absolute inset-0 rounded-xl bg-gradient-to-tr from-white/0 via-white/30 to-white/0"
-                        initial={{ x: "-100%", opacity: 0 }}
-                        whileHover={{ x: "100%", opacity: 1 }}
-                        transition={{ duration: 0.6 }}
-                      />
-                    </motion.div>
-
-                    {/* Label */}
-                    <span className="text-sm font-semibold text-foreground text-center relative z-10 group-hover:text-primary transition-colors duration-300">
-                      {item.label}
-                    </span>
-
-                    {/* Check badge */}
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      whileInView={{ scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: item.delay + 0.3, type: "spring", stiffness: 500 }}
-                      className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-accent flex items-center justify-center shadow-md"
-                    >
-                      <Check className="h-3.5 w-3.5 text-accent-foreground" />
-                    </motion.div>
+                  {/* Members' pick chip */}
+                  <div className="absolute top-4 right-4 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-secondary/20 to-secondary/10 border border-secondary/30 text-secondary text-[10px] font-bold uppercase tracking-widest">
+                    <Sparkles className="h-2.5 w-2.5" />
+                    Pick
                   </div>
+
+                  {/* Icon */}
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.tint} flex items-center justify-center shadow-md mb-4`}>
+                    <IconComponent className="h-6 w-6 text-white" strokeWidth={2.25} />
+                  </div>
+
+                  <h4 className="text-lg font-bold text-foreground mb-2">{f.title}</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+
+                  {/* Accent bar on hover */}
+                  <div className={`absolute bottom-0 left-6 right-6 h-0.5 rounded-full bg-gradient-to-r ${f.tint} opacity-0 group-hover:opacity-100 transition-opacity`} />
                 </motion.div>
               );
             })}

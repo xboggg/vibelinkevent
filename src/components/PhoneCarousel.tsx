@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 
 export interface PhoneCarouselItem {
   id: number | string;
@@ -44,6 +44,26 @@ function PhoneFrame({
   const [src, setSrc] = useState(image);
   useEffect(() => setSrc(image), [image]);
 
+  // Iframe ref so we can drive back/home from the phone frame's controls,
+  // just like on a real iPhone: back = one step in history, home = reload
+  // the invitation to its opening view.
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const [iframeKey, setIframeKey] = useState(0);
+
+  const goBack = () => {
+    try {
+      iframeRef.current?.contentWindow?.history.back();
+    } catch {
+      // Cross-origin block — fall back to full reload
+      setIframeKey((k) => k + 1);
+    }
+  };
+  const goHome = () => {
+    // Force a fresh iframe mount by changing its React key. This works even
+    // when history.go(-N) is blocked by cross-origin policies.
+    setIframeKey((k) => k + 1);
+  };
+
   const canGoLive = isFront && !isLive && !!liveUrl && !!onTryLive;
 
   return (
@@ -65,6 +85,8 @@ function PhoneFrame({
             // way the layout renders exactly as it would on a real phone.
             <div className="absolute inset-0 overflow-hidden">
               <iframe
+                ref={iframeRef}
+                key={iframeKey}
                 src={liveUrl}
                 title={title}
                 loading="lazy"
@@ -115,8 +137,29 @@ function PhoneFrame({
             />
           )}
 
-          {/* Home indicator */}
-          <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-24 h-1 rounded-full bg-white/40 z-10 pointer-events-none" />
+          {/* Home indicator / nav controls.
+              - When NOT live: static home pill (keeps the phone-y feel).
+              - When live: a small back arrow on the left + a home pill on the
+                right, both tappable so visitors can navigate the invitation. */}
+          {isLive && liveUrl ? (
+            <div className="absolute bottom-1.5 left-0 right-0 z-30 flex items-center justify-center gap-3 pointer-events-none">
+              <button
+                onClick={(e) => { e.stopPropagation(); goBack(); }}
+                aria-label="Back one step"
+                className="pointer-events-auto inline-flex items-center justify-center w-7 h-7 rounded-full bg-black/60 backdrop-blur border border-white/25 text-white hover:bg-black/80 active:scale-95 transition"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); goHome(); }}
+                aria-label="Home — reset invitation"
+                title="Home"
+                className="pointer-events-auto w-28 h-1.5 rounded-full bg-white/70 hover:bg-white active:scale-95 transition shadow-md"
+              />
+            </div>
+          ) : (
+            <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-24 h-1 rounded-full bg-white/40 z-10 pointer-events-none" />
+          )}
         </div>
       </div>
     </div>
@@ -135,7 +178,21 @@ export function PhoneCarousel({
   const [userInteracted, setUserInteracted] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
-  const paused = liveIdx !== null || userInteracted;
+  // Pause auto-cycle when carousel is scrolled off-screen — prevents subtle
+  // repaints while the user is looking at something else on the page.
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const [inView, setInView] = useState(true);
+  useEffect(() => {
+    if (!rootRef.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    obs.observe(rootRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  const paused = liveIdx !== null || userInteracted || !inView;
 
   useEffect(() => {
     if (paused || autoRotateMs <= 0 || items.length < 2) return;
@@ -172,6 +229,7 @@ export function PhoneCarousel({
 
   return (
     <div
+      ref={rootRef}
       className={`relative h-[600px] md:h-[700px] flex items-center justify-center ${className}`}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}

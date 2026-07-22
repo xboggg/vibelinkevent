@@ -1,28 +1,18 @@
 import { motion, useInView } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Heart, Gem, Users, Baby, Star, GraduationCap, Radio, Building, Cake, ArrowRight } from "lucide-react";
+import { Heart, Users, Baby, Star, GraduationCap, Radio, Building, Cake, ArrowRight } from "lucide-react";
 import { useRef } from "react";
 
 const eventTypes = [
   {
     icon: Heart,
-    title: "Weddings",
-    desc: "Traditional & white wedding",
+    title: "Weddings & Engagements",
+    desc: "Knocking, traditional & white",
     slug: "wedding",
     href: "/wedding-invitations",
-    color: "bg-rose-50 text-rose-600 border-rose-100",
+    color: "bg-rose-100 text-rose-700 border-rose-200",
     hover: "hover:bg-rose-500 hover:text-white hover:border-rose-500",
-    iconBg: "bg-rose-100 group-hover:bg-rose-400",
-  },
-  {
-    icon: Gem,
-    title: "Engagements",
-    desc: "Customary & knocking ceremonies",
-    slug: "engagement",
-    href: "/engagement-invitations",
-    color: "bg-yellow-50 text-yellow-700 border-yellow-100",
-    hover: "hover:bg-yellow-600 hover:text-white hover:border-yellow-600",
-    iconBg: "bg-yellow-100 group-hover:bg-yellow-500",
+    iconBg: "bg-rose-200 group-hover:bg-rose-400",
   },
   {
     icon: Users,
@@ -126,7 +116,7 @@ export function EventTypesSection() {
         {/* Cards */}
         <motion.div
           ref={ref}
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-3"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-8 gap-3"
         >
           {eventTypes.map((event, i) => (
             <motion.div

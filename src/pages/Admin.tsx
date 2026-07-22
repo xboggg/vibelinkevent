@@ -66,6 +66,9 @@ import { CampaignAnalytics } from "@/components/admin/CampaignAnalytics";
 import { FollowUpHistory } from "@/components/admin/FollowUpHistory";
 import { FollowUpSettings } from "@/components/admin/FollowUpSettings";
 import { BlogManager } from "@/components/admin/BlogManager";
+import { BlogCommentsModeration } from "@/components/admin/BlogCommentsModeration";
+import { BlogAnalytics } from "@/components/admin/BlogAnalytics";
+import { BlogSeriesManager } from "@/components/admin/BlogSeriesManager";
 import { UserManagement } from "@/components/admin/UserManagement";
 import { TestimonialsManager } from "@/components/admin/TestimonialsManager";
 import { NewsletterManager } from "@/components/admin/NewsletterManager";
@@ -159,7 +162,7 @@ interface RevisionRequest {
   updated_at: string;
 }
 
-type AdminSection = "dashboard" | "orders" | "messages" | "analytics" | "chatbot" | "blog" | "testimonials" | "newsletter" | "follow-ups" | "email-settings" | "users" | "team" | "abandoned-carts" | "coupons" | "referrals" | "invoices" | "expenses" | "reports" | "surveys" | "templates" | "backup" | "ai-emails" | "ai-summary" | "escalations" | "segmentation" | "seo-calendar" | "funnel" | "currency" | "languages";
+type AdminSection = "dashboard" | "orders" | "messages" | "analytics" | "chatbot" | "blog" | "blog-comments" | "blog-analytics" | "blog-series" | "testimonials" | "newsletter" | "follow-ups" | "email-settings" | "users" | "team" | "abandoned-carts" | "coupons" | "referrals" | "invoices" | "expenses" | "reports" | "surveys" | "templates" | "backup" | "ai-emails" | "ai-summary" | "escalations" | "segmentation" | "seo-calendar" | "funnel" | "currency" | "languages";
 
 const orderStatusColors: Record<OrderStatus, string> = {
   pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
@@ -201,6 +204,9 @@ const navCategories = [
     icon: FileText,
     items: [
       { id: "blog" as AdminSection, label: "Blog", icon: FileText },
+      { id: "blog-comments" as AdminSection, label: "Blog Comments", icon: FileText },
+      { id: "blog-series" as AdminSection, label: "Blog Series", icon: FileText },
+      { id: "blog-analytics" as AdminSection, label: "Blog Analytics", icon: FileText },
       { id: "testimonials" as AdminSection, label: "Testimonials", icon: Quote },
       { id: "team" as AdminSection, label: "Team", icon: UsersRound },
       { id: "newsletter" as AdminSection, label: "Newsletter", icon: Newspaper },
@@ -1130,6 +1136,15 @@ const Admin = () => {
 
       case "blog":
         return <BlogManager />;
+
+      case "blog-comments":
+        return <BlogCommentsModeration />;
+
+      case "blog-series":
+        return <BlogSeriesManager />;
+
+      case "blog-analytics":
+        return <BlogAnalytics />;
 
       case "testimonials":
         return <TestimonialsManager />;

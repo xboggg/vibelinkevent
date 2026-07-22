@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Eric Osei &amp; Sherita Amelyn Tenda — Wedding · 28 November 2026</title>
-<meta name="description" content="Wedding invitation for Eric Osei &amp; Sherita Amelyn Tenda — Saturday, 28 November 2026 at 12PM · North Brunswick, New Jersey." />
-<meta property="og:title" content="Eric Osei &amp; Sherita Amelyn Tenda — Wedding · 28 November 2026" />
+<title>Eric Osei &amp; Sherita Tenda — Wedding · 28 November 2026</title>
+<meta name="description" content="Wedding invitation for Eric Osei &amp; Sherita Tenda — Saturday, 28 November 2026 at 12PM · North Brunswick, New Jersey." />
+<meta property="og:title" content="Eric Osei &amp; Sherita Tenda — Wedding · 28 November 2026" />
 <meta property="og:description" content="A joining of two hearts. Saturday, 28 November 2026 · 12PM · New Jersey. Strictly by invitation." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://ericsherita.vibelinkevent.com/" />
@@ -86,11 +86,13 @@
     s.classList.add('gone');
     document.body.classList.remove('splash-locked');
 
-    /* If the splash was playing music, seamlessly continue it on the main
-       site from the same timestamp. The RSVP tap that triggered splash-done
-       counts as a user gesture, so autoplay is allowed. */
-    if (typeof e.data.audioAt === 'number' && typeof window.__resumeSiteMusic === 'function'){
-      window.__resumeSiteMusic(e.data.audioAt);
+    /* Always start music on the main site now — the RSVP tap that triggered
+       splash-done counts as a user gesture, so autoplay is allowed. If splash
+       had music playing, we seek to the same timestamp for a seamless handoff;
+       otherwise we start from 0. */
+    if (typeof window.__resumeSiteMusic === 'function'){
+      const at = (typeof e.data.audioAt === 'number' && !isNaN(e.data.audioAt)) ? e.data.audioAt : 0;
+      window.__resumeSiteMusic(at);
     }
 
     setTimeout(() => s.remove(), 950);
@@ -175,6 +177,21 @@
   </div>
 </div>
 
+<!-- ================= SEAT REMINDER BANNER =================
+     Appears only in the final 14 days before the wedding, once per guest
+     (dismissible + remembered in localStorage). JS shows/hides it. -->
+<div class="seat-reminder-banner" id="seatReminderBanner" hidden role="region" aria-label="Seating notice">
+  <div class="srb-inner">
+    <i class="fas fa-chair srb-icon" aria-hidden="true"></i>
+    <div class="srb-text">
+      <strong id="srbTitle">Seat assignments are ready</strong>
+      <span id="srbSub">Find your table below.</span>
+    </div>
+    <a href="#seat" class="srb-cta">Find Your Seat →</a>
+    <button type="button" class="srb-close" id="srbClose" aria-label="Dismiss">×</button>
+  </div>
+</div>
+
 <!-- ================= HERO ================= -->
 <header class="hero">
   <div class="hero-bg" id="heroBg"></div>
@@ -207,7 +224,7 @@
     <h1 class="hero-names">
       <span class="word">Eric</span> <span class="word">Osei</span>
       <span class="amp">&amp;</span>
-      <span class="word middle">Sherita Amelyn Tenda</span>
+      <span class="word middle">Sherita Tenda</span>
     </h1>
     <div class="hero-date">SAT &middot; 28 NOV 2026</div>
     <div class="hero-venue">12PM &middot; North Brunswick, New Jersey</div>
@@ -241,7 +258,7 @@
   </div>
   <div class="timeline" id="tl">
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">11:00 AM</div><div class="tl-title" data-i18n>Guest Arrival</div><div class="tl-body">Ushers welcome guests at Potter's Love Assemble of God. Programme booklets shared.</div></div>
-    <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">12:00 PM</div><div class="tl-title" data-i18n>Ceremony Begins</div><div class="tl-body">Wedding procession, exchange of vows, ring exchange, prayers, and blessings led by Pastor Williams Obeng.</div></div>
+    <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">12:00 PM</div><div class="tl-title" data-i18n>Ceremony Begins</div><div class="tl-body">Wedding procession, exchange of vows, ring exchange, prayers, and blessings led by Rev. Williams Obeng.</div></div>
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">2:00 PM</div><div class="tl-title" data-i18n>Ceremony Ends · Photographs</div><div class="tl-body">Newlyweds' family photos on the church grounds. Guests depart for the reception venue.</div></div>
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">5:00 PM</div><div class="tl-title" data-i18n>Reception at The Sapphire Grand</div><div class="tl-body">Cocktail hour, welcome by the MC, seating of guests.</div></div>
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">7:00 PM</div><div class="tl-title" data-i18n>Dinner · Speeches · Cake</div><div class="tl-body">A three-course meal, family speeches, cutting of the wedding cake, and the couple's first dance.</div></div>
@@ -278,7 +295,10 @@
         <div class="venue-time">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
         <br>
         <a class="venue-directions" href="https://maps.google.com/?q=1210+Cozzens+Ln,+North+Brunswick+Township,+NJ+08902" target="_blank" rel="noopener"><i class="fas fa-diamond-turn-right"></i> <span data-i18n>Get Directions</span></a>
-        <div class="venue-dress"><span data-i18n>Dress code</span> <span data-i18n>To be shared</span></div>
+        <details class="dress-chip">
+          <summary><i class="fas fa-tshirt"></i> <span data-i18n>Dress Code</span> <i class="fas fa-chevron-down chev"></i></summary>
+          <div class="dress-note" data-i18n>Sunday best in warm neutrals. Kindly avoid white — that's for the bride.</div>
+        </details>
       </div>
     </div>
     <div class="venue-card reveal reveal-delay-1">
@@ -292,9 +312,33 @@
         <div class="venue-time">SAT &middot; 28 NOV 2026 &middot; 5PM</div>
         <br>
         <a class="venue-directions" href="https://maps.google.com/?q=800+Rahway+Ave,+Woodbridge,+NJ+07095" target="_blank" rel="noopener"><i class="fas fa-diamond-turn-right"></i> <span data-i18n>Get Directions</span></a>
-        <div class="venue-dress"><span data-i18n>Dress code</span> <span data-i18n>To be shared</span></div>
+        <details class="dress-chip">
+          <summary><i class="fas fa-champagne-glasses"></i> <span data-i18n>Dress Code</span> <i class="fas fa-chevron-down chev"></i></summary>
+          <div class="dress-note" data-i18n>Cocktail elegance. Jewel tones, satin, or Ghanaian glamour — all welcome.</div>
+        </details>
       </div>
     </div>
+  </div>
+
+  <!-- Officiating pastor — formal editorial acknowledgement, no contact info -->
+  <div class="officiant reveal" role="note" aria-label="Officiating Minister">
+    <svg class="officiant-sprig officiant-sprig--l" viewBox="0 0 80 30" aria-hidden="true">
+      <path d="M 78 15 Q 60 8 40 15 Q 20 22 2 15" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+      <ellipse cx="30" cy="11" rx="6" ry="3" transform="rotate(-18 30 11)" fill="currentColor" opacity=".55"/>
+      <ellipse cx="45" cy="18" rx="6" ry="3" transform="rotate(15 45 18)" fill="currentColor" opacity=".55"/>
+      <ellipse cx="18" cy="17" rx="5" ry="2.5" transform="rotate(-8 18 17)" fill="currentColor" opacity=".55"/>
+    </svg>
+    <div class="officiant-inner">
+      <div class="officiant-tag" data-i18n>Officiated by</div>
+      <div class="officiant-name">Rev. Williams Obeng</div>
+      <div class="officiant-verse" data-i18n>&ldquo;What God has joined together&hellip;&rdquo;</div>
+    </div>
+    <svg class="officiant-sprig officiant-sprig--r" viewBox="0 0 80 30" aria-hidden="true">
+      <path d="M 2 15 Q 20 8 40 15 Q 60 22 78 15" fill="none" stroke="currentColor" stroke-width="1" opacity=".55"/>
+      <ellipse cx="50" cy="11" rx="6" ry="3" transform="rotate(18 50 11)" fill="currentColor" opacity=".55"/>
+      <ellipse cx="35" cy="18" rx="6" ry="3" transform="rotate(-15 35 18)" fill="currentColor" opacity=".55"/>
+      <ellipse cx="62" cy="17" rx="5" ry="2.5" transform="rotate(8 62 17)" fill="currentColor" opacity=".55"/>
+    </svg>
   </div>
 </section>
 
@@ -310,7 +354,7 @@
     <div class="rsvp-ticker reveal reveal-delay-1"><strong id="ticker">0</strong> <span data-i18n>guests are already looking forward to the day</span></div>
     <div class="rsvp-progress-wrap reveal reveal-delay-2">
       <div class="rsvp-progress-track"><div class="rsvp-progress-fill" id="progressFill"></div></div>
-      <div class="rsvp-progress-label" id="progressLabel">0 of 200 guests confirmed · 0%</div>
+      <div class="rsvp-progress-label" id="progressLabel">0 of 105 guests confirmed · 0%</div>
     </div>
   </div>
 
@@ -345,20 +389,11 @@
         <input type="radio" name="attending" id="att-no" value="no" />
         <label for="att-no" class="no-label"><i class="fas fa-times"></i> <span data-i18n>Sadly No</span></label>
       </div>
-      <div class="rsvp-row">
-        <div>
-          <label for="rsvpGuests" data-i18n>Number of Guests</label>
-          <select id="rsvpGuests">
-            <option value="1">Just me (1)</option><option value="2" selected>2 people</option><option value="3">3 people</option><option value="4">4 people</option><option value="5">5 people</option><option value="6">6+ people</option>
-          </select>
-        </div>
-        <div>
-          <label for="rsvpSide" data-i18n>Whose Side</label>
-          <select id="rsvpSide">
-            <option value="">— Choose —</option><option value="Bride" data-i18n>Bride's (Sherita)</option><option value="Groom" data-i18n>Groom's (Eric)</option><option value="Both" data-i18n>A friend to both</option>
-          </select>
-        </div>
-      </div>
+      <!-- Strictly by invitation — one seat per RSVP, no plus-ones. -->
+      <label for="rsvpSide" data-i18n>Whose Side</label>
+      <select id="rsvpSide">
+        <option value="">— Choose —</option><option value="Bride" data-i18n>Bride's (Sherita)</option><option value="Groom" data-i18n>Groom's (Eric)</option><option value="Both" data-i18n>A friend to both</option>
+      </select>
       <label for="rsvpDietary" data-i18n>Dietary Requirements (Optional)</label>
       <input type="text" id="rsvpDietary" placeholder="Any allergies or preferences?" maxlength="200" />
       <label for="rsvpNote" data-i18n>A Short Note (Optional)</label>
@@ -386,6 +421,50 @@
         <button type="button" class="rsvp-btn primary" id="btnSubmit"><span data-i18n>Confirm RSVP</span> <i class="fas fa-heart"></i></button>
       </div>
     </div>
+
+    <!-- Success card — shown after a confirmed RSVP.
+         Tells the guest their table number will be posted closer to the day
+         and links straight to the Find Your Seat lookup. -->
+    <div class="rsvp-step" data-step="4">
+      <div class="rsvp-success">
+        <div class="rsvp-success-check"><i class="fas fa-check"></i></div>
+        <div class="rsvp-success-title" id="rsvpSuccessTitle">Thank you!</div>
+        <div class="rsvp-success-body" id="rsvpSuccessBody">
+          Your RSVP is confirmed. See you on <strong>Saturday, 28 November 2026</strong>.
+        </div>
+        <div class="rsvp-success-note">
+          <div class="rsvp-success-note-eyebrow"><i class="fas fa-chair"></i> Your seat</div>
+          <div class="rsvp-success-note-body">
+            Your table will be assigned closer to the day. Please check back <strong>two weeks before the wedding</strong> at
+            <a href="#seat" class="rsvp-success-link">Find Your Seat</a>
+            and we will show you exactly where to sit.
+          </div>
+        </div>
+        <div class="rsvp-actions" style="justify-content:center">
+          <button type="button" class="rsvp-btn secondary" id="btnNewRsvp"><i class="fas fa-rotate"></i> <span>New RSVP</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true"><svg viewBox="0 0 800 60" preserveAspectRatio="none"><path d="M 200 30 Q 350 5 400 30 Q 450 55 600 30"/><circle cx="400" cy="30" r="3"/><ellipse cx="330" cy="30" rx="4" ry="7" transform="rotate(-30 330 30)"/><ellipse cx="470" cy="30" rx="4" ry="7" transform="rotate(30 470 30)"/></svg></div>
+
+<!-- ================= FIND YOUR SEAT ================= -->
+<section class="chapter seat-section" id="seat">
+  <div class="chapter-head reveal">
+    <div class="eyebrow" data-i18n>For Guests</div>
+    <h2 class="chapter-title"><span data-i18n>Find Your Seat</span></h2>
+    <div class="diamond-line" aria-hidden="true"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+    <p class="chapter-sub" data-i18n>Type your name below and we'll show you which table is yours. If we don't have your RSVP yet, please confirm above first.</p>
+  </div>
+
+  <div class="seat-lookup reveal">
+    <div class="seat-form">
+      <input type="text" id="seatName" class="seat-input" placeholder="Type your name…" maxlength="60" autocomplete="off" />
+      <button type="button" id="seatBtn" class="seat-btn"><i class="fas fa-search"></i> <span data-i18n>Find My Seat</span></button>
+    </div>
+    <div class="seat-result" id="seatResult" hidden></div>
   </div>
 </section>
 
@@ -556,8 +635,7 @@
       <div class="acc-body"><div class="acc-content">
         <strong>Newark Liberty (EWR)</strong> is the closest airport — about 25 minutes from the venues.<br>
         <strong>JFK</strong> is around 90 minutes; <strong>LaGuardia</strong> similar.<br><br>
-        Rides: <strong>Uber</strong> and <strong>Lyft</strong> are widely available. A ride from EWR to the reception venue is roughly $35–$50.<br>
-        Family members driving in — parking is available at both venues.
+        Rides: <strong>Uber</strong> and <strong>Lyft</strong> are widely available. A ride from EWR to the reception venue is roughly $35–$50.
       </div></div>
     </div>
     <div class="acc-item">
@@ -565,14 +643,6 @@
       <div class="acc-body"><div class="acc-content">
         Late November in NJ is <strong>cold</strong>. Expect highs around <strong>50°F / 10°C</strong> and lows around <strong>35°F / 2°C</strong>. Light rain or a first snow is possible.<br><br>
         Bring: a proper winter coat, closed-toe shoes, and something warm for the outdoor photo moments. The reception is indoors and heated.
-      </div></div>
-    </div>
-    <div class="acc-item">
-      <button class="acc-head" data-cursor><span class="acc-icon"><i class="fas fa-suitcase"></i></span><span class="acc-title" data-i18n>Packing & TSA</span><i class="fas fa-chevron-down acc-chevron"></i></button>
-      <div class="acc-body"><div class="acc-content">
-        If you're bringing traditional attire, pack it in <strong>carry-on if it fits</strong> to avoid lost luggage.<br><br>
-        US TSA rules: liquids in your carry-on must be under 100ml. Traditional oils, shea butter, and hair products count as liquids. Check-in bags for larger quantities.<br><br>
-        For Ghanaian guests: bring your ETIAS/visa printout and travel insurance printout — customs at EWR sometimes asks.
       </div></div>
     </div>
     <div class="acc-item">
@@ -614,21 +684,21 @@
   </div>
   <div class="contact-grid">
     <div class="contact-card reveal">
-      <div class="contact-role" data-i18n>Officiating Pastor</div>
-      <div class="contact-name">Pastor Williams Obeng</div>
-      <div class="contact-num">+1 732 794 0000</div>
+      <div class="contact-role" data-i18n>Wedding Coordinator</div>
+      <div class="contact-name">Leticia</div>
+      <div class="contact-num">(973) 752-5334</div>
       <div class="contact-actions">
-        <a href="tel:+17327940000" class="contact-btn call"><i class="fas fa-phone"></i> <span data-i18n>Call</span></a>
-        <a href="https://wa.me/17327940000" target="_blank" rel="noopener" class="contact-btn wa"><i class="fab fa-whatsapp"></i> <span data-i18n>WhatsApp</span></a>
+        <a href="tel:+19737525334" class="contact-btn call"><i class="fas fa-phone"></i> <span data-i18n>Call</span></a>
+        <a href="https://wa.me/19737525334" target="_blank" rel="noopener" class="contact-btn wa"><i class="fab fa-whatsapp"></i> <span data-i18n>WhatsApp</span></a>
       </div>
     </div>
     <div class="contact-card reveal reveal-delay-1">
-      <div class="contact-role" data-i18n>Family Coordinator</div>
-      <div class="contact-name">Wedding Coordinator</div>
-      <div class="contact-num">+1 732 794 0000</div>
+      <div class="contact-role" data-i18n>Wedding Coordinator</div>
+      <div class="contact-name">Abby</div>
+      <div class="contact-num">(732) 997-9433</div>
       <div class="contact-actions">
-        <a href="tel:+17327940000" class="contact-btn call"><i class="fas fa-phone"></i> <span data-i18n>Call</span></a>
-        <a href="https://wa.me/17327940000" target="_blank" rel="noopener" class="contact-btn wa"><i class="fab fa-whatsapp"></i> <span data-i18n>WhatsApp</span></a>
+        <a href="tel:+17329979433" class="contact-btn call"><i class="fas fa-phone"></i> <span data-i18n>Call</span></a>
+        <a href="https://wa.me/17329979433" target="_blank" rel="noopener" class="contact-btn wa"><i class="fab fa-whatsapp"></i> <span data-i18n>WhatsApp</span></a>
       </div>
     </div>
   </div>
@@ -651,7 +721,7 @@
 <button class="music-toggle-standalone" id="musicToggle" data-cursor aria-label="Play / pause music" title="Play / pause music">
   <i class="fas fa-music" id="musicIcon"></i>
 </button>
-<audio id="siteAudio" loop preload="none"><source src="music.mp3" type="audio/mpeg"></audio>
+<audio id="siteAudio" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
 
 <script src="app.js"></script>
 </body>

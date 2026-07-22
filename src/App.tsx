@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { usePageTracking } from "@/hooks/usePageTracking";
 import { Loader2 } from "lucide-react";
@@ -19,7 +19,7 @@ import Index from "./pages/Index";
 const Services = lazy(() => import("./pages/Services"));
 const Portfolio = lazy(() => import("./pages/Portfolio"));
 const PortfolioDetail = lazy(() => import("./pages/PortfolioDetail"));
-const Templates = lazy(() => import("./pages/Templates"));
+const Designs = lazy(() => import("./pages/Designs"));
 const TemplateDetail = lazy(() => import("./pages/TemplateDetail"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const Pricing = lazy(() => import("./pages/Pricing"));
@@ -29,6 +29,8 @@ const GetStarted = lazy(() => import("./pages/GetStarted"));
 const ThankYou = lazy(() => import("./pages/ThankYou"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogDetail = lazy(() => import("./pages/BlogDetail"));
+const BlogSeriesIndex = lazy(() => import("./pages/BlogSeriesIndex"));
+const BlogSeriesDetail = lazy(() => import("./pages/BlogSeriesDetail"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminAuth = lazy(() => import("./pages/AdminAuth"));
@@ -46,6 +48,9 @@ const FAQ = lazy(() => import("./pages/FAQ"));
 const Preview = lazy(() => import("./pages/Preview"));
 const StoryPreview = lazy(() => import("./pages/StoryPreview"));
 const ServicesPreview = lazy(() => import("./pages/ServicesPreview"));
+const WeddingPreview = lazy(() => import("./pages/WeddingPreview"));
+const DesignsPreview = lazy(() => import("./pages/DesignsPreview"));
+const BlogArticlePreview = lazy(() => import("./pages/BlogArticlePreview"));
 const BookConsultation = lazy(() => import("./pages/BookConsultation"));
 const Referral = lazy(() => import("./pages/Referral"));
 const WeddingInvitations = lazy(() => import("./pages/events/WeddingInvitations"));
@@ -87,7 +92,9 @@ const App = () => (
               <Route path="/services" element={<Services />} />
               <Route path="/portfolio" element={<Portfolio />} />
               <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
-              <Route path="/templates" element={<Templates />} />
+              <Route path="/designs" element={<Designs />} />
+              {/* Back-compat: old /templates URLs redirect to /designs */}
+              <Route path="/templates" element={<Navigate to="/designs" replace />} />
               <Route path="/templates/:slug" element={<TemplateDetail />} />
               <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/pricing" element={<Pricing />} />
@@ -97,6 +104,9 @@ const App = () => (
               <Route path="/portfolio-preview" element={<Preview />} />
               <Route path="/story-preview" element={<StoryPreview />} />
               <Route path="/services-preview" element={<ServicesPreview />} />
+              <Route path="/wedding-preview" element={<WeddingPreview />} />
+              <Route path="/designs-preview" element={<DesignsPreview />} />
+              <Route path="/blog-preview/graduating-in-ghana" element={<BlogArticlePreview />} />
               <Route path="/book-consultation" element={<BookConsultation />} />
               <Route path="/ref/:code" element={<Referral />} />
               <Route path="/referral" element={<Referral />} />
@@ -112,6 +122,8 @@ const App = () => (
               <Route path="/get-started" element={<GetStarted />} />
               <Route path="/thank-you" element={<ThankYou />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/series" element={<BlogSeriesIndex />} />
+              <Route path="/blog/series/:slug" element={<BlogSeriesDetail />} />
               <Route path="/blog/:slug" element={<BlogDetail />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/auth" element={<AdminAuth />} />

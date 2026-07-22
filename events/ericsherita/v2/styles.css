@@ -26,7 +26,11 @@
   --line-gold:rgba(201,162,74,.4);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+/* Global font-size bump — lifts every rem value site-wide for legibility.
+   Desktop: 17.5px root (~9% larger than the 16px default).
+   Mobile:  17px root (~6% larger). Client feedback: fonts were too small. */
+html{scroll-behavior:smooth;font-size:17.5px}
+@media(max-width:640px){html{font-size:17px}}
 html,body{max-width:100%;overflow-x:hidden}
 body{
   font-family:'Cormorant Garamond', serif;
@@ -98,25 +102,22 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 }
 .nav-brand:hover{transform:scale(1.05)}
 .nav-brand-logo{
-  height:76px;width:auto;display:block;
-  /* Compensate for transparent padding around the mark by scaling the image
-     itself larger — since it renders wider than tall, this makes the visible
-     mark occupy more of the container */
-  transform:scale(1.15);transform-origin:left center;
+  height:76px;width:76px;display:block;
+  border-radius:50%;object-fit:cover;
   filter:drop-shadow(0 3px 14px rgba(0,0,0,.65));
   transition:filter .5s ease;
 }
 .nav-bar.solid{padding-top:.4rem;padding-bottom:.4rem}
 .nav-bar.solid .nav-brand{height:64px}
 .nav-bar.solid .nav-brand-logo{
-  height:64px;
+  height:64px;width:64px;
   filter:drop-shadow(0 2px 5px rgba(90,107,76,.2));
 }
 @media(max-width:900px){
   .nav-brand{height:64px}
-  .nav-brand-logo{height:64px}
-  .nav-bar.solid .nav-brand,
-  .nav-bar.solid .nav-brand-logo{height:56px}
+  .nav-brand-logo{height:64px;width:64px}
+  .nav-bar.solid .nav-brand{height:56px}
+  .nav-bar.solid .nav-brand-logo{height:56px;width:56px}
 }
 .nav-links{
   display:flex;align-items:center;gap:.15rem;
@@ -212,14 +213,17 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
 /* HEADER: logo + date, centered */
 .nav-overlay-header{text-align:center;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:.3rem}
 .nav-overlay-logo{
-  width:auto;
   height:clamp(60px, 11vh, 100px);
+  width:clamp(60px, 11vh, 100px);
+  border-radius:50%;object-fit:cover;
   filter:drop-shadow(0 2px 8px rgba(90,107,76,.15));
 }
 .nav-overlay-date{
   font-family:'Cinzel',serif;
-  font-size:clamp(.5rem, 1.2vh, .6rem);
-  letter-spacing:.42em;color:var(--gold-deep);text-transform:uppercase;font-weight:600;
+  font-size:clamp(.9rem, 2vh, 1.15rem);
+  letter-spacing:.35em;color:var(--gold-deep);text-transform:uppercase;font-weight:600;
+  text-shadow:0 2px 6px rgba(90,65,25,.22), 0 1px 2px rgba(0,0,0,.15);
+  margin-top:.4rem;
 }
 /* LINKS: fill remaining space */
 .nav-overlay-links{
@@ -330,10 +334,10 @@ body.no-scroll{overflow:hidden}
 section.chapter{padding:6rem 1.5rem;position:relative;z-index:2}
 .container{max-width:1180px;margin:0 auto}
 .chapter-head{text-align:center;margin-bottom:3.4rem}
-.eyebrow{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.6em;color:var(--gold-deep);text-transform:uppercase;font-weight:600;margin-bottom:1rem}
-.chapter-title{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2rem, 5vw, 3rem);color:var(--sage-deep);letter-spacing:.02em;line-height:1.2;margin-bottom:.4rem}
+.eyebrow{font-family:'Cinzel',serif;font-size:.88rem;letter-spacing:.5em;color:var(--gold-deep);text-transform:uppercase;font-weight:600;margin-bottom:1rem}
+.chapter-title{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(2.2rem, 5.2vw, 3.2rem);color:var(--sage-deep);letter-spacing:.02em;line-height:1.2;margin-bottom:.4rem}
 .chapter-title em{font-family:'Tangerine',cursive;font-style:normal;font-weight:700;color:var(--gold);font-size:1.7em;line-height:.6;display:inline-block;margin:0 .05em}
-.chapter-sub{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);font-size:1.1rem;letter-spacing:.02em;max-width:640px;margin:0 auto}
+.chapter-sub{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);font-size:1.22rem;letter-spacing:.02em;max-width:640px;margin:0 auto;line-height:1.6}
 
 /* Gold diamond ornament (matches paper card) */
 .diamond{width:26px;height:26px;background:linear-gradient(135deg, var(--gold), var(--gold-bright) 50%, var(--gold-deep));transform:rotate(45deg);border:1px solid var(--gold-deep);box-shadow:0 2px 6px rgba(139,109,58,.35), inset 0 0 0 3px rgba(255,255,255,.15);display:inline-block;position:relative}
@@ -425,11 +429,14 @@ a:hover i.fa-chevron-down{transform:translateY(3px)}
   100%{opacity:0;transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.3)}
 }
 
-/* ==== HERO ==== */
+/* ==== HERO ====
+   Strict 100vh so the whole hero fits inside the viewport on desktop.
+   Tightened padding + content sizes below so the countdown reaches the
+   bottom without clipping. */
 .hero{
-  position:relative;height:100vh;min-height:640px;overflow:hidden;background:#151812;
+  position:relative;height:100vh;height:100dvh;min-height:640px;overflow:hidden;background:#151812;
   display:grid;grid-template-rows:1fr auto;text-align:center;color:var(--ivory);
-  padding:6rem 1.5rem 5rem;
+  padding:4rem 1.5rem 3rem;
 }
 .hero-content{align-self:center}
 .hero-bg{
@@ -527,12 +534,25 @@ a:hover i.fa-chevron-down{transform:translateY(3px)}
 }
 .hero-content{position:relative;z-index:3;max-width:820px;margin:auto}
 .hero-eyebrow{
-  font-family:'Cinzel',serif;font-size:.85rem;letter-spacing:.65em;
-  color:var(--gold-bright);text-transform:uppercase;font-weight:500;
+  display:inline-block;
+  font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.55em;
+  color:#f5ecd3;text-transform:uppercase;font-weight:600;
   margin-bottom:1.4rem;
-  text-shadow:0 2px 12px rgba(0,0,0,.55);
+  padding:.55rem 1.4rem .55rem 1.9rem;   /* extra left padding balances the wide right kerning */
+  /* Dark backdrop pill — semi-transparent black with subtle blur so the eyebrow
+     is always readable no matter what the hero image is doing behind it. */
+  background:rgba(20,24,18,.42);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  border:1px solid rgba(212,180,100,.35);
+  border-radius:999px;
+  text-shadow:0 2px 10px rgba(0,0,0,.75);
+  box-shadow:0 6px 22px rgba(0,0,0,.35);
   opacity:0;transform:translateY(-15px);
   animation:heroFadeDown 1.4s cubic-bezier(.2,.85,.3,1) .4s forwards;
+}
+@media(max-width:640px){
+  .hero-eyebrow{font-size:.82rem;letter-spacing:.4em;padding:.5rem 1.1rem .5rem 1.5rem}
 }
 @keyframes heroFadeDown{to{opacity:1;transform:none}}
 .hero-italic{
@@ -643,9 +663,9 @@ a:hover i.fa-chevron-down{transform:translateY(3px)}
 .tl-dot{position:absolute;left:14px;top:.4rem;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg, var(--gold), var(--gold-deep));border:2px solid var(--paper);box-shadow:0 0 0 3px var(--gold), 0 0 0 5px rgba(212,180,100,.15);z-index:2;transition:transform .5s ease, box-shadow .5s ease}
 @media(min-width:640px){.tl-dot{left:calc(50% - 13px)}.tl-item:nth-child(even) .tl-dot{left:calc(50% - 13px)}}
 .tl-item.lit .tl-dot{transform:scale(1.15);background:linear-gradient(135deg, var(--gold-bright), var(--sage));box-shadow:0 0 0 3px var(--gold-bright), 0 0 0 8px rgba(212,180,100,.35), 0 0 20px rgba(212,180,100,.55)}
-.tl-time{font-family:'Cinzel',serif;font-weight:600;font-size:.72rem;letter-spacing:.32em;color:var(--gold-deep);text-transform:uppercase;margin-bottom:.3rem}
-.tl-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.4rem;color:var(--sage-deep);line-height:1.2;margin-bottom:.3rem}
-.tl-body{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);font-size:.98rem;line-height:1.55}
+.tl-time{font-family:'Cinzel',serif;font-weight:600;font-size:.88rem;letter-spacing:.3em;color:var(--gold-deep);text-transform:uppercase;margin-bottom:.3rem}
+.tl-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.55rem;color:var(--sage-deep);line-height:1.2;margin-bottom:.3rem}
+.tl-body{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);font-size:1.12rem;line-height:1.55}
 
 /* ==== VENUES ==== */
 .venues-section{background:var(--ivory);padding:6rem 1.5rem}
@@ -687,14 +707,229 @@ a:hover i.fa-chevron-down{transform:translateY(3px)}
 .venue-map{width:100%;height:220px;background:#e8e3d0;overflow:hidden}
 .venue-map iframe{width:100%;height:100%;border:0;filter:hue-rotate(-15deg) saturate(.9)}
 .venue-body{padding:2rem 1.6rem 1.8rem;text-align:center;position:relative}
-.venue-tag{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.4em;color:var(--gold-deep);text-transform:uppercase;font-weight:600;margin-bottom:.7rem}
-.venue-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.5rem;color:var(--sage-deep);line-height:1.2;margin-bottom:.5rem}
-.venue-address{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);font-size:1rem;line-height:1.5;margin-bottom:1rem}
-.venue-time{font-family:'Cinzel',serif;color:var(--gold-deep);font-weight:600;letter-spacing:.35em;font-size:.9rem;padding:.4rem 0;border-top:1px solid var(--line-gold);border-bottom:1px solid var(--line-gold);display:inline-block;padding-left:.9rem;padding-right:.5rem;margin-bottom:1rem}
+.venue-tag{font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.35em;color:var(--gold-deep);text-transform:uppercase;font-weight:600;margin-bottom:.7rem}
+.venue-title{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.7rem;color:var(--sage-deep);line-height:1.2;margin-bottom:.5rem}
+.venue-address{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);font-size:1.15rem;line-height:1.5;margin-bottom:1rem}
+.venue-time{font-family:'Cinzel',serif;color:var(--gold-deep);font-weight:600;letter-spacing:.3em;font-size:1.02rem;padding:.4rem 0;border-top:1px solid var(--line-gold);border-bottom:1px solid var(--line-gold);display:inline-block;padding-left:.9rem;padding-right:.5rem;margin-bottom:1rem}
+.venue-directions{font-size:.82rem !important;letter-spacing:.22em !important}
+.hotel-book{font-size:.85rem !important;letter-spacing:.26em !important}
+.deal-link{font-size:.82rem !important;letter-spacing:.22em !important}
+.rsvp-progress-label{font-size:.8rem !important;letter-spacing:.26em !important}
+.rsvp-step-dot{font-size:.92rem !important}
+.rsvp-form-wrap label{font-size:.82rem !important;letter-spacing:.22em !important}
+.rsvp-btn{font-size:.88rem !important;letter-spacing:.22em !important;padding:.95rem 1.5rem !important}
+.attending-toggle label{font-size:.88rem !important;letter-spacing:.18em !important}
+.gift-card-tag{font-size:.78rem !important;letter-spacing:.34em !important}
+.gift-card-name{font-size:.82rem !important;letter-spacing:.26em !important}
+.gift-card-copy{font-size:.72rem !important;letter-spacing:.26em !important}
+.love-converter-title{font-size:.78rem !important;letter-spacing:.32em !important}
+.cd-label{font-size:.72rem !important;letter-spacing:.32em !important}
+@media(max-width:640px){
+  .cd-label{font-size:.68rem !important;letter-spacing:.26em !important}
+}
 .venue-directions{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;background:linear-gradient(135deg, var(--gold-pale), var(--gold));color:#fff;border:1px solid var(--gold-deep);border-radius:99px;font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;text-decoration:none;font-weight:600;box-shadow:0 3px 12px rgba(139,109,58,.3);transition:all .3s;margin-top:.4rem}
 .venue-directions:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(139,109,58,.45)}
-.venue-dress{margin-top:1rem;padding-top:1rem;border-top:1px dashed var(--line);font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);font-size:.85rem}
-.venue-dress span{display:inline-block;padding:.15rem .55rem;background:rgba(139,109,58,.08);border:1px solid var(--line-gold);border-radius:99px;font-size:.55rem;letter-spacing:.32em;text-transform:uppercase;font-weight:600;font-style:normal;color:var(--gold-deep);margin-left:.3rem}
+/* ==== DRESS-CODE CHIP (click to reveal) ==================================
+   A small folded chip — an elegant "tap to open" tucked below the directions.
+   Uses the native <details> element for zero-JS accessibility. When open,
+   the chip transforms into a soft ivory note with a hairline gold rule and a
+   short italic sentence — feels like unfolding a little card. */
+.dress-chip{
+  margin-top:1.1rem;
+  border:none;background:transparent;
+  position:relative;
+}
+.dress-chip > summary{
+  list-style:none;cursor:pointer;
+  display:inline-flex;align-items:center;gap:.55rem;
+  padding:.5rem 1.1rem .5rem 1rem;
+  font-family:'Cinzel',serif;font-size:.72rem;font-weight:600;letter-spacing:.32em;
+  text-transform:uppercase;color:var(--gold-deep);
+  background:linear-gradient(180deg, #fffaf0, #f6ecd0);
+  border:1px solid var(--line-gold);border-radius:999px;
+  box-shadow:0 2px 8px rgba(139,109,58,.15), inset 0 1px 0 rgba(255,255,255,.7);
+  transition:all .35s cubic-bezier(.2,.85,.3,1);
+  user-select:none;
+}
+.dress-chip > summary::-webkit-details-marker{display:none}   /* Safari */
+.dress-chip > summary::marker{display:none}                   /* Firefox */
+.dress-chip > summary:hover{
+  transform:translateY(-1px);
+  box-shadow:0 5px 14px rgba(139,109,58,.28), inset 0 1px 0 rgba(255,255,255,.7);
+  background:linear-gradient(180deg, #fffdf5, #efe1b8);
+}
+.dress-chip > summary i:first-child{font-size:.72rem;color:var(--gold)}
+.dress-chip > summary .chev{
+  font-size:.6rem;opacity:.7;
+  transition:transform .4s cubic-bezier(.2,.85,.3,1);
+}
+.dress-chip[open] > summary .chev{transform:rotate(180deg)}
+.dress-chip[open] > summary{
+  background:linear-gradient(180deg, var(--sage-mist), var(--sage-soft));
+  color:var(--sage-dark);border-color:var(--sage);
+}
+.dress-chip[open] > summary i:first-child,
+.dress-chip[open] > summary .chev{color:var(--sage-dark)}
+
+.dress-chip .dress-note{
+  margin-top:.9rem;
+  padding:1rem 1.2rem;
+  background:linear-gradient(180deg, #fbf8ee, #f2ead1);
+  border-left:2px solid var(--gold);
+  border-radius:2px 10px 10px 2px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.05rem;line-height:1.55;color:var(--text-soft);
+  box-shadow:0 3px 10px rgba(139,109,58,.10);
+  animation:dressNoteIn .5s cubic-bezier(.2,.85,.3,1);
+  position:relative;
+}
+.dress-chip .dress-note::before{
+  content:'\201C';   /* left double quote */
+  position:absolute;top:-.3rem;left:.5rem;
+  font-family:'Great Vibes',cursive;font-style:normal;
+  font-size:2.4rem;color:var(--gold);opacity:.45;line-height:1;
+}
+@keyframes dressNoteIn{
+  from{opacity:0;transform:translateY(-6px) scale(.98)}
+  to  {opacity:1;transform:none}
+}
+@media(max-width:640px){
+  .dress-chip > summary{font-size:.68rem;padding:.5rem 1rem}
+  .dress-chip .dress-note{font-size:1rem;padding:.9rem 1rem}
+}
+
+/* ==== OFFICIATING PASTOR — editorial acknowledgement band ================
+   A gold-and-sage ribbon centred below the venues, flanked by hand-drawn
+   laurel sprigs. Formal, warm, no contact controls — an acknowledgement,
+   not a card. */
+.officiant{
+  margin:3rem auto 0;
+  max-width:640px;
+  display:flex;align-items:center;justify-content:center;gap:.9rem;
+  color:var(--gold-deep);
+  padding:0 1rem;
+  position:relative;
+}
+.officiant-sprig{width:80px;height:30px;flex-shrink:0;color:var(--gold)}
+.officiant-inner{
+  text-align:center;
+  padding:1.05rem 1.6rem;
+  background:linear-gradient(180deg, #fffdf5, #f4ead0);
+  border:1px solid var(--line-gold);
+  border-radius:2px;
+  position:relative;
+  box-shadow:0 4px 18px rgba(139,109,58,.16), inset 0 1px 0 rgba(255,255,255,.7);
+}
+.officiant-inner::before,
+.officiant-inner::after{
+  content:'';position:absolute;width:14px;height:14px;
+  border:1px solid var(--gold);
+}
+.officiant-inner::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.officiant-inner::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.officiant-tag{
+  font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.42em;
+  color:var(--gold-deep);text-transform:uppercase;font-weight:600;
+  margin-bottom:.25rem;
+}
+.officiant-name{
+  font-family:'Cormorant Garamond',serif;font-weight:600;
+  font-size:1.55rem;color:var(--sage-deep);line-height:1.15;
+  letter-spacing:.01em;
+}
+.officiant-verse{
+  margin-top:.35rem;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--gold-deep);font-size:1rem;
+  opacity:.82;
+}
+@media(max-width:640px){
+  .officiant{gap:.5rem;margin:2.5rem auto 0}
+  .officiant-sprig{width:50px;height:22px}
+  .officiant-inner{padding:.9rem 1.1rem}
+  .officiant-name{font-size:1.35rem}
+  .officiant-tag{font-size:.62rem;letter-spacing:.32em}
+  .officiant-verse{font-size:.92rem}
+}
+
+/* ==== FIND YOUR SEAT ====
+   Guest lookup — type name, get table name + tablemates. */
+.seat-section{
+  background:radial-gradient(ellipse at center, var(--paper-warm), var(--paper));
+  padding:5rem 1.5rem;
+}
+.seat-lookup{max-width:640px;margin:2.5rem auto 0;text-align:center}
+.seat-form{
+  display:flex;gap:.6rem;align-items:stretch;
+  background:#fff;padding:.5rem;border-radius:99px;
+  border:1px solid var(--line-gold);
+  box-shadow:0 4px 18px rgba(139,109,58,.15);
+}
+.seat-input{
+  flex:1;padding:.9rem 1.4rem;
+  font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;
+  border:none;background:transparent;color:var(--text);
+  outline:none;
+}
+.seat-input::placeholder{color:var(--muted)}
+.seat-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.85rem 1.4rem;border:none;cursor:pointer;
+  background:linear-gradient(135deg, var(--sage-soft), var(--sage));
+  color:#fff;border-radius:99px;
+  font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.22em;
+  text-transform:uppercase;font-weight:600;
+  transition:all .3s;box-shadow:0 3px 12px rgba(90,107,76,.25);
+  white-space:nowrap;min-height:44px;
+}
+.seat-btn:hover{background:linear-gradient(135deg, var(--sage), var(--sage-deep));transform:translateY(-1px)}
+.seat-btn i{font-size:.75rem}
+
+.seat-result{
+  margin-top:2rem;padding:1.8rem 1.5rem;
+  background:#fff;border:1px solid var(--line-gold);border-radius:6px;
+  box-shadow:0 6px 24px rgba(139,109,58,.12);
+  text-align:center;
+  animation:seatIn .5s cubic-bezier(.2,.85,.3,1);
+}
+@keyframes seatIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.seat-result .greet{
+  font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.32em;
+  color:var(--gold-deep);text-transform:uppercase;font-weight:600;margin-bottom:.4rem;
+}
+.seat-result .who{
+  font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--sage-deep);
+  font-size:1.5rem;margin-bottom:1rem;
+}
+.seat-result .at-tbl{
+  font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text);
+  font-size:1.1rem;line-height:1.5;
+}
+.seat-result .tbl{
+  display:inline-block;margin-top:.6rem;padding:.75rem 1.6rem;
+  background:linear-gradient(135deg, var(--gold-pale), var(--gold));color:#fff;
+  border:1px solid var(--gold-deep);border-radius:99px;
+  font-family:'Cinzel',serif;font-size:1.05rem;letter-spacing:.16em;
+  text-transform:uppercase;font-weight:600;
+  box-shadow:0 4px 14px rgba(139,109,58,.25);
+}
+.seat-result .mates{
+  margin-top:1.4rem;padding-top:1.2rem;border-top:1px dashed rgba(139,109,58,.25);
+  font-family:'Cormorant Garamond',serif;color:var(--text-soft);font-size:1rem;
+  line-height:1.7;
+}
+.seat-result .mates-label{
+  display:block;font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.32em;
+  color:var(--gold-deep);text-transform:uppercase;font-weight:600;margin-bottom:.5rem;
+}
+.seat-result.error{border-color:rgba(178,48,48,.35);background:rgba(178,48,48,.03)}
+.seat-result.error .greet{color:#8a3030}
+.seat-result.error .who{color:#8a3030}
+@media(max-width:640px){
+  .seat-form{flex-direction:column;border-radius:12px;padding:.6rem}
+  .seat-input{text-align:center;padding:.75rem 1rem}
+  .seat-btn{justify-content:center}
+}
 
 /* ==== ACCOMMODATIONS ==== */
 .hotels-section{background:linear-gradient(180deg, var(--paper), var(--paper-warm));padding:6rem 1.5rem;position:relative}
@@ -878,6 +1113,104 @@ a:hover i.fa-chevron-down{transform:translateY(3px)}
 .rsvp-summary-name{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:1.3rem;color:var(--sage-deep);margin-bottom:.4rem}
 .rsvp-summary-line{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);font-size:.95rem;margin-bottom:.2rem}
 .rsvp-summary-line strong{color:var(--gold-deep);font-style:normal;font-weight:600}
+
+/* ==== SEAT REMINDER BANNER ====
+   Fixed at the top of the site during the last 14 days before the wedding.
+   Prompts guests to look up their seat. Dismissible + remembered in
+   localStorage. Sits above the nav and hero. */
+.seat-reminder-banner{
+  position:sticky;top:0;z-index:80;
+  background:linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color:#fff;
+  box-shadow:0 3px 14px rgba(139,109,58,.35);
+  animation:srbIn .5s cubic-bezier(.2,.85,.3,1);
+}
+@keyframes srbIn{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+.srb-inner{
+  max-width:1200px;margin:0 auto;padding:.7rem 1rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.srb-icon{font-size:1.15rem;flex-shrink:0;opacity:.9}
+.srb-text{flex:1;min-width:0;font-family:'Cormorant Garamond',serif;line-height:1.25}
+.srb-text strong{
+  display:block;font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.24em;
+  text-transform:uppercase;font-weight:600;
+}
+.srb-text span{display:block;font-style:italic;font-size:.95rem;opacity:.92;margin-top:.1rem}
+.srb-cta{
+  background:rgba(255,255,255,.28);color:#fff;text-decoration:none;
+  padding:.5rem 1rem;border-radius:99px;
+  font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.2em;
+  text-transform:uppercase;font-weight:600;white-space:nowrap;
+  transition:background .2s;flex-shrink:0;
+}
+.srb-cta:hover,.srb-cta:focus{background:rgba(255,255,255,.45)}
+.srb-close{
+  background:transparent;border:none;color:#fff;cursor:pointer;
+  width:36px;height:36px;font-size:1.4rem;line-height:1;padding:0;
+  border-radius:50%;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.srb-close:hover,.srb-close:focus{background:rgba(255,255,255,.22)}
+@media(max-width:640px){
+  .srb-inner{gap:.55rem;padding:.6rem .7rem;flex-wrap:wrap}
+  .srb-text{flex-basis:100%;order:2;font-size:.95rem}
+  .srb-text strong{font-size:.7rem;letter-spacing:.2em}
+  .srb-text span{font-size:.9rem}
+  .srb-icon{order:1;font-size:1.1rem}
+  .srb-cta{order:3;flex:1;text-align:center;font-size:.66rem;padding:.55rem .8rem}
+  .srb-close{order:1;margin-left:auto}
+}
+
+/* RSVP success card (step 4) */
+.rsvp-success{
+  text-align:center;padding:2rem 1.6rem 1.6rem;
+  background:linear-gradient(180deg, #fdf9ea, var(--paper));
+  border:1px solid var(--line-gold);border-radius:8px;
+  box-shadow:0 6px 22px rgba(139,109,58,.15);
+  animation:rsvpSuccessIn .5s cubic-bezier(.2,.85,.3,1);
+}
+@keyframes rsvpSuccessIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.rsvp-success-check{
+  width:64px;height:64px;margin:0 auto 1rem;
+  background:linear-gradient(135deg, var(--sage-soft), var(--sage));
+  border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;box-shadow:0 6px 18px rgba(90,107,76,.35);
+}
+.rsvp-success-title{
+  font-family:'Cormorant Garamond',serif;font-weight:600;
+  color:var(--sage-deep);font-size:1.6rem;margin-bottom:.5rem;
+}
+.rsvp-success-body{
+  font-family:'Cormorant Garamond',serif;color:var(--text);font-size:1.1rem;
+  line-height:1.5;margin-bottom:1.4rem;
+}
+.rsvp-success-note{
+  margin:1.5rem auto 1.4rem;padding:1.1rem 1.2rem;max-width:480px;
+  background:rgba(212,180,100,.12);border:1px solid var(--line-gold);
+  border-left:3px solid var(--gold);border-radius:4px;text-align:left;
+}
+.rsvp-success-note-eyebrow{
+  font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.32em;
+  color:var(--gold-deep);text-transform:uppercase;font-weight:600;
+  margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem;
+}
+.rsvp-success-note-body{
+  font-family:'Cormorant Garamond',serif;color:var(--text-soft);
+  font-size:1rem;line-height:1.55;
+}
+.rsvp-success-link{
+  color:var(--gold-deep);font-weight:600;text-decoration:underline;
+  text-decoration-color:rgba(139,109,58,.4);text-underline-offset:2px;
+}
+.rsvp-success-link:hover{text-decoration-color:var(--gold-deep)}
+@media(max-width:640px){
+  .rsvp-success{padding:1.5rem 1rem 1.2rem}
+  .rsvp-success-title{font-size:1.4rem}
+  .rsvp-success-body{font-size:1rem}
+  .rsvp-success-note{padding:.9rem 1rem}
+  .rsvp-success-note-body{font-size:.95rem}
+}
 
 /* Confetti */
 .confetti{position:fixed;pointer-events:none;z-index:1000;top:0;left:0;width:100%;height:100%;overflow:hidden;display:none}

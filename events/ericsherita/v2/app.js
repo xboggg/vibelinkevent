@@ -285,18 +285,50 @@ if (false) (function(){
       }
     }, step);
   }
+  /* userPaused: once the user hits pause, we NEVER restart music automatically
+     for the rest of the session. Autoplay only runs if this stays false. */
+  let userPaused = false;
   function play(){
+    userPaused = false;
     audio.play().then(() => {
       playing = true; icon.className = 'fas fa-volume-up'; toggle.classList.add('playing');
       fadeTo(TARGET_VOL, 1400);
     }).catch(() => {});
   }
   function pause(){
+    userPaused = true;
     clearInterval(fadeTimer);
     audio.pause(); playing = false;
     icon.className = 'fas fa-music'; toggle.classList.remove('playing');
   }
   toggle.addEventListener('click', () => { playing ? pause() : play(); });
+
+  /* Best-effort autoplay strategy — belt, braces, and a spare.
+     Kicks off ASAP after DOM ready. If the browser blocks it (needs a user
+     gesture), waits for ONE user interaction (once:true) to start music.
+     Also listens for a 'user-interacted' postMessage from the splash iframe. */
+  const attemptAutoplay = () => {
+    if (playing || userPaused) return Promise.resolve(false);
+    return audio.play().then(() => {
+      playing = true; icon.className = 'fas fa-volume-up'; toggle.classList.add('playing');
+      fadeTo(TARGET_VOL, 1400);
+      return true;
+    }).catch(() => false);
+  };
+  const kick = () => { attemptAutoplay(); };
+  /* One-shot gesture listeners — detach after first fire so the mute button
+     tap doesn't get double-processed as "resume". */
+  ['click','touchstart','pointerdown','keydown','scroll'].forEach(ev =>
+    document.addEventListener(ev, kick, { once: true, passive: true }));
+  /* Also listen for a signal from the splash iframe that the user interacted */
+  window.addEventListener('message', e => {
+    if (e.data && (e.data.type === 'user-interacted' || e.data.type === 'splash-done')){
+      attemptAutoplay();
+    }
+  });
+  /* Start trying immediately — many browsers with Media Engagement Index will allow */
+  attemptAutoplay();
+  setTimeout(attemptAutoplay, 300);
 
   /* Expose a hook so the splash handoff can seamlessly continue the music
      from where the splash left off — the "See Venues & RSVP" tap counts as
@@ -394,7 +426,8 @@ $$('.wish-tab').forEach(t => {
 
 /* ============ RSVP WIZARD ============ */
 (function(){
-  const state = { name:'', guests:2, side:'', ceremony:'yes', reception:'yes', attending:'yes', dietary:'', note:'', email:'', phone:'', found:false };
+  /* Strictly-by-invitation: one seat per RSVP. `guests` is always 1. */
+  const state = { name:'', guests:1, side:'', ceremony:'yes', reception:'yes', attending:'yes', dietary:'', note:'', email:'', phone:'', found:false };
   const nameInp = $('#guestName');
   const statusEl = $('#guestStatus');
   const steps = $$('.rsvp-step');
@@ -420,12 +453,17 @@ $$('.wish-tab').forEach(t => {
       const j = await r.json();
       if (j.found){
         state.name = j.name || q;
-        state.guests = j.seats || 2;
+        state.guests = 1;   /* strictly by invitation */
         state.side = j.side || '';
-        $('#rsvpGuests').value = Math.min(6, state.guests);
         if (state.side) $('#rsvpSide').value = state.side;
         statusEl.className = 'guest-status found on';
-        statusEl.innerHTML = `Welcome, <strong>${escapeHtml(j.name || q)}</strong>. You have <strong>${j.seats} seat${j.seats>1?'s':''}</strong> reserved${j.default? ' (default).' : '.'}`;
+        /* Static template — no user data touches innerHTML except via escapeHtml */
+        statusEl.textContent = '';
+        const p1 = document.createTextNode('Welcome, ');
+        const strong = document.createElement('strong');
+        strong.textContent = j.name || q;
+        const p2 = document.createTextNode('. Your seat is reserved.');
+        statusEl.appendChild(p1); statusEl.appendChild(strong); statusEl.appendChild(p2);
         state.found = true;
         return true;
       } else {
@@ -443,16 +481,14 @@ $$('.wish-tab').forEach(t => {
   $('#btnBack2').addEventListener('click', () => setStep(1));
   $('#btnNext2').addEventListener('click', () => {
     state.attending = document.querySelector('input[name="attending"]:checked').value;
-    state.guests    = parseInt($('#rsvpGuests').value, 10) || 1;
+    state.guests    = 1;   /* strictly by invitation — always one seat */
     state.side      = $('#rsvpSide').value;
     state.dietary   = $('#rsvpDietary').value.trim();
     state.note      = $('#rsvpNote').value.trim();
     state.email     = $('#rsvpEmail').value.trim();
     state.phone     = $('#rsvpPhone').value.trim();
     if (!state.email){ alert('Please enter an email so we can reach you.'); return; }
-    const attendLine = state.attending === 'yes'
-      ? 'Attending &middot; ' + state.guests + ' guest' + (state.guests > 1 ? 's' : '')
-      : 'Not attending';
+    const attendLine = state.attending === 'yes' ? 'Attending' : 'Not attending';
     let html = '<div class="rsvp-summary-name">' + escapeHtml(state.name || 'Guest') + '</div>';
     html += '<div class="rsvp-summary-line"><strong>' + attendLine + '</strong></div>';
     if (state.side) html += '<div class="rsvp-summary-line">' + escapeHtml(state.side) + "'s side</div>";
@@ -475,20 +511,57 @@ $$('.wish-tab').forEach(t => {
       const j = await r.json();
       if (!r.ok) throw new Error(j.error || 'Could not send.');
       confettiBurst();
-      btn.innerHTML = state.attending === 'yes' ? 'Thank you — see you on 28 Nov! ' : 'Thank you — you\'ll be missed.';
       bumpTicker(j.guests);
       refreshLiveTicker();
       refreshProgress(j.guests);
-      setTimeout(() => { btn.disabled = false; btn.innerHTML = 'Confirm RSVP <i class="fas fa-heart"></i>'; setStep(1); nameInp.value=''; statusEl.className='guest-status'; }, 4200);
+
+      /* Personalise the success card + show it */
+      const titleEl = $('#rsvpSuccessTitle');
+      const bodyEl = $('#rsvpSuccessBody');
+      const firstName = (state.name || '').split(' ')[0] || 'friend';
+      if (state.attending === 'yes'){
+        titleEl.textContent = 'Thank you, ' + firstName + '!';
+        bodyEl.textContent = '';
+        bodyEl.appendChild(document.createTextNode('Your RSVP is confirmed. See you on '));
+        const s = document.createElement('strong');
+        s.textContent = 'Saturday, 28 November 2026';
+        bodyEl.appendChild(s);
+        bodyEl.appendChild(document.createTextNode('.'));
+      } else {
+        titleEl.textContent = 'Thank you, ' + firstName;
+        bodyEl.textContent = 'You will be missed. Thank you for letting us know — we hold you close in spirit on the day.';
+        /* Hide seat note for non-attending */
+        const seatNote = document.querySelector('.rsvp-success-note');
+        if (seatNote) seatNote.style.display = 'none';
+      }
+      setStep(4);
+      btn.disabled = false;
+      btn.innerHTML = 'Confirm RSVP <i class="fas fa-heart"></i>';
     }catch(err){
       alert(err.message || 'Could not send RSVP.');
       btn.disabled = false; btn.innerHTML = 'Confirm RSVP <i class="fas fa-heart"></i>';
     }
   });
+
+  /* Reset the wizard so guests can submit another RSVP (e.g. a family member) */
+  $('#btnNewRsvp')?.addEventListener('click', () => {
+    Object.assign(state, { name:'', guests:1, side:'', attending:'yes', dietary:'', note:'', email:'', phone:'', found:false });
+    nameInp.value = '';
+    if ($('#rsvpDietary')) $('#rsvpDietary').value = '';
+    if ($('#rsvpNote')) $('#rsvpNote').value = '';
+    if ($('#rsvpEmail')) $('#rsvpEmail').value = '';
+    if ($('#rsvpPhone')) $('#rsvpPhone').value = '';
+    if ($('#rsvpSide')) $('#rsvpSide').value = '';
+    if ($('#att-yes')) $('#att-yes').checked = true;
+    statusEl.className = 'guest-status';
+    const seatNote = document.querySelector('.rsvp-success-note');
+    if (seatNote) seatNote.style.display = ''; /* restore for next guest */
+    setStep(1);
+  });
 })();
 
 /* ============ RSVP TICKER + PROGRESS + LIVE ============ */
-const RSVP_TARGET = 200; // adjust when guest list uploaded
+const RSVP_TARGET = 105; // adjust when guest list uploaded
 async function refreshTickerAndProgress(){
   try{
     const r = await fetch('api/rsvp.php', { cache: 'no-store' });
@@ -662,65 +735,143 @@ function sparkleBurst(x, y, count){
   const temp = $('#weatherTemp');
   const desc = $('#weatherDesc');
   if (!temp) return;
-  async function fetchWeather(){
-    // North Brunswick NJ: lat 40.4501, lon -74.4646
-    try{
-      const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.45&longitude=-74.46&current=temperature_2m,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=America/New_York&start_date=2026-11-28&end_date=2026-11-28');
-      const j = await r.json();
-      let t, tMax, tMin, code, isDaily;
-      const today = new Date();
-      const wedding = new Date('2026-11-28T12:00:00-05:00');
-      if (Math.abs(wedding - today) < 3 * 86400000){
-        // Within 3 days — use current
-        t = j.current?.temperature_2m;
-        code = j.current?.weather_code;
-      } else {
-        // Use forecast for wedding day (may return null if too far out)
-        tMax = j.daily?.temperature_2m_max?.[0];
-        tMin = j.daily?.temperature_2m_min?.[0];
-        code = j.daily?.weather_code?.[0];
-        isDaily = true;
-      }
-      const wmap = {
-        0: ['Clear sky','fa-sun'],
-        1: ['Mostly clear','fa-sun'],
-        2: ['Partly cloudy','fa-cloud-sun'],
-        3: ['Overcast','fa-cloud'],
-        45: ['Foggy','fa-smog'],
-        48: ['Foggy','fa-smog'],
-        51: ['Light drizzle','fa-cloud-rain'],
-        53: ['Drizzle','fa-cloud-rain'],
-        55: ['Heavy drizzle','fa-cloud-rain'],
-        61: ['Light rain','fa-cloud-rain'],
-        63: ['Rain','fa-cloud-showers-heavy'],
-        65: ['Heavy rain','fa-cloud-showers-heavy'],
-        71: ['Light snow','fa-snowflake'],
-        73: ['Snow','fa-snowflake'],
-        75: ['Heavy snow','fa-snowflake'],
-        80: ['Rain showers','fa-cloud-showers-heavy'],
-        81: ['Rain showers','fa-cloud-showers-heavy'],
-        82: ['Heavy showers','fa-cloud-showers-heavy'],
-        95: ['Thunderstorm','fa-bolt'],
-      };
-      const [descText, iconClass] = wmap[code] || ['Typical New Jersey November','fa-cloud-sun'];
-      if (icon) icon.className = 'weather-icon fas ' + iconClass;
-      if (isDaily && tMax != null){
-        temp.textContent = Math.round(tMax) + '° / ' + Math.round(tMin) + '°C';
-      } else if (t != null){
-        temp.textContent = Math.round(t) + '°C';
-      } else {
-        temp.textContent = '~ 8°C';
-      }
-      desc.textContent = descText + ' expected on 28 November 2026';
-      temp.classList.remove('weather-loading');
-    }catch(e){
-      if (icon) icon.className = 'weather-icon fas fa-cloud-sun';
-      temp.textContent = '~ 8°C';
-      desc.textContent = 'Late November in NJ · typically 5–10°C, chance of first snow';
-      temp.classList.remove('weather-loading');
-    }
+  /* Client-set forecast for the wedding day (Nov 28 2026, Tewksbury NJ average). */
+  if (icon) icon.className = 'weather-icon fas fa-cloud-sun';
+  temp.textContent = '48°F';
+  desc.textContent = 'Cool and transitional · expected on 28 November 2026';
+  temp.classList.remove('weather-loading');
+})();
+
+/* ============ SEAT REMINDER BANNER ============
+   Shows a small sticky banner in the last 14 days before the wedding, telling
+   guests to look up their seat. Dismissible + remembered in localStorage. */
+(function(){
+  const banner = document.getElementById('seatReminderBanner');
+  const closeBtn = document.getElementById('srbClose');
+  if (!banner) return;
+  const WEDDING = new Date('2026-11-28T17:00:00+00:00').getTime();
+  const DISMISS_KEY = 'ericsherita:seatBannerDismissed';
+  const SHOW_FROM_DAYS = 14; /* start showing 14 days before */
+  const now = Date.now();
+  const daysLeft = Math.ceil((WEDDING - now) / 86400000);
+
+  /* Skip if outside the window, already past the wedding, or previously dismissed */
+  if (daysLeft > SHOW_FROM_DAYS || daysLeft < 0) return;
+  try{ if (localStorage.getItem(DISMISS_KEY)) return; }catch(e){}
+
+  /* Personalise the message by days remaining */
+  const title = document.getElementById('srbTitle');
+  const sub   = document.getElementById('srbSub');
+  if (daysLeft === 0){
+    title.textContent = 'The day is here';
+    sub.textContent   = 'Find your table for tonight’s reception.';
+  } else if (daysLeft === 1){
+    title.textContent = 'One day to go';
+    sub.textContent   = 'Look up your table before you arrive tomorrow.';
+  } else if (daysLeft <= 3){
+    title.textContent = daysLeft + ' days to go';
+    sub.textContent   = 'Seat assignments are ready — find yours below.';
+  } else {
+    title.textContent = 'Seating is now assigned';
+    sub.textContent   = 'Look up your table before the wedding — ' + daysLeft + ' days to go.';
   }
-  fetchWeather();
+  banner.hidden = false;
+
+  closeBtn?.addEventListener('click', () => {
+    banner.hidden = true;
+    try{ localStorage.setItem(DISMISS_KEY, '1'); }catch(e){}
+  });
+})();
+
+/* ============ FIND YOUR SEAT ============
+   Guest lookup — types name, we call api/seat-lookup.php which fuzzy-matches
+   against RSVPs, cross-references seating.json, and returns the table name +
+   tablemates. All user-supplied data flows through textContent — no untrusted
+   strings ever touch innerHTML. The only innerHTML mutations on the button
+   swap between two static, developer-authored template strings. */
+(function(){
+  const inp = $('#seatName');
+  const btn = $('#seatBtn');
+  const out = $('#seatResult');
+  if (!inp || !btn || !out) return;
+
+  /* Cache the button's original static markup once so we can restore it
+     without ever concatenating user input. */
+  const BTN_IDLE = btn.innerHTML;
+  const BTN_LOADING = '<i class="fas fa-spinner fa-spin"></i> Looking…';
+
+  function makeEl(tag, cls, text){
+    const el = document.createElement(tag);
+    if (cls) el.className = cls;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+  function showResult(node, isError){
+    out.textContent = '';
+    out.classList.toggle('error', !!isError);
+    out.hidden = false;
+    out.appendChild(node);
+  }
+  function buildFoundCard(j){
+    const wrap = document.createElement('div');
+    wrap.appendChild(makeEl('div', 'greet', 'You are seated at'));
+    wrap.appendChild(makeEl('div', 'who', j.name));
+    const tblLine = makeEl('div', 'at-tbl');
+    tblLine.appendChild(makeEl('span', 'tbl', j.table));
+    if (j.party > 1){
+      const p = makeEl('div', null, 'Party of ' + j.party);
+      p.style.marginTop = '.6rem';
+      p.style.fontStyle = 'italic';
+      p.style.color = 'var(--muted)';
+      tblLine.appendChild(p);
+    }
+    wrap.appendChild(tblLine);
+    if (j.tablemates && j.tablemates.length){
+      const mates = makeEl('div', 'mates');
+      mates.appendChild(makeEl('span', 'mates-label', 'Seated with'));
+      mates.appendChild(document.createTextNode(j.tablemates.join(' · ')));
+      wrap.appendChild(mates);
+    }
+    return wrap;
+  }
+  function buildErrorCard(title, msg){
+    const wrap = document.createElement('div');
+    wrap.appendChild(makeEl('div', 'greet', title));
+    wrap.appendChild(makeEl('div', 'at-tbl', msg));
+    return wrap;
+  }
+
+  async function lookup(){
+    const name = inp.value.trim();
+    if (name.length < 2){
+      showResult(buildErrorCard('Please enter your name', 'Type at least 2 letters and try again.'), true);
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = BTN_LOADING;   // static developer-authored string
+    try{
+      const r = await fetch('api/seat-lookup.php?name=' + encodeURIComponent(name));
+      const j = await r.json();
+      if (j.found){
+        showResult(buildFoundCard(j), false);
+      } else {
+        const reasons = {
+          'no-rsvp':         ['We can’t find your RSVP',        'Please confirm your attendance in the RSVP section above, then check back here.'],
+          'not-attending':   ['Your RSVP is marked "Not attending"', 'If that’s a mistake, please contact Leticia or Abby to update.'],
+          'not-assigned':    ['A seat has not been assigned yet',    'The couple are finalising the seating chart. Please check back closer to the day.'],
+          'name-too-short':  ['Please enter your full name',         'A first + last name gives the best match.']
+        };
+        const [t, m] = reasons[j.reason] || ['No seat found for that name', 'Double-check spelling, or try just your first name.'];
+        showResult(buildErrorCard(t, m), true);
+      }
+    }catch(e){
+      showResult(buildErrorCard('Could not check right now', 'Please try again in a moment.'), true);
+    }
+    btn.disabled = false;
+    btn.innerHTML = BTN_IDLE;      // restore cached idle markup
+  }
+  btn.addEventListener('click', lookup);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') lookup(); });
 })();
 
 /* ============ WISHES REAL-TIME POLLING ============ */

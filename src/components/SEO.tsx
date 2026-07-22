@@ -9,6 +9,15 @@ interface SEOProps {
   ogType?: string;
   noindex?: boolean;
   jsonLd?: object | object[];
+  // Article-specific OG properties (only used when ogType === "article")
+  articleAuthor?: string;
+  articleSection?: string;
+  articleTags?: string[];
+  articlePublishedTime?: string;
+  articleModifiedTime?: string;
+  // Auto-discovery for RSS feeds — set on the Blog page and article pages.
+  rssUrl?: string;
+  rssTitle?: string;
 }
 
 // Organization schema - used site-wide
@@ -83,6 +92,13 @@ const SEO = ({
   ogType = "website",
   noindex = false,
   jsonLd,
+  articleAuthor,
+  articleSection,
+  articleTags,
+  articlePublishedTime,
+  articleModifiedTime,
+  rssUrl,
+  rssTitle,
 }: SEOProps) => {
   const fullTitle = title.includes("VibeLink") ? title : `${title} | VibeLink Event`;
   const siteUrl = "https://vibelinkevent.com";
@@ -102,20 +118,64 @@ const SEO = ({
       <meta name="keywords" content={keywords} />
       {noindex && <meta name="robots" content="noindex, nofollow" />}
       {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+      {rssUrl && (
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={rssTitle || "VibeLink Event Blog"}
+          href={rssUrl}
+        />
+      )}
       
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={ogType} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={title} />
       <meta property="og:site_name" content="VibeLink Event" />
+      <meta property="og:locale" content="en_GH" />
       {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
-      
+
+      {/* Article-specific OG (Facebook, LinkedIn use these for richer previews) */}
+      {ogType === "article" && articleAuthor && (
+        <meta property="article:author" content={articleAuthor} />
+      )}
+      {ogType === "article" && articleSection && (
+        <meta property="article:section" content={articleSection} />
+      )}
+      {ogType === "article" && articlePublishedTime && (
+        <meta property="article:published_time" content={articlePublishedTime} />
+      )}
+      {ogType === "article" && articleModifiedTime && (
+        <meta property="article:modified_time" content={articleModifiedTime} />
+      )}
+      {ogType === "article" &&
+        articleTags?.map((tag) => (
+          <meta key={tag} property="article:tag" content={tag} />
+        ))}
+
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@vibelinkevent" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image:alt" content={title} />
+      {ogType === "article" && articleAuthor && (
+        <meta name="twitter:label1" content="Written by" />
+      )}
+      {ogType === "article" && articleAuthor && (
+        <meta name="twitter:data1" content={articleAuthor} />
+      )}
+      {ogType === "article" && articleSection && (
+        <meta name="twitter:label2" content="Category" />
+      )}
+      {ogType === "article" && articleSection && (
+        <meta name="twitter:data2" content={articleSection} />
+      )}
       
       {/* JSON-LD Structured Data */}
       <script type="application/ld+json">
@@ -179,32 +239,78 @@ export const createBreadcrumbSchema = (items: Array<{ name: string; url: string 
   })),
 });
 
+// Rich BlogPosting schema — helps Google's rich results for articles.
+// Includes explicit Person author (Edmund), articleSection, keywords, and
+// optional partOf for series posts.
 export const createArticleSchema = (article: {
   title: string;
   description: string;
   datePublished: string;
   dateModified?: string;
   author?: string;
+  authorRole?: string;
   image?: string;
   url: string;
-}) => ({
-  "@context": "https://schema.org",
-  "@type": "Article",
-  headline: article.title,
-  description: article.description,
-  datePublished: article.datePublished,
-  dateModified: article.dateModified || article.datePublished,
-  author: {
-    "@type": "Organization",
-    name: article.author || "VibeLink Event",
-    url: "https://vibelinkevent.com",
-  },
-  publisher: {
-    "@id": "https://vibelinkevent.com/#organization",
-  },
-  image: article.image || "https://vibelinkevent.com/og-image.jpg",
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": `https://vibelinkevent.com${article.url}`,
-  },
-});
+  category?: string;
+  tags?: string[];
+  wordCount?: number;
+  seriesTitle?: string;
+  seriesUrl?: string;
+}) => {
+  const absoluteImage = article.image
+    ? (article.image.startsWith("http") ? article.image : `https://vibelinkevent.com${article.image.startsWith("/") ? "" : "/"}${article.image}`)
+    : "https://vibelinkevent.com/og-image.jpg";
+  const absoluteUrl = `https://vibelinkevent.com${article.url.startsWith("/") ? "" : "/"}${article.url}`;
+
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: article.title,
+    description: article.description,
+    datePublished: article.datePublished,
+    dateModified: article.dateModified || article.datePublished,
+    author: {
+      "@type": "Person",
+      name: article.author || "Edmund Adjekum",
+      jobTitle: article.authorRole || "Founder & Lead Viber",
+      url: "https://vibelinkevent.com/about",
+      image: "https://luuztlneysofymmuoxie.supabase.co/storage/v1/object/public/team-photos/4a4c13d6-ae68-4c1a-8346-e8b8228c5c10.jpg",
+      worksFor: {
+        "@type": "Organization",
+        name: "VibeLink Event",
+        url: "https://vibelinkevent.com",
+      },
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "VibeLink Event",
+      url: "https://vibelinkevent.com",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://vibelinkevent.com/vibelink-logo.png",
+      },
+    },
+    image: {
+      "@type": "ImageObject",
+      url: absoluteImage,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": absoluteUrl,
+    },
+    url: absoluteUrl,
+  };
+
+  if (article.category) schema.articleSection = article.category;
+  if (article.tags && article.tags.length > 0) schema.keywords = article.tags.join(", ");
+  if (article.wordCount) schema.wordCount = article.wordCount;
+  if (article.seriesTitle && article.seriesUrl) {
+    schema.isPartOf = {
+      "@type": "CreativeWorkSeries",
+      name: article.seriesTitle,
+      url: `https://vibelinkevent.com${article.seriesUrl}`,
+    };
+  }
+
+  return schema;
+};

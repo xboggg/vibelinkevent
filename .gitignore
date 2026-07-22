@@ -33,3 +33,6 @@ dist-ssr
 # Build artifacts at repo root
 dist.tar.gz
 dist.zip
+
+# Vite build cache scratch files
+vite.config.ts.timestamp-*.mjs

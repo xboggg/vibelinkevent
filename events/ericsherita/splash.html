@@ -828,10 +828,101 @@
     color:var(--gold-bright);font-size:1.2em;
     margin:0 .1em;
   }
+  /* Tap-to-Enter button — appears after the cinematic beat.
+     Layered animations:  fade + rise-in → soft breathing pulse → gold shimmer
+     sweep → arrow bounce. Feels ceremonial, not "web-form button". */
+  .welcome-enter{
+    position:relative;
+    margin-top:2.4rem;
+    display:inline-flex;align-items:center;gap:.7rem;
+    padding:1.05rem 2.4rem 1.05rem 2.6rem;
+    font-family:'Cinzel',serif;font-size:.82rem;letter-spacing:.42em;
+    font-weight:600;color:#fff9e6;text-transform:uppercase;
+    background:linear-gradient(135deg, #c9a24a 0%, #d4b464 45%, #a07d2b 100%);
+    border:1px solid rgba(255,240,200,.4);
+    border-radius:999px;
+    cursor:pointer;overflow:hidden;
+    box-shadow:
+      0 10px 32px rgba(0,0,0,.55),
+      0 6px 18px rgba(139,109,58,.55),
+      inset 0 1px 0 rgba(255,255,255,.35),
+      inset 0 -3px 8px rgba(90,60,15,.35),
+      0 0 0 0 rgba(212,180,100,.5);
+    opacity:0;transform:translateY(20px) scale(.94);
+    animation:
+      welcomeEnterIn 1.1s cubic-bezier(.2,.85,.3,1) 2.6s forwards,
+      welcomeEnterPulse 2.8s ease-in-out 3.7s infinite;
+    -webkit-tap-highlight-color:transparent;
+    text-shadow:0 1px 2px rgba(90,60,15,.35);
+  }
+  .welcome-enter:hover{
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:
+      0 14px 40px rgba(0,0,0,.6),
+      0 8px 22px rgba(139,109,58,.7),
+      inset 0 1px 0 rgba(255,255,255,.45),
+      inset 0 -3px 8px rgba(90,60,15,.35),
+      0 0 40px rgba(212,180,100,.4);
+  }
+  .welcome-enter:active{transform:translateY(0) scale(.99)}
+
+  /* Gold shimmer sweep across the button */
+  .welcome-enter .we-glow{
+    position:absolute;top:0;left:-40%;width:35%;height:100%;
+    background:linear-gradient(115deg,
+      transparent 0%,
+      rgba(255,255,255,0) 30%,
+      rgba(255,255,255,.55) 50%,
+      rgba(255,255,255,0) 70%,
+      transparent 100%);
+    transform:skewX(-18deg);
+    animation:welcomeEnterShimmer 3.5s ease-in-out 3.8s infinite;
+    pointer-events:none;
+  }
+
+  /* Arrow gently bounces to hint "tap me" */
+  .welcome-enter .we-arrow{
+    display:inline-flex;width:1.05em;height:1.05em;
+    animation:welcomeEnterArrow 1.6s ease-in-out 3.7s infinite;
+  }
+  .welcome-enter .we-arrow svg{width:100%;height:100%;color:#fff9e6}
+  .welcome-enter .we-text{position:relative;z-index:2}
+
+  @keyframes welcomeEnterIn{
+    to{opacity:1;transform:translateY(0) scale(1)}
+  }
+  @keyframes welcomeEnterPulse{
+    0%,100%{box-shadow:
+      0 10px 32px rgba(0,0,0,.55),
+      0 6px 18px rgba(139,109,58,.55),
+      inset 0 1px 0 rgba(255,255,255,.35),
+      inset 0 -3px 8px rgba(90,60,15,.35),
+      0 0 0 0 rgba(212,180,100,.55)}
+    50%{box-shadow:
+      0 10px 32px rgba(0,0,0,.55),
+      0 6px 18px rgba(139,109,58,.55),
+      inset 0 1px 0 rgba(255,255,255,.35),
+      inset 0 -3px 8px rgba(90,60,15,.35),
+      0 0 0 18px rgba(212,180,100,0)}
+  }
+  @keyframes welcomeEnterShimmer{
+    0%{left:-40%}
+    60%{left:140%}
+    100%{left:140%}
+  }
+  @keyframes welcomeEnterArrow{
+    0%,100%{transform:translateX(0)}
+    50%    {transform:translateX(6px)}
+  }
   @media(max-width:640px){
     .welcome-countdown{font-size:.95rem;margin-top:1rem}
     .welcome-dove{width:70px;height:52px}
     .welcome-flourish{max-width:280px}
+    .welcome-enter{
+      margin-top:1.9rem;
+      padding:.95rem 1.9rem .95rem 2.1rem;
+      font-size:.78rem;letter-spacing:.32em;gap:.5rem;
+    }
   }
 
   .exit-overlay{
@@ -990,6 +1081,16 @@
     <div class="welcome-sub">Welcome Back</div>
     <div class="welcome-flourish"><span class="fl"></span><svg viewBox="0 0 24 24"><path d="M12 2 L14.5 9.5 L22 12 L14.5 14.5 L12 22 L9.5 14.5 L2 12 L9.5 9.5 Z"/></svg><span class="fl"></span></div>
     <div class="welcome-countdown">The day is coming &mdash; <strong id="welcomeDays">--</strong> days to go</div>
+
+    <!-- Tap-to-enter — appears after the cinematic beat, gives us a user gesture
+         so main-site music can autoplay. Also improves feel of the return visit. -->
+    <button class="welcome-enter" id="welcomeEnterBtn" type="button" aria-label="Enter the invitation">
+      <span class="we-glow" aria-hidden="true"></span>
+      <span class="we-text">Tap to Enter</span>
+      <span class="we-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+    </button>
   </div>
 </div>
 
@@ -1373,11 +1474,25 @@ if (hasSaved()){
      The dove is hidden via CSS (see .welcome-dove{display:none}).
      Kept as a clean fade-in of the photo + text + countdown. */
 
-  /* After 3 seconds → fade out → post to parent → parent hides the iframe */
-  setTimeout(() => {
+  /* Wait for the guest to tap "Tap to Enter" — the tap is a user gesture,
+     which lets the main site's <audio> autoplay under Chrome/Safari policy.
+     Also allow tapping anywhere on the welcome-back screen as a fallback. */
+  const enterBtn = document.getElementById('welcomeEnterBtn');
+  let dismissed = false;
+  const dismiss = () => {
+    if (dismissed) return;
+    dismissed = true;
+    /* Try to start splash audio inside this trusted click handler so the
+       gesture is fresh — best-effort, ignore failures. */
+    try{ tryStartMusic(); }catch(e){}
     welcomeBack.classList.add('gone');
     setTimeout(finishSplash, 900);
-  }, 3000);
+  };
+  if (enterBtn) enterBtn.addEventListener('click', dismiss);
+  /* Tapping anywhere on the welcome-back also works as a graceful escape */
+  welcomeBack.addEventListener('click', e => {
+    if (e.target === welcomeBack) dismiss();
+  });
 }
 
 /* First-visit flow: envelope + card unfold + calendar gate */
@@ -1465,6 +1580,18 @@ function openEnvelope(){
 
 wax.addEventListener('click', e => { e.stopPropagation(); e.preventDefault(); if (!hasSaved()) openEnvelope(); });
 wax.addEventListener('touchend', e => { e.stopPropagation(); e.preventDefault(); if (!hasSaved()) openEnvelope(); }, { passive: false });
+
+/* Forward the FIRST user interaction to the parent so the parent's <audio>
+   can start playing under the umbrella of that gesture. Fires once. */
+(function(){
+  let sent = false;
+  const notify = () => {
+    if (sent) return; sent = true;
+    try{ window.parent && window.parent.postMessage({ type: 'user-interacted' }, '*'); }catch(e){}
+  };
+  ['click','touchstart','pointerdown','keydown'].forEach(ev =>
+    document.addEventListener(ev, notify, { once: true, passive: true }));
+})();
 
 /* ============ CALENDAR GATE ============ */
 const CAL_TITLE = 'Eric & Sherita — Wedding';
