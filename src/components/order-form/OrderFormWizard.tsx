@@ -28,11 +28,19 @@ interface OrderFormWizardProps {
   onComplete?: (data: OrderFormData) => void;
   initialReferralCode?: string;
   initialPackage?: string;
+  initialEventType?: string;
+  initialAddOns?: string[];
 }
 
 const DRAFT_KEY = "vibelink_order_draft";
 
-export const OrderFormWizard = ({ onComplete, initialReferralCode = "", initialPackage = "" }: OrderFormWizardProps) => {
+export const OrderFormWizard = ({
+  onComplete,
+  initialReferralCode = "",
+  initialPackage = "",
+  initialEventType = "",
+  initialAddOns = [],
+}: OrderFormWizardProps) => {
   const savedDraft = (() => {
     try {
       const d = localStorage.getItem(DRAFT_KEY);
@@ -54,11 +62,19 @@ export const OrderFormWizard = ({ onComplete, initialReferralCode = "", initialP
     }
   })();
 
-  const [currentStep, setCurrentStep] = useState(savedDraft?.step || 1);
+  // When the customer arrived from the pricing calculator with a preselected
+  // package, skip step 1 (Event Type) — we already know it — and drop them at
+  // step 2 (Event Details) where the real work starts. The saved draft still
+  // wins if the customer had abandoned an in-progress order.
+  const hasPreselection = !!initialPackage && !savedDraft;
+
+  const [currentStep, setCurrentStep] = useState(savedDraft?.step || (hasPreselection ? 2 : 1));
   const [formData, setFormData] = useState<OrderFormData>({
     ...initialFormData,
     referralCode: initialReferralCode,
     ...(initialPackage ? { selectedPackage: initialPackage } : {}),
+    ...(initialEventType ? { eventType: initialEventType } : {}),
+    ...(initialAddOns.length ? { selectedAddOns: initialAddOns } : {}),
     ...(savedDraft?.data || {}),
   });
   const [isSubmitting, setIsSubmitting] = useState(false);

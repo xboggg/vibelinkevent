@@ -66,15 +66,19 @@ const addOns = UNIVERSAL_ADDONS.map((a) => ({
 }));
 
 // Calculator uses non-Bespoke packages only (Bespoke is quote-only).
+// Keep `slug` so we can pass it through to /get-started as a URL param.
 const calcPackages = getNonBespokePackages().map((p) => ({
+  slug: p.slug,
   name: p.name,
   price: p.price,
 }));
 
-const calcAddOns = addOns
-  .filter(a => a.price !== "Free")
-  .map(a => ({ name: a.name, price: parseInt(a.price.replace(/[^0-9]/g, "")) || 0 }))
-  .filter(a => a.price > 0);
+// Universal add-ons — keep the numeric id so we can pass to /get-started.
+const calcAddOns = UNIVERSAL_ADDONS.map((a) => ({
+  id: a.id,
+  name: a.name,
+  price: a.price,
+}));
 
 function PricingCalculator() {
   // Track selection by package NAME (unique) — earlier version keyed by price,
@@ -248,7 +252,23 @@ function PricingCalculator() {
                   </div>
 
                   <Button asChild className="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90">
-                    <Link to={`/get-started${refCode ? `?ref=${refCode}` : ""}`}>
+                    <Link
+                      to={(() => {
+                        // Carry the customer's selections into the order form so
+                        // they don't have to re-pick everything after clicking
+                        // Get Started. See GetStarted.tsx URL-param reader.
+                        const params = new URLSearchParams();
+                        if (selectedPackageObj?.slug) params.set("package", selectedPackageObj.slug);
+                        const addonIds = selectedAddOns
+                          .map((name) => calcAddOns.find((a) => a.name === name)?.id)
+                          .filter(Boolean) as string[];
+                        if (addonIds.length) params.set("addons", addonIds.join(","));
+                        if (paymentPlan) params.set("plan", paymentPlan);
+                        if (refCode) params.set("ref", refCode);
+                        const q = params.toString();
+                        return `/get-started${q ? `?${q}` : ""}`;
+                      })()}
+                    >
                       Get Started <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                   </Button>

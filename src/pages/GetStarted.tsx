@@ -8,6 +8,7 @@ import SEO from "@/components/SEO";
 import { Gift, Clock, MessageCircle, Shield, Sparkles, CheckCircle2, ArrowLeft } from "lucide-react";
 import { portfolioItems } from "@/data/portfolioItems";
 import { templates as tieredTemplates } from "@/data/templatesData";
+import { getPackageById, EventPackageId } from "@/data/eventPackages";
 
 // Look up a design by slug across both data sources so we can show a friendly
 // "You picked X" banner when the visitor came from /designs.
@@ -23,9 +24,32 @@ const GetStarted = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const referralCode = searchParams.get("ref") || "";
-  const preselectedPackage = searchParams.get("package") || "";
+  const packageParam = searchParams.get("package") || "";
+  const addonsParam = searchParams.get("addons") || "";
   const templateSlug = searchParams.get("template") || "";
   const pickedDesign = templateSlug ? findDesignBySlug(templateSlug) : null;
+
+  // Look up the actual EventPackage the customer picked on the /pricing calculator
+  // so we can pre-fill event type + package on the wizard and skip past those steps.
+  const preselectedPkg = packageParam ? getPackageById(packageParam as EventPackageId) : undefined;
+  // OrderFormWizard stores selectedPackage as the package ID (slug), not display
+  // name — that's what PackageStep / calculateTotal look up against.
+  const preselectedPackage = preselectedPkg?.id || "";
+  const preselectedEventType = preselectedPkg?.id || "";
+
+  // Calculator addon IDs → order-form addon IDs. The calculator uses the
+  // UNIVERSAL_ADDONS set (eventPackages.ts) but the order form uses the addOns
+  // set (orderFormData.ts) which is a different catalogue with different prices.
+  // We only carry over addons that have a clean equivalent in the order form.
+  const CALC_TO_FORM_ADDON: Record<string, string> = {
+    "custom-domain":    "custom-domain",
+    "hosting-6mo":      "hosting-6m",
+    "hosting-1yr":      "hosting-1y",
+    "extra-revision":   "extra-revision",
+  };
+  const preselectedAddons = addonsParam
+    ? addonsParam.split(",").map((id) => CALC_TO_FORM_ADDON[id]).filter(Boolean)
+    : [];
 
   const handleFormComplete = (data: OrderFormData) => {
     toast.success("Order submitted successfully! We'll contact you within 2 hours.");
@@ -94,10 +118,18 @@ const GetStarted = () => {
       {/* Form Section */}
       <section className="py-12 lg:py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
-          {preselectedPackage && (
-            <div className="mb-6 flex items-center gap-2 px-4 py-3 rounded-xl bg-secondary/15 border border-secondary/30 max-w-2xl mx-auto">
-              <Sparkles className="h-4 w-4 text-secondary flex-shrink-0" />
-              <span className="text-sm text-foreground">Package pre-selected: <strong className="text-secondary">{preselectedPackage}</strong> — you can change it at step 4.</span>
+          {preselectedPkg && (
+            <div className="mb-6 max-w-2xl mx-auto px-4 py-3 rounded-xl bg-secondary/15 border border-secondary/30">
+              <div className="flex items-start gap-2">
+                <Sparkles className="h-4 w-4 text-secondary flex-shrink-0 mt-0.5" />
+                <div className="text-sm text-foreground">
+                  We've pre-filled your <strong className="text-secondary">{preselectedPkg.name}</strong> selection from the pricing calculator
+                  {preselectedAddons.length > 0 && (
+                    <> plus <strong className="text-secondary">{preselectedAddons.length} add-on{preselectedAddons.length > 1 ? "s" : ""}</strong></>
+                  )}
+                  . Fill in your event details and we'll get started.
+                </div>
+              </div>
             </div>
           )}
 
@@ -133,7 +165,13 @@ const GetStarted = () => {
               </div>
             </motion.div>
           )}
-          <OrderFormWizard onComplete={handleFormComplete} initialReferralCode={referralCode} initialPackage={preselectedPackage} />
+          <OrderFormWizard
+            onComplete={handleFormComplete}
+            initialReferralCode={referralCode}
+            initialPackage={preselectedPackage}
+            initialEventType={preselectedEventType}
+            initialAddOns={preselectedAddons}
+          />
         </div>
       </section>
     </Layout>
