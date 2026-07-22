@@ -68,7 +68,7 @@ Each package is designed for exactly ONE event type — features match what that
 - Service program (church + burial + reception)
 - One-week, 40-day, and 1-year auto-remembrance
 - Elder-friendly large-text mode
-- 1-year hosting, 3 revisions
+- 6-month hosting (extendable), 3 revisions
 - Best for: Full funerals, memorials, remembrance services
 
 **4. Corporate Event — GHS 3,500**
@@ -579,7 +579,12 @@ Need help? Chat with us on WhatsApp: https://wa.me/4915757178561`;
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
+        // Switched from llama-3.1-8b-instant to llama-3.3-70b-versatile 2026-07-22.
+        // The 8b was hitting Groq's token-per-minute rate limit on this project's
+        // 2,700-token system prompt after just a few messages. The 70b model has
+        // much higher TPM limits AND gives noticeably better answers on Ghanaian
+        // cultural context.
+        model: "llama-3.3-70b-versatile",
         messages: groqMessages,
         temperature: 0.7,
         max_tokens: 2048,
