@@ -763,6 +763,10 @@ const featureCategories = [
   },
 ];
 
+// Computed stat totals — auto-update as we add tabs, no more stale hardcoded numbers
+const TOTAL_FEATURE_CATEGORIES = featureCategories.length;
+const TOTAL_FEATURES = featureCategories.reduce((sum, cat) => sum + cat.features.length, 0);
+
 const servicesSchema = createServiceSchema(
   services.map((s) => ({ name: s.title, description: s.description }))
 );
@@ -1025,8 +1029,8 @@ const Services = () => {
           {/* Stats — 4 big animated counters */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto mb-16">
             {[
-              { n: 77, suffix: "", label: "Features included", tint: "from-primary to-purple-600" },
-              { n: 13, suffix: "", label: "Feature categories", tint: "from-secondary to-yellow-400" },
+              { n: TOTAL_FEATURES, suffix: "", label: "Features included", tint: "from-primary to-purple-600" },
+              { n: TOTAL_FEATURE_CATEGORIES, suffix: "", label: "Feature categories", tint: "from-secondary to-yellow-400" },
               { n: 1, suffix: "", label: "Link, every guest", tint: "from-emerald-500 to-teal-600" },
               { n: 500, suffix: "+", label: "Ghanaian families served", tint: "from-pink-500 to-rose-600" },
             ].map((s, i) => (
