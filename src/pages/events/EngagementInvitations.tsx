@@ -240,7 +240,7 @@ export default function EngagementInvitations() {
               Honour the tradition. Impress every family.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A digital engagement invitation your uncles and aunties will actually be proud to share. Starting from GHS 1,000.
+              A digital engagement invitation your uncles and aunties will actually be proud to share. Starting from GHS 1,500.
             </p>
             <Button
               asChild

@@ -240,7 +240,7 @@ export default function AnniversaryInvitations() {
               Your love story deserves more than a WhatsApp flyer.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A digital anniversary invitation that honours the years — with your original wedding photos, your children's words, and every memory kept forever. Starting from GHS 1,000.
+              A digital anniversary invitation that honours the years — with your original wedding photos, your children's words, and every memory kept forever. Starting from GHS 1,500.
             </p>
             <Button
               asChild

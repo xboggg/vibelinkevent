@@ -191,7 +191,7 @@ export default function BirthdayInvitations() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-fuchsia-100 text-fuchsia-700">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Classic Vibe — GHS 1,500</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Classic Vibe — GHS 2,000</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
               Ideal for birthday parties: custom design in your theme colours, RSVP tracking, photo gallery, background music, wishes wall and 90-day hosting. For milestone birthdays (30/40/50) with live photo wall, MoMo gifts and video guestbook, Prestige Vibe (GHS 2,500) is the one.
             </p>
@@ -240,7 +240,7 @@ export default function BirthdayInvitations() {
               Not another WhatsApp flyer. Your year deserves better.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A digital birthday invitation that's a full-blown celebration — wishes, memories, roasts, and every friend's voice, kept forever. Starting from GHS 1,000.
+              A digital birthday invitation that's a full-blown celebration — wishes, memories, roasts, and every friend's voice, kept forever. Starting from GHS 1,500.
             </p>
             <Button
               asChild

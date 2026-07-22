@@ -289,7 +289,7 @@ export function EventPageTemplate({ config }: Props) {
               {config.ctaHeadline}
             </h2>
             <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-8">
-              Live, interactive and unforgettable. Starting from GHS 1,000.
+              Live, interactive and unforgettable. Starting from GHS 1,500.
             </p>
             <Button asChild size="lg" className="font-bold text-white px-10 py-6 text-lg"
               style={{ background: config.highlightGradient, boxShadow: config.ctaBtnShadow }}>

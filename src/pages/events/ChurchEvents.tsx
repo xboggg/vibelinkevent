@@ -292,7 +292,7 @@ export default function ChurchEvents() {
               Your church event deserves more than a WhatsApp flyer.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A digital invitation that carries every member — from the sermon topic to the offering, from the livestream to the follow-up. Starting from GHS 1,000.
+              A digital invitation that carries every member — from the sermon topic to the offering, from the livestream to the follow-up. Starting from GHS 1,500.
             </p>
             <Button
               asChild

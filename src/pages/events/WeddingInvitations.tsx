@@ -247,7 +247,7 @@ export default function WeddingInvitations() {
               Your guests deserve better than a JPEG.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              Live, interactive and unforgettable. Weddings from GHS 1,000.
+              Live, interactive and unforgettable. Weddings from GHS 1,500.
             </p>
             <Button
               asChild

@@ -12,7 +12,7 @@ const benefits = [
   "Share via WhatsApp — no app download needed",
   "RSVP tracking, countdown timer & photo gallery",
   "Works for weddings, funerals, naming ceremonies & more",
-  "Packages from GHS 1,000",
+  "Packages from GHS 1,500",
 ];
 
 export default function Referral() {

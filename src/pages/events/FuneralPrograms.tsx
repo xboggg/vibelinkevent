@@ -193,7 +193,7 @@ export default function FuneralPrograms() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-slate-100 text-slate-700">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Classic Vibe — GHS 1,500</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Classic Vibe — GHS 2,000</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
               A dignified digital memorial with obituary, biography, condolence wall, custom design, RSVP tracking, background music and 90-day hosting. For families who want MoMo donation link, livestream and 1-year anniversary features, Prestige Vibe (GHS 2,500) is the one.
             </p>
@@ -242,7 +242,7 @@ export default function FuneralPrograms() {
               A memorial that lasts. Not just for a day.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A dignified digital tribute that lives on — and returns to remind the family every year. Starting from GHS 1,000.
+              A dignified digital tribute that lives on — and returns to remind the family every year. Starting from GHS 1,500.
             </p>
             <Button
               asChild

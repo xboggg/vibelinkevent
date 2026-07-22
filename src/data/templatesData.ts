@@ -28,8 +28,8 @@ export interface TemplateItem {
 const DEMO_BASE = "https://demos.vibelinkevent.com/funeral";
 
 export const tierPrices: Record<Tier, number> = {
-  Starter: 1000,
-  Classic: 1500,
+  Starter: 1500,
+  Classic: 2000,
   Prestige: 2500,
   Royal: 4000,
 };
@@ -93,7 +93,7 @@ export const tierBaseFeatures: Record<Tier, string[]> = {
 // =========================================================================
 
 export const templates: TemplateItem[] = [
-  // ─── STARTER TIER (GHS 1,000) ────────────────────────────────────────
+  // ─── STARTER TIER (GHS 1,500) ────────────────────────────────────────
   {
     id: 4,
     slug: "letter-from-a-loved-one",
@@ -169,7 +169,7 @@ export const templates: TemplateItem[] = [
     palette: ["#f0e8d3", "#4a2818", "#b59342", "#6b1a1a"],
   },
 
-  // ─── CLASSIC TIER (GHS 1,500) ────────────────────────────────────────
+  // ─── CLASSIC TIER (GHS 2,000) ────────────────────────────────────────
   {
     id: 1,
     slug: "cathedral-of-stars",

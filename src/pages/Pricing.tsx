@@ -25,14 +25,14 @@ const pricingSchema = {
     {
       "@type": "Offer",
       name: "Starter Vibe",
-      price: "1000",
+      price: "1500",
       priceCurrency: "GHS",
       description: "Best for simple, intimate events",
     },
     {
       "@type": "Offer",
       name: "Classic Vibe",
-      price: "1500",
+      price: "2000",
       priceCurrency: "GHS",
       description: "Best for weddings, funerals, most events",
     },
@@ -56,7 +56,7 @@ const pricingSchema = {
 const packages = [
   {
     name: "Starter Vibe",
-    price: "GHS 1,000",
+    price: "GHS 1,500",
     description: "Simple, intimate events",
     popular: false,
     color: "border-border",
@@ -75,7 +75,7 @@ const packages = [
   },
   {
     name: "Classic Vibe",
-    price: "GHS 1,500",
+    price: "GHS 2,000",
     description: "Weddings, funerals & more",
     popular: false,
     color: "border-border",
@@ -190,8 +190,8 @@ const comparisonFeatures = [
 ];
 
 const calcPackages = [
-  { name: "Starter Vibe", price: 1000 },
-  { name: "Classic Vibe", price: 1500 },
+  { name: "Starter Vibe", price: 1500 },
+  { name: "Classic Vibe", price: 2000 },
   { name: "Prestige Vibe", price: 2500 },
   { name: "Royal Vibe", price: 4000 },
 ];
@@ -407,7 +407,7 @@ const Pricing = () => {
     <Layout>
       <SEO
         title="Pricing"
-        description="Affordable digital invitation packages starting from GHS 1,000. Choose from Starter, Classic, Prestige or Royal packages for your wedding, funeral, or event in Ghana."
+        description="Affordable digital invitation packages starting from GHS 1,500. Choose from Starter, Classic, Prestige or Royal packages for your wedding, funeral, or event in Ghana."
         keywords="digital invitation prices Ghana, wedding invitation cost, event invitation packages Accra"
         canonical="/pricing"
         ogImage="https://vibelinkevent.com/og-pricing.jpg"
@@ -556,11 +556,11 @@ const Pricing = () => {
                 </div>
                 <div className="p-4 text-center border-l border-white/10 hover:bg-white/5 transition-colors">
                   <div className="text-white/90 font-semibold text-sm mb-1">Starter</div>
-                  <div className="text-secondary font-bold text-lg">GHS 1,000</div>
+                  <div className="text-secondary font-bold text-lg">GHS 1,500</div>
                 </div>
                 <div className="p-4 text-center border-l border-white/10 hover:bg-white/5 transition-colors">
                   <div className="text-white/90 font-semibold text-sm mb-1">Classic</div>
-                  <div className="text-secondary font-bold text-lg">GHS 1,500</div>
+                  <div className="text-secondary font-bold text-lg">GHS 2,000</div>
                 </div>
                 <div className="p-4 pt-6 text-center border-l border-white/10 bg-white/15 relative">
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -645,11 +645,11 @@ const Pricing = () => {
                       </th>
                       <th className="p-3 text-center border-l border-white/10 w-[120px]">
                         <div className="text-white/90 font-semibold text-xs">Starter</div>
-                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 1,000</div>
+                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 1,500</div>
                       </th>
                       <th className="p-3 text-center border-l border-white/10 w-[120px]">
                         <div className="text-white/90 font-semibold text-xs">Classic</div>
-                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 1,500</div>
+                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 2,000</div>
                       </th>
                       <th className="p-3 text-center border-l border-white/10 bg-white/15 w-[120px] relative">
                         <div className="absolute -top-1 left-1/2 -translate-x-1/2">
