@@ -19,11 +19,24 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
-// Fixed referral rewards by package
+// Fixed referral rewards by event package. Reward scales with package price
+// so referrers earn proportional cash for the size of the sale they brought in.
 const REFERRAL_REWARDS: Record<string, number> = {
-  "Classic Vibe": 100,
-  "Prestige Vibe": 200,
-  "Royal Vibe": 500,
+  // Small packages — GHS 100 reward
+  "Regular Birthday": 100,
+  "Graduation": 100,
+  "Naming / Outdooring": 100,
+  // Medium packages — GHS 200 reward
+  "Anniversary / Vow Renewal": 200,
+  "Milestone Birthday": 200,
+  "Church Event": 200,
+  "Engagement / Customary": 200,
+  "Funeral & Memorial": 200,
+  // Large packages — GHS 300 reward
+  "Wedding": 300,
+  "Corporate Event": 300,
+  // Bespoke — GHS 500 reward
+  "Bespoke": 500,
 };
 
 interface ReferralCode {

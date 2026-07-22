@@ -191,7 +191,7 @@ export default function EngagementInvitations() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-amber-100 text-amber-800">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Prestige Vibe — GHS 2,500</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Engagement Package — GHS 2,000</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
               Ideal for engagements: kente-inspired design, family cards, knocking ceremony page, RSVP tracking, MoMo contributions and 5 revisions. Perfect for both the knocking and the customary day.
             </p>
@@ -240,7 +240,7 @@ export default function EngagementInvitations() {
               Honour the tradition. Impress every family.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A digital engagement invitation your uncles and aunties will actually be proud to share. Starting from GHS 1,500.
+              A digital engagement invitation your uncles and aunties will actually be proud to share. Starting from GHS 2,000.
             </p>
             <Button
               asChild

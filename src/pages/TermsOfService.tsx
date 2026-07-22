@@ -37,9 +37,10 @@ const TermsOfService = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">3. Revision Policy</h2>
             <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-              <li><strong>Starter Vibe:</strong> 1 round of revisions included</li>
-              <li><strong>Classic Vibe:</strong> 2 rounds of revisions included</li>
-              <li><strong>Prestige & Royal Vibe:</strong> Unlimited revisions included</li>
+              <li><strong>Regular Birthday:</strong> 1 round of revisions included</li>
+              <li><strong>Naming / Outdooring, Graduation:</strong> 2 rounds of revisions included</li>
+              <li><strong>Wedding, Engagement, Funeral, Corporate, Anniversary, Milestone Birthday, Church:</strong> 3 rounds of revisions included</li>
+              <li><strong>Bespoke:</strong> Unlimited revisions included</li>
               <li>Additional revision rounds can be purchased at GHS 100 per round</li>
               <li>A revision round includes all changes requested within a single feedback session</li>
             </ul>

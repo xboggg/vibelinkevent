@@ -198,9 +198,9 @@ export default function WeddingInvitations() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-rose-100 text-rose-700">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Prestige Vibe — GHS 2,500</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Wedding Package — GHS 2,500</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
-              Most couples choose Prestige — it includes photo gallery, RSVP tracking, MoMo donation link, video integration and 5 revisions. For larger weddings with custom domain, Royal Vibe is the one.
+              Everything a Ghanaian wedding needs — multi-day timeline, RSVP with meal preferences, 20-photo gallery, video, MoMo gift link, livestream, seating chart, love story timeline. For custom domain, unlimited revisions and dedicated account manager, upgrade to Bespoke (from GHS 4,500).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700">
@@ -247,7 +247,7 @@ export default function WeddingInvitations() {
               Your guests deserve better than a JPEG.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              Live, interactive and unforgettable. Weddings from GHS 1,500.
+              Live, interactive and unforgettable. Weddings from GHS 2,500.
             </p>
             <Button
               asChild

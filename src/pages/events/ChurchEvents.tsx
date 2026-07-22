@@ -243,9 +243,9 @@ export default function ChurchEvents() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-purple-100 text-purple-800">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Prestige Vibe — GHS 2,500</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Church Event Package — GHS 2,000</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
-              Ideal for major church events: custom design in your ministry colours, RSVP tracking, photo gallery, MoMo offering link, video/livestream integration, calendar sync and 6-month hosting. For multi-day conventions with custom domain, Royal Vibe (GHS 4,000+) is the one.
+              Built for harvests, conventions, revivals and ordinations — multi-day agenda, offering MoMo link with per-day tracking, livestream for members abroad, program booklet, sermon topics per day. For denominational conferences with custom domain and full analytics, upgrade to Bespoke (from GHS 4,500).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800">
@@ -292,7 +292,7 @@ export default function ChurchEvents() {
               Your church event deserves more than a WhatsApp flyer.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A digital invitation that carries every member — from the sermon topic to the offering, from the livestream to the follow-up. Starting from GHS 1,500.
+              A digital invitation that carries every member — from the sermon topic to the offering, from the livestream to the follow-up. Starting from GHS 2,000.
             </p>
             <Button
               asChild

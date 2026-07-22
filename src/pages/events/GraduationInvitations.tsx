@@ -192,9 +192,9 @@ export default function GraduationInvitations() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-blue-100 text-blue-800">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Classic Vibe — GHS 2,000</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Graduation Package — GHS 1,500</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
-              Ideal for graduations: custom design in your university's colours, RSVP tracking, photo gallery of the journey, background music, thank-you wall and 90-day hosting. For families who want MoMo gift link (master's fund) and video guestbook, Prestige Vibe (GHS 2,500) is the one.
+              Built for university, secondary school and professional graduations — journey photos (childhood → graduation), sponsor thank-you page (parents, aunties, uncles), RSVP, MoMo master's fund link, program details. For multi-graduate family celebrations or PhD parties, upgrade to Bespoke (from GHS 4,500).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-blue-700 to-indigo-800 hover:from-blue-800 hover:to-indigo-900">

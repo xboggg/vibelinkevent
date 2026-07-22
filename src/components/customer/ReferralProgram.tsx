@@ -285,9 +285,10 @@ export function ReferralProgram({ customerEmail, customerName }: ReferralProgram
           <div className="bg-secondary/10 rounded-lg p-3 space-y-1">
             <p className="text-sm font-medium">Earn cash for every referral:</p>
             <ul className="text-sm text-muted-foreground space-y-1">
-              <li>• Classic Vibe referral: <span className="font-semibold text-foreground">GHS 100</span></li>
-              <li>• Prestige Vibe referral: <span className="font-semibold text-foreground">GHS 200</span></li>
-              <li>• Royal Vibe referral: <span className="font-semibold text-foreground">GHS 500</span></li>
+              <li>• Regular Birthday / Graduation / Naming: <span className="font-semibold text-foreground">GHS 100</span></li>
+              <li>• Anniversary / Milestone Birthday / Church / Engagement / Funeral: <span className="font-semibold text-foreground">GHS 200</span></li>
+              <li>• Wedding / Corporate: <span className="font-semibold text-foreground">GHS 300</span></li>
+              <li>• Bespoke referral: <span className="font-semibold text-foreground">GHS 500</span></li>
             </ul>
           </div>
         </CardContent>

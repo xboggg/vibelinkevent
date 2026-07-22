@@ -27,11 +27,16 @@ export interface TemplateItem {
 // Demo previews are hosted at this subdomain.
 const DEMO_BASE = "https://demos.vibelinkevent.com/funeral";
 
+// DEPRECATED tier model — VibeLink moved to event-based pricing in Jul 2026.
+// These "tiers" are now used only as a complexity/design-elaborateness label
+// on funeral templates (all funerals share the same GHS 2,000 package price).
+// The "Royal" label maps to Bespoke (custom quote from GHS 4,500+).
+// See src/data/eventPackages.ts for the canonical event-package pricing.
 export const tierPrices: Record<Tier, number> = {
-  Starter: 1500,
-  Classic: 2000,
-  Prestige: 2500,
-  Royal: 4000,
+  Starter: 2000,   // Funeral package base
+  Classic: 2000,   // Funeral package base
+  Prestige: 2000,  // Funeral package base
+  Royal: 4500,     // Bespoke starting price
 };
 
 // Base features included in each tier (mirrors vibelinkevent.com/pricing).
@@ -93,7 +98,7 @@ export const tierBaseFeatures: Record<Tier, string[]> = {
 // =========================================================================
 
 export const templates: TemplateItem[] = [
-  // ─── STARTER TIER (GHS 1,500) ────────────────────────────────────────
+  // ─── SIMPLE DESIGN COMPLEXITY (funeral package GHS 2,000) ─────────────
   {
     id: 4,
     slug: "letter-from-a-loved-one",
@@ -169,7 +174,7 @@ export const templates: TemplateItem[] = [
     palette: ["#f0e8d3", "#4a2818", "#b59342", "#6b1a1a"],
   },
 
-  // ─── CLASSIC TIER (GHS 2,000) ────────────────────────────────────────
+  // ─── STANDARD DESIGN COMPLEXITY (funeral package GHS 2,000) ──────────
   {
     id: 1,
     slug: "cathedral-of-stars",
@@ -295,7 +300,7 @@ export const templates: TemplateItem[] = [
     comingSoon: true,
   },
 
-  // ─── PRESTIGE TIER (GHS 2,500) ───────────────────────────────────────
+  // ─── ELEVATED DESIGN COMPLEXITY (funeral package GHS 2,000) ──────────
   {
     id: 2,
     slug: "the-river",
@@ -426,7 +431,7 @@ export const templates: TemplateItem[] = [
     comingSoon: true,
   },
 
-  // ─── ROYAL TIER (GHS 4,000+) ─────────────────────────────────────────
+  // ─── LUXURY / BESPOKE DESIGN (upgrade to Bespoke, from GHS 4,500+) ────
   {
     id: 11,
     slug: "the-cinema",

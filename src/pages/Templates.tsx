@@ -8,11 +8,13 @@ import { ExternalLink, ArrowRight, Sparkles } from "lucide-react";
 import SEO from "@/components/SEO";
 import { templates, formatGHS, type Tier } from "@/data/templatesData";
 
+// Funeral template design-complexity labels (legacy "tier" naming preserved
+// in TS types but relabelled for the UI now that we use event-based pricing).
 const tierStyles: Record<Tier, { chip: string; ring: string; label: string }> = {
-  Starter:  { chip: "bg-emerald-100 text-emerald-700 border-emerald-200",  ring: "ring-emerald-300/40",  label: "Starter Vibe"  },
-  Classic:  { chip: "bg-sky-100 text-sky-700 border-sky-200",              ring: "ring-sky-300/40",      label: "Classic Vibe"  },
-  Prestige: { chip: "bg-amber-100 text-amber-700 border-amber-200",        ring: "ring-amber-400/40",    label: "Prestige Vibe" },
-  Royal:    { chip: "bg-purple-100 text-purple-700 border-purple-200",     ring: "ring-purple-400/40",   label: "Royal Vibe"    },
+  Starter:  { chip: "bg-emerald-100 text-emerald-700 border-emerald-200",  ring: "ring-emerald-300/40",  label: "Simple"    },
+  Classic:  { chip: "bg-sky-100 text-sky-700 border-sky-200",              ring: "ring-sky-300/40",      label: "Standard"  },
+  Prestige: { chip: "bg-amber-100 text-amber-700 border-amber-200",        ring: "ring-amber-400/40",    label: "Elevated"  },
+  Royal:    { chip: "bg-purple-100 text-purple-700 border-purple-200",     ring: "ring-purple-400/40",   label: "Luxury"    },
 };
 
 const tierFilters: Array<"All" | Tier> = ["All", "Starter", "Classic", "Prestige", "Royal"];

@@ -191,9 +191,9 @@ export default function BirthdayInvitations() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-fuchsia-100 text-fuchsia-700">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Classic Vibe — GHS 2,000</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Milestone Birthday Package — GHS 2,000</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
-              Ideal for birthday parties: custom design in your theme colours, RSVP tracking, photo gallery, background music, wishes wall and 90-day hosting. For milestone birthdays (30/40/50) with live photo wall, MoMo gifts and video guestbook, Prestige Vibe (GHS 2,500) is the one.
+              Perfect for 30th, 40th, 50th, 60th, 70th birthdays — life-timeline photo journey, wishes wall, MoMo gift link, video guestbook add-on, RSVP with dress code. For simple kids' parties without the extras, the Regular Birthday package (GHS 1,200) is a better fit.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-fuchsia-500 to-pink-600 hover:from-fuchsia-600 hover:to-pink-700">
@@ -240,7 +240,7 @@ export default function BirthdayInvitations() {
               Not another WhatsApp flyer. Your year deserves better.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A digital birthday invitation that's a full-blown celebration — wishes, memories, roasts, and every friend's voice, kept forever. Starting from GHS 1,500.
+              A digital birthday invitation that's a full-blown celebration — wishes, memories, roasts, and every friend's voice, kept forever. Starting from GHS 1,200.
             </p>
             <Button
               asChild

@@ -191,9 +191,9 @@ export default function AnniversaryInvitations() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-amber-100 text-amber-800">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Prestige Vibe — GHS 2,500</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Anniversary Package — GHS 1,800</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
-              Ideal for milestone anniversaries: 10-photo gallery for then-vs-now, video integration, MoMo gift link, custom design, 5 revisions and 6-month hosting. For diamond anniversaries or bigger family celebrations, Royal Vibe (GHS 4,000+) adds a custom domain and full host dashboard.
+              Built for silver, pearl, gold and diamond anniversaries — then-vs-now photo comparison, updated love-story timeline, kids' tribute messages, RSVP with meal head-count. For diamond anniversaries or big multi-generation gatherings, upgrade to Bespoke (from GHS 4,500) for a custom domain and dedicated planner.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700">
@@ -240,7 +240,7 @@ export default function AnniversaryInvitations() {
               Your love story deserves more than a WhatsApp flyer.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A digital anniversary invitation that honours the years — with your original wedding photos, your children's words, and every memory kept forever. Starting from GHS 1,500.
+              A digital anniversary invitation that honours the years — with your original wedding photos, your children's words, and every memory kept forever. Starting from GHS 1,800.
             </p>
             <Button
               asChild

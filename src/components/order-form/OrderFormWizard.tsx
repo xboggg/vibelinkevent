@@ -341,11 +341,19 @@ ${formData.designNotes}` : ""}`;
         return;
       }
 
-      // Calculate reward based on package
+      // Calculate reward based on package — must match REFERRAL_REWARDS in ReferralsAdmin.tsx
       const rewardAmounts: Record<string, number> = {
-        "Classic Vibe": 100,
-        "Prestige Vibe": 200,
-        "Royal Vibe": 500,
+        "Regular Birthday": 100,
+        "Graduation": 100,
+        "Naming / Outdooring": 100,
+        "Anniversary / Vow Renewal": 200,
+        "Milestone Birthday": 200,
+        "Church Event": 200,
+        "Engagement / Customary": 200,
+        "Funeral & Memorial": 200,
+        "Wedding": 300,
+        "Corporate Event": 300,
+        "Bespoke": 500,
       };
       const rewardAmount = rewardAmounts[packageName] || 0;
 

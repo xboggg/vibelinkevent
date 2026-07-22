@@ -6,6 +6,13 @@ import { CTASection } from "@/components/sections/CTASection";
 import { Check, X, Star, MessageCircle, Sparkles, Crown, Percent, Gift, Users, Banknote, ArrowRight, Calculator, Trash2, Shield } from "lucide-react";
 import { useState } from "react";
 import SEO, { createBreadcrumbSchema } from "@/components/SEO";
+import {
+  EVENT_PACKAGES,
+  UNIVERSAL_ADDONS,
+  getNonBespokePackages,
+  getStartingPriceLabel,
+  type EventPackage,
+} from "@/data/eventPackages";
 
 const pricingBreadcrumb = createBreadcrumbSchema([
   { name: "Home", url: "/" },
@@ -21,180 +28,48 @@ const pricingSchema = {
     "@type": "Brand",
     name: "VibeLink Event",
   },
-  offers: [
-    {
-      "@type": "Offer",
-      name: "Starter Vibe",
-      price: "1500",
-      priceCurrency: "GHS",
-      description: "Best for simple, intimate events",
-    },
-    {
-      "@type": "Offer",
-      name: "Classic Vibe",
-      price: "2000",
-      priceCurrency: "GHS",
-      description: "Best for weddings, funerals, most events",
-    },
-    {
-      "@type": "Offer",
-      name: "Prestige Vibe",
-      price: "2500",
-      priceCurrency: "GHS",
-      description: "Best for premium celebrations",
-    },
-    {
-      "@type": "Offer",
-      name: "Royal Vibe",
-      price: "4000",
-      priceCurrency: "GHS",
-      description: "Best for exclusive, luxury events",
-    },
-  ],
+  offers: EVENT_PACKAGES.map((p) => ({
+    "@type": "Offer",
+    name: p.name,
+    price: String(p.price),
+    priceCurrency: "GHS",
+    description: p.tagline,
+  })),
 };
 
-const packages = [
-  {
-    name: "Starter Vibe",
-    price: "GHS 1,500",
-    description: "Simple, intimate events",
-    popular: false,
-    color: "border-border",
-    features: [
-      { name: "1 hero banner image", included: true },
-      { name: "Pre-designed template", included: true },
-      { name: "Event details section", included: true },
-      { name: "Countdown timer", included: true },
-      { name: "Google Maps integration", included: true },
-      { name: "WhatsApp share button", included: true },
-      { name: "Mobile responsive", included: true },
-      { name: "30-day hosting", included: true },
-      { name: "1 revision round", included: true },
-    ],
-    excluded: ["Photo gallery", "RSVP tracking", "Background music", "Calendar sync"],
-  },
-  {
-    name: "Classic Vibe",
-    price: "GHS 2,000",
-    description: "Weddings, funerals & more",
-    popular: false,
-    color: "border-border",
-    features: [
-      { name: "2 hero banner images", included: true },
-      { name: "Everything in Starter", included: true, highlight: true },
-      { name: "Custom color scheme", included: true },
-      { name: "Photo gallery (5 photos)", included: true },
-      { name: "RSVP tracking", included: true },
-      { name: "Background music", included: true },
-      { name: "White-label", included: true },
-      { name: "90-day hosting", included: true },
-      { name: "2 revision rounds", included: true },
-    ],
-    excluded: ["Video integration", "Calendar sync", "MoMo donation link", "Priority WhatsApp support"],
-  },
-  {
-    name: "Prestige Vibe",
-    price: "GHS 2,500",
-    description: "Premium celebrations",
-    popular: true,
-    color: "border-secondary",
-    features: [
-      { name: "3 hero banner images", included: true },
-      { name: "Everything in Classic", included: true, highlight: true },
-      { name: "Photo gallery (10 photos)", included: true },
-      { name: "Video integration", included: true },
-      { name: "Calendar sync", included: true },
-      { name: "MoMo donation link", included: true },
-      { name: "Priority WhatsApp support", included: true },
-      { name: "6-month hosting", included: true },
-      { name: "5 revisions", included: true },
-    ],
-    excluded: ["MoMo tracking dashboard", "Guest messaging wall", "Custom domain", "Host dashboard"],
-  },
-  {
-    name: "Royal Vibe",
-    price: "GHS 4,000+",
-    description: "Exclusive, luxury events",
-    popular: false,
-    color: "border-amber-500/50",
-    features: [
-      { name: "5 hero banner images", included: true },
-      { name: "Everything in Prestige", included: true, highlight: true },
-      { name: "Multiple event pages", included: true },
-      { name: "Advanced animations", included: true },
-      { name: "MoMo tracking dashboard", included: true },
-      { name: "Program booklet page", included: true },
-      { name: "Host dashboard", included: true },
-      { name: "Custom domain", included: true },
-      { name: "Book a ride", included: true },
-      { name: "Lost & found", included: true },
-      { name: "White-label (no branding)", included: true },
-      { name: "1-year hosting", included: true },
-      { name: "Unlimited revisions", included: true },
-      { name: "Dedicated account manager", included: true },
-      { name: "Professional consultation", included: true },
-    ],
-    excluded: [],
-  },
-];
+// Rendered pricing cards — derived from the canonical EVENT_PACKAGES source.
+// Each event package is shown as a card with its own features + price.
+// The Bespoke package sits at the end as the premium/custom option.
+const packages = EVENT_PACKAGES.map((p) => ({
+  name: p.name,
+  slug: p.slug,
+  price: p.priceLabel,
+  description: p.tagline,
+  popular: !!p.popular,
+  color: p.popular
+    ? "border-secondary"
+    : p.id === "bespoke"
+    ? "border-amber-500/50"
+    : "border-border",
+  features: p.features.map((f) => ({ name: f, included: true })),
+  excluded: [] as string[],
+  quoteOnly: !!p.quoteOnly,
+  eventPageRoute: p.eventPageRoute,
+}));
 
-const addOns = [
-  { name: "Video Integration", price: "GHS 200", desc: "Embed videos on your invite" },
-  { name: "Calendar Sync", price: "GHS 100", desc: "Guests save the date to their calendar" },
-  { name: "MoMo Tracking Dashboard", price: "GHS 200", desc: "Track donations in real-time" },
-  { name: "Program Booklet Page", price: "GHS 150", desc: "Digital event program for guests" },
-  { name: "Host Dashboard", price: "GHS 200", desc: "Manage RSVPs & view analytics" },
-  { name: "RSVP Tracking", price: "GHS 100", desc: "Track guest responses & attendance" },
-  { name: "QR Check-in System", price: "GHS 150", desc: "Scan guests on arrival" },
-  { name: "Digital Guestbook", price: "GHS 150", desc: "Guests leave messages & photos" },
-  { name: "Gift Acknowledgment Page", price: "GHS 150", desc: "Publicly thank gift contributors" },
-  { name: "Live Stream Embed", price: "GHS 200", desc: "Stream your event live to guests" },
-  { name: "Extended Hosting (6 months)", price: "GHS 500", desc: "Your event page expires after your package hosting period. Extend to keep it live." },
-  { name: "Extended Hosting (1 year)", price: "GHS 1,000", desc: "Your event page expires after your package hosting period. Extend to keep it live." },
-  { name: "Custom Domain (1 year)", price: "GHS 300", desc: "Use your own domain name" },
-  { name: "Extra Photos (+10)", price: "GHS 100", desc: "Expand your photo gallery" },
-  { name: "Additional Language", price: "GHS 150", desc: "Add Twi, French, or others" },
-  { name: "Background Music", price: "GHS 50", desc: "Add music to your invitation" },
-  { name: "Obituary Section", price: "Free", desc: "Add obituary for funeral invites (on request)" },
-  { name: "Lost & Found", price: "GHS 100", desc: "Help guests find lost items" },
-  { name: "Nearby Accommodation", price: "GHS 100", desc: "Show hotels near your venue" },
-  { name: "Book a Ride", price: "GHS 100", desc: "Let guests request transport" },
-];
+// Universal add-ons (available on any non-Bespoke package).
+// Event-specific add-ons are shown on each event's page.
+const addOns = UNIVERSAL_ADDONS.map((a) => ({
+  name: a.name,
+  price: `GHS ${a.price.toLocaleString()}`,
+  desc: a.description,
+}));
 
-// Full comparison table with all features
-const comparisonFeatures = [
-  { feature: "Hero Banners", starter: "1", classic: "2", prestige: "3", royal: "5" },
-  { feature: "Photo Gallery", starter: false, classic: "5 photos", prestige: "10 photos", royal: "Unlimited" },
-  { feature: "Custom Colors", starter: false, classic: true, prestige: true, royal: true },
-  { feature: "Background Music", starter: false, classic: true, prestige: true, royal: true },
-  { feature: "RSVP Tracking", starter: false, classic: true, prestige: true, royal: true },
-  { feature: "Countdown Timer", starter: true, classic: true, prestige: true, royal: true },
-  { feature: "Google Maps", starter: true, classic: true, prestige: true, royal: true },
-  { feature: "WhatsApp Share", starter: true, classic: true, prestige: true, royal: true },
-  { feature: "Calendar Sync", starter: false, classic: false, prestige: true, royal: true },
-  { feature: "Video Integration", starter: false, classic: false, prestige: true, royal: true },
-  { feature: "MoMo Donation Link", starter: false, classic: false, prestige: "Display", royal: "Tracking" },
-  { feature: "Guest Messaging Wall", starter: false, classic: false, prestige: false, royal: true },
-  { feature: "Custom Domain", starter: false, classic: false, prestige: false, royal: true },
-  { feature: "Program Booklet", starter: false, classic: false, prestige: false, royal: true },
-  { feature: "Host Dashboard", starter: false, classic: false, prestige: false, royal: true },
-  { feature: "Book a Ride", starter: false, classic: false, prestige: false, royal: true },
-  { feature: "Lost & Found", starter: false, classic: false, prestige: false, royal: true },
-  { feature: "Multi-Event Pages", starter: false, classic: false, prestige: false, royal: true },
-  { feature: "Advanced Animations", starter: false, classic: false, prestige: false, royal: true },
-  { feature: "White-label", starter: true, classic: true, prestige: true, royal: "No branding" },
-  { feature: "Hosting Duration", starter: "30 days", classic: "90 days", prestige: "6 months", royal: "1 year" },
-  { feature: "Revisions", starter: "1", classic: "2", prestige: "5", royal: "Unlimited" },
-  { feature: "Account Manager", starter: false, classic: false, prestige: false, royal: true },
-  { feature: "Delivery Time", starter: "5-7 days", classic: "5-7 days", prestige: "5-7 days", royal: "7-10 days" },
-];
-
-const calcPackages = [
-  { name: "Starter Vibe", price: 1500 },
-  { name: "Classic Vibe", price: 2000 },
-  { name: "Prestige Vibe", price: 2500 },
-  { name: "Royal Vibe", price: 4000 },
-];
+// Calculator uses non-Bespoke packages only (Bespoke is quote-only).
+const calcPackages = getNonBespokePackages().map((p) => ({
+  name: p.name,
+  price: p.price,
+}));
 
 const calcAddOns = addOns
   .filter(a => a.price !== "Free")
@@ -407,7 +282,7 @@ const Pricing = () => {
     <Layout>
       <SEO
         title="Pricing"
-        description="Affordable digital invitation packages starting from GHS 1,500. Choose from Starter, Classic, Prestige or Royal packages for your wedding, funeral, or event in Ghana."
+        description="Digital invitation packages for every Ghanaian event — weddings from GHS 2,500, funerals from GHS 2,000, birthdays from GHS 1,200. Every package built specifically for its event type."
         keywords="digital invitation prices Ghana, wedding invitation cost, event invitation packages Accra"
         canonical="/pricing"
         ogImage="https://vibelinkevent.com/og-pricing.jpg"
@@ -424,13 +299,13 @@ const Pricing = () => {
             className="text-center max-w-3xl mx-auto"
           >
             <span className="inline-block px-4 py-1.5 rounded-full bg-secondary/20 text-secondary text-sm font-medium mb-4">
-              Simple Pricing
+              One package per event, priced to match
             </span>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-4">
-              Choose Your Perfect Package
+              Pricing Built for Your Event
             </h1>
             <p className="text-primary-foreground/80 text-base lg:text-lg">
-              Beautiful digital invitations for every budget. No hidden fees.
+              Every event is different — so is every package. Pick the event you're planning and get exactly the features it needs. No stripped-down tiers, no confusing upgrades.
             </p>
           </motion.div>
         </div>
@@ -459,7 +334,7 @@ const Pricing = () => {
       {/* Pricing Cards */}
       <section className="py-12 lg:py-16 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
             {packages.map((pkg, index) => (
               <motion.div
                 key={pkg.name}
@@ -509,8 +384,8 @@ const Pricing = () => {
                   className="w-full"
                   size="sm"
                 >
-                  <Link to={pkg.name === "Royal Vibe" ? "/contact" : `/get-started?package=${encodeURIComponent(pkg.name)}`}>
-                    {pkg.name === "Royal Vibe" ? "Contact Us" : "Get Started"}
+                  <Link to={pkg.quoteOnly ? "/contact" : `/get-started?package=${encodeURIComponent(pkg.slug)}`}>
+                    {pkg.quoteOnly ? "Get Custom Quote" : "Get Started"}
                   </Link>
                 </Button>
                 <p className="text-center text-xs text-muted-foreground mt-2 flex items-center justify-center gap-1">
@@ -523,212 +398,6 @@ const Pricing = () => {
         </div>
       </section>
 
-      {/* Comparison Table */}
-      <section className="py-16 lg:py-24 bg-gradient-to-b from-muted/30 via-background to-muted/20">
-        <div className="container mx-auto px-4 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-              Feature Comparison
-            </span>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3">Compare Packages</h2>
-            <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-              Find your perfect fit at a glance
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-6xl mx-auto"
-          >
-            {/* Desktop Table */}
-            <div className="hidden md:block overflow-visible rounded-3xl border border-border/40 shadow-2xl bg-card/80 backdrop-blur-sm">
-              {/* Table Header */}
-              <div className="grid grid-cols-5 bg-gradient-to-r from-primary via-purple-dark to-navy rounded-t-3xl">
-                <div className="p-5 flex items-center">
-                  <span className="text-white font-bold text-sm tracking-wide uppercase">Feature</span>
-                </div>
-                <div className="p-4 text-center border-l border-white/10 hover:bg-white/5 transition-colors">
-                  <div className="text-white/90 font-semibold text-sm mb-1">Starter</div>
-                  <div className="text-secondary font-bold text-lg">GHS 1,500</div>
-                </div>
-                <div className="p-4 text-center border-l border-white/10 hover:bg-white/5 transition-colors">
-                  <div className="text-white/90 font-semibold text-sm mb-1">Classic</div>
-                  <div className="text-secondary font-bold text-lg">GHS 2,000</div>
-                </div>
-                <div className="p-4 pt-6 text-center border-l border-white/10 bg-white/15 relative">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-bold shadow-xl ring-2 ring-secondary/30">
-                      <Star className="h-3 w-3 fill-current" />
-                      POPULAR
-                    </span>
-                  </div>
-                  <div className="text-white font-semibold text-sm mb-1">Prestige</div>
-                  <div className="text-secondary font-bold text-lg">GHS 2,500</div>
-                </div>
-                <div className="p-4 text-center border-l border-white/10 hover:bg-white/5 transition-colors">
-                  <div className="flex items-center justify-center gap-1.5 text-white font-semibold text-sm mb-1">
-                    <Crown className="h-4 w-4 text-amber-400" />
-                    Royal
-                  </div>
-                  <div className="text-secondary font-bold text-lg">GHS 4,000+</div>
-                </div>
-              </div>
-
-              {/* Table Body */}
-              <div className="divide-y divide-border/20">
-                {comparisonFeatures.map((row, index) => (
-                  <div
-                    key={row.feature}
-                    className={`grid grid-cols-5 ${index % 2 === 0 ? "bg-background/50" : "bg-muted/30"} hover:bg-primary/5 transition-all duration-200`}
-                  >
-                    <div className="py-4 px-5 text-foreground font-medium text-sm flex items-center">
-                      {row.feature}
-                    </div>
-                    <div className="py-4 px-3 flex items-center justify-center border-l border-border/15">
-                      {renderCellValue(row.starter)}
-                    </div>
-                    <div className="py-4 px-3 flex items-center justify-center border-l border-border/15 bg-secondary/8">
-                      {renderCellValue(row.classic)}
-                    </div>
-                    <div className="py-4 px-3 flex items-center justify-center border-l border-border/15">
-                      {renderCellValue(row.prestige)}
-                    </div>
-                    <div className="py-4 px-3 flex items-center justify-center border-l border-border/15">
-                      {renderCellValue(row.royal)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Table Footer - CTA */}
-              <div className="grid grid-cols-5 bg-gradient-to-r from-muted/50 to-muted/30 border-t border-border/30 rounded-b-3xl">
-                <div className="p-5"></div>
-                <div className="p-4 flex justify-center border-l border-border/15">
-                  <Button asChild variant="outline" size="sm" className="text-xs h-9 px-5 rounded-full hover:bg-primary/10 hover:border-primary/50 transition-all">
-                    <Link to="/get-started">Get Started</Link>
-                  </Button>
-                </div>
-                <div className="p-4 flex justify-center border-l border-border/15">
-                  <Button asChild variant="outline" size="sm" className="text-xs h-9 px-5 rounded-full hover:bg-primary/10 hover:border-primary/50 transition-all">
-                    <Link to="/get-started">Get Started</Link>
-                  </Button>
-                </div>
-                <div className="p-4 flex justify-center border-l border-border/15 bg-secondary/8">
-                  <Button asChild variant="gold" size="sm" className="text-xs h-9 px-5 rounded-full shadow-lg hover:shadow-xl transition-all">
-                    <Link to="/get-started">Get Started</Link>
-                  </Button>
-                </div>
-                <div className="p-4 flex justify-center border-l border-border/15">
-                  <Button asChild variant="outline" size="sm" className="text-xs h-9 px-5 rounded-full hover:bg-primary/10 hover:border-primary/50 transition-all">
-                    <Link to="/contact">Contact Us</Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile Horizontal Scroll Table */}
-            <div className="md:hidden">
-              <div className="overflow-x-auto pb-4 rounded-2xl border border-border/40 shadow-xl bg-card/80 backdrop-blur-sm" style={{ WebkitOverflowScrolling: 'touch' }}>
-                <table className="w-full border-collapse" style={{ minWidth: '680px' }}>
-                  {/* Table Header */}
-                  <thead>
-                    <tr className="bg-gradient-to-r from-primary via-purple-dark to-navy">
-                      <th className="p-3 text-left text-white font-bold text-xs w-[140px] uppercase tracking-wide">
-                        Feature
-                      </th>
-                      <th className="p-3 text-center border-l border-white/10 w-[120px]">
-                        <div className="text-white/90 font-semibold text-xs">Starter</div>
-                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 1,500</div>
-                      </th>
-                      <th className="p-3 text-center border-l border-white/10 w-[120px]">
-                        <div className="text-white/90 font-semibold text-xs">Classic</div>
-                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 2,000</div>
-                      </th>
-                      <th className="p-3 text-center border-l border-white/10 bg-white/15 w-[120px] relative">
-                        <div className="absolute -top-1 left-1/2 -translate-x-1/2">
-                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground text-[9px] font-bold shadow-lg whitespace-nowrap ring-1 ring-secondary/30">
-                            <Star className="h-2.5 w-2.5 fill-current" />
-                            POPULAR
-                          </span>
-                        </div>
-                        <div className="text-white font-semibold text-xs mt-3">Prestige</div>
-                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 2,500</div>
-                      </th>
-                      <th className="p-3 text-center border-l border-white/10 w-[120px]">
-                        <div className="flex items-center justify-center gap-1 text-white font-semibold text-xs">
-                          <Crown className="h-3 w-3 text-amber-400" />
-                          Royal
-                        </div>
-                        <div className="text-secondary font-bold text-sm mt-0.5">GHS 4,000+</div>
-                      </th>
-                    </tr>
-                  </thead>
-                  {/* Table Body */}
-                  <tbody>
-                    {comparisonFeatures.map((row, index) => (
-                      <tr key={row.feature} className={index % 2 === 0 ? "bg-background/50" : "bg-muted/30"}>
-                        <td className="py-3 px-3 text-foreground font-medium text-xs">
-                          {row.feature}
-                        </td>
-                        <td className="py-3 px-2 text-center border-l border-border/15">
-                          {renderCellValue(row.starter)}
-                        </td>
-                        <td className="py-3 px-2 text-center border-l border-border/15 bg-secondary/8">
-                          {renderCellValue(row.classic)}
-                        </td>
-                        <td className="py-3 px-2 text-center border-l border-border/15">
-                          {renderCellValue(row.prestige)}
-                        </td>
-                        <td className="py-3 px-2 text-center border-l border-border/15">
-                          {renderCellValue(row.royal)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                  {/* Table Footer */}
-                  <tfoot>
-                    <tr className="bg-gradient-to-r from-muted/50 to-muted/30 border-t border-border/30">
-                      <td className="p-3"></td>
-                      <td className="p-3 text-center border-l border-border/15">
-                        <Button asChild variant="outline" size="sm" className="text-[10px] h-8 px-3 rounded-full">
-                          <Link to="/get-started">Select</Link>
-                        </Button>
-                      </td>
-                      <td className="p-3 text-center border-l border-border/15">
-                        <Button asChild variant="outline" size="sm" className="text-[10px] h-8 px-3 rounded-full">
-                          <Link to="/get-started">Select</Link>
-                        </Button>
-                      </td>
-                      <td className="p-3 text-center border-l border-border/15 bg-secondary/8">
-                        <Button asChild variant="gold" size="sm" className="text-[10px] h-8 px-3 rounded-full shadow-md">
-                          <Link to="/get-started">Select</Link>
-                        </Button>
-                      </td>
-                      <td className="p-3 text-center border-l border-border/15">
-                        <Button asChild variant="outline" size="sm" className="text-[10px] h-8 px-3 rounded-full">
-                          <Link to="/contact">Contact</Link>
-                        </Button>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-              <p className="text-center text-muted-foreground text-xs mt-3 flex items-center justify-center gap-2">
-                <span className="inline-block w-8 h-px bg-border"></span>
-                ← Swipe to compare all packages →
-                <span className="inline-block w-8 h-px bg-border"></span>
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       <PricingCalculator />
 
@@ -997,9 +666,9 @@ const Pricing = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                   {[
-                    { package: "Classic Vibe", reward: "GHS 100", color: "from-blue-500 to-cyan-500" },
-                    { package: "Prestige Vibe", reward: "GHS 200", color: "from-purple-500 to-pink-500" },
-                    { package: "Royal Vibe", reward: "GHS 500", color: "from-amber-500 to-orange-500" }
+                    { package: "Any small event", reward: "GHS 100", color: "from-blue-500 to-cyan-500" },
+                    { package: "Wedding / Corporate", reward: "GHS 250", color: "from-purple-500 to-pink-500" },
+                    { package: "Bespoke", reward: "GHS 500", color: "from-amber-500 to-orange-500" }
                   ].map((tier, index) => (
                     <motion.div
                       key={tier.package}

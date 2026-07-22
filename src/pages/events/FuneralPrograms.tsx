@@ -193,9 +193,9 @@ export default function FuneralPrograms() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-slate-100 text-slate-700">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Classic Vibe — GHS 2,000</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Funeral &amp; Memorial Package — GHS 2,000</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
-              A dignified digital memorial with obituary, biography, condolence wall, custom design, RSVP tracking, background music and 90-day hosting. For families who want MoMo donation link, livestream and 1-year anniversary features, Prestige Vibe (GHS 2,500) is the one.
+              A dignified digital tribute with full obituary, biography, condolence wall, MoMo Nsawa tracker, livestream for diaspora, 15-photo tribute gallery, and auto-remembrance at one-week, 40-day and 1-year. For families needing a custom domain, voice tribute wall or full life-story chapters, upgrade to Bespoke (from GHS 4,500).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-slate-700 to-slate-900 hover:from-slate-800 hover:to-black">
@@ -242,7 +242,7 @@ export default function FuneralPrograms() {
               A memorial that lasts. Not just for a day.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A dignified digital tribute that lives on — and returns to remind the family every year. Starting from GHS 1,500.
+              A dignified digital tribute that lives on — and returns to remind the family every year. Starting from GHS 2,000.
             </p>
             <Button
               asChild

@@ -8,8 +8,10 @@ import {
   PartyPopper,
   Flower2,
   Gem,
-  MoreHorizontal
+  MoreHorizontal,
+  Sparkles,
 } from "lucide-react";
+import { EVENT_PACKAGES } from "./eventPackages";
 
 export interface EventType {
   id: string;
@@ -52,113 +54,36 @@ export interface StylePreference {
   image?: string;
 }
 
+// Event types shown as the FIRST step of the order form. Selecting one
+// determines which package the customer gets — one package per event type.
+// IDs map 1:1 to EVENT_PACKAGES.id (see eventPackages.ts).
 export const eventTypes: EventType[] = [
-  // Row 1 — celebrations & unions
-  { id: "wedding", name: "Wedding", icon: Heart, description: "Celebrate your love story" },
-  { id: "engagement", name: "Engagement", icon: Gem, description: "Customary marriage & knocking" },
-  { id: "anniversary", name: "Anniversary", icon: PartyPopper, description: "Milestone celebrations" },
-  { id: "birthday", name: "Birthday", icon: Cake, description: "Make birthdays special" },
-  { id: "naming", name: "Naming Ceremony", icon: Baby, description: "Welcome new life" },
-  // Row 2 — memorial, faith, professional, other
-  { id: "funeral", name: "Funeral", icon: Flower2, description: "Honor a life well-lived" },
-  { id: "church", name: "Church Event", icon: Church, description: "Faith-based gatherings" },
-  { id: "graduation", name: "Graduation", icon: GraduationCap, description: "Celebrate achievements" },
-  { id: "corporate", name: "Corporate Event", icon: Building2, description: "Professional gatherings" },
-  { id: "other", name: "Other / Custom", icon: MoreHorizontal, description: "Tell us your event" },
+  { id: "wedding",             name: "Wedding",              icon: Heart,            description: "GHS 2,500 — Traditional + church + reception" },
+  { id: "engagement",          name: "Engagement",           icon: Gem,              description: "GHS 2,000 — Customary marriage & knocking" },
+  { id: "funeral",             name: "Funeral & Memorial",   icon: Flower2,          description: "GHS 2,000 — Full funeral or memorial" },
+  { id: "corporate",           name: "Corporate Event",      icon: Building2,        description: "GHS 3,500 — Conferences, launches, AGMs" },
+  { id: "naming",              name: "Naming / Outdooring",  icon: Baby,             description: "GHS 1,500 — 8-day baby naming" },
+  { id: "milestone-birthday",  name: "Milestone Birthday",   icon: Cake,             description: "GHS 2,000 — 30th, 40th, 50th, 60th, 70th" },
+  { id: "birthday",            name: "Regular Birthday",     icon: Cake,             description: "GHS 1,200 — Kids' parties, casual birthdays" },
+  { id: "anniversary",         name: "Anniversary",          icon: PartyPopper,      description: "GHS 1,800 — Silver / Pearl / Gold / Diamond" },
+  { id: "graduation",          name: "Graduation",           icon: GraduationCap,    description: "GHS 1,500 — Uni, secondary, professional" },
+  { id: "church",              name: "Church Event",         icon: Church,           description: "GHS 2,000 — Harvest, convention, ordination" },
+  { id: "bespoke",             name: "Bespoke / Custom",     icon: Sparkles,         description: "From GHS 4,500 — Anything unique" },
 ];
 
-export const packages: Package[] = [
-  {
-    id: "starter",
-    name: "Starter Vibe",
-    price: 1500,
-    description: "Best for simple, intimate events",
-    popular: false,
-    heroImages: 1,
-    hosting: "30 days",
-    revisions: "1 round",
-    features: [
-      "1 hero banner image",
-      "Pre-designed template",
-      "Event details section",
-      "Countdown timer",
-      "Google Maps integration",
-      "WhatsApp share button",
-      "Mobile responsive",
-      "30-day hosting",
-      "1 revision round",
-    ],
-  },
-  {
-    id: "classic",
-    name: "Classic Vibe",
-    price: 2000,
-    description: "Best for weddings, funerals, most events",
-    popular: true,
-    heroImages: 2,
-    hosting: "90 days",
-    revisions: "2 rounds",
-    features: [
-      "2 hero banner images",
-      "Everything in Starter",
-      "Custom color scheme",
-      "Photo gallery (5 photos)",
-      "RSVP tracking",
-      "Background music",
-      "White-label",
-      "90-day hosting",
-      "2 revision rounds",
-    ],
-  },
-  {
-    id: "prestige",
-    name: "Prestige Vibe",
-    price: 2500,
-    description: "Best for premium celebrations",
-    popular: false,
-    heroImages: 3,
-    hosting: "6 months",
-    revisions: "5 revisions",
-    features: [
-      "3 hero banner images",
-      "Everything in Classic",
-      "Photo gallery (10 photos)",
-      "Video integration",
-      "Calendar sync",
-      "MoMo donation link",
-      "Priority WhatsApp support",
-      "6-month hosting",
-      "5 revisions",
-    ],
-  },
-  {
-    id: "royal",
-    name: "Royal Vibe",
-    price: 4000,
-    description: "Best for exclusive, luxury events",
-    popular: false,
-    heroImages: 5,
-    hosting: "1 year",
-    revisions: "Unlimited",
-    features: [
-      "5 hero banner images",
-      "Everything in Prestige",
-      "Multiple event pages",
-      "Advanced animations",
-      "MoMo tracking dashboard",
-      "Program booklet page",
-      "Host dashboard",
-      "Custom domain",
-      "Book a ride",
-      "Lost & found",
-      "White-label (no branding)",
-      "1-year hosting",
-      "Unlimited revisions",
-      "Dedicated account manager",
-      "Professional consultation",
-    ],
-  },
-];
+// Packages derived from the single-source EVENT_PACKAGES. Each event type has
+// exactly ONE package; customer picks event, gets its package. No tier confusion.
+export const packages: Package[] = EVENT_PACKAGES.map((p) => ({
+  id: p.id,
+  name: p.name,
+  price: p.price,
+  description: p.tagline,
+  popular: !!p.popular,
+  heroImages: p.id === "bespoke" ? 5 : p.id === "wedding" ? 3 : p.id === "birthday" ? 1 : 2,
+  hosting: p.hosting,
+  revisions: p.revisions,
+  features: p.features,
+}));
 
 export const addOns: AddOn[] = [
   // Design

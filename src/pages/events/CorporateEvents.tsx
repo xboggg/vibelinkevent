@@ -293,9 +293,9 @@ export default function CorporateEvents() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-blue-100 text-blue-800">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Royal Vibe — GHS 4,000+</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Corporate Event Package — GHS 3,500</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
-              Built for enterprise events: custom domain, host dashboard, unlimited photos, video integration, MoMo tracking, priority WhatsApp support, and full 12-month hosting. For smaller corporate gatherings or single-session launches, Prestige Vibe (GHS 2,500) covers the essentials.
+              Built for conferences, launches, AGMs and galas — multi-session agenda, delegate registration with badges, sponsor tier logos, speaker bios, post-event survey and live analytics dashboard. For enterprise events with custom domain, subdomain, and dedicated account manager, upgrade to Bespoke (from GHS 4,500).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-blue-700 to-slate-800 hover:from-blue-800 hover:to-slate-900">
@@ -342,7 +342,7 @@ export default function CorporateEvents() {
               Your delegates deserve more than a PDF and an Eventbrite link.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A premium digital invitation that carries every speaker, sponsor and delegate — from registration to post-event survey. Starting from GHS 1,500 for smaller launches.
+              A premium digital invitation that carries every speaker, sponsor and delegate — from registration to post-event survey. Starting from GHS 3,500.
             </p>
             <Button
               asChild

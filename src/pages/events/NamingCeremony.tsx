@@ -191,9 +191,9 @@ export default function NamingCeremony() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-sky-100 text-sky-700">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Classic Vibe — GHS 2,000</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Naming &amp; Outdooring Package — GHS 1,500</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
-              Ideal for naming ceremonies: custom design, photo gallery, RSVP tracking, background music, prayers wall and 90-day hosting. For families who want MoMo gift link and video guestbook, Prestige Vibe (GHS 2,500) is the one.
+              Built for the 8-day naming ceremony (Din To) — auto-countdown from birth, baby photo gallery, RSVP, parents' story, tradition explainer for international family, background music, and program timeline. Add-ons available for libation ceremony order, extended tradition explainer, and baby time capsule.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-sky-500 to-cyan-600 hover:from-sky-600 hover:to-cyan-700">
