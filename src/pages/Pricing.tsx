@@ -77,12 +77,18 @@ const calcAddOns = addOns
   .filter(a => a.price > 0);
 
 function PricingCalculator() {
-  const [selectedPackage, setSelectedPackage] = useState<number | null>(null);
+  // Track selection by package NAME (unique) — earlier version keyed by price,
+  // which caused all packages sharing the same price (Engagement, Funeral,
+  // Milestone Birthday, Church all at GHS 2,000) to highlight together.
+  const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const [paymentPlan, setPaymentPlan] = useState<"full" | "split">("full");
   const [refCode, setRefCode] = useState("");
 
-  const packageTotal = selectedPackage ?? 0;
+  const selectedPackageObj = selectedPackage
+    ? calcPackages.find((p) => p.name === selectedPackage)
+    : undefined;
+  const packageTotal = selectedPackageObj?.price ?? 0;
   const addOnsTotal = selectedAddOns.reduce((sum, name) => {
     const a = calcAddOns.find(x => x.name === name);
     return sum + (a?.price ?? 0);
@@ -114,20 +120,23 @@ function PricingCalculator() {
             <div className="bg-card border border-border rounded-2xl p-5">
               <p className="text-xs font-bold tracking-widest uppercase text-primary mb-4">Step 1 — Choose Package</p>
               <div className="grid grid-cols-2 gap-3">
-                {calcPackages.map(pkg => (
-                  <button
-                    key={pkg.name}
-                    onClick={() => setSelectedPackage(pkg.price)}
-                    className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
-                      selectedPackage === pkg.price
-                        ? "border-primary bg-primary/5 shadow-md"
-                        : "border-border hover:border-primary/40 bg-background"
-                    }`}
-                  >
-                    <p className={`font-bold text-sm ${selectedPackage === pkg.price ? "text-primary" : "text-foreground"}`}>{pkg.name}</p>
-                    <p className="text-lg font-black text-foreground mt-0.5">GHS {pkg.price.toLocaleString()}</p>
-                  </button>
-                ))}
+                {calcPackages.map(pkg => {
+                  const isSelected = selectedPackage === pkg.name;
+                  return (
+                    <button
+                      key={pkg.name}
+                      onClick={() => setSelectedPackage(pkg.name)}
+                      className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
+                        isSelected
+                          ? "border-primary bg-primary/5 shadow-md"
+                          : "border-border hover:border-primary/40 bg-background"
+                      }`}
+                    >
+                      <p className={`font-bold text-sm ${isSelected ? "text-primary" : "text-foreground"}`}>{pkg.name}</p>
+                      <p className="text-lg font-black text-foreground mt-0.5">GHS {pkg.price.toLocaleString()}</p>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -192,7 +201,7 @@ function PricingCalculator() {
                 <>
                   <div className="space-y-2 mb-4">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">{calcPackages.find(p => p.price === selectedPackage)?.name}</span>
+                      <span className="text-muted-foreground">{selectedPackage}</span>
                       <span className="font-semibold">GHS {packageTotal.toLocaleString()}</span>
                     </div>
                     {selectedAddOns.map(name => {
