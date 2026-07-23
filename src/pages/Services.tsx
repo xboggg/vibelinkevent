@@ -169,6 +169,11 @@ const services = [
     icon: Cake,
     title: "Birthday Celebrations",
     description: "Make every birthday unforgettable with vibrant, personalised digital invitations.",
+    // Optional per-card cross-link. Rendered as a subtle text link below the
+    // description. Currently only Birthday uses this — points to the Milestone
+    // Birthday page so we don't need a separate 'Milestone' card cluttering
+    // the services grid.
+    crossLink: { label: "Planning a 30th, 40th, 50th, 60th or 70th? See our Milestone Birthday page", href: "/milestone-birthday" },
     features: [
       { name: "Countdown to the big day", desc: "Build excitement early" },
       { name: "Gift wishlist & registry", desc: "Tell guests what you'd love" },
@@ -896,6 +901,18 @@ const Services = () => {
                     <p className="text-muted-foreground text-lg leading-relaxed">
                       {service.description}
                     </p>
+
+                    {/* Optional cross-link to a sibling page (e.g. Birthday
+                        card links to /milestone-birthday). Kept subtle so it
+                        doesn't compete with the primary CTAs at the bottom. */}
+                    {service.crossLink && (
+                      <Link
+                        to={service.crossLink.href}
+                        className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 font-medium underline underline-offset-4 decoration-primary/30 hover:decoration-primary transition-colors"
+                      >
+                        {service.crossLink.label} <span aria-hidden>→</span>
+                      </Link>
+                    )}
 
                     <ul className="space-y-3">
                       {service.features.map((feature) => (

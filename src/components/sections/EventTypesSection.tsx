@@ -47,7 +47,10 @@ const eventTypes = [
   {
     icon: Cake,
     title: "Birthdays",
-    desc: "Milestones worth celebrating",
+    // Card links to /birthday (Regular Birthday) which cross-links to
+    // /milestone-birthday. Subtitle hints both types exist so we can keep
+    // an even 8-card grid rather than 9 (Milestone as a separate card).
+    desc: "Regular · Milestone",
     slug: "birthday",
     href: "/birthday",
     color: "bg-pink-50 text-pink-600 border-pink-100",
