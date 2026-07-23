@@ -57,14 +57,6 @@ const packages = EVENT_PACKAGES.map((p) => ({
   eventPageRoute: p.eventPageRoute,
 }));
 
-// Universal add-ons (available on any non-Bespoke package).
-// Event-specific add-ons are shown on each event's page.
-const addOns = UNIVERSAL_ADDONS.map((a) => ({
-  name: a.name,
-  price: `GHS ${a.price.toLocaleString()}`,
-  desc: a.description,
-}));
-
 // Calculator uses non-Bespoke packages only (Bespoke is quote-only).
 // Keep `slug` so we can pass it through to /get-started as a URL param.
 const calcPackages = getNonBespokePackages().map((p) => ({
@@ -430,50 +422,10 @@ const Pricing = () => {
 
       <PricingCalculator />
 
-      {/* Add-ons Section */}
-      <section className="py-12 lg:py-16 bg-background">
-        <div className="container mx-auto px-4 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-8"
-          >
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 mb-4">
-              <Sparkles className="h-6 w-6 text-primary" />
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-              Enhance Your Invitation
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Add extra features to make your invitation even more special
-            </p>
-          </motion.div>
-
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {addOns.map((addon, index) => (
-                <motion.div
-                  key={addon.name}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.02 }}
-                  className="flex items-center justify-between p-3 rounded-lg bg-card border border-border hover:border-primary/30 hover:bg-muted/30 transition-all group"
-                >
-                  <div className="flex-1 min-w-0">
-                    <span className="text-foreground font-medium text-sm block truncate">{addon.name}</span>
-                    <span className="text-muted-foreground text-xs">{addon.desc}</span>
-                  </div>
-                  <span className="text-primary font-bold text-sm whitespace-nowrap ml-3 group-hover:text-secondary transition-colors">
-                    {addon.price}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* "Enhance Your Invitation" static add-ons grid removed 2026-07-23 —
+         the PricingCalculator directly above already lets customers select
+         and price add-ons interactively, so a static grid of the same 8
+         items below was pure duplication. */}
 
       {/* Payment Plans */}
       <section className="py-14 bg-gradient-to-b from-muted/30 via-background to-muted/20 overflow-hidden">
