@@ -39,17 +39,21 @@ const GetStarted = () => {
 
   // Calculator addon IDs → order-form addon IDs. The calculator uses the
   // UNIVERSAL_ADDONS set (eventPackages.ts) but the order form uses the addOns
-  // set (orderFormData.ts) which is a different catalogue with different prices.
-  // We only carry over addons that have a clean equivalent in the order form.
+  // set (orderFormData.ts) which is a separate catalogue. Mapped entries
+  // pre-check the matching add-on on step 5; rush-48h maps to step 6's
+  // deliveryUrgency instead of an add-on.
   const CALC_TO_FORM_ADDON: Record<string, string> = {
     "custom-domain":    "custom-domain",
     "hosting-6mo":      "hosting-6m",
     "hosting-1yr":      "hosting-1y",
     "extra-revision":   "extra-revision",
+    "white-label":      "white-label",
+    "priority-support": "priority-support",
+    "ai-photo-restore": "ai-photo-restore",
   };
-  const preselectedAddons = addonsParam
-    ? addonsParam.split(",").map((id) => CALC_TO_FORM_ADDON[id]).filter(Boolean)
-    : [];
+  const calcAddonIds = addonsParam ? addonsParam.split(",") : [];
+  const preselectedAddons = calcAddonIds.map((id) => CALC_TO_FORM_ADDON[id]).filter(Boolean);
+  const preselectedRush = calcAddonIds.includes("rush-48h");
 
   const handleFormComplete = (data: OrderFormData) => {
     toast.success("Order submitted successfully! We'll contact you within 2 hours.");
@@ -118,20 +122,23 @@ const GetStarted = () => {
       {/* Form Section */}
       <section className="py-12 lg:py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
-          {preselectedPkg && (
-            <div className="mb-6 max-w-2xl mx-auto px-4 py-3 rounded-xl bg-secondary/15 border border-secondary/30">
-              <div className="flex items-start gap-2">
-                <Sparkles className="h-4 w-4 text-secondary flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-foreground">
-                  We've pre-filled your <strong className="text-secondary">{preselectedPkg.name}</strong> selection from the pricing calculator
-                  {preselectedAddons.length > 0 && (
-                    <> plus <strong className="text-secondary">{preselectedAddons.length} add-on{preselectedAddons.length > 1 ? "s" : ""}</strong></>
-                  )}
-                  . Fill in your event details and we'll get started.
+          {preselectedPkg && (() => {
+            const extrasCount = preselectedAddons.length + (preselectedRush ? 1 : 0);
+            return (
+              <div className="mb-6 max-w-2xl mx-auto px-4 py-3 rounded-xl bg-secondary/15 border border-secondary/30">
+                <div className="flex items-start gap-2">
+                  <Sparkles className="h-4 w-4 text-secondary flex-shrink-0 mt-0.5" />
+                  <div className="text-sm text-foreground">
+                    We've pre-filled your <strong className="text-secondary">{preselectedPkg.name}</strong> selection from the pricing calculator
+                    {extrasCount > 0 && (
+                      <> plus <strong className="text-secondary">{extrasCount} add-on{extrasCount > 1 ? "s" : ""}</strong></>
+                    )}
+                    . Fill in your event details and we'll get started.
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {pickedDesign && (
             <motion.div
@@ -171,6 +178,7 @@ const GetStarted = () => {
             initialPackage={preselectedPackage}
             initialEventType={preselectedEventType}
             initialAddOns={preselectedAddons}
+            initialRush={preselectedRush}
           />
         </div>
       </section>

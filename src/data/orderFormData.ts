@@ -118,6 +118,10 @@ export const addOns: AddOn[] = [
   { id: "hosting-1y", name: "Extended Hosting (1 year)", price: 600, priceLabel: "GHS 600", category: "hosting" },
   { id: "custom-domain", name: "Custom Domain", price: 300, priceLabel: "GHS 300/yr", category: "hosting" },
   { id: "memorial-renewal", name: "Memorial Page Renewal", price: 100, priceLabel: "GHS 100/yr", category: "hosting" },
+  // Design / branding
+  { id: "white-label", name: "White-Label (remove VibeLink badge)", price: 300, priceLabel: "GHS 300", category: "design" },
+  { id: "priority-support", name: "Priority WhatsApp Support", price: 200, priceLabel: "GHS 200", category: "features" },
+  { id: "ai-photo-restore", name: "AI Photo Restoration", price: 150, priceLabel: "GHS 150", category: "design" },
 ];
 
 export const colorPalettes: ColorPalette[] = [

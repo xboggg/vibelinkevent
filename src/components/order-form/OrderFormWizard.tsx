@@ -30,6 +30,7 @@ interface OrderFormWizardProps {
   initialPackage?: string;
   initialEventType?: string;
   initialAddOns?: string[];
+  initialRush?: boolean;
 }
 
 const DRAFT_KEY = "vibelink_order_draft";
@@ -40,8 +41,16 @@ export const OrderFormWizard = ({
   initialPackage = "",
   initialEventType = "",
   initialAddOns = [],
+  initialRush = false,
 }: OrderFormWizardProps) => {
+  // Arriving with a fresh package pre-selection (from the /pricing calculator)
+  // means the customer's intent has clearly changed — ignore any stale
+  // localStorage draft so it doesn't silently overwrite their new selections
+  // and drop them back at step 1 with nothing filled in.
+  const hasPreselection = !!initialPackage;
+
   const savedDraft = (() => {
+    if (hasPreselection) return null;
     try {
       const d = localStorage.getItem(DRAFT_KEY);
       if (!d) return null;
@@ -62,12 +71,6 @@ export const OrderFormWizard = ({
     }
   })();
 
-  // When the customer arrived from the pricing calculator with a preselected
-  // package, skip step 1 (Event Type) — we already know it — and drop them at
-  // step 2 (Event Details) where the real work starts. The saved draft still
-  // wins if the customer had abandoned an in-progress order.
-  const hasPreselection = !!initialPackage && !savedDraft;
-
   const [currentStep, setCurrentStep] = useState(savedDraft?.step || (hasPreselection ? 2 : 1));
   const [formData, setFormData] = useState<OrderFormData>({
     ...initialFormData,
@@ -75,6 +78,7 @@ export const OrderFormWizard = ({
     ...(initialPackage ? { selectedPackage: initialPackage } : {}),
     ...(initialEventType ? { eventType: initialEventType } : {}),
     ...(initialAddOns.length ? { selectedAddOns: initialAddOns } : {}),
+    ...(initialRush ? { deliveryUrgency: "rush" as const } : {}),
     ...(savedDraft?.data || {}),
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
