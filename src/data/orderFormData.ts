@@ -38,6 +38,11 @@ export interface AddOn {
   price: number;
   priceLabel: string;
   category: "delivery" | "design" | "features" | "language" | "hosting";
+  // Optional. If present, the add-on is treated as ALREADY INCLUDED when the
+  // customer's package ID appears in this list — AddOnsStep hides it from
+  // the "extras" grid and shows it under "Already in your package" instead.
+  // Package IDs come from EventPackageId in eventPackages.ts.
+  includedInPackages?: string[];
 }
 
 export interface ColorPalette {
@@ -85,47 +90,52 @@ export const packages: Package[] = EVENT_PACKAGES.map((p) => ({
   features: p.features,
 }));
 
+// includedInPackages field: cross-referenced against every package's `features`
+// list in eventPackages.ts. Any add-on whose function overlaps with a feature
+// the package already ships gets that package ID in the list — AddOnsStep
+// then hides it from the extras grid so the customer isn't asked to pay
+// for something they already have. Bespoke ("All add-ons included") is
+// present on nearly every add-on.
 export const addOns: AddOn[] = [
   // Design
-  { id: "video-integration", name: "Video Integration", price: 200, priceLabel: "GHS 200", category: "design" },
-  { id: "extra-revision", name: "Extra Revision Round", price: 100, priceLabel: "GHS 100", category: "design" },
-  { id: "extra-photos", name: "Extra Photos (+10)", price: 100, priceLabel: "GHS 100", category: "design" },
+  { id: "video-integration", name: "Video Integration", price: 200, priceLabel: "GHS 200", category: "design", includedInPackages: ["wedding", "bespoke"] },
+  { id: "extra-revision", name: "Extra Revision Round", price: 100, priceLabel: "GHS 100", category: "design", includedInPackages: ["bespoke"] },
+  { id: "extra-photos", name: "Extra Photos (+10)", price: 100, priceLabel: "GHS 100", category: "design", includedInPackages: ["bespoke"] },
   // Features
-  { id: "calendar-sync", name: "Calendar Sync", price: 100, priceLabel: "GHS 100", category: "features" },
-  { id: "momo-tracking", name: "MoMo Tracking Dashboard", price: 200, priceLabel: "GHS 200", category: "features" },
-  { id: "program-booklet", name: "Program Booklet Page", price: 150, priceLabel: "GHS 150", category: "features" },
-  { id: "host-dashboard", name: "Host Dashboard", price: 200, priceLabel: "GHS 200", category: "features" },
-  { id: "rsvp", name: "RSVP Tracking", price: 100, priceLabel: "GHS 100", category: "features" },
-  { id: "qr-checkin", name: "QR Check-in System", price: 150, priceLabel: "GHS 150", category: "features" },
-  { id: "digital-guestbook", name: "Digital Guestbook", price: 150, priceLabel: "GHS 150", category: "features" },
-  { id: "gift-acknowledgment", name: "Gift Acknowledgment Page", price: 150, priceLabel: "GHS 150", category: "features" },
-  { id: "livestream", name: "Live Stream Embed", price: 200, priceLabel: "GHS 200", category: "features" },
-  { id: "thank-you", name: "Post-Event Thank You Page", price: 200, priceLabel: "GHS 200", category: "features" },
-  { id: "messaging-wall", name: "Guest Messaging Wall", price: 150, priceLabel: "GHS 150", category: "features" },
-  { id: "photo-booth", name: "Photo Booth Frame", price: 100, priceLabel: "GHS 100", category: "features" },
-  { id: "timeline", name: "Event Timeline/Program Display", price: 100, priceLabel: "GHS 100", category: "features" },
-  { id: "tribute-wall", name: "Memory Tribute Wall (funerals)", price: 200, priceLabel: "GHS 200", category: "features" },
-  { id: "bg-music", name: "Background Music", price: 50, priceLabel: "GHS 50", category: "features" },
-  { id: "lost-found", name: "Lost & Found", price: 100, priceLabel: "GHS 100", category: "features" },
-  { id: "nearby-accommodation", name: "Nearby Accommodation", price: 100, priceLabel: "GHS 100", category: "features" },
-  { id: "book-a-ride", name: "Book a Ride", price: 100, priceLabel: "GHS 100", category: "features" },
+  { id: "calendar-sync", name: "Calendar Sync", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
+  { id: "momo-tracking", name: "MoMo Tracking Dashboard", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["wedding", "funeral", "milestone-birthday", "graduation", "church", "bespoke"] },
+  { id: "program-booklet", name: "Program Booklet Page", price: 150, priceLabel: "GHS 150", category: "features", includedInPackages: ["church", "bespoke"] },
+  { id: "host-dashboard", name: "Host Dashboard", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["corporate", "bespoke"] },
+  { id: "rsvp", name: "RSVP Tracking", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["wedding", "engagement", "funeral", "corporate", "naming", "milestone-birthday", "birthday", "anniversary", "graduation", "church", "bespoke"] },
+  { id: "qr-checkin", name: "QR Check-in System", price: 150, priceLabel: "GHS 150", category: "features", includedInPackages: ["bespoke"] },
+  { id: "digital-guestbook", name: "Digital Guestbook", price: 150, priceLabel: "GHS 150", category: "features", includedInPackages: ["milestone-birthday", "bespoke"] },
+  { id: "gift-acknowledgment", name: "Gift Acknowledgment Page", price: 150, priceLabel: "GHS 150", category: "features", includedInPackages: ["corporate", "graduation", "bespoke"] },
+  { id: "livestream", name: "Live Stream Embed", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["wedding", "funeral", "church", "bespoke"] },
+  { id: "thank-you", name: "Post-Event Thank You Page", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["corporate", "graduation", "bespoke"] },
+  { id: "messaging-wall", name: "Guest Messaging Wall", price: 150, priceLabel: "GHS 150", category: "features", includedInPackages: ["funeral", "milestone-birthday", "bespoke"] },
+  { id: "photo-booth", name: "Photo Booth Frame", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
+  { id: "timeline", name: "Event Timeline/Program Display", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["wedding", "engagement", "funeral", "corporate", "naming", "milestone-birthday", "anniversary", "graduation", "church", "bespoke"] },
+  { id: "tribute-wall", name: "Memory Tribute Wall (funerals)", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["funeral", "bespoke"] },
+  { id: "bg-music", name: "Background Music", price: 50, priceLabel: "GHS 50", category: "features", includedInPackages: ["wedding", "engagement", "naming", "milestone-birthday", "anniversary", "graduation", "church", "bespoke"] },
+  { id: "lost-found", name: "Lost & Found", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
+  { id: "nearby-accommodation", name: "Nearby Accommodation", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
+  { id: "book-a-ride", name: "Book a Ride", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
   // Language
-  { id: "extra-language", name: "Additional Language", price: 150, priceLabel: "GHS 150", category: "language" },
-  { id: "bilingual-twi", name: "Bilingual (English + Twi)", price: 150, priceLabel: "GHS 150", category: "language" },
-  { id: "bilingual-french", name: "Bilingual (English + French)", price: 150, priceLabel: "GHS 150", category: "language" },
-  // Hosting
+  { id: "extra-language", name: "Additional Language", price: 150, priceLabel: "GHS 150", category: "language", includedInPackages: ["engagement", "bespoke"] },
+  { id: "bilingual-twi", name: "Bilingual (English + Twi)", price: 150, priceLabel: "GHS 150", category: "language", includedInPackages: ["engagement", "bespoke"] },
+  { id: "bilingual-french", name: "Bilingual (English + French)", price: 150, priceLabel: "GHS 150", category: "language", includedInPackages: ["bespoke"] },
   // Hosting — prices must stay in lockstep with UNIVERSAL_ADDONS in
   // eventPackages.ts (the /pricing page's source of truth).
   { id: "hosting-6m", name: "Extended Hosting (6 months)", price: 500, priceLabel: "GHS 500", category: "hosting" },
-  { id: "hosting-1y", name: "Extended Hosting (1 year)", price: 1000, priceLabel: "GHS 1,000", category: "hosting" },
-  { id: "custom-domain", name: "Custom Domain", price: 500, priceLabel: "GHS 500/yr", category: "hosting" },
+  { id: "hosting-1y", name: "Extended Hosting (1 year)", price: 1000, priceLabel: "GHS 1,000", category: "hosting", includedInPackages: ["bespoke"] },
+  { id: "custom-domain", name: "Custom Domain", price: 500, priceLabel: "GHS 500/yr", category: "hosting", includedInPackages: ["bespoke"] },
   // Memorial Page Renewal removed from order form — it's a future recurring
   // subscription (GHS 100/yr) that kicks in after the initial hosting period
   // ends, not an upfront add-on. Handled separately post-event.
   // Design / branding
-  { id: "white-label", name: "White-Label (remove VibeLink badge)", price: 300, priceLabel: "GHS 300", category: "design" },
-  { id: "priority-support", name: "Priority WhatsApp Support", price: 200, priceLabel: "GHS 200", category: "features" },
-  { id: "ai-photo-restore", name: "AI Photo Restoration", price: 150, priceLabel: "GHS 150", category: "design" },
+  { id: "white-label", name: "White-Label (remove VibeLink badge)", price: 300, priceLabel: "GHS 300", category: "design", includedInPackages: ["bespoke"] },
+  { id: "priority-support", name: "Priority WhatsApp Support", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["bespoke"] },
+  { id: "ai-photo-restore", name: "AI Photo Restoration", price: 150, priceLabel: "GHS 150", category: "design", includedInPackages: ["bespoke"] },
 ];
 
 export const colorPalettes: ColorPalette[] = [

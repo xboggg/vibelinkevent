@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { OrderFormData, addOns, packages } from "@/data/orderFormData";
-import { ArrowLeft, ArrowRight, Check, Plus } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, ChevronDown, ChevronUp, Plus, Sparkles } from "lucide-react";
 
 interface AddOnsStepProps {
   formData: OrderFormData;
@@ -26,9 +27,38 @@ export const AddOnsStep = ({
   onPrev,
 }: AddOnsStepProps) => {
   const selectedPackage = packages.find((p) => p.id === formData.selectedPackage);
-  
-  // Group add-ons by category
-  const groupedAddOns = addOns.reduce((acc, addon) => {
+  const [showIncluded, setShowIncluded] = useState(false);
+
+  // Split add-ons into "already in your package" (hidden from the extras grid,
+  // shown collapsed so customers can reassure themselves it's there) and
+  // "real extras" (the paid checkboxes). When no package is selected yet,
+  // fall back to showing everything as extras.
+  const pkgId = formData.selectedPackage;
+  const includedAddOns = pkgId
+    ? addOns.filter((a) => a.includedInPackages?.includes(pkgId))
+    : [];
+  const extraAddOns = pkgId
+    ? addOns.filter((a) => !a.includedInPackages?.includes(pkgId))
+    : addOns;
+
+  // If a stale addon was pre-selected but is now "included" in the customer's
+  // package (e.g. arrived from /pricing calculator with an addon that's baked
+  // into their event), silently drop it so we don't double-charge. useEffect
+  // so it doesn't run during render.
+  useEffect(() => {
+    const stale = formData.selectedAddOns.filter((id) =>
+      includedAddOns.some((a) => a.id === id)
+    );
+    if (stale.length > 0) {
+      updateFormData({
+        selectedAddOns: formData.selectedAddOns.filter((id) => !stale.includes(id)),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pkgId]);
+
+  // Group extras by category for the paid grid
+  const groupedAddOns = extraAddOns.reduce((acc, addon) => {
     if (!acc[addon.category]) {
       acc[addon.category] = [];
     }
@@ -67,10 +97,50 @@ export const AddOnsStep = ({
           <div className="mt-2 p-3 rounded-lg bg-muted/50 text-sm">
             <span className="text-muted-foreground">Your package: </span>
             <span className="font-semibold text-foreground">{selectedPackage.name}</span>
-            <span className="text-muted-foreground"> • Some features may already be included</span>
+            {includedAddOns.length > 0 && (
+              <span className="text-muted-foreground"> • {includedAddOns.length} feature{includedAddOns.length > 1 ? "s" : ""} already included</span>
+            )}
           </div>
         )}
       </div>
+
+      {/* Already included — collapsible reassurance, non-clickable. Only
+          appears when the customer's package actually covers at least one
+          feature the order-form catalogue also offers. */}
+      {selectedPackage && includedAddOns.length > 0 && (
+        <div className="rounded-xl border border-emerald-200/70 bg-emerald-50/60 dark:bg-emerald-950/20 dark:border-emerald-900/40 overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setShowIncluded((v) => !v)}
+            className="w-full flex items-center justify-between p-3 text-left hover:bg-emerald-100/40 dark:hover:bg-emerald-900/20 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-emerald-700 dark:text-emerald-400 flex-shrink-0" />
+              <span className="text-sm font-semibold text-emerald-900 dark:text-emerald-200">
+                Already in your {selectedPackage.name} package ({includedAddOns.length})
+              </span>
+            </div>
+            {showIncluded ? (
+              <ChevronUp className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
+            ) : (
+              <ChevronDown className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
+            )}
+          </button>
+          {showIncluded && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 pt-0">
+              {includedAddOns.map((addon) => (
+                <div
+                  key={addon.id}
+                  className="flex items-center gap-2 p-2 rounded-lg bg-white/60 dark:bg-emerald-950/30 border border-emerald-200/50 dark:border-emerald-900/30"
+                >
+                  <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                  <span className="text-xs text-emerald-900 dark:text-emerald-200">{addon.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="space-y-6">
         {Object.entries(groupedAddOns).map(([category, categoryAddOns]) => (
