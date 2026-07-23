@@ -17,7 +17,10 @@ export const EventTypeStep = ({
   onNext,
 }: EventTypeStepProps) => {
   const handleSelect = (eventId: string) => {
-    updateFormData({ eventType: eventId });
+    // Event ID and package ID share the same slug (wedding, funeral, bespoke...)
+    // so picking the event locks in the package too — there's no separate
+    // Package step in the wizard anymore.
+    updateFormData({ eventType: eventId, selectedPackage: eventId });
   };
 
   return (

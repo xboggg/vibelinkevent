@@ -103,9 +103,9 @@ export const PriceCalculator = ({ formData, currentStep }: PriceCalculatorProps)
         )}
       </div>
 
-      {currentStep < 4 && (
+      {!formData.selectedPackage && (
         <p className="text-xs text-muted-foreground mt-4 text-center">
-          Complete step {currentStep} to see pricing
+          Pick your event to see pricing
         </p>
       )}
     </motion.div>

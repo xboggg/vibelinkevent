@@ -7,21 +7,22 @@ import { supabase } from "@/integrations/supabase/client";
 import { EventTypeStep } from "./steps/EventTypeStep";
 import { EventDetailsStep } from "./steps/EventDetailsStep";
 import { StyleColorsStep } from "./steps/StyleColorsStep";
-import { PackageStep } from "./steps/PackageStep";
 import { AddOnsStep } from "./steps/AddOnsStep";
 import { TimelineStep } from "./steps/TimelineStep";
 import { ContactStep } from "./steps/ContactStep";
 import { OrderSummary } from "./OrderSummary";
 import { PriceCalculator } from "./PriceCalculator";
 
+// Package step removed — each event type has exactly ONE package (event ID
+// and package ID share the same slug), so EventTypeStep now auto-sets
+// selectedPackage when the event is picked. Wizard is 6 steps.
 const steps = [
   { id: 1, name: "Event Type", shortName: "Event" },
   { id: 2, name: "Event Details", shortName: "Details" },
   { id: 3, name: "Style & Colors", shortName: "Style" },
-  { id: 4, name: "Package", shortName: "Package" },
-  { id: 5, name: "Add-ons", shortName: "Add-ons" },
-  { id: 6, name: "Timeline", shortName: "Timeline" },
-  { id: 7, name: "Contact & Submit", shortName: "Submit" },
+  { id: 4, name: "Add-ons", shortName: "Add-ons" },
+  { id: 5, name: "Timeline", shortName: "Timeline" },
+  { id: 6, name: "Contact & Submit", shortName: "Submit" },
 ];
 
 interface OrderFormWizardProps {
@@ -88,7 +89,7 @@ export const OrderFormWizard = ({
     if (currentStep > 1 || Object.values(formData).some(v => v && v !== initialFormData[v as keyof OrderFormData])) {
       localStorage.setItem(DRAFT_KEY, JSON.stringify({ step: currentStep, data: formData }));
     }
-    if (currentStep >= 7 && formData.email) {
+    if (currentStep >= 6 && formData.email) {
       let sessionId = sessionStorage.getItem("vibelink_cart_session");
       if (!sessionId) {
         sessionId = crypto.randomUUID();
@@ -150,20 +151,20 @@ export const OrderFormWizard = ({
   };
 
   const isStepComplete = (step: number): boolean => {
+    // Package step (previously #4) removed — selectedPackage is now auto-set
+    // when the event type is picked at step 1.
     switch (step) {
       case 1:
-        return !!formData.eventType;
+        return !!formData.eventType && !!formData.selectedPackage;
       case 2:
         return !!formData.eventTitle && !!formData.eventDate && !!formData.eventVenue;
       case 3:
         return !!formData.colorPalette && !!formData.stylePreference;
       case 4:
-        return !!formData.selectedPackage;
-      case 5:
         return true; // Add-ons are optional
-      case 6:
+      case 5:
         return true; // Timeline has defaults
-      case 7:
+      case 6:
         return !!formData.fullName && !!formData.phone;
       default:
         return false;
@@ -525,12 +526,10 @@ ${formData.designNotes}` : ""}`;
       case 3:
         return <StyleColorsStep {...props} />;
       case 4:
-        return <PackageStep {...props} />;
-      case 5:
         return <AddOnsStep {...props} />;
-      case 6:
+      case 5:
         return <TimelineStep {...props} />;
-      case 7:
+      case 6:
         return (
           <ContactStep
             {...props}
@@ -637,7 +636,9 @@ ${formData.designNotes}` : ""}`;
             formData={formData}
             currentStep={currentStep}
           />
-          {currentStep >= 4 && (
+          {/* Order summary shows as soon as an event is picked at step 1 —
+              selectedPackage is auto-set from eventType now. */}
+          {!!formData.selectedPackage && (
             <OrderSummary
               formData={formData}
               total={calculateTotal()}
