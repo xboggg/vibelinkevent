@@ -112,11 +112,18 @@ export const addOns: AddOn[] = [
   { id: "gift-acknowledgment", name: "Gift Acknowledgment Page", price: 150, priceLabel: "GHS 150", category: "features", includedInPackages: ["corporate", "graduation", "bespoke"] },
   { id: "livestream", name: "Live Stream Embed", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["wedding", "funeral", "church", "bespoke"] },
   { id: "thank-you", name: "Post-Event Thank You Page", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["corporate", "graduation", "bespoke"] },
-  { id: "messaging-wall", name: "Guest Messaging Wall", price: 150, priceLabel: "GHS 150", category: "features", includedInPackages: ["funeral", "milestone-birthday", "bespoke"] },
+  // Guest Messaging Wall is a richer, moderated live wall — distinct from a
+  // package's simple condolence/wishes wall. Paid extra for everyone except Bespoke.
+  { id: "messaging-wall", name: "Guest Messaging Wall", price: 150, priceLabel: "GHS 150", category: "features", includedInPackages: ["bespoke"] },
   { id: "photo-booth", name: "Photo Booth Frame", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
-  { id: "timeline", name: "Event Timeline/Program Display", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["wedding", "engagement", "funeral", "corporate", "naming", "milestone-birthday", "anniversary", "graduation", "church", "bespoke"] },
+  // Event Timeline is a richer visual display — distinct from a package's
+  // simple "Program timeline" text. Paid extra for everyone except Bespoke.
+  { id: "timeline", name: "Event Timeline/Program Display", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
   { id: "tribute-wall", name: "Memory Tribute Wall (funerals)", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["funeral", "bespoke"] },
-  { id: "bg-music", name: "Background Music", price: 50, priceLabel: "GHS 50", category: "features", includedInPackages: ["wedding", "engagement", "naming", "milestone-birthday", "anniversary", "graduation", "church", "bespoke"] },
+  // Background Music upgrade lets the customer pick their OWN track —
+  // distinct from a package's default curated playlist. Paid extra for
+  // everyone except Bespoke.
+  { id: "bg-music", name: "Background Music", price: 50, priceLabel: "GHS 50", category: "features", includedInPackages: ["bespoke"] },
   { id: "lost-found", name: "Lost & Found", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
   { id: "nearby-accommodation", name: "Nearby Accommodation", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
   { id: "book-a-ride", name: "Book a Ride", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
