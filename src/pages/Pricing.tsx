@@ -645,11 +645,16 @@ const Pricing = () => {
                   <h4 className="text-xl font-bold text-foreground">Your Earnings Per Referral</h4>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                {/* Four referral tiers — MUST stay in sync with rewardAmounts in
+                    OrderFormWizard.tsx and REFERRAL_REWARDS in ReferralsAdmin.tsx.
+                    Any change here needs matching changes there or referrers
+                    will see one number and get paid a different one. */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   {[
-                    { package: "Any small event", reward: "GHS 100", color: "from-blue-500 to-cyan-500" },
-                    { package: "Wedding / Corporate", reward: "GHS 250", color: "from-purple-500 to-pink-500" },
-                    { package: "Bespoke", reward: "GHS 500", color: "from-amber-500 to-orange-500" }
+                    { package: "Small events", subtitle: "Birthday, Graduation, Naming", reward: "GHS 100", color: "from-blue-500 to-cyan-500" },
+                    { package: "Medium events", subtitle: "Anniversary, Milestone, Church, Engagement, Funeral", reward: "GHS 200", color: "from-emerald-500 to-teal-500" },
+                    { package: "Large events", subtitle: "Wedding, Corporate", reward: "GHS 300", color: "from-purple-500 to-pink-500" },
+                    { package: "Bespoke", subtitle: "Custom, luxury events", reward: "GHS 500", color: "from-amber-500 to-orange-500" }
                   ].map((tier, index) => (
                     <motion.div
                       key={tier.package}
@@ -660,9 +665,10 @@ const Pricing = () => {
                       whileHover={{ scale: 1.05, y: -5 }}
                       className="text-center p-4 rounded-xl bg-card border border-border shadow-sm hover:shadow-md transition-all"
                     >
-                      <p className="text-muted-foreground text-sm mb-1">When they order</p>
-                      <p className="font-semibold text-foreground mb-2">{tier.package}</p>
-                      <div className={`inline-block px-4 py-2 rounded-full bg-gradient-to-r ${tier.color} text-white font-bold text-lg shadow-lg`}>
+                      <p className="text-muted-foreground text-xs mb-1">When they order</p>
+                      <p className="font-semibold text-foreground text-sm">{tier.package}</p>
+                      <p className="text-muted-foreground text-[10px] leading-tight mb-3 min-h-[24px]">{tier.subtitle}</p>
+                      <div className={`inline-block px-3 py-1.5 rounded-full bg-gradient-to-r ${tier.color} text-white font-bold text-base shadow-lg`}>
                         {tier.reward}
                       </div>
                     </motion.div>

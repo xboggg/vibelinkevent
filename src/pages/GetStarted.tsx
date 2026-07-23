@@ -24,7 +24,13 @@ const GetStarted = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const referralCode = searchParams.get("ref") || "";
-  const packageParam = searchParams.get("package") || "";
+  // Two conventions in the codebase point at /get-started with a pre-selected
+  // event/package:
+  //   • /pricing calculator + Bespoke card send `?package=<lowercase slug>`
+  //   • The 9 event pages (via EventPageTemplate) send `?eventType=<Capitalized>`
+  // Accept both so no entry point silently drops the customer's intent. Also
+  // lowercase-normalize so casing mismatches (Wedding vs wedding) resolve.
+  const packageParam = (searchParams.get("package") || searchParams.get("eventType") || "").toLowerCase();
   const addonsParam = searchParams.get("addons") || "";
   const templateSlug = searchParams.get("template") || "";
   const pickedDesign = templateSlug ? findDesignBySlug(templateSlug) : null;
