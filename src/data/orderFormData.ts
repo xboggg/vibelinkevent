@@ -119,7 +119,9 @@ export const addOns: AddOn[] = [
   { id: "hosting-6m", name: "Extended Hosting (6 months)", price: 500, priceLabel: "GHS 500", category: "hosting" },
   { id: "hosting-1y", name: "Extended Hosting (1 year)", price: 1000, priceLabel: "GHS 1,000", category: "hosting" },
   { id: "custom-domain", name: "Custom Domain", price: 500, priceLabel: "GHS 500/yr", category: "hosting" },
-  { id: "memorial-renewal", name: "Memorial Page Renewal", price: 100, priceLabel: "GHS 100/yr", category: "hosting" },
+  // Memorial Page Renewal removed from order form — it's a future recurring
+  // subscription (GHS 100/yr) that kicks in after the initial hosting period
+  // ends, not an upfront add-on. Handled separately post-event.
   // Design / branding
   { id: "white-label", name: "White-Label (remove VibeLink badge)", price: 300, priceLabel: "GHS 300", category: "design" },
   { id: "priority-support", name: "Priority WhatsApp Support", price: 200, priceLabel: "GHS 200", category: "features" },
