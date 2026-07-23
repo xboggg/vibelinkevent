@@ -872,16 +872,12 @@ const Services = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent transition-opacity duration-300 group-hover:opacity-0" />
 
-                      <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/70 to-primary/50 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center p-6">
-                        <div className="text-center text-primary-foreground">
-                          <div className="text-5xl md:text-6xl font-bold mb-2">{service.stats.created}</div>
-                          <div className="text-lg font-medium mb-4 opacity-90">{service.stats.label}</div>
-                          <div className="flex items-center justify-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                            <span className="text-sm">Client Satisfaction:</span>
-                            <span className="text-lg font-bold">{service.stats.satisfaction}</span>
-                          </div>
-                        </div>
-                      </div>
+                      {/* Hover overlay used to show fake stats (500+ Weddings
+                          Created, 98% satisfaction, etc.). Removed 2026-07-23
+                          per honesty pass — site isn't public yet so per-
+                          category volume claims were fabricated. The title +
+                          feature list on the text side of the card already
+                          communicates the value; no overlay needed. */}
                     </motion.div>
                   </div>
 

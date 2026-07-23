@@ -106,7 +106,7 @@ export default function Referral() {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { value: "500+", label: "Events Created" },
+                  { value: "100+", label: "Invitations Created" },
                   { value: "98%", label: "Satisfaction" },
                   { value: "48hr", label: "Rush Delivery" },
                 ].map((s, i) => (

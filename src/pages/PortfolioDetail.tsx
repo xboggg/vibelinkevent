@@ -70,7 +70,7 @@ const portfolioData: Record<string, {
     features: ["Event countdown timer", "Photo gallery", "Alumni registration portal", "Donation tracking", "Event schedule", "School history timeline", "WhatsApp sharing"],
     story: "We designed and developed a stunning digital platform for the Old Students Association of PRESEC-OSU for their landmark 70th Anniversary celebration. With alumni scattered across Ghana and the diaspora, they needed a central hub to rally the PRESEC family together. We delivered a vibrant, school-colored website featuring the iconic motto OPR3! BEE ESH3! that captured the spirit of brotherhood and excellence. The platform serves as both an invitation to the grand launch event and a registration portal for alumni worldwide.",
     package: "Prestige Vibe",
-    highlights: ["500+ alumni registrations", "Nationwide reach", "Diaspora engagement from 10+ countries"],
+    highlights: ["100+ alumni registrations", "Nationwide reach", "Diaspora engagement from 3 countries"],
   },
   "nana-yaw-memorial": {
     title: "In Loving Memory of Nana Yaw",
@@ -81,7 +81,7 @@ const portfolioData: Record<string, {
     features: ["Memorial biography", "Tribute wall for messages", "Funeral program schedule", "Donation tracking", "Photo gallery", "Location directions", "WhatsApp sharing"],
     story: "The family of Nana Yaw needed a way to coordinate a large funeral while keeping diaspora family members informed. We created a memorial page that served both as an invitation and a lasting tribute. The donation tracking feature helped the family manage contributions transparently, and the tribute wall became a cherished collection of memories from friends and family.",
     package: "Prestige Vibe",
-    highlights: ["GHS 25,000+ donations tracked", "50+ tribute messages", "500+ page views"],
+    highlights: ["GHS 10,000+ donations tracked", "20+ tribute messages", "200+ page views"],
   },
   "baby-adjoa-naming": {
     title: "Baby Adjoa's Naming Ceremony",

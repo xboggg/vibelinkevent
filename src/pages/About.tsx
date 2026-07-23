@@ -69,8 +69,8 @@ const values = [
 ];
 
 const stats = [
-  { value: 500, suffix: "+", label: "Events Created" },
-  { value: 10000, suffix: "+", label: "Guests Reached" },
+  { value: 100, suffix: "+", label: "Invitations Created" },
+  { value: 3, suffix: "", label: "Countries Reached" },
   { value: 98, suffix: "%", label: "Satisfaction Rate" },
   { value: 48, suffix: "hrs", label: "Fastest Delivery" },
 ];
