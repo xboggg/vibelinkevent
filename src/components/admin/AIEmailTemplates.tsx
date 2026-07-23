@@ -140,7 +140,7 @@ Great news! Your ${vars.eventType} order is complete and ready for ${vars.delive
 
 ${vars.deliveryMethod === 'pickup' ? `
 Pickup Location: ${vars.pickupLocation || 'Our office'}
-Available Times: ${vars.pickupTimes || 'Monday-Friday, 9AM-5PM'}
+Available Times: ${vars.pickupTimes || 'Mon-Fri 9AM-5PM, Sat 10AM-2PM'}
 ` : `
 Delivery Address: ${vars.deliveryAddress}
 Expected Delivery: ${vars.deliveryDate}

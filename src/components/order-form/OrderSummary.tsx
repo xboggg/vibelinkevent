@@ -116,7 +116,7 @@ export const OrderSummary = ({ formData, total }: OrderSummaryProps) => {
           </li>
           <li className="flex justify-between">
             <span className="text-muted-foreground">Saturday</span>
-            <span className="text-foreground font-medium">10am - 4pm</span>
+            <span className="text-foreground font-medium">10am - 2pm</span>
           </li>
         </ul>
       </div>
