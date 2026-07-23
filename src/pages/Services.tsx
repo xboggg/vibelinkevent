@@ -961,9 +961,15 @@ const Services = () => {
             className="mt-12 text-center"
           >
             <p className="text-muted-foreground mb-6">
-              Features availability varies by package.
-              <Link to="/pricing" className="text-primary font-medium ml-1">View our pricing</Link> to see what is included in each tier.
+              Features shown here vary by event package.
+              <Link to="/pricing" className="text-primary font-medium ml-1">View our pricing</Link> to see what's included with each event.
             </p>
+            <div className="mb-8 max-w-2xl mx-auto px-4 py-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-900/40 text-sm text-amber-900 dark:text-amber-200">
+              <span className="font-semibold">Advanced features</span> such as vendor marketplace, weather contingency, planner analytics, and enterprise white-label are part of our
+              <Link to="/pricing" className="font-semibold underline underline-offset-2 mx-1">Bespoke package</Link>
+              or available on request.
+              <Link to="/contact" className="font-semibold underline underline-offset-2 ml-1">Talk to us for a custom quote.</Link>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild variant="default" size="lg">
                 <Link to="/pricing">View Pricing</Link>
