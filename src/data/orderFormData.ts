@@ -114,9 +114,11 @@ export const addOns: AddOn[] = [
   { id: "bilingual-twi", name: "Bilingual (English + Twi)", price: 150, priceLabel: "GHS 150", category: "language" },
   { id: "bilingual-french", name: "Bilingual (English + French)", price: 150, priceLabel: "GHS 150", category: "language" },
   // Hosting
-  { id: "hosting-6m", name: "Extended Hosting (6 months)", price: 250, priceLabel: "GHS 250", category: "hosting" },
-  { id: "hosting-1y", name: "Extended Hosting (1 year)", price: 600, priceLabel: "GHS 600", category: "hosting" },
-  { id: "custom-domain", name: "Custom Domain", price: 300, priceLabel: "GHS 300/yr", category: "hosting" },
+  // Hosting — prices must stay in lockstep with UNIVERSAL_ADDONS in
+  // eventPackages.ts (the /pricing page's source of truth).
+  { id: "hosting-6m", name: "Extended Hosting (6 months)", price: 500, priceLabel: "GHS 500", category: "hosting" },
+  { id: "hosting-1y", name: "Extended Hosting (1 year)", price: 1000, priceLabel: "GHS 1,000", category: "hosting" },
+  { id: "custom-domain", name: "Custom Domain", price: 500, priceLabel: "GHS 500/yr", category: "hosting" },
   { id: "memorial-renewal", name: "Memorial Page Renewal", price: 100, priceLabel: "GHS 100/yr", category: "hosting" },
   // Design / branding
   { id: "white-label", name: "White-Label (remove VibeLink badge)", price: 300, priceLabel: "GHS 300", category: "design" },
