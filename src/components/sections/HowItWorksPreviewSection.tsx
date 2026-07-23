@@ -18,8 +18,8 @@ const steps = [
   {
     number: "02",
     icon: MessageSquare,
-    title: "Get Your Quote",
-    description: "WhatsApp reply within 2 hours with your custom quote.",
+    title: "We Confirm on WhatsApp",
+    description: "Same-day WhatsApp confirmation to lock in your details.",
     gradient: "from-pink-500 to-rose-500",
     glow: "rgba(236,72,153,0.35)",
     bg: "#ec4899",
@@ -28,7 +28,7 @@ const steps = [
     number: "03",
     icon: CreditCard,
     title: "Pay & Confirm",
-    description: "50% deposit via MoMo or Card to lock your date.",
+    description: "MoMo, bank transfer, or card — 50% deposit or pay in full.",
     gradient: "from-cyan-500 to-blue-500",
     glow: "rgba(6,182,212,0.35)",
     bg: "#06b6d4",
@@ -218,7 +218,7 @@ export function HowItWorksPreviewSection() {
             transition={{ delay: 0.5 }}
             className="mt-6 text-sm text-muted-foreground"
           >
-            Takes just 2 minutes to get started • Response within 2 hours
+            Takes just 2 minutes to get started • Same-day WhatsApp response
           </motion.p>
         </motion.div>
 

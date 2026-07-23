@@ -128,7 +128,7 @@ const Contact = () => {
       toast({
         title: "Message sent",
         description: formData.email
-          ? "We've sent you a confirmation email. We'll respond within 2 hours."
+          ? "We've sent you a confirmation email. We'll respond the same day."
           : "Thank you. Our team will respond shortly.",
       });
 
@@ -206,7 +206,7 @@ const Contact = () => {
                 transition={{ duration: 1.8, repeat: Infinity }}
                 className="w-2 h-2 rounded-full bg-emerald-400"
               />
-              <span className="text-white/90 text-sm font-medium">We usually reply within 2 hours</span>
+              <span className="text-white/90 text-sm font-medium">We usually reply the same day</span>
             </motion.div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
@@ -263,7 +263,7 @@ const Contact = () => {
                 glow: "shadow-green-500/25",
               },
               {
-                icon: Zap, title: "Response Time", detail: "Within 2 hours", flag: null,
+                icon: Zap, title: "Response Time", detail: "Same day", flag: null,
                 grad: "from-violet-500 to-purple-600",
                 tint: "bg-violet-50 dark:bg-violet-950/30",
                 text: "text-violet-600 dark:text-violet-400",
@@ -342,7 +342,7 @@ const Contact = () => {
                 </span>
               </h2>
               <p className="text-muted-foreground text-lg">
-                Have a question or want to discuss your event? Drop us a line — we'll get back to you within 2 hours.
+                Have a question or want to discuss your event? Drop us a line — we'll get back to you the same day.
               </p>
             </motion.div>
 

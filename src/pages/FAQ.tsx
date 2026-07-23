@@ -17,7 +17,7 @@ const faqCategories: WhatsAppFAQCategory[] = [
       },
       {
         question: "How do I place an order?",
-        answer: "Simply click 'Get Started', fill in our quick 7-step form with your event details, choose your package, and complete payment. Our team will contact you via WhatsApp within 2 hours to confirm.",
+        answer: "Simply click 'Get Started', fill in our quick 6-step form with your event details, choose your package, and complete payment. Our team will contact you via WhatsApp the same day to confirm.",
       },
       {
         question: "What information do I need to provide?",
@@ -193,7 +193,7 @@ const FAQ = () => {
             </div>
             <h3 className="text-xl md:text-2xl font-bold text-foreground mb-2">Question we didn't cover?</h3>
             <p className="text-muted-foreground text-sm md:text-base mb-5">
-              Skip the FAQ and message us directly. We reply within 2 hours.
+              Skip the FAQ and message us directly. We reply the same day.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="bg-gradient-to-r from-primary to-secondary hover:opacity-90 shadow-md hover:shadow-lg shadow-primary/30">

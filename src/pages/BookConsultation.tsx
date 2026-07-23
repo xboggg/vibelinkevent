@@ -32,7 +32,7 @@ const timeSlots = [
 const whyPoints = [
   { icon: Clock, text: "30-minute focused session" },
   { icon: MessageCircle, text: "Via WhatsApp call or video" },
-  { icon: Calendar, text: "We confirm within 2 hours" },
+  { icon: Calendar, text: "We confirm the same day" },
   { icon: Phone, text: "Free — no obligation" },
 ];
 
@@ -133,7 +133,7 @@ export default function BookConsultation() {
                 <CheckCircle className="h-10 w-10 text-green-600" />
               </div>
               <h2 className="text-2xl font-bold text-foreground mb-3">Booking Received!</h2>
-              <p className="text-muted-foreground mb-2">We'll confirm your slot via WhatsApp within 2 hours.</p>
+              <p className="text-muted-foreground mb-2">We'll confirm your slot via WhatsApp the same day.</p>
               <p className="text-muted-foreground text-sm mb-8">A WhatsApp message is opening so you can send it directly to us.</p>
               <Button asChild className="bg-gradient-to-r from-primary to-secondary">
                 <a href="/" >Back to Home <ArrowRight className="ml-2 h-4 w-4" /></a>
