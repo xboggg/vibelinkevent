@@ -1,5 +1,7 @@
-// Rebuilt from scratch 2026-07-10 — matches /wedding-invitations pattern.
-// Palette: magenta/pink + gold/confetti-purple — festive, celebratory.
+// Regular Birthday page — kids' parties, casual 21sts, laid-back birthday
+// get-togethers. Split from /milestone-birthday 2026-07-23 so 30/40/50/60/70
+// celebrations get their own dedicated (and more valuable) product page.
+// Palette: magenta/pink + gold/confetti-purple — festive, playful.
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
@@ -28,11 +30,11 @@ import heroImg from "@/assets/hero-birthday.jpg";
 const birthdaySpecialFeatures: SpecialFeature[] = [
   {
     n: 1, icon: PartyPopper,
-    category: "Milestone",
-    shortLabel: "Milestone",
-    title: "Milestone-Birthday Spotlight",
-    short: "18. 21. 30. 40. 50. 60. Honoured differently.",
-    description: "A themed banner that matches the milestone — coming-of-age at 18 or 21, the golden 50, the diamond 60. Every big year, treated like the big deal it is.",
+    category: "Theme",
+    shortLabel: "Theme",
+    title: "Party-Theme Spotlight",
+    short: "Barbie, Y2K, all-black, kente — matched.",
+    description: "Whatever your birthday party theme, the invitation is themed to match. Colours, fonts, illustrations, mood — every detail dialled in so the invitation feels like part of the party, not an afterthought.",
     tint: "from-fuchsia-500 to-pink-600", soft: "bg-fuchsia-50", accent: "text-fuchsia-700", emoji: "🎉",
   },
   {
@@ -119,14 +121,15 @@ const birthdaySpecialFeatures: SpecialFeature[] = [
 ];
 
 const testimonials = [
-  { name: "Ama Sarpong", location: "Accra — 30th", quote: "The roast section had my friends crying with laughter reading it out at the toasts. And the compliment jar? I still read it when I'm having a bad day." },
-  { name: "Kwame Boateng", location: "Kumasi — 50th", quote: "The 'photos through the years' section had my kids and my dad going through my childhood photos together. Best gift I could have asked for." },
+  { name: "Ama Sarpong", location: "Accra — 21st", quote: "The roast section had my friends crying with laughter reading it out at the toasts. And the compliment jar? I still read it when I'm having a bad day." },
+  { name: "Kwame Boateng", location: "Kumasi — Kids party", quote: "For my son's 8th birthday, the photo booth frame was the highlight — every parent left with themed selfies. The kids loved seeing their names on the wishes wall too." },
   { name: "Efua Owusu", location: "London — 21st", quote: "The live wishes ticker was the whole vibe. Watching wishes scroll in real time as friends walked into the party — everyone was refreshing their phones." },
 ];
 
 const faqs = [
+  { question: "Is this right for a milestone birthday (30/40/50/60/70)?", answer: "The Regular Birthday package is best for kids' parties, teen birthdays, 21sts, and casual celebrations. For a milestone birthday — 30th, 40th, 50th, 60th, or 70th — the Milestone Birthday package (GHS 2,000) is purpose-built and includes the life-timeline photo journey, video guestbook add-on, MoMo gift tracker, and more. See /milestone-birthday for details." },
   { question: "Can you match my party theme?", answer: "Yes. Whatever the theme — Y2K, all-black, Barbie, kente, Great Gatsby — we design the invitation around it. Colours, fonts, and vibe all matched." },
-  { question: "How long does a birthday invitation take?", answer: "Standard delivery is 3–5 business days. Rush delivery in 24 hours is available for a small additional fee." },
+  { question: "How long does a birthday invitation take?", answer: "Standard delivery is 3–5 business days. Rush delivery in 48 hours is available for a small additional fee." },
   { question: "Can I keep the roast page hidden from parents?", answer: "Yes. The roast section can be unlisted — only guests you share the private link with can see it. Keep it away from mum's WhatsApp." },
   { question: "Can I accept MoMo gifts?", answer: "Yes. Guests can send cash gifts directly via MTN, Vodafone or AirtelTigo. Tracked in real-time on your host dashboard." },
   { question: "Can I update details after it goes live?", answer: "Yes. Any change to venue, time, or dress code is updated once and every guest sees the latest instantly." },
@@ -136,9 +139,9 @@ export default function BirthdayInvitations() {
   return (
     <Layout>
       <SEO
-        title="Birthday Invitations Ghana — Digital Party & Milestone Cards"
-        description="Beautiful digital birthday invitations for Ghanaian celebrations. Milestone spotlights, wishes wall, roast section, live photo wall, video guestbook — one link, every friend."
-        keywords="birthday invitations Ghana, 30th birthday invite, 40th birthday party Ghana, digital birthday card, milestone birthday invitation Accra, 21st birthday invite"
+        title="Birthday Invitations Ghana — Digital Party Cards for Every Age"
+        description="Beautiful digital birthday invitations for Ghanaian celebrations. Party-theme spotlights, wishes wall, roast section, live photo wall, photo booth frame — one link, every friend. From GHS 1,200."
+        keywords="birthday invitations Ghana, 21st birthday invite, kids birthday party invitation Ghana, digital birthday card, teen birthday invite Accra, birthday party invitation"
         canonical="/birthday"
         ogImage="https://vibelinkevent.com/og-image.jpg"
       />
@@ -149,20 +152,20 @@ export default function BirthdayInvitations() {
         imageAlt="Ghanaian birthday celebration"
         imageObjectPos="center 30%"
         chip="For Ghanaian Birthdays"
-        heading="Another Year."
-        headingHighlight="Loudest Celebration Yet."
-        subheading="From the milestone spotlight to the roast section — every wish, every memory, every compliment. One link, every friend."
+        heading="Every Party."
+        headingHighlight="Its Own Vibe."
+        subheading="From the party-theme spotlight to the roast section — every wish, every memory, every compliment. Perfect for kids' parties, teen birthdays, 21sts, and casual celebrations."
         primaryCta={{ label: "Start Your Birthday Invite", href: "/get-started?eventType=Birthday" }}
         secondaryCta={{ label: "See Birthday Examples", href: "/portfolio?type=birthday" }}
-        trustRow={["200+ Ghanaian birthdays", "18 · 21 · 30 · 40 · 50 · 60", "Every wish, kept"]}
+        trustRow={["Theme-matched design", "Kids · Teens · 21sts", "Every wish, kept"]}
       />
 
       {/* 2. Special features carousel */}
       <SpecialFeaturesCarousel
         features={birthdaySpecialFeatures}
-        chip="Birthday-only features"
-        heading="Built for the Biggest Party of the Year"
-        subheading="Ten features shaped around how Ghanaians throw birthdays — from the milestone spotlight to the roast section your best friend will read at the toast."
+        chip="Birthday party features"
+        heading="Built for the Party of the Year"
+        subheading="Ten features shaped around how Ghanaians throw birthday parties — from the theme spotlight to the roast section your best friend will read at the toast."
       />
 
       {/* 3. Common features grid */}
@@ -191,9 +194,9 @@ export default function BirthdayInvitations() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 bg-fuchsia-100 text-fuchsia-700">
               Our Recommendation
             </span>
-            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Milestone Birthday Package — GHS 2,000</h3>
+            <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Regular Birthday Package — GHS 1,200</h3>
             <p className="text-gray-500 mb-6 leading-relaxed text-base md:text-lg">
-              Perfect for 30th, 40th, 50th, 60th, 70th birthdays — life-timeline photo journey, wishes wall, MoMo gift link, video guestbook add-on, RSVP with dress code. For simple kids' parties without the extras, the Regular Birthday package (GHS 1,200) is a better fit.
+              Perfect for kids' birthday parties, teen birthdays, 21st celebrations, and casual birthday get-togethers — single-page invitation with theme colours, RSVP with head-count, photo gallery, event details, Google Maps, WhatsApp share. Planning a 30th, 40th, 50th, 60th or 70th? The <Link to="/milestone-birthday" className="text-fuchsia-700 font-semibold underline underline-offset-2">Milestone Birthday package (GHS 2,000)</Link> is purpose-built for those.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button asChild size="lg" className="font-bold text-white bg-gradient-to-r from-fuchsia-500 to-pink-600 hover:from-fuchsia-600 hover:to-pink-700">
@@ -237,10 +240,10 @@ export default function BirthdayInvitations() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 mb-4 leading-tight">
-              Not another WhatsApp flyer. Your year deserves better.
+              Not another WhatsApp flyer. Your party deserves better.
             </h2>
             <p className="text-gray-600 text-base md:text-lg max-w-2xl mx-auto mb-8">
-              A digital birthday invitation that's a full-blown celebration — wishes, memories, roasts, and every friend's voice, kept forever. Starting from GHS 1,200.
+              A digital birthday invitation that's a full-blown party — wishes, memories, roasts, and every friend's voice, kept forever. Starting from GHS 1,200.
             </p>
             <Button
               asChild

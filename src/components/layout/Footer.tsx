@@ -60,12 +60,15 @@ const eventTypes = [{
   href: "/naming-ceremony"
 }, {
   name: "Anniversaries",
-  href: "/birthday"
+  href: "/anniversary-invitations"
 }, {
   name: "Graduations",
   href: "/graduation"
 }, {
-  name: "Birthday Celebrations",
+  name: "Milestone Birthdays",
+  href: "/milestone-birthday"
+}, {
+  name: "Birthday Parties",
   href: "/birthday"
 }, {
   name: "Church Events",
