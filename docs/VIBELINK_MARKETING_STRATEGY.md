@@ -1,8 +1,16 @@
 # VibeLink Event - Viral Marketing & Customer Acquisition Strategy
 
-**Document Version:** 1.0
-**Date:** February 16, 2026
+**Document Version:** 1.1
+**Original date:** February 16, 2026
+**Last updated:** July 24, 2026
 **Prepared for:** VibeLink Event (vibelinkevent.com)
+
+> **Note:** This is a strategic plan, not a live spec. The marketing strategy, viral loops, content
+> calendar, and channel-mix guidance below remain the working plan. However, the **pricing tables and
+> referral scale in this doc were rewritten July 2026** to match the current event-based pricing
+> model live on the site — see also `/DOCUMENTATION.md` §7A for the authoritative pricing reference.
+> Any older references to Starter/Classic/Prestige/Royal tiers, "Baby Shower" as a category, or
+> GHS 800-3,000 funeral pricing are historical planning from before the July 2026 rebuild.
 
 ---
 
@@ -44,20 +52,26 @@ VibeLink Event is positioned to become Ghana's premier digital event stationery 
 
 ### Target Market Segments
 
+Our packages align 1:1 with the segment they serve. Fixed prices (not budget ranges) — see /pricing for the full grid.
+
 #### Primary Markets (High Value)
-| Segment | Events | Budget Range | Decision Timeline |
-|---------|--------|--------------|-------------------|
-| Weddings | Traditional & White | GHS 2,000 - 10,000+ | 3-12 months |
-| Corporate Events | Conferences, Launches | GHS 1,500 - 5,000 | 1-3 months |
-| Funerals/Memorial | Obituaries, Programs | GHS 800 - 3,000 | 1-2 weeks |
+| Segment | Package | Price | Decision Timeline |
+|---------|---------|-------|-------------------|
+| Weddings | Wedding | GHS 2,500 | 3-12 months |
+| Corporate Events | Corporate Event | GHS 3,500 | 1-3 months |
+| Funerals/Memorial | Funeral & Memorial | GHS 2,000 | 1-2 weeks |
+| Custom / Luxury | Bespoke | GHS 4,500+ | 2-6 months |
 
 #### Secondary Markets (Volume)
-| Segment | Events | Budget Range | Decision Timeline |
-|---------|--------|--------------|-------------------|
-| Birthdays | Milestone celebrations | GHS 500 - 2,000 | 2-4 weeks |
-| Baby Events | Outdooring, Showers | GHS 600 - 1,500 | 1-2 months |
-| Graduations | All levels | GHS 400 - 1,200 | 1-3 weeks |
-| Religious Events | Confirmations, etc. | GHS 500 - 1,500 | 1-2 months |
+| Segment | Package | Price | Decision Timeline |
+|---------|---------|-------|-------------------|
+| Milestone Birthdays (30/40/50/60/70) | Milestone Birthday | GHS 2,000 | 2-4 weeks |
+| Regular Birthdays (kids, teens, 21sts) | Regular Birthday | GHS 1,200 | 1-3 weeks |
+| Namings / Outdoorings (Din To) | Naming / Outdooring | GHS 1,500 | 1-2 months |
+| Engagements / Customary | Engagement / Customary | GHS 2,000 | 2-4 months |
+| Anniversaries / Vow Renewals | Anniversary / Vow Renewal | GHS 1,800 | 1-3 months |
+| Graduations | Graduation | GHS 1,500 | 1-3 weeks |
+| Church Events (harvest, revival, ordination) | Church Event | GHS 2,000 | 1-2 months |
 
 ### Competitor Analysis
 
@@ -384,19 +398,20 @@ Trending: Event-specific hashtags
 
 **"Share the Vibe" Program**
 
-| Referral Action | Referrer Gets | New Customer Gets |
-|-----------------|---------------|-------------------|
-| Friend signs up | GHS 50 credit | GHS 50 off first order |
-| Friend completes order | Additional GHS 100 credit | - |
-| 5 successful referrals | Free Gold Package | - |
-| 10 successful referrals | VIP Ambassador Status | - |
+Referrer earns cash proportional to the size of the sale their referral brought in. Live values (July 2026) — source of truth in `src/components/admin/ReferralsAdmin.tsx` + `src/components/order-form/OrderFormWizard.tsx` + /pricing:
 
-**VIP Ambassador Benefits:**
-- 20% lifetime commission on referrals
-- Free premium upgrades
-- Early access to new designs
-- Feature on VibeLink website
-- Priority support
+| Referred customer bought | Referrer earns |
+|--------------------------|----------------|
+| Small event (Regular Birthday, Graduation, Naming / Outdooring) | GHS 100 |
+| Medium event (Anniversary, Milestone Birthday, Church, Engagement, Funeral) | GHS 200 |
+| Large event (Wedding, Corporate) | GHS 300 |
+| Bespoke | GHS 500 |
+
+**No limits on referrals** — the more they share, the more they earn. Payouts via MoMo.
+
+**Future Ambassador tiering (planned, not live yet):**
+- 5+ successful referrals → recurring bonus + priority support badge
+- 10+ successful referrals → feature on VibeLink homepage + early access to new designs
 
 ### Guest-to-Customer Pipeline
 
@@ -409,14 +424,16 @@ When guests visit a portfolio site:
 
 ### Loyalty Program
 
-**"VibeLink Rewards"**
+**"VibeLink Rewards"** (planned — not yet live)
+
+Recalibrated for current pricing (Wedding GHS 2,500, Bespoke GHS 4,500+):
 
 | Tier | Requirement | Benefits |
 |------|-------------|----------|
 | Bronze | 1st order | 5% off next order, priority support |
-| Silver | 2 orders / GHS 2,000 spent | 10% off, free add-ons |
-| Gold | 3 orders / GHS 5,000 spent | 15% off, free rush delivery |
-| Platinum | 5 orders / GHS 10,000 spent | 20% off, free annual event |
+| Silver | 2 orders / GHS 4,000 spent | 10% off, free add-ons |
+| Gold | 3 orders / GHS 8,000 spent | 15% off, free rush delivery |
+| Platinum | 5 orders / GHS 15,000 spent | 20% off, free annual event |
 
 ---
 
