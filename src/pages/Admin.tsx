@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -271,14 +271,50 @@ const Admin = () => {
   const [loadingReminders, setLoadingReminders] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
-  const [activeSection, setActiveSection] = useState<AdminSection>("dashboard");
+
+  // activeSection persists across refreshes via URL first (?section=blog)
+  // then localStorage as a fallback (last-visited on this browser).
+  // navCategories.flatMap gives us the full list of valid IDs for validation
+  // so refreshing on ?section=<junk> falls safely back to dashboard.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const VALID_SECTIONS = navCategories.flatMap(c => c.items.map(i => i.id)) as AdminSection[];
+  const isValidSection = (v: string | null): v is AdminSection =>
+    !!v && (VALID_SECTIONS as string[]).includes(v);
+  const [activeSection, setActiveSectionState] = useState<AdminSection>(() => {
+    const fromUrl = searchParams.get("section");
+    if (isValidSection(fromUrl)) return fromUrl;
+    try {
+      const fromStorage = localStorage.getItem("vibelink_admin_section");
+      if (isValidSection(fromStorage)) return fromStorage;
+    } catch { /* localStorage unavailable — safe to ignore */ }
+    return "dashboard";
+  });
+  // Wrap the setter so URL + storage stay in lockstep with state.
+  const setActiveSection = (section: AdminSection) => {
+    setActiveSectionState(section);
+    try { localStorage.setItem("vibelink_admin_section", section); } catch { /* ignore */ }
+    // Preserve any other query params (e.g. filters someone adds later)
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      if (section === "dashboard") next.delete("section"); // keep URL clean for default
+      else next.set("section", section);
+      return next;
+    }, { replace: true }); // don't spam the back-button history
+  };
   const [runningFollowUps, setRunningFollowUps] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [recordingPayment, setRecordingPayment] = useState<"deposit" | "balance" | null>(null);
   const [paymentReference, setPaymentReference] = useState("");
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryLog[]>([]);
   const [loadingPaymentHistory, setLoadingPaymentHistory] = useState(false);
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(["Main"]);
+  // When restoring an activeSection from URL/localStorage, also expand the
+  // category that contains it so the sidebar shows a visible highlighted item.
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(() => {
+    const initial = new Set(["Main"]);
+    const owningCategory = navCategories.find(c => c.items.some(i => i.id === activeSection));
+    if (owningCategory) initial.add(owningCategory.category);
+    return Array.from(initial);
+  });
   const [finalLink, setFinalLink] = useState("");
   const [savingFinalLink, setSavingFinalLink] = useState(false);
   const [revisionRequests, setRevisionRequests] = useState<RevisionRequest[]>([]);
