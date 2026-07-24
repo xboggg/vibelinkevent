@@ -522,7 +522,7 @@ export function AIEmailTemplates() {
                   <Input
                     value={variables.packageName}
                     onChange={(e) => setVariables({ ...variables, packageName: e.target.value })}
-                    placeholder="Premium Package"
+                    placeholder="e.g. Wedding, Funeral & Memorial"
                   />
                 </div>
                 <div>

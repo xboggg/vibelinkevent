@@ -331,12 +331,12 @@ export function FollowUpSettings() {
                         dangerouslySetInnerHTML={{
                           __html: DOMPurify.sanitize(
                             (getCurrentValue(setting, 'email_template') as string)
-                              .replace(/\{\{client_name\}\}/g, 'John Doe')
+                              .replace(/\{\{client_name\}\}/g, 'Ama Boateng')
                               .replace(/\{\{order_id\}\}/g, 'ABC123')
                               .replace(/\{\{event_title\}\}/g, 'Wedding Celebration')
-                              .replace(/\{\{total_price\}\}/g, '150,000')
-                              .replace(/\{\{event_date\}\}/g, 'March 15, 2025')
-                              .replace(/\{\{package_name\}\}/g, 'Premium Package')
+                              .replace(/\{\{total_price\}\}/g, '2,500')
+                              .replace(/\{\{event_date\}\}/g, 'March 15, 2027')
+                              .replace(/\{\{package_name\}\}/g, 'Wedding')
                           )
                         }}
                       />

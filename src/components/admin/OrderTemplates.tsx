@@ -3,6 +3,7 @@ import {
   Plus, Copy, Edit, Trash2, Search, FilePlus2,
   Loader2, Package, Users, Calendar, DollarSign, Check
 } from "lucide-react";
+import { EVENT_PACKAGES } from "@/data/eventPackages";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,24 +45,16 @@ interface OrderTemplate {
   updated_at: string;
 }
 
+// Derived from the canonical package list so this admin form NEVER drifts
+// out of sync with what customers actually order. If a package is added,
+// removed, or renamed in eventPackages.ts, both lists here update
+// automatically on next build.
 const eventTypes = [
-  "Wedding",
-  "Birthday",
-  "Corporate Event",
-  "Funeral",
-  "Anniversary",
-  "Graduation",
-  "Baby Shower",
-  "Engagement",
-  "Other"
+  ...EVENT_PACKAGES.map((p) => p.name),
+  "Other",
 ];
 
-const packageOptions = [
-  "Basic Package",
-  "Standard Package",
-  "Premium Package",
-  "Custom Package"
-];
+const packageOptions = EVENT_PACKAGES.map((p) => p.name);
 
 export function OrderTemplates() {
   const [templates, setTemplates] = useState<OrderTemplate[]>([]);
