@@ -526,21 +526,83 @@ const Admin = () => {
       startRestore();
     }
 
-    // ---- rAF retry loop for tab-refocus ------------------------------
-    // The ResizeObserver-based path above depends on page HEIGHT growing
-    // (data loading, layout shifts). On tab refocus the page height DOES
-    // NOT change (already fully rendered before hide), so the observer
-    // never fires. A single scrollTo on visibilitychange isn't enough
-    // either — a post-refocus layout pass can clamp back to 0.
+    // ---- Refocus recovery (time-window based, NOT state-based) ------
+    // External review v5 caught the previous approach's fatal flaw with a
+    // scrollTo hook + real browser recorder:
     //
-    // Solution: an independent rAF-driven retry loop that keeps calling
-    // scrollTo until scrollY holds at the target for 2 consecutive frames
-    // OR ~800ms elapses. Doesn't need any DOM signal — pure timer.
+    //   t=184274: visibilitychange fires, scrollY still 1800 (target) ✓
+    //   t=184277: focus fires,           scrollY still 1800
+    //   t=184318: browser resets scrollY → 0  (~40ms AFTER the events)
+    //
+    // My previous rAF loop terminated on frame 1 because "scrollY is
+    // within 4px of target" was TRUE at that moment — the reset hadn't
+    // happened yet. Then the reset landed with no watcher left.
+    //
+    // The bug is the "already at target" success condition. During the
+    // refocus window it lies — scroll IS temporarily at target, then the
+    // browser rips it away. Time-based window is the only correct shape.
+    //
+    // Two-layer defense per reviewer's recommendation:
+    //
+    //   Layer A: unconditional scrollTo(target,'instant') every frame for
+    //   REFOCUS_ASSERT_MS. Doesn't check current scrollY — just keeps
+    //   asserting. Any browser reset during this window is immediately
+    //   overwritten on the next frame.
+    //
+    //   Layer B: after the assertion window ends, a short scroll listener
+    //   watches for scrollY drifting toward 0 within REFOCUS_WATCH_MS. If
+    //   the reset lands late, we still catch it and re-apply.
     let refocusRafId: number | null = null;
     let refocusStartTime = 0;
-    let refocusConsecutiveHits = 0;
-    const REFOCUS_MAX_MS = 1000;
-    const refocusRetry = () => {
+    let refocusScrollWatcher: (() => void) | null = null;
+    let refocusWatchTimeoutId: number | null = null;
+    const REFOCUS_ASSERT_MS = 600;   // fire scrollTo every frame for this long
+    const REFOCUS_WATCH_MS = 400;    // then watch for a late reset for this long
+    const REFOCUS_WATCH_THRESHOLD = 100; // scroll below this within watch window = late reset
+
+    const stopRefocusWatcher = () => {
+      if (refocusScrollWatcher) {
+        window.removeEventListener("scroll", refocusScrollWatcher);
+        refocusScrollWatcher = null;
+      }
+      if (refocusWatchTimeoutId !== null) {
+        window.clearTimeout(refocusWatchTimeoutId);
+        refocusWatchTimeoutId = null;
+      }
+    };
+
+    const beginRefocusWatch = (target: number) => {
+      stopRefocusWatcher();
+      // Watch for a late reset: scroll drops BELOW threshold within the
+      // watch window = the browser's belated wipe, re-apply target.
+      // Any OTHER scroll (up higher than target, or intermediate value
+      // caused by user scrolling) = user intent, hand control back and
+      // stop watching so we don't fight them.
+      refocusScrollWatcher = () => {
+        if (userTookOver) return;
+        const y = window.scrollY;
+        if (y < REFOCUS_WATCH_THRESHOLD) {
+          // Late reset — re-apply the target.
+          const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const capped = Math.min(target, maxScroll);
+          window.scrollTo({ top: capped, left: 0, behavior: "instant" as ScrollBehavior });
+        } else if (Math.abs(y - target) > REFOCUS_WATCH_THRESHOLD) {
+          // Scrolled somewhere neither near-0 nor near-target = user is
+          // scrolling. Bail out, let them.
+          userTookOver = true;
+          stopRefocusWatcher();
+          isRestoring = false;
+        }
+        // Otherwise (near target) we're where we want to be, keep watching.
+      };
+      window.addEventListener("scroll", refocusScrollWatcher, { passive: true });
+      refocusWatchTimeoutId = window.setTimeout(() => {
+        stopRefocusWatcher();
+        scheduleSettle(target);
+      }, REFOCUS_WATCH_MS);
+    };
+
+    const refocusAssertLoop = () => {
       refocusRafId = null;
       const target = lastGoodScrollRef.current[activeSection] || 0;
       if (target <= 0 || userTookOver) {
@@ -549,39 +611,31 @@ const Admin = () => {
       }
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const capped = Math.min(target, maxScroll);
-      if (Math.abs(window.scrollY - capped) < 4) {
-        refocusConsecutiveHits++;
-        // Two frames stable = done.
-        if (refocusConsecutiveHits >= 2) {
-          scheduleSettle(target);
-          return;
-        }
+      // KEY: fire unconditionally. Don't check "is scrollY already at
+      // target" — that check gets fooled during the pre-reset window.
+      window.scrollTo({ top: capped, left: 0, behavior: "instant" as ScrollBehavior });
+
+      if (performance.now() - refocusStartTime < REFOCUS_ASSERT_MS) {
+        refocusRafId = requestAnimationFrame(refocusAssertLoop);
       } else {
-        refocusConsecutiveHits = 0;
-        // Not there yet — re-apply. 'instant' so no smooth-scroll cascade.
-        window.scrollTo({ top: capped, left: 0, behavior: "instant" as ScrollBehavior });
+        // Assertion window done. Enter watch mode for late resets.
+        beginRefocusWatch(target);
       }
-      if (performance.now() - refocusStartTime > REFOCUS_MAX_MS) {
-        // Give up — hand back to the ResizeObserver / hardCap failsafe.
-        scheduleSettle(target);
-        return;
-      }
-      refocusRafId = requestAnimationFrame(refocusRetry);
     };
 
     // ---- Re-restore on tab-refocus -----------------------------------
-    // Freeze saves FIRST, then kick off the rAF retry loop (NOT the
-    // observer-based path, because height won't change on refocus).
+    // Freeze saves FIRST, then start the assert loop. Do NOT rely on the
+    // ResizeObserver — page height doesn't change on refocus.
     const onVisible = () => {
       if (document.hidden) return;
       isRestoring = true; // freeze saves before browser's reset animates
       userTookOver = false;
       if ((lastGoodScrollRef.current[activeSection] || 0) > 0) {
-        // Cancel any in-flight rAF retry (e.g. rapid tab-switching).
+        // Cancel any in-flight retry (rapid tab-switching).
         if (refocusRafId !== null) cancelAnimationFrame(refocusRafId);
+        stopRefocusWatcher();
         refocusStartTime = performance.now();
-        refocusConsecutiveHits = 0;
-        refocusRafId = requestAnimationFrame(refocusRetry);
+        refocusRafId = requestAnimationFrame(refocusAssertLoop);
       } else {
         // Nothing to restore, but still hold the freeze briefly so the
         // browser's reset animation doesn't get saved as user intent.
@@ -599,6 +653,7 @@ const Admin = () => {
       if (hardCap !== null) window.clearTimeout(hardCap);
       if (settleTimer !== null) window.clearTimeout(settleTimer);
       if (refocusRafId !== null) cancelAnimationFrame(refocusRafId);
+      stopRefocusWatcher();
       observer?.disconnect();
     };
   }, [activeSection]);
