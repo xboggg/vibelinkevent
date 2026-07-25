@@ -380,33 +380,35 @@ const Admin = () => {
 
   // Per-section scroll save/restore.
   //
-  // Design (based on reviewer feedback identifying a save/restore feedback
-  // loop on tab-switch):
+  // Design (third-party review v3): the previous near-0 value guard was
+  // defeated by the browser's ANIMATED refocus reset — it produces a
+  // sequence of intermediate scrollY values (e.g. 1591 → 477 → 154) all
+  // above any reasonable "near-0" threshold. Every one of those got
+  // saved, progressively clobbering the good value.
   //
-  // 1. Source of truth for the last known good scrollY is a REF, not
-  //    sessionStorage. Sessions is a persistence mirror. Reason: on
-  //    tab-refocus the browser fires scroll events with y=0 (a "settling"
-  //    reset). If we only trusted sessionStorage, those spurious 0s would
-  //    overwrite the real value before we could restore from it.
+  // The correct defense is STATE-based, not value-based:
   //
-  // 2. Save listener REJECTS a 0/near-0 save if we're within a settling
-  //    window (500ms) after any visibilitychange / focus / pageshow event.
-  //    That's the browser refocus reset, not user intent.
+  // 1. `isRestoring` flag: while true, the save listener rejects ALL
+  //    saves regardless of value. Set true the moment a restore begins,
+  //    cleared only after the scroll has settled within tolerance AND
+  //    stayed stable across a short quiet period.
   //
-  // 3. Save listener also rejects a 0-save if our ref already holds a
-  //    substantial non-zero value — treats it as spurious noise no matter
-  //    when it happens. Belt-and-suspenders for edge cases.
+  // 2. Restore uses `behavior: 'instant'` (no animation) so a restore
+  //    produces exactly ONE scroll event at the target, not a cascade
+  //    of intermediate values.
   //
-  // 4. Restore uses ResizeObserver on <body>: fires every time the page
-  //    grows, tries again until the document is tall enough. Terminates on
-  //    (a) landing within 4px, (b) user actually scrolls, (c) 10s hard cap.
+  // 3. On visibilitychange->visible: set isRestoring FIRST (freezes saves),
+  //    then re-run the restore. The animated browser reset now happens
+  //    inside the freeze window and cannot poison the good value.
   //
-  // 5. On tab-refocus, we explicitly re-arm the restore observer so a
-  //    browser-induced reset can be reverted from the ref.
+  // 4. Source of truth stays a ref (lastGoodScrollRef). sessionStorage is
+  //    a persistence mirror so a fresh tab/refresh can seed the ref.
+  //
+  // 5. Restore uses ResizeObserver on <body> to retry as the page grows.
+  //    Terminates when scroll settles at target, user actually takes over,
+  //    or a 10s hard cap fires.
   useEffect(() => {
     const storageKey = `vibelink_admin_scroll:${activeSection}`;
-    const REFOCUS_SETTLING_MS = 500;
-    const MIN_SAVE_THRESHOLD = 50; // ignore trivial scrolls near-top
 
     // Seed the ref for this section from sessionStorage IF we don't already
     // have a good value in memory (fresh page load or first visit).
@@ -422,44 +424,34 @@ const Admin = () => {
     let observer: ResizeObserver | null = null;
     let hardCap: number | null = null;
     let saveTimer: number | null = null;
-    let programmaticUntil = 0;
+    let settleTimer: number | null = null;
+    // THE key change: state-based freeze. All saves rejected while true.
+    let isRestoring = false;
 
     // ---- SAVE listener ------------------------------------------------
+    // No value threshold. Only two ways to reject: isRestoring is true,
+    // OR we're inside a short post-refocus freeze window (belt+braces
+    // in case the refocus fires before isRestoring is set).
+    const REFOCUS_FREEZE_MS = 800;
     const onScroll = () => {
-      // Ignore our own programmatic scrolls (fired by tryRestore below).
-      if (performance.now() < programmaticUntil) return;
+      // Hard freeze — restore in progress, ignore every scroll event.
+      if (isRestoring) return;
+      // Refocus safety window — catches the tiny gap between the browser
+      // firing its animated reset and our onVisible handler running.
+      if (performance.now() - lastRefocusAtRef.current < REFOCUS_FREEZE_MS) return;
 
       const y = window.scrollY;
-      const sinceRefocus = performance.now() - lastRefocusAtRef.current;
-      const currentGood = lastGoodScrollRef.current[activeSection] || 0;
-
-      // Reject spurious 0-saves. Two guards:
-      //   (a) we're inside the post-refocus settling window and this is
-      //       a near-0 scroll — browser reset, not user intent
-      //   (b) we already have a substantial saved value and this is
-      //       near-0 — treat as noise regardless of when it happens
-      if (y < MIN_SAVE_THRESHOLD) {
-        if (sinceRefocus < REFOCUS_SETTLING_MS) return;
-        if (currentGood >= MIN_SAVE_THRESHOLD) return;
-      }
-
-      // Real user intent — this cancels any in-progress restore.
+      // User intent — cancel any pending restore.
       userTookOver = true;
 
       // Throttled write to both ref (primary) and sessionStorage (persist).
       if (saveTimer !== null) return;
       saveTimer = window.setTimeout(() => {
+        // Re-check freeze conditions at flush time. Something might have
+        // triggered a restore in the 150ms since we captured the intent.
+        if (isRestoring) { saveTimer = null; return; }
+        if (performance.now() - lastRefocusAtRef.current < REFOCUS_FREEZE_MS) { saveTimer = null; return; }
         const finalY = window.scrollY;
-        // Re-check the same guard at flush time in case things settled.
-        const sinceRefocus2 = performance.now() - lastRefocusAtRef.current;
-        const currentGood2 = lastGoodScrollRef.current[activeSection] || 0;
-        if (
-          finalY < MIN_SAVE_THRESHOLD &&
-          (sinceRefocus2 < REFOCUS_SETTLING_MS || currentGood2 >= MIN_SAVE_THRESHOLD)
-        ) {
-          saveTimer = null;
-          return;
-        }
         lastGoodScrollRef.current[activeSection] = finalY;
         sessionStorage.setItem(storageKey, String(finalY));
         saveTimer = null;
@@ -468,15 +460,37 @@ const Admin = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
 
     // ---- RESTORE ------------------------------------------------------
+    // scheduleSettle: after a successful scrollTo, watch scrollY for a
+    // quiet period. Only clear isRestoring when we've stayed within
+    // tolerance of the target for the whole period. Being strict here
+    // means the animated refocus reset stays inside the freeze window
+    // and no save fires with an intermediate value.
+    const SETTLE_QUIET_MS = 200;
+    const SETTLE_TOLERANCE_PX = 6;
+    const scheduleSettle = (target: number) => {
+      if (settleTimer !== null) window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(() => {
+        settleTimer = null;
+        if (Math.abs(window.scrollY - target) < SETTLE_TOLERANCE_PX) {
+          isRestoring = false;
+        } else {
+          // Still drifting — try again once. If it's still off after that,
+          // give up so we don't lock saves forever.
+          scheduleSettle(target);
+        }
+      }, SETTLE_QUIET_MS);
+    };
+
     const tryRestore = () => {
       if (userTookOver) return;
       const target = lastGoodScrollRef.current[activeSection] || 0;
       if (target <= 0) return;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       if (maxScroll < target) return; // observer will re-fire on next grow
-      programmaticUntil = performance.now() + 150;
-      window.scrollTo(0, target);
-      // Confirm landing. If good, stop. Otherwise wait for next resize.
+      isRestoring = true;
+      // 'instant' = no smooth animation = single scroll event at target,
+      // no cascade of intermediate values that could get saved.
+      window.scrollTo({ top: target, left: 0, behavior: "instant" as ScrollBehavior });
       requestAnimationFrame(() => {
         if (Math.abs(window.scrollY - target) < 4) {
           observer?.disconnect();
@@ -484,19 +498,26 @@ const Admin = () => {
             window.clearTimeout(hardCap);
             hardCap = null;
           }
+          scheduleSettle(target);
         }
+        // If not within 4px, leave isRestoring=true; the observer will
+        // fire again on the next resize and re-attempt the scroll.
       });
     };
 
     const startRestore = () => {
       observer?.disconnect();
       if (hardCap !== null) window.clearTimeout(hardCap);
+      isRestoring = true; // freeze saves immediately
       observer = new ResizeObserver(tryRestore);
       observer.observe(document.body);
       requestAnimationFrame(tryRestore);
       hardCap = window.setTimeout(() => {
         observer?.disconnect();
         hardCap = null;
+        // Failsafe: even if restore never settles, unfreeze saves after
+        // 10s so we don't permanently block user scroll persistence.
+        isRestoring = false;
       }, 10000);
     };
 
@@ -506,17 +527,19 @@ const Admin = () => {
     }
 
     // ---- Re-restore on tab-refocus -----------------------------------
-    // When the tab becomes visible again, re-run the restore path.
-    // The ref preserves the real saved value even if the browser reset
-    // scrollY to 0 while the tab was hidden.
+    // Set isRestoring FIRST (freezes saves), THEN restore. The browser's
+    // animated reset now happens inside the freeze window.
     const onVisible = () => {
       if (document.hidden) return;
-      // Reset userTookOver — after a refocus, the "user intent" flag from
-      // an earlier scroll shouldn't block a fresh restore. If the user
-      // scrolls after refocus, onScroll will flip it again.
+      isRestoring = true; // FIRST — protects the good value from the
+                          // browser's animated scroll cascade.
       userTookOver = false;
       if ((lastGoodScrollRef.current[activeSection] || 0) > 0) {
         startRestore();
+      } else {
+        // Nothing to restore, but still hold the freeze briefly so the
+        // browser's animated reset doesn't get saved as user intent.
+        window.setTimeout(() => { isRestoring = false; }, REFOCUS_FREEZE_MS);
       }
     };
     document.addEventListener("visibilitychange", onVisible);
@@ -528,6 +551,7 @@ const Admin = () => {
       window.removeEventListener("focus", onVisible);
       if (saveTimer !== null) window.clearTimeout(saveTimer);
       if (hardCap !== null) window.clearTimeout(hardCap);
+      if (settleTimer !== null) window.clearTimeout(settleTimer);
       observer?.disconnect();
     };
   }, [activeSection]);
