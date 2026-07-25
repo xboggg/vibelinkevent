@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
@@ -331,12 +331,25 @@ const Admin = () => {
     );
   };
 
+  // In-memory "last known good" scroll per section. Lives OUTSIDE
+  // sessionStorage so a browser-inflicted refocus-reset (which fires
+  // scroll events with y=0) can't clobber the real saved position.
+  // Structure: { [sectionId]: lastGoodScrollY }. Keyed by section so
+  // switching around remembers each section independently.
+  const lastGoodScrollRef = useRef<Record<string, number>>({});
+  // Timestamp of last visibilitychange/focus/pageshow event. Save
+  // listener refuses to persist a 0/near-0 scroll within a settling
+  // window after this timestamp — that scroll is the browser reset,
+  // not user intent.
+  const lastRefocusAtRef = useRef<number>(0);
+
   // Handle menu click with scroll to top
   const handleMenuClick = (sectionId: AdminSection, category: string) => {
     // Wipe the saved scroll for the new section — a deliberate section click
     // is a fresh start, not a return. Prevents the auto-restore below from
     // jumping to an old position on a NEW navigation.
     sessionStorage.removeItem(`vibelink_admin_scroll:${sectionId}`);
+    lastGoodScrollRef.current[sectionId] = 0;
     setActiveSection(sectionId);
     setSidebarOpen(false);
     // Expand the category if not already expanded
@@ -347,105 +360,172 @@ const Admin = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Long-lived visibility/focus tracker — arms the "just refocused" window
+  // that the save listener uses to reject spurious 0-scroll saves.
+  // Also triggers a re-restore attempt on refocus so the observer can
+  // recover from the browser's refocus-reset.
+  useEffect(() => {
+    const markRefocus = () => {
+      lastRefocusAtRef.current = performance.now();
+    };
+    document.addEventListener("visibilitychange", markRefocus);
+    window.addEventListener("focus", markRefocus);
+    window.addEventListener("pageshow", markRefocus);
+    return () => {
+      document.removeEventListener("visibilitychange", markRefocus);
+      window.removeEventListener("focus", markRefocus);
+      window.removeEventListener("pageshow", markRefocus);
+    };
+  }, []);
+
   // Per-section scroll save/restore.
   //
-  // Problem: when the tab loses focus and regains it, React re-renders and
-  // the browser (with scrollRestoration=auto) sometimes restores to 0 because
-  // the DOM content re-mounts. Fix has two halves — save + restore.
+  // Design (based on reviewer feedback identifying a save/restore feedback
+  // loop on tab-switch):
   //
-  // SAVE: on every scroll (throttled), write scrollY to sessionStorage keyed
-  // by section. Listener attached synchronously on mount so we never miss
-  // an early scroll.
+  // 1. Source of truth for the last known good scrollY is a REF, not
+  //    sessionStorage. Sessions is a persistence mirror. Reason: on
+  //    tab-refocus the browser fires scroll events with y=0 (a "settling"
+  //    reset). If we only trusted sessionStorage, those spurious 0s would
+  //    overwrite the real value before we could restore from it.
   //
-  // RESTORE: wait until the document is actually tall enough to hold the
-  // saved position, THEN scrollTo. Previously this used a fixed timer, which
-  // failed intermittently when data loading ran slower than the timer. Now
-  // uses ResizeObserver on <body> — every time the page grows, we try again.
-  // Stops once (a) the scroll lands within tolerance of the target, (b) the
-  // user manually scrolls first (respect intent), or (c) a 10s hard cap
-  // elapses (give up rather than loop forever).
+  // 2. Save listener REJECTS a 0/near-0 save if we're within a settling
+  //    window (500ms) after any visibilitychange / focus / pageshow event.
+  //    That's the browser refocus reset, not user intent.
+  //
+  // 3. Save listener also rejects a 0-save if our ref already holds a
+  //    substantial non-zero value — treats it as spurious noise no matter
+  //    when it happens. Belt-and-suspenders for edge cases.
+  //
+  // 4. Restore uses ResizeObserver on <body>: fires every time the page
+  //    grows, tries again until the document is tall enough. Terminates on
+  //    (a) landing within 4px, (b) user actually scrolls, (c) 10s hard cap.
+  //
+  // 5. On tab-refocus, we explicitly re-arm the restore observer so a
+  //    browser-induced reset can be reverted from the ref.
   useEffect(() => {
     const storageKey = `vibelink_admin_scroll:${activeSection}`;
+    const REFOCUS_SETTLING_MS = 500;
+    const MIN_SAVE_THRESHOLD = 50; // ignore trivial scrolls near-top
 
-    // Shared flag: any user-initiated scroll flips this so the restore
-    // observer stops trying to override intent. Declared first so both
-    // save + restore closures capture the same reference.
-    let restoreDone = false;
+    // Seed the ref for this section from sessionStorage IF we don't already
+    // have a good value in memory (fresh page load or first visit).
+    if (!lastGoodScrollRef.current[activeSection]) {
+      const stored = sessionStorage.getItem(storageKey);
+      const n = stored ? Number(stored) : 0;
+      if (Number.isFinite(n) && n > 0) {
+        lastGoodScrollRef.current[activeSection] = n;
+      }
+    }
+
+    let userTookOver = false;
     let observer: ResizeObserver | null = null;
     let hardCap: number | null = null;
-
-    // ---- SAVE half ----------------------------------------------------
-    // Ignore programmatic scrolls fired BY our own restore. Anything
-    // triggered during the initial restore window should not be treated
-    // as user intent. We detect it by comparing the pre-scroll scrollY
-    // against the current target — if we're on our way TO the target,
-    // don't cancel the restore.
     let saveTimer: number | null = null;
     let programmaticUntil = 0;
+
+    // ---- SAVE listener ------------------------------------------------
     const onScroll = () => {
-      // If this scroll happened within the programmatic window we just set,
-      // treat it as ours (don't cancel restore, don't save yet).
+      // Ignore our own programmatic scrolls (fired by tryRestore below).
       if (performance.now() < programmaticUntil) return;
-      // Real user scroll — respect it.
-      restoreDone = true;
+
+      const y = window.scrollY;
+      const sinceRefocus = performance.now() - lastRefocusAtRef.current;
+      const currentGood = lastGoodScrollRef.current[activeSection] || 0;
+
+      // Reject spurious 0-saves. Two guards:
+      //   (a) we're inside the post-refocus settling window and this is
+      //       a near-0 scroll — browser reset, not user intent
+      //   (b) we already have a substantial saved value and this is
+      //       near-0 — treat as noise regardless of when it happens
+      if (y < MIN_SAVE_THRESHOLD) {
+        if (sinceRefocus < REFOCUS_SETTLING_MS) return;
+        if (currentGood >= MIN_SAVE_THRESHOLD) return;
+      }
+
+      // Real user intent — this cancels any in-progress restore.
+      userTookOver = true;
+
+      // Throttled write to both ref (primary) and sessionStorage (persist).
       if (saveTimer !== null) return;
       saveTimer = window.setTimeout(() => {
-        sessionStorage.setItem(storageKey, String(window.scrollY));
+        const finalY = window.scrollY;
+        // Re-check the same guard at flush time in case things settled.
+        const sinceRefocus2 = performance.now() - lastRefocusAtRef.current;
+        const currentGood2 = lastGoodScrollRef.current[activeSection] || 0;
+        if (
+          finalY < MIN_SAVE_THRESHOLD &&
+          (sinceRefocus2 < REFOCUS_SETTLING_MS || currentGood2 >= MIN_SAVE_THRESHOLD)
+        ) {
+          saveTimer = null;
+          return;
+        }
+        lastGoodScrollRef.current[activeSection] = finalY;
+        sessionStorage.setItem(storageKey, String(finalY));
         saveTimer = null;
       }, 150);
     };
-    // Register save listener BEFORE the restore starts so early scrolls
-    // during the restore window don't get lost.
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    const saved = sessionStorage.getItem(storageKey);
-    const target = saved ? Number(saved) : 0;
-    const shouldRestore = Number.isFinite(target) && target > 0;
-
-    if (shouldRestore) {
-      const tryRestore = () => {
-        if (restoreDone) return;
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        if (maxScroll >= target) {
-          // Mark the next 100ms as programmatic so onScroll's user-intent
-          // check ignores this scroll (would otherwise flip restoreDone).
-          programmaticUntil = performance.now() + 100;
-          window.scrollTo(0, target);
-          // Confirm we actually landed close to target (some layouts still
-          // shift slightly after). Give it one more frame; if within 4px,
-          // we're done. If not, let the observer try again on next resize.
-          requestAnimationFrame(() => {
-            if (Math.abs(window.scrollY - target) < 4) {
-              restoreDone = true;
-              observer?.disconnect();
-              if (hardCap !== null) window.clearTimeout(hardCap);
-            }
-          });
+    // ---- RESTORE ------------------------------------------------------
+    const tryRestore = () => {
+      if (userTookOver) return;
+      const target = lastGoodScrollRef.current[activeSection] || 0;
+      if (target <= 0) return;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (maxScroll < target) return; // observer will re-fire on next grow
+      programmaticUntil = performance.now() + 150;
+      window.scrollTo(0, target);
+      // Confirm landing. If good, stop. Otherwise wait for next resize.
+      requestAnimationFrame(() => {
+        if (Math.abs(window.scrollY - target) < 4) {
+          observer?.disconnect();
+          if (hardCap !== null) {
+            window.clearTimeout(hardCap);
+            hardCap = null;
+          }
         }
-      };
+      });
+    };
 
-      // ResizeObserver on the body: fires whenever the page height changes
-      // (data loading, images loading, layout shifts, etc). Each height
-      // change is a fresh chance to reach the saved target.
+    const startRestore = () => {
+      observer?.disconnect();
+      if (hardCap !== null) window.clearTimeout(hardCap);
       observer = new ResizeObserver(tryRestore);
       observer.observe(document.body);
-
-      // Kick off an initial attempt on the next frame after this effect runs
-      // — covers the case where the DOM is already tall enough at mount time
-      // (fast data, refresh, etc).
       requestAnimationFrame(tryRestore);
-
-      // Hard cap: after 10s of trying, give up. Prevents the observer from
-      // living forever if the page never grows tall enough (very slow load
-      // or the user navigated away).
       hardCap = window.setTimeout(() => {
-        restoreDone = true;
         observer?.disconnect();
+        hardCap = null;
       }, 10000);
+    };
+
+    // Initial restore on mount / section change.
+    if ((lastGoodScrollRef.current[activeSection] || 0) > 0) {
+      startRestore();
     }
+
+    // ---- Re-restore on tab-refocus -----------------------------------
+    // When the tab becomes visible again, re-run the restore path.
+    // The ref preserves the real saved value even if the browser reset
+    // scrollY to 0 while the tab was hidden.
+    const onVisible = () => {
+      if (document.hidden) return;
+      // Reset userTookOver — after a refocus, the "user intent" flag from
+      // an earlier scroll shouldn't block a fresh restore. If the user
+      // scrolls after refocus, onScroll will flip it again.
+      userTookOver = false;
+      if ((lastGoodScrollRef.current[activeSection] || 0) > 0) {
+        startRestore();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onVisible);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onVisible);
       if (saveTimer !== null) window.clearTimeout(saveTimer);
       if (hardCap !== null) window.clearTimeout(hardCap);
       observer?.disconnect();
