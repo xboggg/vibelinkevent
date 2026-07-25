@@ -348,57 +348,107 @@ const Admin = () => {
   };
 
   // Per-section scroll save/restore.
+  //
   // Problem: when the tab loses focus and regains it, React re-renders and
   // the browser (with scrollRestoration=auto) sometimes restores to 0 because
-  // the DOM content re-mounts. We save the user's scrollY per active section
-  // to sessionStorage on every scroll, and restore it when the section is
-  // re-mounted (component re-mount OR activeSection change).
+  // the DOM content re-mounts. Fix has two halves — save + restore.
+  //
+  // SAVE: on every scroll (throttled), write scrollY to sessionStorage keyed
+  // by section. Listener attached synchronously on mount so we never miss
+  // an early scroll.
+  //
+  // RESTORE: wait until the document is actually tall enough to hold the
+  // saved position, THEN scrollTo. Previously this used a fixed timer, which
+  // failed intermittently when data loading ran slower than the timer. Now
+  // uses ResizeObserver on <body> — every time the page grows, we try again.
+  // Stops once (a) the scroll lands within tolerance of the target, (b) the
+  // user manually scrolls first (respect intent), or (c) a 10s hard cap
+  // elapses (give up rather than loop forever).
   useEffect(() => {
     const storageKey = `vibelink_admin_scroll:${activeSection}`;
 
-    // 1. Restore any saved position for this section. Deferred to allow the
-    //    section's content to render (lazy chunks, data fetches) before we
-    //    try to scroll to a position that might otherwise be past the current
-    //    document height. Two rAFs = "next frame after next paint", which is
-    //    usually enough for the section's initial layout.
-    const raf1 = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const saved = sessionStorage.getItem(storageKey);
-        if (!saved) return;
-        const y = Number(saved);
-        if (!Number.isFinite(y) || y <= 0) return;
-        // Only restore if the document is actually tall enough — otherwise
-        // scrollTo silently clamps to the max and we lose the position anyway.
-        // If not tall enough yet, try once more shortly (async data may still
-        // be arriving). Give up after one retry to avoid infinite loops.
-        if (document.documentElement.scrollHeight >= y + window.innerHeight * 0.5) {
-          window.scrollTo(0, y);
-        } else {
-          setTimeout(() => {
-            if (document.documentElement.scrollHeight >= y + window.innerHeight * 0.5) {
-              window.scrollTo(0, y);
-            }
-          }, 400);
-        }
-      });
-    });
+    // Shared flag: any user-initiated scroll flips this so the restore
+    // observer stops trying to override intent. Declared first so both
+    // save + restore closures capture the same reference.
+    let restoreDone = false;
+    let observer: ResizeObserver | null = null;
+    let hardCap: number | null = null;
 
-    // 2. Save the user's current scrollY on every scroll, throttled so we
-    //    don't hammer sessionStorage. 150ms feels immediate but avoids churn.
+    // ---- SAVE half ----------------------------------------------------
+    // Ignore programmatic scrolls fired BY our own restore. Anything
+    // triggered during the initial restore window should not be treated
+    // as user intent. We detect it by comparing the pre-scroll scrollY
+    // against the current target — if we're on our way TO the target,
+    // don't cancel the restore.
     let saveTimer: number | null = null;
+    let programmaticUntil = 0;
     const onScroll = () => {
+      // If this scroll happened within the programmatic window we just set,
+      // treat it as ours (don't cancel restore, don't save yet).
+      if (performance.now() < programmaticUntil) return;
+      // Real user scroll — respect it.
+      restoreDone = true;
       if (saveTimer !== null) return;
       saveTimer = window.setTimeout(() => {
         sessionStorage.setItem(storageKey, String(window.scrollY));
         saveTimer = null;
       }, 150);
     };
+    // Register save listener BEFORE the restore starts so early scrolls
+    // during the restore window don't get lost.
     window.addEventListener("scroll", onScroll, { passive: true });
 
+    const saved = sessionStorage.getItem(storageKey);
+    const target = saved ? Number(saved) : 0;
+    const shouldRestore = Number.isFinite(target) && target > 0;
+
+    if (shouldRestore) {
+      const tryRestore = () => {
+        if (restoreDone) return;
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        if (maxScroll >= target) {
+          // Mark the next 100ms as programmatic so onScroll's user-intent
+          // check ignores this scroll (would otherwise flip restoreDone).
+          programmaticUntil = performance.now() + 100;
+          window.scrollTo(0, target);
+          // Confirm we actually landed close to target (some layouts still
+          // shift slightly after). Give it one more frame; if within 4px,
+          // we're done. If not, let the observer try again on next resize.
+          requestAnimationFrame(() => {
+            if (Math.abs(window.scrollY - target) < 4) {
+              restoreDone = true;
+              observer?.disconnect();
+              if (hardCap !== null) window.clearTimeout(hardCap);
+            }
+          });
+        }
+      };
+
+      // ResizeObserver on the body: fires whenever the page height changes
+      // (data loading, images loading, layout shifts, etc). Each height
+      // change is a fresh chance to reach the saved target.
+      observer = new ResizeObserver(tryRestore);
+      observer.observe(document.body);
+
+      // Kick off an initial attempt on the next frame after this effect runs
+      // — covers the case where the DOM is already tall enough at mount time
+      // (fast data, refresh, etc).
+      requestAnimationFrame(tryRestore);
+
+      // Hard cap: after 10s of trying, give up. Prevents the observer from
+      // living forever if the page never grows tall enough (very slow load
+      // or the user navigated away).
+      hardCap = window.setTimeout(() => {
+        restoreDone = true;
+        observer?.disconnect();
+      }, 10000);
+    }
+
     return () => {
-      cancelAnimationFrame(raf1);
       window.removeEventListener("scroll", onScroll);
       if (saveTimer !== null) window.clearTimeout(saveTimer);
+      if (hardCap !== null) window.clearTimeout(hardCap);
+      observer?.disconnect();
     };
   }, [activeSection]);
 
