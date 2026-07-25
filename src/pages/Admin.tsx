@@ -526,19 +526,65 @@ const Admin = () => {
       startRestore();
     }
 
+    // ---- rAF retry loop for tab-refocus ------------------------------
+    // The ResizeObserver-based path above depends on page HEIGHT growing
+    // (data loading, layout shifts). On tab refocus the page height DOES
+    // NOT change (already fully rendered before hide), so the observer
+    // never fires. A single scrollTo on visibilitychange isn't enough
+    // either — a post-refocus layout pass can clamp back to 0.
+    //
+    // Solution: an independent rAF-driven retry loop that keeps calling
+    // scrollTo until scrollY holds at the target for 2 consecutive frames
+    // OR ~800ms elapses. Doesn't need any DOM signal — pure timer.
+    let refocusRafId: number | null = null;
+    let refocusStartTime = 0;
+    let refocusConsecutiveHits = 0;
+    const REFOCUS_MAX_MS = 1000;
+    const refocusRetry = () => {
+      refocusRafId = null;
+      const target = lastGoodScrollRef.current[activeSection] || 0;
+      if (target <= 0 || userTookOver) {
+        isRestoring = false;
+        return;
+      }
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const capped = Math.min(target, maxScroll);
+      if (Math.abs(window.scrollY - capped) < 4) {
+        refocusConsecutiveHits++;
+        // Two frames stable = done.
+        if (refocusConsecutiveHits >= 2) {
+          scheduleSettle(target);
+          return;
+        }
+      } else {
+        refocusConsecutiveHits = 0;
+        // Not there yet — re-apply. 'instant' so no smooth-scroll cascade.
+        window.scrollTo({ top: capped, left: 0, behavior: "instant" as ScrollBehavior });
+      }
+      if (performance.now() - refocusStartTime > REFOCUS_MAX_MS) {
+        // Give up — hand back to the ResizeObserver / hardCap failsafe.
+        scheduleSettle(target);
+        return;
+      }
+      refocusRafId = requestAnimationFrame(refocusRetry);
+    };
+
     // ---- Re-restore on tab-refocus -----------------------------------
-    // Set isRestoring FIRST (freezes saves), THEN restore. The browser's
-    // animated reset now happens inside the freeze window.
+    // Freeze saves FIRST, then kick off the rAF retry loop (NOT the
+    // observer-based path, because height won't change on refocus).
     const onVisible = () => {
       if (document.hidden) return;
-      isRestoring = true; // FIRST — protects the good value from the
-                          // browser's animated scroll cascade.
+      isRestoring = true; // freeze saves before browser's reset animates
       userTookOver = false;
       if ((lastGoodScrollRef.current[activeSection] || 0) > 0) {
-        startRestore();
+        // Cancel any in-flight rAF retry (e.g. rapid tab-switching).
+        if (refocusRafId !== null) cancelAnimationFrame(refocusRafId);
+        refocusStartTime = performance.now();
+        refocusConsecutiveHits = 0;
+        refocusRafId = requestAnimationFrame(refocusRetry);
       } else {
         // Nothing to restore, but still hold the freeze briefly so the
-        // browser's animated reset doesn't get saved as user intent.
+        // browser's reset animation doesn't get saved as user intent.
         window.setTimeout(() => { isRestoring = false; }, REFOCUS_FREEZE_MS);
       }
     };
@@ -552,6 +598,7 @@ const Admin = () => {
       if (saveTimer !== null) window.clearTimeout(saveTimer);
       if (hardCap !== null) window.clearTimeout(hardCap);
       if (settleTimer !== null) window.clearTimeout(settleTimer);
+      if (refocusRafId !== null) cancelAnimationFrame(refocusRafId);
       observer?.disconnect();
     };
   }, [activeSection]);
