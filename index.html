@@ -99,6 +99,93 @@
   <body>
     <div id="root"></div>
     <!-- reCAPTCHA loaded dynamically only when order form is opened -->
+    <!--
+      TEMPORARY scroll-diagnostic V2 — active only on /admin. Previous
+      tracer identified React as the caller but the refetchOnWindowFocus
+      fix didn't stop the reset. This version adds: MutationObserver on
+      #root children (catches DOM subtree replacement), scroll-event
+      listener (catches native browser scroll changes), and periodic
+      scrollY-poll (catches silent resets between events).
+    -->
+    <script>
+      (function () {
+        if (!location.pathname.startsWith('/admin')) return;
+
+        // 1. All programmatic scrollTo / scrollTop=0 (same as V1)
+        var origWinScroll = window.scrollTo.bind(window);
+        window.scrollTo = function () {
+          console.groupCollapsed('[SCROLL] window.scrollTo', arguments, 'visible=' + !document.hidden);
+          console.trace();
+          console.groupEnd();
+          return origWinScroll.apply(window, arguments);
+        };
+        var scrollTopDesc = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollTop');
+        if (scrollTopDesc && scrollTopDesc.set) {
+          var origSetter = scrollTopDesc.set;
+          Object.defineProperty(Element.prototype, 'scrollTop', {
+            configurable: true, enumerable: scrollTopDesc.enumerable,
+            get: scrollTopDesc.get,
+            set: function (v) {
+              if (this === document.documentElement || this === document.body) {
+                console.groupCollapsed('[SCROLL] scrollTop=' + v, 'visible=' + !document.hidden);
+                console.trace();
+                console.groupEnd();
+              }
+              return origSetter.call(this, v);
+            }
+          });
+        }
+
+        // 2. Every actual scroll event (fires whether triggered by JS, browser,
+        //    user, or anchor). Reports old vs new position so we spot resets.
+        var lastY = 0;
+        window.addEventListener('scroll', function () {
+          var y = window.scrollY;
+          if (Math.abs(y - lastY) > 200) {
+            console.log('[SCROLL] scroll event: ' + lastY + ' -> ' + y + ' visible=' + !document.hidden);
+          }
+          lastY = y;
+        }, { passive: true });
+
+        // 3. DOM replacement detector — when React remounts a subtree, that's
+        //    what actually loses scroll position. Watch #root's children.
+        var observer;
+        var startObserver = function () {
+          var root = document.getElementById('root');
+          if (!root) { setTimeout(startObserver, 100); return; }
+          observer = new MutationObserver(function (mutations) {
+            var added = 0, removed = 0;
+            for (var i = 0; i < mutations.length; i++) {
+              added += mutations[i].addedNodes.length;
+              removed += mutations[i].removedNodes.length;
+            }
+            // Only log big DOM shifts, not small updates.
+            if (added + removed > 5) {
+              console.log('[SCROLL] DOM mutation: +' + added + ' -' + removed + ' nodes at scrollY=' + window.scrollY + ' visible=' + !document.hidden);
+            }
+          });
+          observer.observe(root, { childList: true, subtree: true });
+          console.log('[SCROLL] MutationObserver armed on #root');
+        };
+        startObserver();
+
+        // 4. Tab-focus lifecycle logging
+        document.addEventListener('visibilitychange', function () {
+          console.log('[SCROLL] visibilitychange visible=' + !document.hidden + ' scrollY=' + window.scrollY);
+        });
+        window.addEventListener('focus', function () {
+          console.log('[SCROLL] window focus scrollY=' + window.scrollY);
+        });
+        window.addEventListener('blur', function () {
+          console.log('[SCROLL] window blur scrollY=' + window.scrollY);
+        });
+        window.addEventListener('pageshow', function (e) {
+          console.log('[SCROLL] pageshow persisted=' + e.persisted + ' scrollY=' + window.scrollY);
+        });
+
+        console.log('[SCROLL] tracer V2 armed on /admin');
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
