@@ -70,7 +70,21 @@ const RouteFallback = () => (
   </div>
 );
 
-const queryClient = new QueryClient();
+// refetchOnWindowFocus is React Query's default, but it silently refetches
+// every active query every time the tab regains focus. On admin pages
+// (which are lazy-loaded inside a Suspense boundary), the resulting
+// transient re-render can remount the DOM subtree — which resets
+// window.scrollTop to 0. Root cause identified 2026-07-25 via
+// scroll tracer stack: the reset came from react-core, not any user code.
+// Disabling this also spares the DB/network from a burst of duplicate
+// requests every time the user Alt+Tabs.
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 // Page tracking wrapper component
 const PageTracker = ({ children }: { children: React.ReactNode }) => {
