@@ -333,6 +333,10 @@ const Admin = () => {
 
   // Handle menu click with scroll to top
   const handleMenuClick = (sectionId: AdminSection, category: string) => {
+    // Wipe the saved scroll for the new section — a deliberate section click
+    // is a fresh start, not a return. Prevents the auto-restore below from
+    // jumping to an old position on a NEW navigation.
+    sessionStorage.removeItem(`vibelink_admin_scroll:${sectionId}`);
     setActiveSection(sectionId);
     setSidebarOpen(false);
     // Expand the category if not already expanded
@@ -342,6 +346,61 @@ const Admin = () => {
     // Scroll main content to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Per-section scroll save/restore.
+  // Problem: when the tab loses focus and regains it, React re-renders and
+  // the browser (with scrollRestoration=auto) sometimes restores to 0 because
+  // the DOM content re-mounts. We save the user's scrollY per active section
+  // to sessionStorage on every scroll, and restore it when the section is
+  // re-mounted (component re-mount OR activeSection change).
+  useEffect(() => {
+    const storageKey = `vibelink_admin_scroll:${activeSection}`;
+
+    // 1. Restore any saved position for this section. Deferred to allow the
+    //    section's content to render (lazy chunks, data fetches) before we
+    //    try to scroll to a position that might otherwise be past the current
+    //    document height. Two rAFs = "next frame after next paint", which is
+    //    usually enough for the section's initial layout.
+    const raf1 = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const saved = sessionStorage.getItem(storageKey);
+        if (!saved) return;
+        const y = Number(saved);
+        if (!Number.isFinite(y) || y <= 0) return;
+        // Only restore if the document is actually tall enough — otherwise
+        // scrollTo silently clamps to the max and we lose the position anyway.
+        // If not tall enough yet, try once more shortly (async data may still
+        // be arriving). Give up after one retry to avoid infinite loops.
+        if (document.documentElement.scrollHeight >= y + window.innerHeight * 0.5) {
+          window.scrollTo(0, y);
+        } else {
+          setTimeout(() => {
+            if (document.documentElement.scrollHeight >= y + window.innerHeight * 0.5) {
+              window.scrollTo(0, y);
+            }
+          }, 400);
+        }
+      });
+    });
+
+    // 2. Save the user's current scrollY on every scroll, throttled so we
+    //    don't hammer sessionStorage. 150ms feels immediate but avoids churn.
+    let saveTimer: number | null = null;
+    const onScroll = () => {
+      if (saveTimer !== null) return;
+      saveTimer = window.setTimeout(() => {
+        sessionStorage.setItem(storageKey, String(window.scrollY));
+        saveTimer = null;
+      }, 150);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      window.removeEventListener("scroll", onScroll);
+      if (saveTimer !== null) window.clearTimeout(saveTimer);
+    };
+  }, [activeSection]);
 
   useEffect(() => {
     if (!loading && !user) {
