@@ -602,21 +602,15 @@ const Admin = () => {
       }, REFOCUS_WATCH_MS);
     };
 
-    // Frame counter for temporary diagnostic logging — helps reviewers
-    // confirm the loop actually runs on real tab-switch. Remove after fix
-    // is verified in the wild.
-    let refocusFrameCount = 0;
     const refocusAssertLoop = () => {
       refocusRafId = null;
       const target = lastGoodScrollRef.current[activeSection] || 0;
       if (target <= 0 || userTookOver) {
-        console.log("[SCROLL-FIX] assert-loop-abort", { target, userTookOver, framesRun: refocusFrameCount });
         isRestoring = false;
         return;
       }
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const capped = Math.min(target, maxScroll);
-      refocusFrameCount++;
       // KEY: fire unconditionally. Don't check "is scrollY already at
       // target" — that check gets fooled during the pre-reset window.
       window.scrollTo({ top: capped, left: 0, behavior: "instant" as ScrollBehavior });
@@ -625,7 +619,6 @@ const Admin = () => {
         refocusRafId = requestAnimationFrame(refocusAssertLoop);
       } else {
         // Assertion window done. Enter watch mode for late resets.
-        console.log("[SCROLL-FIX] assert-loop-complete", { target, framesRun: refocusFrameCount, finalY: window.scrollY });
         beginRefocusWatch(target);
       }
     };
@@ -636,7 +629,6 @@ const Admin = () => {
     const onVisible = () => {
       if (document.hidden) return;
       const goodValue = lastGoodScrollRef.current[activeSection] || 0;
-      console.log("[SCROLL-FIX] onVisible", { activeSection, goodValue, currentY: window.scrollY });
       isRestoring = true; // freeze saves before browser's reset animates
       userTookOver = false;
       if (goodValue > 0) {
@@ -644,10 +636,8 @@ const Admin = () => {
         if (refocusRafId !== null) cancelAnimationFrame(refocusRafId);
         stopRefocusWatcher();
         refocusStartTime = performance.now();
-        refocusFrameCount = 0;
         refocusRafId = requestAnimationFrame(refocusAssertLoop);
       } else {
-        console.log("[SCROLL-FIX] onVisible-no-goodValue-skipping");
         // Nothing to restore, but still hold the freeze briefly so the
         // browser's reset animation doesn't get saved as user intent.
         window.setTimeout(() => { isRestoring = false; }, REFOCUS_FREEZE_MS);
@@ -675,11 +665,15 @@ const Admin = () => {
     }
   }, [user, loading, navigate]);
 
+  // Keyed on user.id (not the user object reference) so this doesn't
+  // re-fire when Supabase's onAuthStateChange emits TOKEN_REFRESHED on
+  // tab-refocus with a fresh user object for the same underlying user.
   useEffect(() => {
     if (user && isAdmin) {
       fetchOrders();
     }
-  }, [user, isAdmin]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, isAdmin]);
 
   useEffect(() => {
     if (selectedOrder) {
