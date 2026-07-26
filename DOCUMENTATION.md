@@ -481,6 +481,37 @@ Lives in `src/pages/Admin.tsx` inside a single big useEffect keyed on `activeSec
 
 **Gotcha to remember:** if you ever probe `blog_post_views` from PostgREST, `select=count` looks like a valid column response but is actually the PostgREST count aggregate. Only `view_count` is a real column. If you see a 42803 GROUP BY error when selecting multiple columns, that's PostgREST confirming the table is a view/aggregate — plain multi-column selects on aggregate rows need explicit `group by`, which PostgREST doesn't do without an RPC.
 
+### Chatbot Analytics + Follow-ups History — tables didn't exist at all
+
+**Symptom:** `/admin?section=chatbot` and `/admin?section=follow-ups` both threw `PGRST205 "Could not find the table 'public.<name>'"` errors in the console and rendered empty. Metric cards read 0.
+
+**Cause:** the admin panel components existed and their queries were correctly-formed — but the four backing tables were never created. Full external audit of the admin panel found these were the only remaining missing-table bugs after the BlogAnalytics fix above.
+
+**Verified missing (probed 10 alternate names — none existed):**
+- `chat_conversations` — one row per chatbot session
+- `chat_messages` — one row per message in a conversation
+- `chat_analytics` — topic → count aggregate ("wedding pricing asked 14 times")
+- `follow_up_logs` — one row per follow-up email sent
+
+**Fix:** created all four via `supabase/migrations/20260726_chat_and_followup_tables.sql`. Column shapes cross-referenced against the exact queries the code already fires:
+
+| Table | Key columns | Notes |
+|---|---|---|
+| `chat_conversations` | `id`, `session_id`, `started_at`, `message_count` | Anon INSERT/UPDATE (customer chatbot writes as anon), admin SELECT |
+| `chat_messages` | `id`, `conversation_id` (FK cascade), `role` (user/assistant/system), `content`, `suggestions` (jsonb), `created_at` | Anon INSERT + SELECT (unguessable UUID conversation_id acts as capability); admin ALL |
+| `chat_analytics` | `topic` (PK), `count`, `last_asked_at` | Anon INSERT/UPDATE (chatbot increments on topic detection); admin SELECT |
+| `follow_up_logs` | `id`, `order_id` (FK to `orders` cascade), `follow_up_type`, `sent_at`, `success`, `error_message`, `metadata` | Admin SELECT only. Writes come from the follow-up Edge Function via service_role, which bypasses RLS |
+
+**How `follow_up_logs` was identified as CREATE (not repoint):** reviewer's captured query was `select=*,orders(client_name,client_email,event_title)&order=sent_at.desc` — the PostgREST embed and ordering by `sent_at` proved this was a per-send history table, not the existing `follow_up_settings` config table. `follow_up_settings` remains and continues to work for the settings page.
+
+**Applied via Supabase Dashboard SQL Editor.** When Supabase's "Potential issue detected: query creates a table without RLS" dialog appears, click **"Run without RLS"** — the migration's `alter table ... enable row level security` + `create policy` lines a few rows below in the same block turn RLS on explicitly. Supabase's warning only reads the CREATE and doesn't see the RLS setup that follows.
+
+**Also gotcha discovered:** Supabase SQL Editor's "Run" button can execute only the statement adjacent to the cursor, not the full editor contents, when the RLS-warning dialog interrupts. If a multi-block migration lands only partially, re-run the missing blocks explicitly (safe because migrations use `CREATE TABLE IF NOT EXISTS` and `DROP POLICY IF EXISTS`). Alternatively use Ctrl+Enter to run the whole editor.
+
+### Admin router fallback — not actually broken
+
+Reviewer flagged that unrecognized `?section=` slugs render Messages instead of a 404 state. **Verified not the case** in current code — `Admin.tsx` validates the URL param against `VALID_SECTIONS` (derived from `navCategories`) and falls back to `"dashboard"` on invalid, and the `renderStep` switch has an explicit `default: return null;`. Reviewer likely tested on a cached bundle predating the July 24 section-persistence fix. No change needed.
+
 ---
 
 ## 12. Roadmap Ideas (from Feature Enhancement doc)
@@ -588,6 +619,7 @@ The big change: **complete pricing model rebuild** from 4 tiers to 11 event-base
 - **Scroll-position restore on tab-switch** — 7 iterations to find the real cause. Final fix is an unconditional rAF assert loop (600ms) + late-reset watcher (400ms) that runs on `visibilitychange`. Independent of the ResizeObserver-based path that handles reload/section-change. Do not add state checks to this loop — see §11A Layer 7 for why.
 - **Refetch flash on tab-return** — Supabase `TOKEN_REFRESHED` was firing `has_role` RPC 2× on every refocus + re-triggering `fetchOrders` via useEffect. Fixed with a module-scoped admin-role cache in `useAuth.ts` and by keying Admin's fetchOrders effect on `user?.id` instead of the user object reference.
 - **Blog Analytics broken with 400 error** — the query used `post_slug` and `viewed_at`, neither of which exist on `blog_post_views`. Real schema is a pre-aggregated view with `post_id, day, view_count`. Fixed by using the correct columns, filtering by `day`, summing `view_count` per row, and PostgREST-embedding `blog_posts` on the FK to resolve slug/title/category in one round-trip.
+- **Chatbot Analytics + Follow-ups History broken with 404s** — external audit of the entire admin (~35 sections) found these two panels' backing tables never existed at all. Created 4 tables via migration `20260726_chat_and_followup_tables.sql`: `chat_conversations`, `chat_messages`, `chat_analytics`, `follow_up_logs`. Column shapes cross-checked against the exact queries the code already fires. Rest of the admin (32 sections) verified clean by the same audit — no other missing-table bugs.
 
 **Blog feature images:** ~48 blog articles now have real DALL-E-3-generated feature images (previously all pointed at a broken shared placeholder). Batched by category, all optimized to ~150-250 KB JPEG q=82 progressive at 1600px max. Filenames follow slug convention in `public/blog-heros/`. Prompts drafted per-article by reading each article's excerpt for grounding — kept as reusable material in `scratchpad/blog-image-prompts/BATCH_*.md`.
 
