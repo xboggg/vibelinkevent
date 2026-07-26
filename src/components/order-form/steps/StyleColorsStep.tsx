@@ -392,15 +392,28 @@ export const StyleColorsStep = ({
         </div>
       </div>
 
-      <div className="flex justify-between pt-2">
-        <Button variant="outline" onClick={onPrev} size="lg" className="gap-2">
+      <div className="flex flex-col items-end gap-2 pt-2 sm:flex-row sm:justify-between sm:items-center">
+        <Button variant="outline" onClick={onPrev} size="lg" className="gap-2 order-2 sm:order-1">
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
-        <Button onClick={validateAndProceed} disabled={!isValid} size="lg" className="gap-2">
-          Continue
-          <ArrowRight className="h-4 w-4" />
-        </Button>
+        <div className="flex flex-col items-end gap-1 order-1 sm:order-2">
+          {/* Explicit hint per QA feedback 2026-07-26 — users were briefly
+              wondering why Continue was inactive without a visible reason. */}
+          {!isValid && (
+            <p className="text-xs text-muted-foreground">
+              {!formData.colorPalette && !formData.stylePreference
+                ? "Pick a colour palette and design style to continue"
+                : !formData.colorPalette
+                ? "Pick a colour palette to continue"
+                : "Pick a design style to continue"}
+            </p>
+          )}
+          <Button onClick={validateAndProceed} disabled={!isValid} size="lg" className="gap-2">
+            Continue
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );
