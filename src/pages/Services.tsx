@@ -1051,7 +1051,7 @@ const Services = () => {
               { n: TOTAL_FEATURES, suffix: "", label: "Features included", tint: "from-primary to-purple-600" },
               { n: TOTAL_FEATURE_CATEGORIES, suffix: "", label: "Feature categories", tint: "from-secondary to-yellow-400" },
               { n: 1, suffix: "", label: "Link, every guest", tint: "from-emerald-500 to-teal-600" },
-              { n: 500, suffix: "+", label: "Ghanaian families served", tint: "from-pink-500 to-rose-600" },
+              { n: 9, suffix: "", label: "Event types covered", tint: "from-pink-500 to-rose-600" },
             ].map((s, i) => (
               <motion.div
                 key={i}

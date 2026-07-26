@@ -223,8 +223,8 @@ export const portfolioItems: PortfolioItem[] = [
     title: "Frank & Hannah — Traditional Engagement",
     type: "Engagements",
     description: "An elegant Ghanaian engagement invitation in gold-and-ivory, centred on the Adinkra symbol of love and faithfulness.",
-    image: "/frankhannah-portfolio.png?v=2",
-    thumbnail: "/frankhannah-portfolio.png?v=2",
+    image: "/frankhannah-portfolio.webp",
+    thumbnail: "/frankhannah-portfolio.webp",
     demoUrl: "https://frankhannah.vibelinkevent.com/",
     slug: "frank-hannah-engagement",
     features: [
