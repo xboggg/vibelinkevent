@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
-import { MessageCircle as MessageCircleIcon, Mail, MapPin, Phone, Clock, HelpCircle, Loader2, Sparkles, Send, Zap, Globe } from "lucide-react";
+import { MessageCircle as MessageCircleIcon, Mail, MapPin, Clock, HelpCircle, Loader2, Sparkles, Send, Zap, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -254,7 +254,6 @@ const Contact = () => {
               {
                 type: "whatsapp" as const,
                 chatHref: "https://wa.me/4915757178561",
-                callHref: "tel:+4915757178561",
                 icon: MessageCircleIcon, title: "WhatsApp", detail: "+49 157 5717 8561",
                 subdetail: "Chat or call · free worldwide · fastest reply",
                 grad: "from-emerald-400 via-green-500 to-green-600",
@@ -301,26 +300,19 @@ const Contact = () => {
                   <p className={`${card.text} text-base font-semibold mb-1`}>{card.detail}</p>
                   <p className="text-muted-foreground text-xs leading-relaxed">{card.subdetail}</p>
 
-                  {/* WhatsApp card: two real action buttons.
-                      Chat opens wa.me (browser or WhatsApp app).
-                      Call fires the system dialer (tel: scheme). */}
-                  {isWhatsApp && card.chatHref && card.callHref && (
-                    <div className="mt-5 pt-4 border-t border-border/60 grid grid-cols-2 gap-2">
+                  {/* WhatsApp card: single Chat action.
+                      Opens wa.me — once in WhatsApp, the user can
+                      voice/video-call from inside the app natively. */}
+                  {isWhatsApp && card.chatHref && (
+                    <div className="mt-5 pt-4 border-t border-border/60">
                       <a
                         href={card.chatHref}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-gradient-to-br ${card.grad} text-white text-sm font-semibold shadow-sm hover:shadow-md hover:brightness-110 transition-all`}
+                        className={`w-full flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-gradient-to-br ${card.grad} text-white text-sm font-semibold shadow-sm hover:shadow-md hover:brightness-110 transition-all`}
                       >
                         <MessageCircleIcon className="h-4 w-4" strokeWidth={2.25} />
-                        Chat
-                      </a>
-                      <a
-                        href={card.callHref}
-                        className={`flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg border-2 ${card.border} ${card.text} text-sm font-semibold hover:bg-green-50 dark:hover:bg-green-950/30 transition-colors`}
-                      >
-                        <Phone className="h-4 w-4" strokeWidth={2.25} />
-                        Call
+                        Chat on WhatsApp
                       </a>
                     </div>
                   )}

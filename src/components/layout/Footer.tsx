@@ -71,24 +71,39 @@ const eventTypes = [{
   name: "Corporate Events",
   href: "/corporate-events"
 }];
+// Each social has its official brand identity on hover. Idle state stays
+// the shared subdued pill; hover swaps to the brand colour + white icon.
+// Instagram uses its official gradient (the flat "#E4405F" doesn't do it
+// justice); the rest are single brand tokens.
 const socialLinks = [{
   name: "Instagram",
   icon: Instagram,
-  href: "https://instagram.com/vibelinkevent"
+  href: "https://instagram.com/vibelinkevent",
+  hoverClass: "hover:bg-gradient-to-tr hover:from-[#f09433] hover:via-[#dc2743] hover:to-[#bc1888] hover:text-white"
 }, {
   name: "Facebook",
   icon: Facebook,
-  href: "https://facebook.com/vibelinkevent"
+  href: "https://facebook.com/vibelinkevent",
+  hoverClass: "hover:bg-[#1877F2] hover:text-white"
 }, {
   name: "Twitter",
   icon: Twitter,
-  href: "https://twitter.com/vibelinkevent"
+  href: "https://twitter.com/vibelinkevent",
+  hoverClass: "hover:bg-[#1DA1F2] hover:text-white"
 }, {
   name: "TikTok",
   icon: () => <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
     </svg>,
-  href: "https://tiktok.com/@vibelinkevent"
+  href: "https://tiktok.com/@vibelinkevent",
+  hoverClass: "hover:bg-black hover:text-white"
+}, {
+  name: "WhatsApp",
+  icon: () => <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>,
+  href: "https://wa.me/4915757178561",
+  hoverClass: "hover:bg-[#25D366] hover:text-white"
 }];
 export function Footer() {
   const [email, setEmail] = useState("");
@@ -156,7 +171,7 @@ export function Footer() {
               Your Event. Our Vibe. Turning Ghanaian celebrations into stunning, shareable digital invitations.
             </p>
             <div className="flex items-center justify-center md:justify-start gap-3">
-              {socialLinks.map(social => <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-primary-foreground/10 hover:bg-secondary hover:text-secondary-foreground transition-all duration-300" aria-label={social.name}>
+              {socialLinks.map(social => <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-lg bg-primary-foreground/10 ${social.hoverClass} transition-all duration-300`} aria-label={social.name}>
                   <social.icon className="h-4 w-4" />
                 </a>)}
             </div>
@@ -210,10 +225,9 @@ export function Footer() {
                   +233 24 414 7594
                 </a>
               </li>
-              {/* WhatsApp — the primary channel. Number opens wa.me (chat),
-                  "Chat" and "Call" mini-links below give explicit control:
-                  Chat -> wa.me, Call -> tel:. On mobile the whole block
-                  centres like the sibling rows; on desktop it left-aligns. */}
+              {/* WhatsApp — the primary channel. Single wa.me link; the
+                  in-app WhatsApp call button is available once the chat opens,
+                  so we don't duplicate a Call action here. */}
               <li className="flex flex-col items-center gap-1 md:flex-row md:items-start md:justify-start md:gap-3 text-sm text-center md:text-left">
                 <div className="flex items-center gap-3">
                   <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-secondary flex-shrink-0 md:mt-0.5">
@@ -224,23 +238,7 @@ export function Footer() {
                   </a>
                 </div>
                 <div className="text-xs text-primary-foreground/60 md:mt-1">
-                  <a
-                    href="https://wa.me/4915757178561"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-secondary transition-colors underline-offset-2 hover:underline"
-                  >
-                    Chat
-                  </a>
-                  {" or "}
-                  <a
-                    href="tel:+4915757178561"
-                    className="hover:text-secondary transition-colors underline-offset-2 hover:underline"
-                  >
-                    Call
-                  </a>
-                  <span className="text-primary-foreground/60 mx-1.5">•</span>
-                  <span className="text-primary-foreground/60">free worldwide</span>
+                  Chat on WhatsApp <span className="mx-1.5">•</span> free worldwide
                 </div>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3 text-sm">
