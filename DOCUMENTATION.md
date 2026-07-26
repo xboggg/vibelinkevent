@@ -1,6 +1,6 @@
 # VibeLink Event — Main Site Documentation
 
-> Last updated: 2026-07-24
+> Last updated: 2026-07-26
 > Repo: `vibelink/` (this folder) · GitHub `xboggg/vibelinkevent`
 > Live: https://vibelinkevent.com
 
@@ -391,6 +391,70 @@ Posts are managed via `/admin/blog` (protected by admin auth). Scheduled posts (
 
 ---
 
+## 11A. Admin Panel — Cause & Solution Log (2026-07-25 → 2026-07-26)
+
+Detailed record of bugs identified and fixed in the admin panel during a multi-day debugging exchange with an external code reviewer. Kept explicit so future-me doesn't have to re-derive the causes.
+
+### Admin section persistence across page refresh
+
+**Symptom:** refreshing any admin section always returned you to the Dashboard.
+
+**Cause:** `activeSection` lived only in React `useState`. React state doesn't survive a page refresh — component unmounts, state destroyed, next render resets to the initial value `"dashboard"`.
+
+**Fix (Admin.tsx):** three-tier restoration order:
+1. **URL param** (`?section=blog`) — authoritative when present. Enables bookmarks and shareable links.
+2. **localStorage** (`vibelink_admin_section`) — fallback for the initial visit on a new tab.
+3. **`"dashboard"`** — final default.
+
+`setActiveSection` wraps `useState`'s setter so URL + storage + state stay in lockstep. Uses `setSearchParams(…, { replace: true })` so switching sections doesn't spam the back-button history. `?section=dashboard` is omitted from the URL (kept clean for default). `VALID_SECTIONS` is derived from `navCategories` so unknown values fall back safely and future-added sections auto-validate. Containing sidebar category is auto-expanded on restore so the active item is visible.
+
+### Admin scroll position lost on tab-switch
+
+**Symptom:** scroll to the bottom of any admin section, switch to another browser tab, come back — page had jumped to the top.
+
+This one took **7 iterations** because the root cause was masked by multiple layered bugs. Documenting each layer so the pattern is recognisable next time.
+
+**Layer 1 (misdiagnosis — my `refetchOnWindowFocus` guess).** React Query defaults `refetchOnWindowFocus: true` — plausible cause of re-render → subtree remount → scrollTop reset. Turned off in `App.tsx` QueryClient. Real bug persisted, but this fix is worth keeping — spares the DB/network from a burst of duplicate queries on every Alt+Tab.
+
+**Layer 2 (misdiagnosis — `scrollRestoration = 'manual'`).** Browser's `history.scrollRestoration` was `'auto'`, which the reviewer flagged as suspicious. Setting it to `'manual'` disabled the browser's built-in scroll memory but I hadn't added replacement logic — so refresh now went to top every time. Made the problem WORSE. Reverted to `'auto'` (browser default) as a safety net.
+
+**Layer 3 (partial — fixed-timer restore).** Wrote a save/restore effect keyed per section: on scroll → save to sessionStorage; on section change → restore. Used a fixed 400ms retry timer. Worked when data loaded fast, failed when slow — the restore attempt fired before the page was tall enough, `scrollTo(target)` silently clamped, user stuck at top. Race condition.
+
+**Layer 4 (partial — ResizeObserver retry).** Replaced the fixed timer with a `ResizeObserver` on `<body>` — every time the page grew (data streaming in, images arriving), the observer fired and re-attempted the scroll. Terminates when scroll lands within 4px of target, user scrolls first, or 10s hard cap fires. **This fixed the reload / section-change path — but not tab-switch.** Reason: on tab-refocus, the page height does NOT change (already fully rendered before hide), so the observer never fires.
+
+**Layer 5 (partial — save/restore feedback loop caught).** Reviewer captured with instrumentation that on tab-refocus the browser fires an animated scroll cascade (`1591 → 477 → 154`) descending to 0. Every intermediate value got saved by the save-listener, progressively clobbering the real saved value. Added `isRestoring` state flag (all saves rejected while true) + `behavior: 'instant'` on restore scrollTo (no smooth-scroll cascade of our own) + 500ms post-refocus settling window. Still didn't fix it.
+
+**Layer 6 (partial — dedicated rAF loop for refocus).** Reviewer proved with a `scrollTo` hook that the page-height-based ResizeObserver never fired on refocus. Added an independent `requestAnimationFrame`-driven retry loop that runs ONLY on visibility change, doesn't need any DOM signal. Terminated on "scrollY within 4px of target for 2 consecutive frames" — but that success check was FALSE POSITIVE at frame 1 because the browser hadn't reset scroll yet. Loop exited immediately, browser reset landed at t+41ms with nobody watching.
+
+**Layer 7 (fixed — unconditional assert loop + late-reset watcher).** Reviewer's key insight: the reset lands ~40ms AFTER `visibilitychange` fires, so any state check at event-time is meaningless. Only unconditional time-based assertion works.
+
+Final design:
+- **Assert phase (600ms):** every animation frame, call `scrollTo(target, behavior: 'instant')` **unconditionally**. No "am I there?" check. The browser's late reset gets overwritten on the very next frame.
+- **Watch phase (400ms after assert):** install a short-lived scroll listener. If scrollY drops below 100 → late reset arrived, re-apply target. If scrollY is far from both 0 and target → user is scrolling, hand control back. If scrollY stays near target → keep watching until timeout.
+- **`isRestoring` freeze** stays true across the full assert+watch window so no spurious save can slip through.
+- **Source of truth** for the last known good position is a REF (`lastGoodScrollRef`), not sessionStorage. sessionStorage is a persistence mirror so a fresh tab/refresh can seed the ref. A browser-fired 0 can't clobber a value living in a JS ref because the save listener checks the ref before writing.
+
+Lives in `src/pages/Admin.tsx` inside a single big useEffect keyed on `activeSection`. **DO NOT introduce state checks like "am I at target?" into the refocus path** — they will pass at event-time and fail 40ms later. Time-based unconditional assertion is the only shape that works.
+
+### Admin flash / unnecessary refetch on tab-return
+
+**Symptom:** returning to the admin tab showed a full-screen spinner briefly before the content re-appeared.
+
+**Cause:** Supabase's `onAuthStateChange` fires a `TOKEN_REFRESHED` event on tab-refocus (this is Supabase's default behaviour, unrelated to React Query). Each fire triggered:
+- `checkAdminRole()` → `has_role` RPC. Fired 2× per refocus because `useAuth()` is called by Admin.tsx + useSessionTimeout + AdminAuth.tsx.
+- Admin.tsx's `useEffect(() => fetchOrders(), [user, isAdmin])` fired because `setUser(session.user)` was called with a fresh user object reference (same underlying user).
+
+**Fix (useAuth.ts):**
+- Module-scoped `adminRoleCache` `Map<userId, boolean>`. Cache hit skips the RPC entirely — `TOKEN_REFRESHED` no longer re-queries a role we already know.
+- Module-scoped `adminRoleInFlight` `Map<userId, Promise<boolean>>` to deduplicate concurrent lookups when multiple `useAuth()` consumers mount at once. One RPC round-trip shared across all callers.
+- Both caches cleared on `signOut()` so a subsequent sign-in re-queries.
+
+**Fix (Admin.tsx):** changed `useEffect(fetchOrders, [user, isAdmin])` → `useEffect(fetchOrders, [user?.id, isAdmin])`. Same underlying user id = no refetch.
+
+**Result confirmed by reviewer's network capture:** `has_role` RPCs on refocus went from 2 → 0. `/orders` refetch went from 1 → 0.
+
+---
+
 ## 12. Roadmap Ideas (from Feature Enhancement doc)
 
 Selected high-value items from the master feature-ideas doc:
@@ -488,6 +552,19 @@ The big change: **complete pricing model rebuild** from 4 tiers to 11 event-base
 
 **Deploy pipeline correction (2026-07-23):**
 - Discovered the actual deploy uses GitHub Actions (runner → 144 relay → 38 install), NOT the manual scp flow the previous docs described. The `deploy-webhook.cjs` and `vibelink-webhook.service` on server 38 are dead legacy — the service was restart-looping 180k+ times since Jan 2026 pointing at a deleted directory. Killed the service, corrected the memory + this doc.
+
+### July 25-26 session — Admin fixes, blog images, misc
+
+**Admin panel bug hunting** (see §11A for full cause & solution log):
+- **Section persistence across refresh** — admin sidebar was resetting to Dashboard on refresh. `activeSection` now persists via URL param (`?section=blog`) → localStorage → dashboard default, in that order. Enables bookmarks + shareable admin links.
+- **Scroll-position restore on tab-switch** — 7 iterations to find the real cause. Final fix is an unconditional rAF assert loop (600ms) + late-reset watcher (400ms) that runs on `visibilitychange`. Independent of the ResizeObserver-based path that handles reload/section-change. Do not add state checks to this loop — see §11A Layer 7 for why.
+- **Refetch flash on tab-return** — Supabase `TOKEN_REFRESHED` was firing `has_role` RPC 2× on every refocus + re-triggering `fetchOrders` via useEffect. Fixed with a module-scoped admin-role cache in `useAuth.ts` and by keying Admin's fetchOrders effect on `user?.id` instead of the user object reference.
+
+**Blog feature images:** ~48 blog articles now have real DALL-E-3-generated feature images (previously all pointed at a broken shared placeholder). Batched by category, all optimized to ~150-250 KB JPEG q=82 progressive at 1600px max. Filenames follow slug convention in `public/blog-heros/`. Prompts drafted per-article by reading each article's excerpt for grounding — kept as reusable material in `scratchpad/blog-image-prompts/BATCH_*.md`.
+
+**Documentation refresh** — DOCUMENTATION.md brought current with the July 2026 rebuilds. Also cleaned up 3 stale drift points in the admin (`OrderTemplates.tsx` had "Baby Shower" + generic "Basic/Standard/Premium Package" names → now derives from `EVENT_PACKAGES`; `AIEmailTemplates.tsx` and `FollowUpSettings.tsx` had "Premium Package" as hardcoded example → real names).
+
+**Misc surface polish** (from earlier in the same exchange but part of this session's arc): stats-honesty pass (500+ → 100+ Invitations, removed 9 fake per-category stat overlays on /services), copy alignment (steps 2/3 on HowItWorks rewritten, Saturday hours 10am-2pm, "Enhance Your Invitation" duplicate section removed from /pricing, Milestone Birthday split off from /birthday with dedicated `/milestone-birthday` page).
 
 ### Prior sessions (up to 2026-07-17)
 
