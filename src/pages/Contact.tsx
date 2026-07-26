@@ -255,7 +255,7 @@ const Contact = () => {
                 type: "link" as const,
                 href: "https://wa.me/4915757178561",
                 icon: MessageCircleIcon, title: "WhatsApp", detail: "+49 157 5717 8561",
-                subdetail: "Chat only · free worldwide · fastest reply",
+                subdetail: "Chat or call · free worldwide · fastest reply",
                 grad: "from-emerald-400 via-green-500 to-green-600",
                 text: "text-green-700 dark:text-green-400",
                 border: "border-green-200/70 dark:border-green-900/50",

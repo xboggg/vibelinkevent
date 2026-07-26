@@ -211,7 +211,7 @@ export function Footer() {
                 </a>
               </li>
               {/* WhatsApp — the primary channel. Whole line links to wa.me,
-                  clarifier text ('chat only — free worldwide') sets expectation
+                  clarifier text ('chat or call — free worldwide') sets expectation
                   that this is the diaspora-friendly free-message number. */}
               <li className="flex items-start justify-center md:justify-start gap-3 text-sm">
                 <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-secondary flex-shrink-0 mt-0.5">
@@ -219,7 +219,7 @@ export function Footer() {
                 </svg>
                 <a href="https://wa.me/4915757178561" target="_blank" rel="noopener noreferrer" className="text-primary-foreground/70 hover:text-secondary transition-colors">
                   <span className="block">+49 157 5717 8561</span>
-                  <span className="block text-xs text-primary-foreground/50">Chat only — free worldwide</span>
+                  <span className="block text-xs text-primary-foreground/50">Chat or call · free worldwide</span>
                 </a>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3 text-sm">
