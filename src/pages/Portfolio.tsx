@@ -137,15 +137,30 @@ const Portfolio = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="group rounded-2xl bg-card border border-border overflow-hidden hover:border-primary/30 hover:shadow-lg transition-all duration-300"
               >
-                {/* Image */}
-                <div className="relative aspect-[4/3] overflow-hidden">
+                {/* Image — width/height reserve space so the tile never
+                    collapses while loading (no more "broken image" flash on
+                    slow connections). Skeleton placeholder shown behind the
+                    <img> so a slow-loading image reveals a subtle shimmer
+                    instead of empty white. onError falls back to full-size
+                    image if the thumbnail is missing on the server. */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-muted/40">
+                  <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-muted/50 to-muted/30 animate-pulse" aria-hidden />
                   <img
                     src={item.thumbnail || item.image}
                     alt={item.title}
                     loading="lazy"
-                    className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+                    decoding="async"
+                    width={800}
+                    height={600}
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      if (item.thumbnail && item.image && img.src.endsWith(item.thumbnail)) {
+                        img.src = item.image;
+                      }
+                    }}
+                    className="relative w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 to-transparent pointer-events-none" />
                   <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-medium">
                     {item.type}
                   </span>

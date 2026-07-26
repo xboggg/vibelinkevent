@@ -282,7 +282,7 @@ const portfolioData: Record<string, {
     title: "Eric & Sherita — Save the Date",
     type: "Wedding",
     description: "An editorial Save-the-Date for Eric & Sherita — Saturday, 28 November 2026 at 12PM, New Jersey. Sage-green, ivory and warm-gold palette lifted directly from the couple's paper card, with a cinematic splash-to-hero storytelling flow: gold rings on ivory lace fade into a full-bleed golden-hour walk.",
-    image: "/ericsherita-portfolio.png?v=2",
+    image: "/ericsherita-portfolio.webp",
     demoUrl: "https://ericsherita.vibelinkevent.com/",
     features: [
       "Cinematic splash — hands, rings and eucalyptus on ivory lace, gold-cornered card with tap-to-enter",
@@ -375,11 +375,23 @@ const PortfolioDetail = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full rounded-2xl shadow-lg mb-8"
-                />
+                {/* Hero image — width/height reserve space to prevent the
+                    layout jump that made slow-loading images look broken.
+                    Eager decode: this is the first content the visitor came
+                    for. Skeleton wrapper prevents a flash of empty white. */}
+                <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden shadow-lg mb-8 bg-muted/40">
+                  <div className="absolute inset-0 bg-gradient-to-br from-muted/30 via-muted/50 to-muted/30 animate-pulse" aria-hidden />
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    width={1600}
+                    height={900}
+                    loading="eager"
+                    decoding="async"
+                    fetchPriority="high"
+                    className="relative w-full h-full object-cover"
+                  />
+                </div>
                 
                 {/* The Story — editorial treatment. Section header with a
                     subtle divider, left-accent bar on the prose column, and
