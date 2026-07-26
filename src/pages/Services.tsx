@@ -88,7 +88,7 @@ const services = [
   {
     icon: Heart,
     title: "Wedding Invitations",
-    description: "Beautiful digital invitations for your traditional, white wedding, or both.",
+    description: "Beautiful digital invitations for your traditional wedding, white wedding, or both.",
     features: [
       { name: "Dual ceremony support", desc: "Traditional & white wedding" },
       { name: "Love story timeline", desc: "Your journey together" },
@@ -104,7 +104,7 @@ const services = [
   {
     icon: Gem,
     title: "Engagement / Customary Marriage",
-    description: "Dignified digital invitations for the knocking, customary marriage and engagement ceremony — where two families become one.",
+    description: "Elegant digital invitations for the knocking, customary marriage and engagement — where two families become one.",
     features: [
       { name: "Adinkra symbol design", desc: "Sankofa, Gye Nyame, Osrane ne Nsoromma" },
       { name: "Kente-inspired palette", desc: "Colours that honour both families" },
@@ -136,7 +136,7 @@ const services = [
   {
     icon: Radio,
     title: "Church Events",
-    description: "Elegant digital invitations for harvest services, thanksgiving, dedications, pastor anniversaries, and all church programs.",
+    description: "Elegant invitations for harvest, thanksgiving, dedications, anniversaries and every church program.",
     features: [
       { name: "Service program & order", desc: "Full church program schedule" },
       { name: "Speaker & minister profiles", desc: "Introduce your speakers" },
@@ -152,7 +152,7 @@ const services = [
   {
     icon: Baby,
     title: "Naming Ceremonies",
-    description: "Celebrate the arrival of new life with joyful digital invitations.",
+    description: "Celebrate the arrival of new life with joyful, shareable invitations.",
     features: [
       { name: "Baby introduction", desc: "Welcome the new arrival" },
       { name: "Name meaning display", desc: "Cultural significance" },
@@ -205,7 +205,7 @@ const services = [
   {
     icon: GraduationCap,
     title: "Graduation Celebrations",
-    description: "Share your academic achievements with family and friends.",
+    description: "Celebrate your hard-won achievement with everyone who helped you get there.",
     features: [
       { name: "Achievement showcase", desc: "Degree, honors, awards" },
       { name: "Ceremony details", desc: "Date, time, venue" },
