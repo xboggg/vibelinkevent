@@ -222,15 +222,8 @@ const Contact = () => {
           </motion.div>
         </div>
 
-        {/* Wave divider */}
-        <div className="absolute bottom-0 left-0 right-0 leading-none">
-          <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" preserveAspectRatio="none" className="block w-full h-[50px] md:h-[80px]">
-            <path
-              d="M0 100L60 90C120 80 240 60 360 55C480 50 600 60 720 62.5C840 65 960 60 1080 55C1200 50 1320 55 1380 57.5L1440 60V100H0Z"
-              className="fill-background"
-            />
-          </svg>
-        </div>
+        {/* Bottom divider — clean straight edge that matches the flat
+            bottom used on the Pricing / Blog / Portfolio hero sections. */}
       </section>
 
       {/* Contact Info Cards — 3 colour-themed cards. WhatsApp is a real
