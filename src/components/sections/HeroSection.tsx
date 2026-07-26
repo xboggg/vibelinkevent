@@ -244,7 +244,6 @@ const preloadImages = () => {
 
 export function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [previousSlide, setPreviousSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(new Array(slides.length).fill(false));
   const sectionRef = useRef<HTMLElement>(null);
@@ -256,17 +255,11 @@ export function HeroSection() {
   const parallaxScale = useTransform(scrollY, [0, 500], [1, 1.1]);
 
   const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => {
-      setPreviousSlide(prev);
-      return (prev + 1) % slides.length;
-    });
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
   }, []);
 
   const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => {
-      setPreviousSlide(prev);
-      return (prev - 1 + slides.length) % slides.length;
-    });
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   }, []);
 
   useEffect(() => {
@@ -313,43 +306,43 @@ export function HeroSection() {
         if (Math.abs(diff) > 50) { diff > 0 ? nextSlide() : prevSlide(); }
       }}
     >
-      {/* Background Images with Crossfade and Parallax */}
+      {/* Background Images with Crossfade and Parallax
+       *
+       * All slide images are permanently mounted in a stack and cross-faded
+       * via opacity/z-index. Previously the code had 2 <img> slots (current
+       * + previous) with key={currentSlide} on the wrapper, which forced
+       * React to UNMOUNT the old <img> and MOUNT a fresh one every cycle.
+       * Browsers treat a freshly-mounted <img> as a new resource request —
+       * over 15+ cycles that made ~131 image requests for 7 files, ~23 MB
+       * of duplicated download (external perf audit 2026-07-26). Keeping
+       * the <img> elements mounted means each file is fetched exactly once
+       * for the lifetime of the page.
+       */}
       <div className="absolute inset-0 overflow-hidden">
       <motion.div
         className="absolute inset-0 bg-navy"
         style={{ y: parallaxY, scale: parallaxScale }}
       >
-        {/* Previous slide (bottom layer) */}
-        <div className="absolute inset-0" style={{ zIndex: 1 }}>
+        {slides.map((slide, i) => (
           <img
-            src={slides[previousSlide].image}
-            alt={slides[previousSlide].alt}
-            className="w-full h-full object-cover"
-            style={{ objectPosition: slides[previousSlide].objectPos }}
-            loading="lazy"
+            key={slide.image}
+            src={slide.image}
+            alt={slide.alt}
+            width={1920}
+            height={1080}
+            className="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out"
+            style={{
+              objectPosition: slide.objectPos,
+              opacity: i === currentSlide ? 1 : 0,
+              zIndex: i === currentSlide ? 2 : 1,
+            }}
+            loading={i === 0 ? "eager" : "lazy"}
+            fetchPriority={i === 0 ? "high" : "low"}
+            onLoad={() => handleImageLoad(i)}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-purple-dark/70" />
-          <div className="absolute inset-0 bg-pattern-dots opacity-20" />
-        </div>
-        
-        {/* Current slide (top layer with fade-in) */}
-        <div 
-          key={currentSlide}
-          className="absolute inset-0 hero-slide-fade"
-          style={{ zIndex: 2 }}
-        >
-          <img
-            src={slides[currentSlide].image}
-            alt={slides[currentSlide].alt}
-            className="w-full h-full object-cover"
-            style={{ objectPosition: slides[currentSlide].objectPos }}
-            loading="eager"
-            fetchPriority="high"
-            onLoad={() => handleImageLoad(currentSlide)}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-purple-dark/70" />
-          <div className="absolute inset-0 bg-pattern-dots opacity-20" />
-        </div>
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-purple-dark/70" style={{ zIndex: 3 }} />
+        <div className="absolute inset-0 bg-pattern-dots opacity-20" style={{ zIndex: 3 }} />
       </motion.div>
       </div>
 
@@ -539,10 +532,7 @@ export function HeroSection() {
         {slides.map((_, index) => (
           <button
             key={index}
-            onClick={() => {
-              setPreviousSlide(currentSlide);
-              setCurrentSlide(index);
-            }}
+            onClick={() => setCurrentSlide(index)}
             className={`w-2 h-2 rounded-full transition-all duration-300 ${
               index === currentSlide
                 ? "bg-secondary w-8"
