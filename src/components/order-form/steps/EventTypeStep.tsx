@@ -72,7 +72,13 @@ export const EventTypeStep = ({
                 >
                   {event.name}
                 </h3>
-                <p className="text-xs text-muted-foreground mt-0.5 hidden sm:block">
+                {/* Description shows on every viewport (mobile included) —
+                    dropped the earlier `hidden sm:block` that was hiding the
+                    GHS price + one-liner on phones, leaving mobile visitors
+                    with just an icon and event name to choose from. Loose
+                    leading + wrapping so short/long descriptions both look
+                    balanced across the grid. */}
+                <p className="text-[11px] sm:text-xs text-muted-foreground mt-1 leading-snug">
                   {event.description}
                 </p>
               </div>
