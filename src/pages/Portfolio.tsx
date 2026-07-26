@@ -132,40 +132,57 @@ const Portfolio = () => {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           {filteredItems.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
-              className="max-w-xl mx-auto text-center py-8 md:py-12"
-            >
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-5">
-                <Inbox className="h-8 w-8 text-primary" strokeWidth={2} />
-              </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
-                We&rsquo;re adding {activeCategory} examples soon
-              </h2>
-              <p className="text-muted-foreground text-base md:text-lg mb-8">
-                No public case studies for this category yet — but we build them.
-                Browse everything we&rsquo;ve shipped so far, or start your own.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => handleCategoryChange("All")}
-                  className="w-full sm:w-auto"
+            // Empty-state: instead of a generic "View all work" fallback,
+            // send the visitor to the matching category on /designs. So a
+            // church visitor with no portfolio entries lands on the church
+            // designs (which have their own empty-state fallback if that's
+            // also empty). Category→slug lookup mirrors the Portfolio filter's
+            // slug → category map above.
+            (() => {
+              const activeSlug = Object.entries(slugToCategoryMap).find(
+                ([, cat]) => cat === activeCategory
+              )?.[0];
+              const designsHref = activeSlug ? `/designs?type=${activeSlug}` : "/designs";
+              return (
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="max-w-xl mx-auto text-center py-8 md:py-12"
                 >
-                  <ArrowRight className="mr-2 h-4 w-4 rotate-180" />
-                  View all work
-                </Button>
-                <Button asChild variant="gold" size="lg" className="w-full sm:w-auto">
-                  <Link to="/get-started">
-                    Start Your Invitation
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-5">
+                    <Inbox className="h-8 w-8 text-primary" strokeWidth={2} />
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                    We&rsquo;re adding {activeCategory} examples soon
+                  </h2>
+                  <p className="text-muted-foreground text-base md:text-lg mb-8">
+                    No public case studies for this category yet — but we build them.
+                    Browse orderable designs for {activeCategory.toLowerCase()},
+                    or start your own.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="lg"
+                      className="w-full sm:w-auto"
+                    >
+                      <Link to={designsHref}>
+                        <ArrowRight className="mr-2 h-4 w-4 rotate-180" />
+                        Browse designs
+                      </Link>
+                    </Button>
+                    <Button asChild variant="gold" size="lg" className="w-full sm:w-auto">
+                      <Link to="/get-started">
+                        Start Your Invitation
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </motion.div>
+              );
+            })()
           ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {filteredItems.map((item, index) => (

@@ -6,15 +6,40 @@
 // - Card CTAs: "Preview Live" (opens the sample invitation) + "Order This Design"
 //   → /get-started?template=<slug>
 // - No tier/price on cards; a small link under the header points to /pricing
-import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, ArrowRight, Sparkles, Info } from "lucide-react";
+import { ExternalLink, ArrowRight, Sparkles, Info, Inbox } from "lucide-react";
 import SEO from "@/components/SEO";
 import { portfolioItems } from "@/data/portfolioItems";
 import { templates as tieredTemplates } from "@/data/templatesData";
+
+// URL-slug → Designs tab key. Kept in lockstep with slugToCategoryMap in
+// portfolioItems.ts so /portfolio?type=X and /designs?type=X mean the same
+// category on both pages. Weddings & Engagements share the merged tab here.
+const SLUG_TO_TAB_KEY: Record<string, string> = {
+  wedding: "WeddingsEngagements",
+  engagement: "WeddingsEngagements",
+  funeral: "Funerals",
+  naming: "Naming",
+  anniversary: "Anniversaries",
+  graduation: "Graduations",
+  birthday: "Birthdays",
+  church: "Church",
+  corporate: "Corporate",
+};
+const TAB_KEY_TO_SLUG: Record<string, string> = {
+  WeddingsEngagements: "wedding",
+  Funerals: "funeral",
+  Naming: "naming",
+  Anniversaries: "anniversary",
+  Graduations: "graduation",
+  Birthdays: "birthday",
+  Church: "church",
+  Corporate: "corporate",
+};
 
 // Unified design item used on this page — normalises across the two sources.
 interface Design {
@@ -115,8 +140,34 @@ function DesignCard({ item, tint, soft, accent }: { item: Design; tint: string; 
 
 // ── Page ────────────────────────────────────────────────────────────
 export default function Designs() {
-  const [activeKey, setActiveKey] = useState<string>("All");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const typeParam = searchParams.get("type");
+  const initialKey = typeParam ? SLUG_TO_TAB_KEY[typeParam] || "All" : "All";
+  const [activeKey, setActiveKey] = useState<string>(initialKey);
   const activeTab = TABS.find((t) => t.key === activeKey) || TABS[0];
+
+  // Keep tab state in sync if the URL param changes (browser back/forward,
+  // or a category-matched deep link from the Portfolio empty-state).
+  useEffect(() => {
+    if (typeParam) {
+      const mapped = SLUG_TO_TAB_KEY[typeParam];
+      if (mapped) setActiveKey(mapped);
+    } else {
+      setActiveKey("All");
+    }
+  }, [typeParam]);
+
+  // Clicking a tab updates the URL so it can be shared / deep-linked.
+  const handleTabClick = (key: string) => {
+    setActiveKey(key);
+    if (key === "All") {
+      setSearchParams({});
+    } else {
+      const slug = TAB_KEY_TO_SLUG[key];
+      if (slug) setSearchParams({ type: slug });
+      else setSearchParams({});
+    }
+  };
 
   // Designs page merges TWO sources:
   //  1. Demos from portfolioItems.ts (items WITHOUT demoLabel — real clients
@@ -213,7 +264,7 @@ export default function Designs() {
               return (
                 <button
                   key={t.key}
-                  onClick={() => setActiveKey(t.key)}
+                  onClick={() => handleTabClick(t.key)}
                   className={`shrink-0 inline-flex items-center gap-1.5 px-3 md:px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all ${
                     active
                       ? `bg-gradient-to-r ${t.tint} text-white shadow-md`
@@ -240,18 +291,47 @@ export default function Designs() {
           </div>
 
           {filtered.length === 0 ? (
-            <div className="max-w-md mx-auto text-center py-20">
-              <div className="text-6xl mb-4">🎨</div>
-              <h3 className="text-xl font-bold mb-2">No designs here yet</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                We're adding more designs to this category soon. In the meantime, we can build a custom design just for you.
+            // Empty-state mirrors the Portfolio one so the two pages read as
+            // a matched pair. Falls back to "View all designs" that clears
+            // the filter, plus the primary Get Started CTA. Fires by count,
+            // not by category, so any future empty tab handles itself.
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35 }}
+              className="max-w-xl mx-auto text-center py-8 md:py-12"
+            >
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-5">
+                <Inbox className="h-8 w-8 text-primary" strokeWidth={2} />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                We&rsquo;re adding {activeTab.label} soon
+              </h2>
+              <p className="text-muted-foreground text-base md:text-lg mb-8">
+                No designs for this category yet — but we build custom ones from scratch.
+                Browse everything on offer, or tell us your vibe and we&rsquo;ll craft it.
               </p>
-              <Button asChild size="lg" className={`bg-gradient-to-r ${activeTab.tint} text-white border-0`}>
-                <Link to="/get-started">
-                  Start a Custom Design <ArrowRight className="w-4 h-4 ml-1" />
-                </Link>
-              </Button>
-            </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => handleTabClick("All")}
+                  className="w-full sm:w-auto"
+                >
+                  <ArrowRight className="mr-2 h-4 w-4 rotate-180" />
+                  View all designs
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  className={`bg-gradient-to-r ${activeTab.tint} text-white border-0 w-full sm:w-auto`}
+                >
+                  <Link to="/get-started">
+                    Start Your Invitation <ArrowRight className="w-4 h-4 ml-1" />
+                  </Link>
+                </Button>
+              </div>
+            </motion.div>
           ) : (
             <AnimatePresence mode="wait">
               <motion.div
