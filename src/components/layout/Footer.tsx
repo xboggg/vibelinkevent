@@ -159,7 +159,7 @@ export function Footer() {
               <img src="/vibelink-logo.png" alt="VibeLink Event" className="h-20 object-contain" />
             </Link>
             <p className="text-primary-foreground/70 text-sm leading-relaxed mb-4">
-              Your Event. Our Vibe. Transform your Ghanaian events into stunning, shareable digital invitations.
+              Your Event. Our Vibe. Turning Ghanaian celebrations into stunning, shareable digital invitations.
             </p>
             <div className="flex items-center justify-center md:justify-start gap-3">
               {socialLinks.map(social => <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-primary-foreground/10 hover:bg-secondary hover:text-secondary-foreground transition-all duration-300" aria-label={social.name}>

@@ -514,6 +514,56 @@ Reviewer flagged that unrecognized `?section=` slugs render Messages instead of 
 
 ---
 
+## 11B. Public Site — Cause & Solution Log (2026-07-26)
+
+Full external QA of the public-facing site (26 pages, both forms, routing, responsive foundations) came back clean overall. Three real issues + one UX polish item.
+
+### Homepage hero carousel re-fetching images (~23 MB duplicate loading)
+
+**Symptom:** homepage decoded ~27.8 MB — of which ~26 MB was images — across 131 image requests for only 26 distinct images. Each of the 7 hero images was loaded 15-17 times over a page session.
+
+**Cause:** `HeroSection.tsx` had a two-slot render pattern (`current` + `previous` `<img>`) wrapped in `<div key={currentSlide}>`. The `key` prop forced React to UNMOUNT the old `<img>` element and MOUNT a fresh one on every rotation. Browsers treat a re-created `<img>` as a new resource request, so cycling 15+ times through 7 images produced 100+ redundant fetches (~23 MB of wasted download on cold visit, plus decode cost every cycle even on warm cache).
+
+**Fix (`HeroSection.tsx`):** replaced the current+previous slot pattern with a **stack of always-mounted `<img>` elements** — one per slide, permanently in the DOM, crossfading via `opacity` + `zIndex` + a CSS transition. Each hero image is now requested exactly once for the page's lifetime. Removed the dead `previousSlide` state and `setPreviousSlide` callback that only the old two-slot renderer needed.
+
+**Also in same commit:** added explicit `width={1920} height={1080}` to hero images (fixes CLS — reviewer flagged that all 21 homepage images lacked dimensions, causing layout shift as they loaded). Non-first slides marked `loading="lazy"` + `fetchPriority="low"` so the initial paint isn't fighting 7 concurrent image fetches.
+
+**Lesson to remember:** if you ever build a carousel using `<div key={index}>` to trigger re-render, the images inside get re-fetched. Either keep the `<img>` elements permanently mounted and toggle visual state, or use CSS-only crossfade with pre-mounted layers.
+
+### Favicon: 357 KB → 1.2 KB
+
+**Cause:** `favicon.png` was a 1024×1024 RGBA source PNG (357 KB) being served for a ~32px browser tab. Also being used dual-duty as `apple-touch-icon`.
+
+**Fix:** split cleanly.
+- `favicon.png` — resized to 32×32 (1.2 KB, −99.6%). Browser tab icon.
+- `apple-touch-icon.png` — NEW file at 180×180 (15.4 KB). iOS home-screen icon.
+- `index.html` link tags updated with explicit `sizes="32x32"` and `sizes="180x180"` attributes.
+
+### Style step: no hint on the disabled Continue button
+
+**Symptom (UX):** on `/get-started` step 3 (Style & Colours), the Continue button is disabled until BOTH a palette AND a design style are chosen. QA reviewer noted users briefly wondered why it wouldn't advance.
+
+**Fix (`StyleColorsStep.tsx`):** added a small muted-text hint above the Continue button, only visible while Continue is disabled. Contextual to what's missing:
+- Neither picked: "Pick a colour palette and design style to continue"
+- Only palette missing: "Pick a colour palette to continue"
+- Only style missing: "Pick a design style to continue"
+
+Restructured the button row to flex-col-then-row so the hint sits directly above Continue on mobile and to its left on desktop, without displacing the Back button.
+
+### Test data cleanup (post-QA-audit)
+
+Reviewer's E2E form-submission tests created two rows to clean up:
+- Order `7ec0f971-3fdd-4b69-8ef6-acf2e466ad07` ("QA TEST ORDER — please delete", GHS 2,650, qa-test@example.com)
+- Contact message `9fc975e8-a9bb-4565-b022-17207fde5cfa` ("QA TEST", qa-test@example.com)
+
+Both deleted 2026-07-26 via Supabase REST with the service key. **Gotcha for future cleanup:** the `orders.id` column is UUID, which doesn't support `ilike` operator — use `client_email=eq.<value>` or the full UUID with `id=eq.<uuid>`. `contact_messages` is actually stored in `vl_contact_messages` (the `send-contact-message` Edge Function writes there).
+
+### Public-site items VERIFIED clean by the audit
+
+Homepage timings (TTFB 79ms, DOM interactive 158ms, full load 552ms, FCP 600ms). All 26 pages loaded with no console errors or failed network requests. Both forms (Contact + Get Started wizard) work end-to-end — Contact fires the Edge Function and returns success; Get Started generates a real order ID and reaches Thank You. Routing 404 works correctly (unlike the admin's silent fallback the reviewer initially thought was there but wasn't). Responsive foundations solid (viewport meta, 74 breakpoint classes, mobile hamburger menu, zero horizontal overflow). Pricing math verified: Wedding 2,500 + QR Check-in add-on 150 = 2,650, 50% deposit = 1,325.
+
+---
+
 ## 12. Roadmap Ideas (from Feature Enhancement doc)
 
 Selected high-value items from the master feature-ideas doc:
@@ -620,6 +670,7 @@ The big change: **complete pricing model rebuild** from 4 tiers to 11 event-base
 - **Refetch flash on tab-return** — Supabase `TOKEN_REFRESHED` was firing `has_role` RPC 2× on every refocus + re-triggering `fetchOrders` via useEffect. Fixed with a module-scoped admin-role cache in `useAuth.ts` and by keying Admin's fetchOrders effect on `user?.id` instead of the user object reference.
 - **Blog Analytics broken with 400 error** — the query used `post_slug` and `viewed_at`, neither of which exist on `blog_post_views`. Real schema is a pre-aggregated view with `post_id, day, view_count`. Fixed by using the correct columns, filtering by `day`, summing `view_count` per row, and PostgREST-embedding `blog_posts` on the FK to resolve slug/title/category in one round-trip.
 - **Chatbot Analytics + Follow-ups History broken with 404s** — external audit of the entire admin (~35 sections) found these two panels' backing tables never existed at all. Created 4 tables via migration `20260726_chat_and_followup_tables.sql`: `chat_conversations`, `chat_messages`, `chat_analytics`, `follow_up_logs`. Column shapes cross-checked against the exact queries the code already fires. Rest of the admin (32 sections) verified clean by the same audit — no other missing-table bugs.
+- **Public-site QA sweep** (see §11B for full log) — 26 pages, both forms, routing, responsive foundations all audited by external reviewer. Three fixes: hero carousel was re-fetching images (~23 MB duplicate loading, ~131 requests for 7 files — fixed by keeping `<img>` elements permanently mounted and crossfading via opacity); favicon 357 KB → 1.2 KB with new separate 15.4 KB apple-touch-icon; added contextual hint on Style step's disabled Continue button. Two QA test rows deleted (order + contact msg). Public site verified clean otherwise — timings, forms, routing, responsive all pass.
 
 **Blog feature images:** ~48 blog articles now have real DALL-E-3-generated feature images (previously all pointed at a broken shared placeholder). Batched by category, all optimized to ~150-250 KB JPEG q=82 progressive at 1600px max. Filenames follow slug convention in `public/blog-heros/`. Prompts drafted per-article by reading each article's excerpt for grounding — kept as reusable material in `scratchpad/blog-image-prompts/BATCH_*.md`.
 
