@@ -31,7 +31,7 @@ export const OrderSummary = ({ formData, total }: OrderSummaryProps) => {
         <ol className="space-y-3">
           {[
             "Submit this form",
-            "We WhatsApp you the same day",
+            "We WhatsApp you within 24 hours",
             "Receive your custom quote",
             "Pay 50% deposit to start",
             formData.selectedPackage === "royal"

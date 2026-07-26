@@ -19,7 +19,7 @@ const steps = [
     number: "02",
     icon: MessageSquare,
     title: "We Confirm on WhatsApp",
-    description: "Same-day WhatsApp confirmation to lock in your details.",
+    description: "WhatsApp confirmation within 24 hours to lock in your details.",
     gradient: "from-pink-500 to-rose-500",
     glow: "rgba(236,72,153,0.35)",
     bg: "#ec4899",
@@ -218,7 +218,7 @@ export function HowItWorksPreviewSection() {
             transition={{ delay: 0.5 }}
             className="mt-6 text-sm text-muted-foreground"
           >
-            Takes just 2 minutes to get started • Same-day WhatsApp response
+            Takes just 2 minutes to get started • WhatsApp response within 24 hours
           </motion.p>
         </motion.div>
 

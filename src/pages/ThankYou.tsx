@@ -214,7 +214,7 @@ const ThankYou = () => {
     <Layout>
       <SEO 
         title="Thank You"
-        description="Your order has been received. We'll contact you the same day with your custom quote."
+        description="Your order has been received. We'll contact you within 24 hours with your custom quote."
         noindex={true}
       />
       <section className="pt-24 lg:pt-32 pb-20 min-h-[80vh] flex items-center bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A]">

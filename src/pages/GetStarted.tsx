@@ -62,7 +62,7 @@ const GetStarted = () => {
   const preselectedRush = calcAddonIds.includes("rush-48h");
 
   const handleFormComplete = (data: OrderFormData) => {
-    toast.success("Order submitted successfully! We'll contact you on WhatsApp the same day.");
+    toast.success("Order submitted successfully! We'll contact you on WhatsApp within 24 hours.");
     navigate("/thank-you");
   };
 
@@ -74,7 +74,7 @@ const GetStarted = () => {
     <Layout>
       <SEO 
         title="Get Started"
-        description="Create your digital invitation today. Fill out our simple 6-step form and receive your same-day WhatsApp confirmation."
+        description="Create your digital invitation today. Fill out our simple 6-step form and receive your WhatsApp confirmation within 24 hours."
         keywords="order digital invitation Ghana, create wedding invitation, event invitation order"
         canonical="/get-started"
       />
@@ -95,12 +95,12 @@ const GetStarted = () => {
             </h1>
             <p className="text-primary-foreground/80 text-lg lg:text-xl mb-6">
               Fill out the form below with your event details and style preferences.
-              We'll confirm on WhatsApp the same day.
+              We'll confirm on WhatsApp within 24 hours.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               {[
                 { icon: Clock, text: "Takes about 2 minutes" },
-                { icon: MessageCircle, text: "Same-day WhatsApp confirmation" },
+                { icon: MessageCircle, text: "WhatsApp confirmation within 24 hours" },
                 { icon: Shield, text: "Money-back guarantee" },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-1.5 text-primary-foreground/70">
