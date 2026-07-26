@@ -27,7 +27,7 @@ const organizationSchema = {
   "@id": "https://vibelinkevent.com/#organization",
   name: "VibeLink Event",
   alternateName: "VibeLink",
-  description: "Ghana's premier digital invitation service for weddings, funerals, naming ceremonies, graduations & corporate events.",
+  description: "Digital invitations for Ghanaian celebrations — weddings, funerals, naming ceremonies, graduations and corporate events, at home and across the diaspora.",
   url: "https://vibelinkevent.com",
   logo: "https://vibelinkevent.com/og-image.jpg",
   image: "https://vibelinkevent.com/og-image.jpg",
@@ -77,7 +77,7 @@ const websiteSchema = {
   "@id": "https://vibelinkevent.com/#website",
   url: "https://vibelinkevent.com",
   name: "VibeLink Event",
-  description: "Ghana's premier digital invitation service",
+  description: "Digital invitations for Ghanaian celebrations, at home and across the diaspora.",
   publisher: {
     "@id": "https://vibelinkevent.com/#organization",
   },
@@ -93,7 +93,7 @@ const websiteSchema = {
 
 const SEO = ({
   title = "VibeLink Event | Digital Event Invitations",
-  description = "Ghana's premier digital invitation service. Create stunning interactive invitations for weddings, funerals, naming ceremonies, graduations & corporate events.",
+  description = "Digital invitations for Ghanaian celebrations. Create stunning interactive invitations for weddings, funerals, naming ceremonies, graduations and corporate events — at home and across the diaspora.",
   keywords = "digital invitations Ghana, wedding invitations Ghana, funeral programs Ghana, naming ceremony invitations, event invitations Accra",
   canonical,
   ogImage = "https://vibelinkevent.com/og-image.jpg",

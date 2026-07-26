@@ -231,7 +231,12 @@ export function WhatsAppFAQ({
                         transition={{ duration: 0.35 }}
                         className="flex justify-end"
                       >
-                        <button onClick={() => toggleOpen(id)} className="text-left group focus:outline-none">
+                        <button
+                          onClick={() => toggleOpen(id)}
+                          aria-expanded={isOpen}
+                          aria-controls={`faq-answer-${id}`}
+                          className="text-left group focus:outline-none"
+                        >
                           <div
                             className={`relative max-w-[calc(100vw-6rem)] md:max-w-[420px] px-3.5 py-2 rounded-lg rounded-tr-none bg-[#d9fdd3] dark:bg-[#005c4b] shadow-sm group-hover:brightness-95 dark:group-hover:brightness-110 transition-all ${
                               isOpen ? "ring-2 ring-primary/50" : ""
@@ -257,7 +262,12 @@ export function WhatsAppFAQ({
                             transition={{ duration: 0.25, ease: "easeOut" }}
                             className="flex justify-start"
                           >
-                            <div className="relative max-w-[calc(100vw-6rem)] md:max-w-[420px] px-3.5 py-2 rounded-lg rounded-tl-none bg-white dark:bg-[#202c33] shadow-sm">
+                            <div
+                              id={`faq-answer-${id}`}
+                              role="region"
+                              aria-label={`Answer to: ${faq.question}`}
+                              className="relative max-w-[calc(100vw-6rem)] md:max-w-[420px] px-3.5 py-2 rounded-lg rounded-tl-none bg-white dark:bg-[#202c33] shadow-sm"
+                            >
                               <p className="text-[11px] font-semibold text-primary mb-0.5">VibeLink Team</p>
                               <p className="text-sm text-gray-800 dark:text-gray-100 leading-relaxed">{faq.answer}</p>
                               <span className="text-[10px] text-gray-500 dark:text-gray-400 block mt-1 text-right">

@@ -4,31 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- Primary Meta Tags -->
-    <title>Digital Event Invitations in Ghana | VibeLink Event</title>
-    <meta name="title" content="Digital Event Invitations in Ghana | VibeLink Event" />
+    <!-- Fallback title + description only. Per-route <title>, meta,
+         Open Graph, Twitter Card, canonical, and JSON-LD are owned by the
+         SEO component (src/components/SEO.tsx via react-helmet) so that
+         crawlers see the correct values for each page instead of these
+         index.html defaults being duplicated by hydration. Do NOT add
+         og:*, twitter:*, canonical, description, or ld+json here — the
+         SEO component will inject a second copy and the two conflict. -->
+    <title>Digital Invitations for Ghanaian Celebrations | VibeLink Event</title>
     <meta name="description" content="VibeLink builds interactive digital invitations for Ghanaian weddings, funerals, outdoorings, birthdays and corporate events. Share by link, track RSVPs." />
-    <meta name="keywords" content="digital invitations Ghana, wedding invitations Ghana, funeral programs Ghana, naming ceremony invitations, event invitations Accra, online invitations Ghana, WhatsApp invitations" />
     <meta name="author" content="VibeLink Event" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://vibelinkevent.com/" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://vibelinkevent.com/" />
-    <meta property="og:title" content="VibeLink Event | Digital Event Invitations" />
-    <meta property="og:description" content="Ghana's premier digital invitation service. Create stunning interactive invitations for weddings, funerals, naming ceremonies & more." />
-    <meta property="og:image" content="https://vibelinkevent.com/og-image.png" />
-    <meta property="og:site_name" content="VibeLink Event" />
-    <meta property="og:locale" content="en_GH" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://vibelinkevent.com/" />
-    <meta name="twitter:title" content="VibeLink Event | Digital Event Invitations" />
-    <meta name="twitter:description" content="Ghana's premier digital invitation service. Create stunning interactive invitations for weddings, funerals, naming ceremonies & more." />
-    <meta name="twitter:image" content="https://vibelinkevent.com/og-image.png" />
-    <meta name="twitter:site" content="@vibelinkevent" />
 
     <!-- Additional SEO -->
     <meta name="geo.region" content="GH" />
@@ -61,39 +47,9 @@
       gtag('config', 'G-6ZY31KPC0V');
     </script>
 
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "VibeLink Event",
-      "description": "Ghana's premier digital invitation service for weddings, funerals, naming ceremonies, and more.",
-      "url": "https://vibelinkevent.com",
-      "logo": "https://vibelinkevent.com/logo.png",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Accra",
-        "addressCountry": "GH"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": "5.6037",
-        "longitude": "-0.1870"
-      },
-      "openingHours": "Mo-Su 00:00-24:00",
-      "priceRange": "GHS 600 - GHS 5,000+",
-      "sameAs": [
-        "https://instagram.com/vibelinkevent",
-        "https://facebook.com/vibelinkevent",
-        "https://twitter.com/vibelinkevent",
-        "https://tiktok.com/@vibelinkevent"
-      ],
-      "serviceArea": {
-        "@type": "Country",
-        "name": "Ghana"
-      }
-    }
-    </script>
+    <!-- Structured Data — owned by src/components/SEO.tsx per route,
+         which combines organizationSchema + websiteSchema + any page-specific
+         schema into one <script>. Do not duplicate here. -->
   </head>
 
   <body>
