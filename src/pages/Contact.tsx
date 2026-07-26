@@ -265,7 +265,7 @@ const Contact = () => {
               {
                 type: "static" as const,
                 icon: Zap, title: "Response Time", detail: "Within 24 hours",
-                subdetail: "Every day · WhatsApp-first, no office hours",
+                subdetail: "Mon–Fri 9am–5pm · Sat 10am–2pm GMT",
                 grad: "from-violet-500 via-purple-500 to-fuchsia-600",
                 text: "text-violet-700 dark:text-violet-400",
                 border: "border-violet-200/70 dark:border-violet-900/50",

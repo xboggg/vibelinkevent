@@ -215,7 +215,9 @@ export function Footer() {
           {/* Contact */}
           <div className="text-center md:text-left md:ml-4 lg:ml-8">
             <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-4">
-              Contact Us
+              <Link to="/contact" className="hover:text-secondary/80 transition-colors">
+                Contact Us
+              </Link>
             </h4>
             <ul className="space-y-3">
               {/* Ghana call line — kept per user preference (real answered line). */}
