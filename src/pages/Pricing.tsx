@@ -70,6 +70,7 @@ const calcAddOns = UNIVERSAL_ADDONS.map((a) => ({
   id: a.id,
   name: a.name,
   price: a.price,
+  badge: a.badge,
 }));
 
 function PricingCalculator() {
@@ -157,8 +158,15 @@ function PricingCalculator() {
                         : "border-border hover:border-secondary/40 bg-background"
                     }`}
                   >
-                    <span className={`text-xs font-medium truncate ${selectedAddOns.includes(addon.name) ? "text-secondary" : "text-foreground"}`}>{addon.name}</span>
-                    <span className="text-xs font-bold text-muted-foreground ml-2 flex-shrink-0">+{addon.price.toLocaleString()}</span>
+                    <span className={`text-xs font-medium truncate flex items-center gap-1.5 ${selectedAddOns.includes(addon.name) ? "text-secondary" : "text-foreground"}`}>
+                      {addon.name}
+                      {addon.badge && (
+                        <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-secondary/20 text-secondary flex-shrink-0">
+                          {addon.badge}
+                        </span>
+                      )}
+                    </span>
+                    <span className="text-xs font-bold text-muted-foreground ml-2 flex-shrink-0">+GHS {addon.price.toLocaleString()}</span>
                   </button>
                 ))}
               </div>
@@ -328,6 +336,13 @@ const Pricing = () => {
             <p className="text-primary-foreground/80 text-base lg:text-lg">
               Every event is different — so is every package. Pick the event you're planning and get exactly the features it needs. No stripped-down tiers, no confusing upgrades.
             </p>
+            {/* Single money-back reassurance — replaces the guarantee line that
+                used to repeat under every package card. Kept once here and once
+                in the payments section below. */}
+            <p className="mt-4 inline-flex items-center gap-1.5 text-primary-foreground/70 text-sm">
+              <Shield className="h-4 w-4 text-green-400" />
+              Every package is backed by our money-back guarantee.
+            </p>
           </motion.div>
         </div>
       </section>
@@ -409,13 +424,16 @@ const Pricing = () => {
                     {pkg.quoteOnly ? "Get Custom Quote" : "Get Started"}
                   </Link>
                 </Button>
-                <p className="text-center text-xs text-muted-foreground mt-2 flex items-center justify-center gap-1">
-                  <Shield className="h-3 w-3 text-green-500" />
-                  Money-back guarantee
-                </p>
               </motion.div>
             ))}
           </div>
+
+          {/* Hosting/revisions explainer — reframes the deliberate variation
+              across packages so customers don't read it as arbitrary. */}
+          <p className="mt-8 max-w-3xl mx-auto text-center text-sm text-muted-foreground">
+            Hosting length and revision rounds scale with the size and lead-time of your event —
+            larger celebrations get longer hosting and more revisions. Need more? Add extra hosting below.
+          </p>
         </div>
       </section>
 

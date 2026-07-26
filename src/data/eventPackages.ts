@@ -44,6 +44,7 @@ export interface PackageAddon {
   name: string;
   price: number;
   description: string;
+  badge?: string;              // Optional label ("best value", etc.)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -53,8 +54,8 @@ export const UNIVERSAL_ADDONS: PackageAddon[] = [
   { id: "custom-domain",     name: "Custom Domain",              price: 500,  description: "Use your own domain (e.g. kwameandama.com) instead of a subdomain" },
   { id: "rush-48h",          name: "Rush Delivery (48 hours)",   price: 300,  description: "Skip the queue — your invitation ready in 48 hours" },
   { id: "white-label",       name: "White-Label",                price: 300,  description: "Remove the small 'Powered by VibeLink' badge" },
-  { id: "hosting-6mo",       name: "Extra Hosting (+6 months)",  price: 500,  description: "Extend your invitation's live period by 6 months" },
-  { id: "hosting-1yr",       name: "Extra Hosting (+1 year)",    price: 1000, description: "Extend your invitation's live period by 1 year" },
+  { id: "hosting-6mo",       name: "Extra Hosting (+6 months)",  price: 300,  description: "Extend your invitation's live period by 6 months" },
+  { id: "hosting-1yr",       name: "Extra Hosting (+1 year)",    price: 500,  description: "Extend your invitation's live period by a full year", badge: "best value" },
   { id: "ai-photo-restore",  name: "AI Photo Restoration",       price: 150,  description: "Blurry family photos → sharp, print-ready originals" },
   { id: "extra-revision",    name: "Extra Revision Round",       price: 100,  description: "One additional round of design changes" },
   { id: "priority-support",  name: "Priority WhatsApp Support",  price: 200,  description: "Front-of-queue response from our team" },

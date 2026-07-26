@@ -133,8 +133,8 @@ export const addOns: AddOn[] = [
   { id: "bilingual-french", name: "Bilingual (English + French)", price: 150, priceLabel: "GHS 150", category: "language", includedInPackages: ["bespoke"] },
   // Hosting — prices must stay in lockstep with UNIVERSAL_ADDONS in
   // eventPackages.ts (the /pricing page's source of truth).
-  { id: "hosting-6m", name: "Extended Hosting (6 months)", price: 500, priceLabel: "GHS 500", category: "hosting" },
-  { id: "hosting-1y", name: "Extended Hosting (1 year)", price: 1000, priceLabel: "GHS 1,000", category: "hosting", includedInPackages: ["bespoke"] },
+  { id: "hosting-6m", name: "Extended Hosting (6 months)", price: 300, priceLabel: "GHS 300", category: "hosting" },
+  { id: "hosting-1y", name: "Extended Hosting (1 year) — best value", price: 500, priceLabel: "GHS 500", category: "hosting", includedInPackages: ["bespoke"] },
   { id: "custom-domain", name: "Custom Domain", price: 500, priceLabel: "GHS 500/yr", category: "hosting", includedInPackages: ["bespoke"] },
   // Memorial Page Renewal removed from order form — it's a future recurring
   // subscription (GHS 100/yr) that kicks in after the initial hosting period
