@@ -252,8 +252,9 @@ const Contact = () => {
                 glow: "shadow-emerald-500/25",
               },
               {
-                type: "link" as const,
-                href: "https://wa.me/4915757178561",
+                type: "whatsapp" as const,
+                chatHref: "https://wa.me/4915757178561",
+                callHref: "tel:+4915757178561",
                 icon: MessageCircleIcon, title: "WhatsApp", detail: "+49 157 5717 8561",
                 subdetail: "Chat or call · free worldwide · fastest reply",
                 grad: "from-emerald-400 via-green-500 to-green-600",
@@ -272,8 +273,19 @@ const Contact = () => {
                 glow: "shadow-violet-500/25",
               },
             ].map((card, i) => {
-              const cardBody = (
-                <>
+              const isWhatsApp = card.type === "whatsapp";
+              const commonClasses = `group relative text-center p-7 lg:p-8 rounded-2xl bg-card border ${card.border} shadow-sm hover:shadow-2xl ${card.glow} transition-all duration-300 ${card.featured ? 'md:-translate-y-2 ring-1 ring-green-500/20' : ''}`;
+
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.5, delay: i * 0.1, type: "spring", stiffness: 100 }}
+                  whileHover={{ y: isWhatsApp ? -8 : -6, scale: isWhatsApp ? 1.03 : 1.02 }}
+                  className={commonClasses}
+                >
                   {/* Coloured accent bar on top */}
                   <div className={`absolute top-0 left-6 right-6 h-1 rounded-b-full bg-gradient-to-r ${card.grad}`} />
 
@@ -289,47 +301,29 @@ const Contact = () => {
                   <p className={`${card.text} text-base font-semibold mb-1`}>{card.detail}</p>
                   <p className="text-muted-foreground text-xs leading-relaxed">{card.subdetail}</p>
 
-                  {/* WhatsApp gets a "tap to chat" hint on hover */}
-                  {card.type === "link" && (
-                    <div className={`mt-4 pt-4 border-t border-border/60 flex items-center justify-center gap-1.5 ${card.text} text-xs font-semibold uppercase tracking-widest opacity-70 group-hover:opacity-100 transition-opacity`}>
-                      Tap to chat
-                      <Send className="h-3 w-3" />
+                  {/* WhatsApp card: two real action buttons.
+                      Chat opens wa.me (browser or WhatsApp app).
+                      Call fires the system dialer (tel: scheme). */}
+                  {isWhatsApp && card.chatHref && card.callHref && (
+                    <div className="mt-5 pt-4 border-t border-border/60 grid grid-cols-2 gap-2">
+                      <a
+                        href={card.chatHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-gradient-to-br ${card.grad} text-white text-sm font-semibold shadow-sm hover:shadow-md hover:brightness-110 transition-all`}
+                      >
+                        <MessageCircleIcon className="h-4 w-4" strokeWidth={2.25} />
+                        Chat
+                      </a>
+                      <a
+                        href={card.callHref}
+                        className={`flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg border-2 ${card.border} ${card.text} text-sm font-semibold hover:bg-green-50 dark:hover:bg-green-950/30 transition-colors`}
+                      >
+                        <Phone className="h-4 w-4" strokeWidth={2.25} />
+                        Call
+                      </a>
                     </div>
                   )}
-                </>
-              );
-
-              const commonClasses = `group relative text-center p-7 lg:p-8 rounded-2xl bg-card border ${card.border} shadow-sm hover:shadow-2xl ${card.glow} transition-all duration-300 ${card.featured ? 'md:-translate-y-2 ring-1 ring-green-500/20' : ''}`;
-
-              if (card.type === "link") {
-                return (
-                  <motion.a
-                    key={i}
-                    href={card.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: true, margin: "-40px" }}
-                    transition={{ duration: 0.5, delay: i * 0.1, type: "spring", stiffness: 100 }}
-                    whileHover={{ y: -8, scale: 1.03 }}
-                    className={commonClasses}
-                  >
-                    {cardBody}
-                  </motion.a>
-                );
-              }
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.5, delay: i * 0.1, type: "spring", stiffness: 100 }}
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  className={commonClasses}
-                >
-                  {cardBody}
                 </motion.div>
               );
             })}
