@@ -18,7 +18,10 @@
 -- slug to bucket historic page_views into a per-(post, day) aggregate table,
 -- then wires a trigger so future visits keep the aggregate live.
 --
--- Applied: 2026-07-26 via Supabase SQL Editor.
+-- Applied 2026-07-26 via Supabase SQL Editor (first run failed on has_role();
+-- fixed to reference user_roles directly, which matches the pattern the
+-- rest of the codebase uses).
+--
 -- Safe to re-run — all DDL is IF NOT EXISTS / DROP IF EXISTS, DML is
 -- idempotent via ON CONFLICT.
 -- ============================================================================
@@ -38,8 +41,10 @@ CREATE TABLE IF NOT EXISTS public.blog_post_views (
 CREATE INDEX IF NOT EXISTS blog_post_views_day_idx
   ON public.blog_post_views (day DESC);
 
--- RLS: admin-read only (matches other analytics tables). Anon MUST NOT
--- read raw view counts — that's business intelligence.
+-- RLS: admin-read only. References public.user_roles directly (avoids
+-- depending on has_role() which uses an app_role enum type not present
+-- in this DB). Anon must not read raw view counts — that's business
+-- intelligence.
 ALTER TABLE public.blog_post_views ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "blog_post_views admin read" ON public.blog_post_views;
@@ -47,7 +52,14 @@ CREATE POLICY "blog_post_views admin read"
   ON public.blog_post_views
   FOR SELECT
   TO authenticated
-  USING (public.has_role(auth.uid(), 'admin'::public.app_role));
+  USING (
+    EXISTS (
+      SELECT 1
+      FROM public.user_roles
+      WHERE user_id = auth.uid()
+        AND role = 'admin'
+    )
+  );
 
 -- Grants — service_role bypasses RLS entirely; authenticated needs SELECT
 -- to hit the policy above.
