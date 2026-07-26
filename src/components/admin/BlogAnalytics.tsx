@@ -1,16 +1,28 @@
 // Blog analytics: total views, top articles, per-post view trend (last 30 days).
-// Reads from blog_post_views (page_view rows created by increment_post_view RPC).
+//
+// Reads from blog_post_views — a pre-aggregated view (not a raw events
+// table) with columns: post_id (FK -> blog_posts.id), day (date), view_count.
+//
+// Historical bug (fixed 2026-07-26): earlier version queried post_slug and
+// viewed_at, neither of which exist on blog_post_views. That threw a 400
+// on every load and the whole panel read 0. The real columns are post_id
+// and day; the FK to blog_posts is joined via PostgREST embed to resolve
+// slug/title/category in a single round-trip.
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 import { Loader2, TrendingUp, Eye, Calendar, ArrowUp, ArrowDown, Minus, ExternalLink } from "lucide-react";
-import { LineChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid, BarChart, Bar } from "recharts";
+import { LineChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
 import { Link } from "react-router-dom";
 
+// Row shape after the embed. `blog_posts` is null when a view row somehow
+// references a deleted post — we filter those out defensively.
 interface ViewRow {
-  post_slug: string;
-  viewed_at: string;
+  post_id: string;
+  day: string;         // ISO date, e.g. "2026-07-25"
+  view_count: number;
+  blog_posts: { slug: string; title: string; category: string; published: boolean } | null;
 }
 
 interface PostSummary {
@@ -30,7 +42,9 @@ function toISO(d: Date) {
   return d.toISOString().slice(0, 10);
 }
 
-// Build a 30-day-aligned buckets array
+// Build a 30-day-aligned buckets array. Rows carry a `day` field (already
+// ISO date) and a `view_count`. Since the source is pre-aggregated by
+// (post_id, day), each row contributes its view_count to its day bucket.
 function buildDailyBuckets(rows: ViewRow[]): Record<string, number> {
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
@@ -41,8 +55,9 @@ function buildDailyBuckets(rows: ViewRow[]): Record<string, number> {
     buckets[toISO(d)] = 0;
   }
   for (const r of rows) {
-    const key = r.viewed_at.slice(0, 10);
-    if (key in buckets) buckets[key] += 1;
+    // `day` may be a full timestamp or a plain date; normalize either way.
+    const key = (r.day || "").slice(0, 10);
+    if (key in buckets) buckets[key] += r.view_count || 0;
   }
   return buckets;
 }
@@ -60,34 +75,47 @@ export function BlogAnalytics() {
         const since = new Date();
         since.setUTCDate(since.getUTCDate() - DAYS);
         since.setUTCHours(0, 0, 0, 0);
-        const [{ data: views, error: vErr }, { data: postsMeta, error: pErr }] = await Promise.all([
+        const sinceIso = toISO(since);
+        const [viewsResp, postsResp] = await Promise.all([
+          // Embed blog_posts via the FK on post_id so we get slug/title/category
+          // in one round-trip. day is filtered as ISO date.
           supabase
             .from("blog_post_views")
-            .select("post_slug, viewed_at")
-            .gte("viewed_at", since.toISOString())
+            .select("post_id, day, view_count, blog_posts(slug, title, category, published)")
+            .gte("day", sinceIso)
             .limit(50000),
+          // Second fetch: every published post, so unread articles still
+          // appear in the "All articles" list with 0 views.
           supabase.from("blog_posts").select("slug, title, category").eq("published", true),
         ]);
-        if (vErr) throw vErr;
-        if (pErr) throw pErr;
+        if (viewsResp.error) throw viewsResp.error;
+        if (postsResp.error) throw postsResp.error;
 
+        // Cast to our row shape (Supabase's generated types don't know about
+        // the blog_post_views view yet).
+        const views = ((viewsResp.data || []) as unknown) as ViewRow[];
+        const postsMeta = postsResp.data || [];
+
+        // Bucket rows by slug (via the embedded blog_posts.slug).
         const bySlug = new Map<string, ViewRow[]>();
-        for (const v of views || []) {
-          if (!bySlug.has(v.post_slug)) bySlug.set(v.post_slug, []);
-          bySlug.get(v.post_slug)!.push(v);
+        for (const v of views) {
+          const slug = v.blog_posts?.slug;
+          if (!slug) continue; // orphaned view row (post deleted) — skip
+          if (!bySlug.has(slug)) bySlug.set(slug, []);
+          bySlug.get(slug)!.push(v);
         }
 
-        // Site-wide daily totals
-        const siteBuckets = buildDailyBuckets(views || []);
+        // Site-wide daily totals — sum view_count across all rows.
+        const siteBuckets = buildDailyBuckets(views);
         setDailyTotal(Object.entries(siteBuckets).map(([date, v]) => ({ date, views: v })));
-        setTotalViews30d((views || []).length);
+        setTotalViews30d(views.reduce((s, r) => s + (r.view_count || 0), 0));
 
-        const now = Date.now();
         const summaries: PostSummary[] = [];
-        for (const meta of postsMeta || []) {
+        for (const meta of postsMeta) {
           const rows = bySlug.get(meta.slug) || [];
           const buckets = buildDailyBuckets(rows);
           const daily = Object.entries(buckets).map(([date, views]) => ({ date, views }));
+          const total = rows.reduce((s, r) => s + (r.view_count || 0), 0);
           const last7 = daily.slice(-7).reduce((s, d) => s + d.views, 0);
           const prev7 = daily.slice(-14, -7).reduce((s, d) => s + d.views, 0);
           const trend: PostSummary["trend"] =
@@ -96,7 +124,7 @@ export function BlogAnalytics() {
             slug: meta.slug,
             title: meta.title,
             category: meta.category,
-            total: rows.length,
+            total,
             last7,
             prev7,
             trend,
