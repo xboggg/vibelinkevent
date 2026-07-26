@@ -13,7 +13,7 @@ const faqCategories: WhatsAppFAQCategory[] = [
     faqs: [
       {
         question: "How long does it take to create my digital invitation?",
-        answer: "Standard delivery is 5–10 business days from when you provide all required details. Need it faster? We offer 48-hour express delivery at an additional fee.",
+        answer: "Standard delivery is 5–7 business days from when you provide all required details. Need it faster? Our Rush Delivery add-on gets it to you in 48 hours (+GHS 300).",
       },
       {
         question: "How do I place an order?",
@@ -31,7 +31,7 @@ const faqCategories: WhatsAppFAQCategory[] = [
     faqs: [
       {
         question: "Can I make changes after my invitation is created?",
-        answer: "Yes — revisions are included in every package. Starter includes 1 round, Classic includes 2, Prestige includes 5, and Royal includes unlimited revisions. Additional rounds can be purchased as an add-on.",
+        answer: "Yes — revision rounds are included with every package. The number depends on the event: weddings, funerals, engagements, corporate and church events include 3 rounds; naming and graduation include 2; regular birthdays include 1; and Bespoke is unlimited. Need more? Add extra revision rounds for GHS 100 each.",
       },
       {
         question: "Can I update event details after the invitation goes live?",
@@ -49,11 +49,11 @@ const faqCategories: WhatsAppFAQCategory[] = [
       },
       {
         question: "Do you serve clients outside Ghana?",
-        answer: "Absolutely. We serve clients across Africa, Europe, and beyond. With a presence in both Ghana and Germany, we understand diaspora needs well. Our invitations work on any device worldwide.",
+        answer: "Absolutely. We serve families across Ghana and the diaspora — Africa, Europe and beyond. Because we're online-first, your invitation reaches loved ones on any device, anywhere in the world.",
       },
       {
         question: "How long does my invitation stay live?",
-        answer: "Hosting duration depends on your package — Starter (30 days), Classic (90 days), Prestige (6 months), Royal (1 year). Extended hosting is available as an add-on.",
+        answer: "Hosting is included with every package and varies by event: weddings and funerals include 6 months, most others (engagement, church, corporate, anniversary, milestone birthday) include 90 days, naming and graduation include 60 days, regular birthdays include 30 days, and Bespoke includes 1 year. Extend anytime with our Extra Hosting add-on (+6 months GHS 300, +1 year GHS 500 — best value).",
       },
     ],
   },
@@ -89,7 +89,7 @@ const faqCategories: WhatsAppFAQCategory[] = [
       },
       {
         question: "Can guests RSVP through the invitation?",
-        answer: "Yes — RSVP tracking is available on Classic packages and above. Guests click the RSVP button, fill a short form, and you see all responses in your dashboard.",
+        answer: "Yes — RSVP tracking is included with virtually every package. Guests tap the RSVP button, fill a short form, and you see all responses in your dashboard.",
       },
     ],
   },

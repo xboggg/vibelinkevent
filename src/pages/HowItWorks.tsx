@@ -127,7 +127,7 @@ const faqs = [
   },
   {
     question: "Can I make changes after I receive my draft?",
-    answer: "Absolutely! Each package includes revision rounds (1-5 depending on package, unlimited for Royal). Even after approval, you can update event details like venue, time, or contact information at any time before your event.",
+    answer: "Absolutely! Every package includes revision rounds (typically 1–3 depending on your event, unlimited for Bespoke). Even after approval, you can update event details like venue, time, or contact information at any time before your event.",
   },
   {
     question: "How do guests RSVP?",

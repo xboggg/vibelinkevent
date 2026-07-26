@@ -435,7 +435,7 @@ export default function CustomerPortal() {
 
                         <div className="bg-secondary/10 rounded-lg p-3 text-xs text-muted-foreground">
                           <p className="font-medium text-foreground mb-1">Earn per referral:</p>
-                          <p>Classic: GHS 100 • Prestige: GHS 200 • Royal: GHS 500</p>
+                          <p>Small events GHS 100 · Medium GHS 200 · Large GHS 300 · Bespoke GHS 500</p>
                         </div>
                       </motion.div>
                     ) : !showOtpInput ? (

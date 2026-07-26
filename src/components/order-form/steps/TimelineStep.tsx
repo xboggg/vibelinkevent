@@ -21,9 +21,12 @@ export const TimelineStep = ({
   onNext,
   onPrev,
 }: TimelineStepProps) => {
-  // Royal package takes 7-10 days, others take 5-7 days
-  const isRoyalPackage = formData.selectedPackage === "royal";
-  const standardDays = isRoyalPackage ? 10 : 7;
+  // Bespoke has a longer 7-10 day window because of custom design work;
+  // every event-based package (Wedding, Funeral, Naming, etc.) ships in the
+  // standard 5-7 days. Old "royal" tier check dropped 2026-07-22 when we
+  // moved from Starter/Classic/Prestige/Royal to per-event packages.
+  const isBespoke = formData.selectedPackage === "bespoke";
+  const standardDays = isBespoke ? 10 : 7;
   const standardDelivery = addDays(new Date(), standardDays);
   const rushDelivery = addDays(new Date(), 2);
 
@@ -58,7 +61,7 @@ export const TimelineStep = ({
             <div>
               <h3 className="font-bold text-lg text-foreground">Standard</h3>
               <p className="text-sm text-muted-foreground">
-                {isRoyalPackage ? "7-10 business days" : "5-7 business days"}
+                {isBespoke ? "7-10 business days" : "5-7 business days"}
               </p>
             </div>
           </div>
@@ -116,7 +119,7 @@ export const TimelineStep = ({
       <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/50 text-sm">
         <Info className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
         <p className="text-muted-foreground">
-          <span className="font-medium text-foreground">Delivery times:</span> Starter, Classic & Prestige packages take 5-7 days. Royal package takes 7-10 days due to premium features.
+          <span className="font-medium text-foreground">Delivery times:</span> Standard delivery on all event packages is 5–7 business days. Bespoke takes 7–10 days due to the custom design work involved.
         </p>
       </div>
 

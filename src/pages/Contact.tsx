@@ -15,11 +15,11 @@ import { WhatsAppFAQ } from "@/components/WhatsAppFAQ";
 const faqs = [
   {
     question: "How long does it take to create my digital invitation?",
-    answer: "Delivery across all packages is 5-10 business days from when you provide all required details. Need it faster? We offer a 48-hour express delivery option available at an additional fee.",
+    answer: "Standard delivery is 5–7 business days from when you provide all required details. Need it faster? Our Rush Delivery add-on gets it to you in 48 hours (+GHS 300).",
   },
   {
     question: "Can I make changes after my invitation is created?",
-    answer: "Yes, revisions are included in every package. The Starter plan includes 1 revision round, Classic includes 2, Prestige includes 5, and Royal includes unlimited revisions. Additional revision rounds beyond your plan can be purchased as an add-on.",
+    answer: "Yes — revision rounds are included with every package. The number depends on the event: weddings, funerals, engagements, corporate and church events include 3 rounds; naming and graduation include 2; regular birthdays include 1; and Bespoke is unlimited. Need more? Add extra revision rounds for GHS 100 each.",
   },
   {
     question: "How do guests access my digital invitation?",
