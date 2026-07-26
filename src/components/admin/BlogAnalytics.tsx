@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import { Loader2, TrendingUp, Eye, Calendar, ArrowUp, ArrowDown, Minus, ExternalLink } from "lucide-react";
+import { Loader2, TrendingUp, Eye, Calendar, ArrowUp, ArrowDown, Minus, ExternalLink, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { LineChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
 import { Link } from "react-router-dom";
 
@@ -142,6 +142,30 @@ export function BlogAnalytics() {
   }, [toast]);
 
   const top10 = useMemo(() => posts.slice(0, 10), [posts]);
+
+  // "All articles" table — pagination + search. 10 per page keeps the
+  // table short; search jumps directly to a post by title/slug/category.
+  const PAGE_SIZE = 10;
+  const [tableQuery, setTableQuery] = useState("");
+  const [tablePage, setTablePage] = useState(1);
+  const filteredPosts = useMemo(() => {
+    const q = tableQuery.trim().toLowerCase();
+    if (!q) return posts;
+    return posts.filter(
+      (p) =>
+        p.title.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q),
+    );
+  }, [posts, tableQuery]);
+  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE));
+  // If the current page falls off the end (search shrinks the list),
+  // snap back to page 1 so the table is never empty.
+  useEffect(() => {
+    if (tablePage > totalPages) setTablePage(1);
+  }, [totalPages, tablePage]);
+  const pageStart = (tablePage - 1) * PAGE_SIZE;
+  const pagePosts = filteredPosts.slice(pageStart, pageStart + PAGE_SIZE);
   const peakDay = useMemo(() => {
     if (!dailyTotal.length) return null;
     return dailyTotal.reduce((peak, d) => (d.views > peak.views ? d : peak), dailyTotal[0]);
@@ -262,11 +286,29 @@ export function BlogAnalytics() {
         )}
       </div>
 
-      {/* All articles table */}
+      {/* All articles table — paginated (10 per page) with a search box.
+          Was previously a single 48-row scroll which felt endless. Search
+          filters by title / slug / category; snap-back to page 1 when the
+          filter shrinks the list past the current page. */}
       <div className="rounded-2xl border border-border bg-card p-4 md:p-5">
-        <h3 className="text-sm font-bold text-foreground mb-3 inline-flex items-center gap-1.5">
-          <Calendar className="h-4 w-4 text-primary" /> All articles
-        </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+          <h3 className="text-sm font-bold text-foreground inline-flex items-center gap-1.5">
+            <Calendar className="h-4 w-4 text-primary" /> All articles
+            <span className="text-xs font-normal text-muted-foreground ml-1">
+              ({filteredPosts.length}{tableQuery ? ` of ${posts.length}` : ""})
+            </span>
+          </h3>
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+            <input
+              type="text"
+              value={tableQuery}
+              onChange={(e) => { setTableQuery(e.target.value); setTablePage(1); }}
+              placeholder="Search title, slug, category…"
+              className="w-full pl-8 pr-2 py-1.5 text-xs rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+          </div>
+        </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -279,27 +321,61 @@ export function BlogAnalytics() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/50">
-              {posts.map((p) => (
-                <tr key={p.slug} className="text-sm">
-                  <td className="py-2 px-2">
-                    <Link to={`/blog/${p.slug}`} target="_blank" rel="noopener" className="hover:text-primary line-clamp-1 max-w-md inline-block">
-                      {p.title}
-                    </Link>
-                    <div className="text-[10px] text-muted-foreground">{p.category}</div>
-                  </td>
-                  <td className="text-right py-2 px-2 font-bold">{p.total}</td>
-                  <td className="text-right py-2 px-2 hidden md:table-cell">{p.last7}</td>
-                  <td className="text-right py-2 px-2 hidden md:table-cell text-muted-foreground">{p.prev7}</td>
-                  <td className="text-right py-2 px-2">
-                    {p.trend === "up" && <ArrowUp className="h-3.5 w-3.5 text-emerald-600 inline" />}
-                    {p.trend === "down" && <ArrowDown className="h-3.5 w-3.5 text-rose-600 inline" />}
-                    {p.trend === "flat" && <Minus className="h-3.5 w-3.5 text-muted-foreground inline" />}
+              {pagePosts.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-sm text-muted-foreground">
+                    No articles match “{tableQuery}”.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                pagePosts.map((p) => (
+                  <tr key={p.slug} className="text-sm">
+                    <td className="py-2 px-2">
+                      <Link to={`/blog/${p.slug}`} target="_blank" rel="noopener" className="hover:text-primary line-clamp-1 max-w-md inline-block">
+                        {p.title}
+                      </Link>
+                      <div className="text-[10px] text-muted-foreground">{p.category}</div>
+                    </td>
+                    <td className="text-right py-2 px-2 font-bold">{p.total}</td>
+                    <td className="text-right py-2 px-2 hidden md:table-cell">{p.last7}</td>
+                    <td className="text-right py-2 px-2 hidden md:table-cell text-muted-foreground">{p.prev7}</td>
+                    <td className="text-right py-2 px-2">
+                      {p.trend === "up" && <ArrowUp className="h-3.5 w-3.5 text-emerald-600 inline" />}
+                      {p.trend === "down" && <ArrowDown className="h-3.5 w-3.5 text-rose-600 inline" />}
+                      {p.trend === "flat" && <Minus className="h-3.5 w-3.5 text-muted-foreground inline" />}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+        {/* Pagination controls — hidden entirely when everything fits on one page. */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between mt-4 pt-3 border-t border-border">
+            <div className="text-xs text-muted-foreground">
+              Page {tablePage} of {totalPages} · Showing {pageStart + 1}–{Math.min(pageStart + PAGE_SIZE, filteredPosts.length)} of {filteredPosts.length}
+            </div>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setTablePage((p) => Math.max(1, p - 1))}
+                disabled={tablePage === 1}
+                className="p-1.5 rounded-md border border-border text-muted-foreground hover:text-foreground hover:border-primary/40 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                aria-label="Previous page"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setTablePage((p) => Math.min(totalPages, p + 1))}
+                disabled={tablePage === totalPages}
+                className="p-1.5 rounded-md border border-border text-muted-foreground hover:text-foreground hover:border-primary/40 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                aria-label="Next page"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
