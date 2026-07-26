@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
-import { MessageCircle as MessageCircleIcon, Mail, MapPin, Phone, Clock, HelpCircle, Loader2, Sparkles, Send, Zap } from "lucide-react";
+import { MessageCircle as MessageCircleIcon, Mail, MapPin, Phone, Clock, HelpCircle, Loader2, Sparkles, Send, Zap, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     question: "Do you serve clients outside Ghana?",
-    answer: "Absolutely! We serve clients across Africa, Europe, and beyond. With offices in Ghana and Germany, we understand diaspora needs well — our invitations include international sharing options and work perfectly on any device worldwide.",
+    answer: "Absolutely. We serve Ghanaian families and organisations wherever they are — Accra to London, Toronto, New York, Berlin, and beyond. Every invitation includes international sharing options and works on any device worldwide, and we chat freely on WhatsApp across time zones.",
   },
   {
     question: "What payment methods do you accept?",
@@ -217,7 +217,7 @@ const Contact = () => {
               {" "}beautiful
             </h1>
             <p className="text-white/80 text-lg lg:text-xl max-w-2xl mx-auto">
-              A question, a quote, a vision — send it our way. Ghana, Germany, or anywhere in the diaspora, we're one message away.
+              A question, a quote, a vision — send it our way. Wherever you are in Ghana or the diaspora, we're one message away.
             </p>
           </motion.div>
         </div>
@@ -233,72 +233,106 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Contact Info Cards — 4 colour-themed cards, spring-in, hover lift with colour glow */}
+      {/* Contact Info Cards — 3 colour-themed cards. WhatsApp is a real
+          click-target (opens chat). "Serving" card replaces the previous
+          "Ghana Office / Germany Office" pair since we don't have a physical
+          office — it names the reach honestly. Design intent: bigger cards,
+          more breathing room, WhatsApp card visually pops as the primary CTA. */}
       <section className="py-14 lg:py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               {
-                icon: MapPin, title: "Ghana Office", detail: "Accra, Ghana", flag: "🇬🇭",
-                grad: "from-red-500 via-yellow-400 to-emerald-500",
-                tint: "bg-emerald-50 dark:bg-emerald-950/30",
-                text: "text-emerald-600 dark:text-emerald-400",
+                type: "static" as const,
+                icon: Globe, title: "Serving", detail: "Ghana & the diaspora",
+                subdetail: "Accra to London, Toronto, New York, Berlin",
+                grad: "from-red-500 via-yellow-400 to-emerald-500",   // Ghanaian flag palette
+                text: "text-emerald-700 dark:text-emerald-400",
                 border: "border-emerald-200/70 dark:border-emerald-900/50",
                 glow: "shadow-emerald-500/25",
               },
               {
-                icon: MapPin, title: "Germany Office", detail: "Berlin, Germany", flag: "🇩🇪",
-                grad: "from-black via-red-600 to-yellow-400",
-                tint: "bg-amber-50 dark:bg-amber-950/30",
-                text: "text-amber-700 dark:text-amber-400",
-                border: "border-amber-200/70 dark:border-amber-900/50",
-                glow: "shadow-amber-500/25",
-              },
-              {
-                icon: Phone, title: "WhatsApp", detail: "+49 157 571 78561", flag: null,
-                grad: "from-emerald-400 to-green-600",
-                tint: "bg-green-50 dark:bg-green-950/30",
+                type: "link" as const,
+                href: "https://wa.me/4915757178561",
+                icon: MessageCircleIcon, title: "WhatsApp", detail: "+49 157 5717 8561",
+                subdetail: "Chat only · free worldwide · fastest reply",
+                grad: "from-emerald-400 via-green-500 to-green-600",
                 text: "text-green-700 dark:text-green-400",
                 border: "border-green-200/70 dark:border-green-900/50",
-                glow: "shadow-green-500/25",
+                glow: "shadow-green-500/40",
+                featured: true,  // slightly bigger and more prominent
               },
               {
-                icon: Zap, title: "Response Time", detail: "Same day", flag: null,
-                grad: "from-violet-500 to-purple-600",
-                tint: "bg-violet-50 dark:bg-violet-950/30",
-                text: "text-violet-600 dark:text-violet-400",
+                type: "static" as const,
+                icon: Zap, title: "Response Time", detail: "Same day",
+                subdetail: "Mon–Sat · 9am–5pm GMT",
+                grad: "from-violet-500 via-purple-500 to-fuchsia-600",
+                text: "text-violet-700 dark:text-violet-400",
                 border: "border-violet-200/70 dark:border-violet-900/50",
                 glow: "shadow-violet-500/25",
               },
-            ].map((card, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.1, type: "spring", stiffness: 100 }}
-                whileHover={{ y: -6, scale: 1.03 }}
-                className={`group relative text-center p-6 rounded-2xl bg-card border ${card.border} shadow-sm hover:shadow-xl ${card.glow} transition-shadow duration-300`}
-              >
-                {/* Coloured accent bar on top */}
-                <div className={`absolute top-0 left-4 right-4 h-1 rounded-b-full bg-gradient-to-r ${card.grad}`} />
+            ].map((card, i) => {
+              const cardBody = (
+                <>
+                  {/* Coloured accent bar on top */}
+                  <div className={`absolute top-0 left-6 right-6 h-1 rounded-b-full bg-gradient-to-r ${card.grad}`} />
 
-                {/* Icon badge with gradient */}
-                <motion.div
-                  className={`w-14 h-14 mx-auto rounded-2xl bg-gradient-to-br ${card.grad} flex items-center justify-center mb-4 shadow-lg`}
-                  animate={{ y: [0, -3, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
-                >
-                  {card.flag ? (
-                    <span className="text-2xl drop-shadow-sm">{card.flag}</span>
-                  ) : (
-                    <card.icon className="h-6 w-6 text-white" strokeWidth={2.25} />
+                  {/* Icon badge with gradient — floats subtly */}
+                  <motion.div
+                    className={`w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${card.grad} flex items-center justify-center mb-5 shadow-lg`}
+                    animate={{ y: [0, -3, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: i * 0.3 }}
+                  >
+                    <card.icon className="h-7 w-7 text-white" strokeWidth={2.25} />
+                  </motion.div>
+                  <h3 className="text-lg font-bold text-foreground mb-1.5">{card.title}</h3>
+                  <p className={`${card.text} text-base font-semibold mb-1`}>{card.detail}</p>
+                  <p className="text-muted-foreground text-xs leading-relaxed">{card.subdetail}</p>
+
+                  {/* WhatsApp gets a "tap to chat" hint on hover */}
+                  {card.type === "link" && (
+                    <div className={`mt-4 pt-4 border-t border-border/60 flex items-center justify-center gap-1.5 ${card.text} text-xs font-semibold uppercase tracking-widest opacity-70 group-hover:opacity-100 transition-opacity`}>
+                      Tap to chat
+                      <Send className="h-3 w-3" />
+                    </div>
                   )}
+                </>
+              );
+
+              const commonClasses = `group relative text-center p-7 lg:p-8 rounded-2xl bg-card border ${card.border} shadow-sm hover:shadow-2xl ${card.glow} transition-all duration-300 ${card.featured ? 'md:-translate-y-2 ring-1 ring-green-500/20' : ''}`;
+
+              if (card.type === "link") {
+                return (
+                  <motion.a
+                    key={i}
+                    href={card.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.5, delay: i * 0.1, type: "spring", stiffness: 100 }}
+                    whileHover={{ y: -8, scale: 1.03 }}
+                    className={commonClasses}
+                  >
+                    {cardBody}
+                  </motion.a>
+                );
+              }
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.5, delay: i * 0.1, type: "spring", stiffness: 100 }}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  className={commonClasses}
+                >
+                  {cardBody}
                 </motion.div>
-                <h3 className="text-base font-bold text-foreground mb-1">{card.title}</h3>
-                <p className={`${card.text} text-sm font-medium`}>{card.detail}</p>
-              </motion.div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -342,7 +376,7 @@ const Contact = () => {
                 </span>
               </h2>
               <p className="text-muted-foreground text-lg">
-                Have a question or want to discuss your event? Drop us a line — we'll get back to you the same day.
+                Have a question or want to discuss your event? Send us a message — we reply on WhatsApp, same day.
               </p>
             </motion.div>
 
