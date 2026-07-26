@@ -69,10 +69,10 @@ const values = [
 ];
 
 const stats = [
-  { value: 100, suffix: "+", label: "Invitations Created" },
+  { value: 50, suffix: "+", label: "Invitations Created" },
   { value: 3, suffix: "", label: "Countries Reached" },
   { value: 98, suffix: "%", label: "Satisfaction Rate" },
-  { value: 48, suffix: "hrs", label: "Fastest Delivery" },
+  { value: 48, suffix: "hrs", label: "Rush Delivery" },
 ];
 
 const carouselImages = [
@@ -239,7 +239,7 @@ const About = () => {
     <Layout>
       <SEO
         title="About Us"
-        description="Learn about VibeLink Event - Ghana's premier digital invitation service. Discover our journey from paper to the future of event invitations."
+        description="Learn about VibeLink Event — digital invitations for Ghanaian celebrations, at home and across the diaspora. Our journey from paper to the future of event invitations."
         keywords="VibeLink Event, digital invitations, Ghana event services, about VibeLink"
         canonical="/about"
         jsonLd={aboutBreadcrumb}
@@ -258,7 +258,7 @@ const About = () => {
               About VibeLink Event
             </h1>
             <p className="text-white/80 text-lg lg:text-xl">
-              Ghana's premier digital invitation service, celebrating life's precious moments
+              Digital invitations for Ghanaian celebrations, at home and across the diaspora
             </p>
           </motion.div>
         </div>
