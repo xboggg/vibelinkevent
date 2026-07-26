@@ -38,6 +38,12 @@ CREATE TABLE IF NOT EXISTS public.blog_post_views (
   PRIMARY KEY (post_id, day)
 );
 
+-- Defensive: if an earlier partial run created the table WITHOUT updated_at
+-- (happened once during initial development), add it now. IF NOT EXISTS
+-- makes it a no-op on fresh runs.
+ALTER TABLE public.blog_post_views
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE INDEX IF NOT EXISTS blog_post_views_day_idx
   ON public.blog_post_views (day DESC);
 
