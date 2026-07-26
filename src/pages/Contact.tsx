@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
-import { MessageCircle as MessageCircleIcon, Mail, MapPin, Clock, HelpCircle, Loader2, Sparkles, Send, Zap, Globe } from "lucide-react";
+import { MessageCircle as MessageCircleIcon, Mail, MapPin, Phone, Clock, HelpCircle, Loader2, Sparkles, Send, Zap, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -247,6 +247,7 @@ const Contact = () => {
               {
                 type: "whatsapp" as const,
                 chatHref: "https://wa.me/4915757178561",
+                ghanaTel: "+233244147594",
                 icon: MessageCircleIcon, title: "WhatsApp", detail: "+49 157 5717 8561",
                 subdetail: "Chat or call · free worldwide · fastest reply",
                 grad: "from-emerald-400 via-green-500 to-green-600",
@@ -257,8 +258,8 @@ const Contact = () => {
               },
               {
                 type: "static" as const,
-                icon: Zap, title: "Response Time", detail: "Within 24 hours",
-                subdetail: "Mon–Fri 9am–5pm · Sat 10am–2pm GMT",
+                icon: Zap, title: "Reachable Hours", detail: "Mon–Fri 9am–5pm GMT",
+                subdetail: "Sat 10am–2pm GMT · Replies within 24 hours",
                 grad: "from-violet-500 via-purple-500 to-fuchsia-600",
                 text: "text-violet-700 dark:text-violet-400",
                 border: "border-violet-200/70 dark:border-violet-900/50",
@@ -295,9 +296,20 @@ const Contact = () => {
 
                   {/* WhatsApp card: single Chat action.
                       Opens wa.me — once in WhatsApp, the user can
-                      voice/video-call from inside the app natively. */}
+                      voice/video-call from inside the app natively.
+                      Ghana landline shown above the button for callers who
+                      prefer a local number over WhatsApp. */}
                   {isWhatsApp && card.chatHref && (
-                    <div className="mt-5 pt-4 border-t border-border/60">
+                    <div className="mt-5 pt-4 border-t border-border/60 space-y-2.5">
+                      {card.ghanaTel && (
+                        <a
+                          href={`tel:${card.ghanaTel}`}
+                          className={`inline-flex items-center justify-center gap-1.5 text-xs ${card.text} hover:underline underline-offset-2`}
+                        >
+                          <Phone className="h-3.5 w-3.5" strokeWidth={2.25} />
+                          Also on Ghana line: +233 24 414 7594
+                        </a>
+                      )}
                       <a
                         href={card.chatHref}
                         target="_blank"

@@ -103,11 +103,13 @@ export const OrderSummary = ({ formData, total }: OrderSummaryProps) => {
         </ul>
       </div>
 
-      {/* Business Hours */}
+      {/* Reachable Hours — renamed from "Business Hours" so it matches how
+          we actually operate (WhatsApp-first, no office). Same live window
+          on the Contact page card. */}
       <div className="bg-card rounded-2xl border border-border p-6">
         <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
           <Clock className="h-5 w-5 text-secondary" />
-          Business Hours
+          Reachable Hours
         </h3>
         <ul className="space-y-2 text-sm">
           <li className="flex justify-between">
