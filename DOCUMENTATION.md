@@ -453,6 +453,34 @@ Lives in `src/pages/Admin.tsx` inside a single big useEffect keyed on `activeSec
 
 **Result confirmed by reviewer's network capture:** `has_role` RPCs on refocus went from 2 → 0. `/orders` refetch went from 1 → 0.
 
+### Blog Analytics — "Analytics load failed" red toast, all metrics at 0
+
+**Symptom:** `/admin?section=blog-analytics` showed a destructive toast with the message `column blog_post_views.post_slug does not exist`, and every metric card read 0.
+
+**Cause:** the query in `BlogAnalytics.tsx` was written against a **non-existent schema**:
+- Selected `post_slug, viewed_at` — neither column exists
+- Filtered by `viewed_at` — doesn't exist
+- Counted raw row lengths — but `blog_post_views` is a pre-aggregated view, not a raw events table
+
+**Verified real schema (probed live 2026-07-26):**
+| Aspect | Actual |
+|---|---|
+| Table type | Pre-aggregated view (not raw events) |
+| Real columns | `post_id`, `day` (ISO date), `view_count` |
+| FK | `post_id` → `blog_posts.id` (PostgREST embed works) |
+| `count` | ⚠ PostgREST reserved aggregate function, NOT a column. `select=count` returns `[{count: N}]` — a whole-table row count. Do NOT treat as a data column. |
+| Canonical sum field | `view_count` |
+
+**Fix (`BlogAnalytics.tsx`):**
+- `select`: `post_slug, viewed_at` → `post_id, day, view_count, blog_posts(slug, title, category, published)` — the embed resolves slug/title/category in a single round-trip via the FK
+- Filter: `.gte("viewed_at", isoString)` → `.gte("day", isoDate)` (YYYY-MM-DD, since `day` is a date column)
+- Aggregation: was counting raw rows (`rows.length`); now sums `view_count` per row (source is pre-aggregated by `(post_id, day)`)
+- Bucketing: keys off `row.day` (already ISO) instead of slicing `viewed_at`
+- Defensive: skips orphan view rows where `blog_posts` embed is `null` (post deleted after view was recorded)
+- Unread posts still surface: secondary `blog_posts` fetch seeds every published article into the "All articles" list with `total=0`
+
+**Gotcha to remember:** if you ever probe `blog_post_views` from PostgREST, `select=count` looks like a valid column response but is actually the PostgREST count aggregate. Only `view_count` is a real column. If you see a 42803 GROUP BY error when selecting multiple columns, that's PostgREST confirming the table is a view/aggregate — plain multi-column selects on aggregate rows need explicit `group by`, which PostgREST doesn't do without an RPC.
+
 ---
 
 ## 12. Roadmap Ideas (from Feature Enhancement doc)
@@ -559,6 +587,7 @@ The big change: **complete pricing model rebuild** from 4 tiers to 11 event-base
 - **Section persistence across refresh** — admin sidebar was resetting to Dashboard on refresh. `activeSection` now persists via URL param (`?section=blog`) → localStorage → dashboard default, in that order. Enables bookmarks + shareable admin links.
 - **Scroll-position restore on tab-switch** — 7 iterations to find the real cause. Final fix is an unconditional rAF assert loop (600ms) + late-reset watcher (400ms) that runs on `visibilitychange`. Independent of the ResizeObserver-based path that handles reload/section-change. Do not add state checks to this loop — see §11A Layer 7 for why.
 - **Refetch flash on tab-return** — Supabase `TOKEN_REFRESHED` was firing `has_role` RPC 2× on every refocus + re-triggering `fetchOrders` via useEffect. Fixed with a module-scoped admin-role cache in `useAuth.ts` and by keying Admin's fetchOrders effect on `user?.id` instead of the user object reference.
+- **Blog Analytics broken with 400 error** — the query used `post_slug` and `viewed_at`, neither of which exist on `blog_post_views`. Real schema is a pre-aggregated view with `post_id, day, view_count`. Fixed by using the correct columns, filtering by `day`, summing `view_count` per row, and PostgREST-embedding `blog_posts` on the FK to resolve slug/title/category in one round-trip.
 
 **Blog feature images:** ~48 blog articles now have real DALL-E-3-generated feature images (previously all pointed at a broken shared placeholder). Batched by category, all optimized to ~150-250 KB JPEG q=82 progressive at 1600px max. Filenames follow slug convention in `public/blog-heros/`. Prompts drafted per-article by reading each article's excerpt for grounding — kept as reusable material in `scratchpad/blog-image-prompts/BATCH_*.md`.
 
