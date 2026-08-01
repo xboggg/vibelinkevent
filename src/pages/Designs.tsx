@@ -11,10 +11,17 @@ import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ExternalLink, ArrowRight, Sparkles, Info, Inbox } from "lucide-react";
+import { ExternalLink, ArrowRight, Sparkles, Info, Inbox, Eye, EyeOff } from "lucide-react";
 import SEO from "@/components/SEO";
 import { portfolioItems } from "@/data/portfolioItems";
 import { templates as tieredTemplates } from "@/data/templatesData";
+
+// Admin-preview mode: /designs?admin=1 makes the 15 in-progress template
+// designs visible so Edmund can screenshot, preview, or send demo links to
+// specific clients privately. Public visitors never see them (thumbnails
+// don't exist yet). Persisted in sessionStorage so the flag survives
+// tab-switches within a session without needing the URL param each time.
+const ADMIN_KEY = "vl_designs_admin";
 
 // URL-slug → Designs tab key. Kept in lockstep with slugToCategoryMap in
 // portfolioItems.ts so /portfolio?type=X and /designs?type=X mean the same
@@ -52,6 +59,9 @@ interface Design {
   demoUrl?: string;
   slug: string;
   features: string[];
+  isTemplate?: boolean;         // true for pro templates (admin-only visibility)
+  hasThumbnail?: boolean;       // false = show palette-gradient placeholder card instead
+  palette?: string[];           // hex stops for placeholder gradient (templates only)
 }
 
 // ── Tabs ────────────────────────────────────────────────────────────
@@ -79,18 +89,46 @@ function DesignCard({ item, tint, soft, accent }: { item: Design; tint: string; 
       whileHover={{ y: -6 }}
       className="group relative rounded-2xl bg-white border border-border shadow-sm hover:shadow-2xl hover:shadow-primary/10 transition-all overflow-hidden flex flex-col"
     >
-      {/* Category chip on image */}
+      {/* Image (or palette placeholder for admin-only templates without a
+          real thumbnail yet). The placeholder uses the template's palette
+          hex stops so it feels intentional, not broken. */}
       <div className="relative aspect-[16/10] bg-slate-100 overflow-hidden">
-        <img
-          src={item.image}
-          alt={item.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          style={{ objectPosition: item.imagePosition || "center" }}
-          loading="lazy"
-        />
+        {item.isTemplate && !item.hasThumbnail && item.palette?.length ? (
+          <div
+            className="w-full h-full flex items-center justify-center relative"
+            style={{
+              background: `linear-gradient(135deg, ${item.palette.slice(0, 4).join(", ")})`,
+            }}
+          >
+            <div className="text-center px-4">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/85 text-[10px] font-bold uppercase tracking-widest text-slate-700 shadow-sm mb-2">
+                <EyeOff className="w-3 h-3" /> Thumbnail pending
+              </div>
+              <div className="text-white font-serif italic text-lg drop-shadow-sm">
+                {item.title}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <img
+            src={item.image}
+            alt={item.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            style={{ objectPosition: item.imagePosition || "center" }}
+            loading="lazy"
+          />
+        )}
         <div className={`absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full ${soft} ${accent} text-[10px] font-bold uppercase tracking-widest border border-white/60 backdrop-blur shadow-sm`}>
           <Sparkles className="w-3 h-3" /> {item.type}
         </div>
+        {/* Admin-preview badge — makes it visually obvious which cards are
+            template-catalogue vs shipped-portfolio, so screenshots and demo
+            shares don't get mixed up. */}
+        {item.isTemplate && (
+          <div className="absolute top-3 right-3 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/95 text-white text-[9px] font-bold uppercase tracking-widest shadow-md">
+            <Eye className="w-2.5 h-2.5" /> Admin preview
+          </div>
+        )}
       </div>
 
       {/* Body */}
@@ -146,6 +184,23 @@ export default function Designs() {
   const [activeKey, setActiveKey] = useState<string>(initialKey);
   const activeTab = TABS.find((t) => t.key === activeKey) || TABS[0];
 
+  // Admin-preview mode. Enabled by ?admin=1 (persisted in sessionStorage).
+  // Disabled by ?admin=0. Public visitors never trigger either.
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return sessionStorage.getItem(ADMIN_KEY) === "1";
+  });
+  useEffect(() => {
+    const flag = searchParams.get("admin");
+    if (flag === "1") {
+      sessionStorage.setItem(ADMIN_KEY, "1");
+      setIsAdmin(true);
+    } else if (flag === "0") {
+      sessionStorage.removeItem(ADMIN_KEY);
+      setIsAdmin(false);
+    }
+  }, [searchParams]);
+
   // Keep tab state in sync if the URL param changes (browser back/forward,
   // or a category-matched deep link from the Portfolio empty-state).
   useEffect(() => {
@@ -171,12 +226,13 @@ export default function Designs() {
 
   // Designs page merges TWO sources:
   //  1. Demos from portfolioItems.ts (items WITHOUT demoLabel — real clients
-  //     with demoLabel stay exclusively on /portfolio)
-  //  2. The 15 pro templates from templatesData.ts (funerals for now, more to
-  //     come by event type). Their tier/price is intentionally NOT shown here
-  //     — pricing lives on /pricing.
+  //     with demoLabel stay exclusively on /portfolio). ALWAYS visible.
+  //  2. The 15 pro templates from templatesData.ts. ADMIN-ONLY for now —
+  //     their thumbnails haven't been produced yet. When you generate them
+  //     and drop into public/templates-img/, flip `hasThumbnail: true` per
+  //     template so they become publicly visible.
   const allDesigns = useMemo<Design[]>(() => {
-    // Portfolio-side demos → normalised into Design
+    // Portfolio-side demos → normalised into Design (always public)
     const demos: Design[] = portfolioItems
       .filter((it) => !it.demoLabel)
       .map((it) => ({
@@ -191,8 +247,11 @@ export default function Designs() {
         features: it.features || [],
       }));
 
-    // Templates-side pro designs → normalised. `category` uses singular
-    // ("Funeral") whereas the tabs use plural ("Funerals"), so map it.
+    // Public visitors only see portfolio demos — early return skips templates.
+    if (!isAdmin) return demos;
+
+    // Admin gets the 15 pro templates too. `category` uses singular ("Funeral")
+    // whereas the tabs use plural ("Funerals"), so map it.
     const categoryToType: Record<string, string> = {
       Funeral: "Funerals",
       Wedding: "Weddings",
@@ -212,10 +271,13 @@ export default function Designs() {
       demoUrl: t.comingSoon ? undefined : t.previewUrl,
       slug: t.slug,
       features: t.features || [],
+      isTemplate: true,
+      hasThumbnail: false, // flip to true per-template once real thumbnail exists
+      palette: t.palette,
     }));
 
     return [...demos, ...proTemplates];
-  }, []);
+  }, [isAdmin]);
 
   const filtered = useMemo(() => {
     if (activeTab.types.length === 0) return allDesigns;
@@ -231,8 +293,35 @@ export default function Designs() {
         canonical="/designs"
       />
 
+      {/* Admin-mode indicator bar — only visible when ?admin=1 flag active.
+          Persists across the session; one-click 'exit preview' to see what
+          public visitors see. */}
+      {isAdmin && (
+        <div className="bg-amber-500 text-white pt-24 lg:pt-28 pb-2">
+          <div className="container mx-auto px-4 lg:px-8 flex items-center justify-between gap-3 text-xs md:text-sm">
+            <div className="inline-flex items-center gap-2 font-semibold">
+              <Eye className="w-4 h-4" /> Admin preview mode — you can see all
+              {" "}{tieredTemplates.length} pro templates (public visitors don't)
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                sessionStorage.removeItem(ADMIN_KEY);
+                setIsAdmin(false);
+                const next = new URLSearchParams(searchParams);
+                next.set("admin", "0");
+                setSearchParams(next);
+              }}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/25 hover:bg-white/40 font-semibold transition-colors"
+            >
+              <EyeOff className="w-3 h-3" /> Exit preview
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Hero */}
-      <section className="pt-24 lg:pt-32 pb-10 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A] text-white">
+      <section className={`${isAdmin ? "pt-4" : "pt-24 lg:pt-32"} pb-10 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A] text-white`}>
         <div className="container mx-auto px-4 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 border border-white/25 text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur">
             <Sparkles className="w-3.5 h-3.5" /> Browse All Designs
