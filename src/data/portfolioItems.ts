@@ -78,7 +78,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: 6,
     title: "PRESEC-OSU 70th Anniversary",
-    type: "Corporate",
+    type: "Anniversaries",
     description: "Celebrating 70 years of academic excellence and brotherhood at Presbyterian Secondary School, Osu.",
     image: "/oposa-portfolio.webp",
     thumbnail: "/oposa-portfolio-thumb.webp",

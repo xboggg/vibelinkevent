@@ -82,7 +82,7 @@ const portfolioData: Record<string, {
   },
   "presec-osu-70th-anniversary": { demoLabel: "Open Invitation",
     title: "PRESEC-OSU 70th Anniversary Launch",
-    type: "Corporate",
+    type: "Anniversary",
     description: "A grand celebration marking 70 years of academic excellence, brotherhood, and the enduring legacy of Presbyterian Secondary School, Osu.",
     image: "/oposa-portfolio.webp",
     demoUrl: "https://osupresec70.vibelinkevent.com/",
