@@ -255,7 +255,7 @@ export default function CorporateEvents() {
         subheading="Product launches. Conferences. AGMs. Awards nights. A premium digital invitation that carries every speaker, every sponsor, every delegate — held together in one professional link."
         primaryCta={{ label: "Start Your Corporate Invite", href: "/get-started?eventType=Corporate" }}
         secondaryCta={{ label: "See Corporate Examples", href: "/portfolio?type=corporate" }}
-        trustRow={["80+ Ghanaian corporates", "Summits · AGMs · Launches", "Every delegate, one link"]}
+        trustRow={["Attendee analytics dashboard", "Summits · AGMs · Launches", "Every delegate, one link"]}
         overlayGradient="linear-gradient(90deg, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.6) 45%, rgba(15,23,42,0.3) 100%)"
       />
 

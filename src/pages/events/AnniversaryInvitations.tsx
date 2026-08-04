@@ -154,7 +154,7 @@ export default function AnniversaryInvitations() {
         subheading="Silver. Gold. Diamond. Every year of love, remembered — the wedding day recap, the children's tributes, the vow renewal. All held together in one timeless link."
         primaryCta={{ label: "Start Your Anniversary Invite", href: "/get-started?eventType=Anniversary" }}
         secondaryCta={{ label: "See Anniversary Examples", href: "/portfolio?type=anniversary" }}
-        trustRow={["100+ milestones celebrated", "Silver · Gold · Diamond", "Every year, remembered"]}
+        trustRow={["Then-vs-now photo comparison", "Silver · Gold · Diamond", "Every year, remembered"]}
       />
 
       {/* 2. Special features carousel */}
@@ -251,7 +251,7 @@ export default function AnniversaryInvitations() {
                 Create My Anniversary Invite <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <p className="text-gray-500 text-sm mt-4">Free consultation · Draft in 24 hours · Money-back guarantee</p>
+            <p className="text-gray-500 text-sm mt-4">Free consultation · Standard 5–7 days · 48h Rush +GHS 300 · Full deposit refund before design begins</p>
           </motion.div>
         </div>
       </section>

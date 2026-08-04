@@ -3,9 +3,9 @@ import { Globe, Star, Zap, Heart } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 const stats = [
-  { value: 100, suffix: "+", label: "Invitations Created", icon: Heart },
+  { value: 50, suffix: "+", label: "Invitations Created", icon: Heart },
   { value: 3, suffix: "", label: "Countries Reached", icon: Globe },
-  { value: 98, suffix: "%", label: "Client Satisfaction", icon: Star },
+  { value: 98, suffix: "%", label: "Satisfaction Rate", icon: Star },
   { value: 48, suffix: "hrs", label: "Rush Delivery", icon: Zap },
 ];
 

@@ -89,7 +89,7 @@ const portfolioData: Record<string, {
     features: ["Event countdown timer", "Photo gallery", "Alumni registration portal", "Donation tracking", "Event schedule", "School history timeline", "WhatsApp sharing"],
     story: "We designed and developed a stunning digital platform for the Old Students Association of PRESEC-OSU for their landmark 70th Anniversary celebration. With alumni scattered across Ghana and the diaspora, they needed a central hub to rally the PRESEC family together. We delivered a vibrant, school-colored website featuring the iconic motto OPR3! BEE ESH3! that captured the spirit of brotherhood and excellence. The platform serves as both an invitation to the grand launch event and a registration portal for alumni worldwide.",
     package: "Bespoke",
-    highlights: ["100+ alumni registrations", "Nationwide reach", "Diaspora engagement from 3 countries"],
+    highlights: ["Alumni registration portal", "Nationwide reach", "Diaspora engagement from 3 countries"],
   },
   "nana-yaw-memorial": {
     title: "In Loving Memory of Nana Yaw",

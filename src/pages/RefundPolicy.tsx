@@ -13,38 +13,42 @@ const RefundPolicy = () => {
       <div className="container mx-auto px-4 lg:px-8 py-16 lg:py-24">
         <div className="max-w-3xl mx-auto prose prose-lg dark:prose-invert">
           <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-8">Refund Policy</h1>
-          <p className="text-muted-foreground mb-8">Last updated: {new Date().toLocaleDateString()}</p>
+          <p className="text-muted-foreground mb-8">Last updated: 4 August 2026</p>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">1. Full Refund</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">1. Deposit Refund Before Design Begins</h2>
             <p className="text-muted-foreground">
-              You are entitled to a full refund of your deposit if you cancel your order before we begin any design work. This typically means within 24 hours of placing your order, provided no designer has been assigned to your project.
+              You are entitled to a <strong>full refund of your deposit</strong> if you
+              cancel your order before we begin any design work. This typically means
+              within 24 hours of placing your order, provided no designer has been
+              assigned to your project. This is the money-back promise we make on the
+              pricing and order pages.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">2. Partial Refund (After Draft Delivered)</h2>
-            <p className="text-muted-foreground mb-4">
-              Once the first draft has been delivered, the following refund structure applies:
+            <h2 className="text-2xl font-semibold text-foreground mb-4">2. Once Design Work Has Begun</h2>
+            <p className="text-muted-foreground">
+              After we assign a designer and begin work on your invitation, the
+              deposit becomes non-refundable. The deposit covers the design time
+              already invested in your project.
             </p>
-            <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-              <li><strong>Before first revision:</strong> 50% of deposit refunded</li>
-              <li><strong>After first revision:</strong> 25% of deposit refunded</li>
-              <li><strong>After second revision:</strong> No refund available</li>
-            </ul>
             <p className="text-muted-foreground mt-4">
-              The non-refundable portion covers the design work already completed by our team.
+              If you need to change event details (date, venue, colours, etc.) after
+              work has started, your included revision rounds cover those updates at
+              no extra cost.
             </p>
           </section>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">3. No Refund</h2>
             <p className="text-muted-foreground mb-4">
-              Refunds are not available in the following situations:
+              For clarity, refunds are not available in the following situations:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
+              <li>After design work has begun (see §2 above)</li>
               <li>After final design approval has been given</li>
-              <li>After the invitation has been published/gone live</li>
+              <li>After the invitation has been published / gone live</li>
               <li>For add-on services that have been delivered</li>
               <li>For rush delivery fees after work has begun</li>
               <li>For hosting fees after the invitation has been published</li>
@@ -54,13 +58,12 @@ const RefundPolicy = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">4. Event Cancellation</h2>
             <p className="text-muted-foreground">
-              We understand that events may be cancelled due to unforeseen circumstances. In case of event cancellation:
+              We understand that events may be cancelled due to unforeseen
+              circumstances. Where design work has already begun, we cannot refund
+              the deposit but we will issue a <strong>credit note valid for 12 months</strong>
+              that you can apply to any future VibeLink invitation of equal or
+              greater value.
             </p>
-            <ul className="list-disc pl-6 space-y-2 text-muted-foreground mt-4">
-              <li><strong>Before any design work:</strong> Full refund</li>
-              <li><strong>During design process:</strong> Partial refund based on work completed</li>
-              <li><strong>After completion:</strong> Credit note for future use (valid for 12 months)</li>
-            </ul>
           </section>
 
           <section className="mb-8">

@@ -154,7 +154,7 @@ export default function GraduationInvitations() {
         subheading="From the struggle to the stage — celebrate the certificate, honour every sponsor, and share the day with everyone who prayed you through. One link, every family."
         primaryCta={{ label: "Start Your Graduation Invite", href: "/get-started?eventType=Graduation" }}
         secondaryCta={{ label: "See Graduation Examples", href: "/portfolio?type=graduation" }}
-        trustRow={["120+ Ghanaian graduates", "Legon · KNUST · UCC · UPSA", "Every sponsor honoured"]}
+        trustRow={["Sponsor recognition wall", "Legon · KNUST · UCC · UPSA", "Every sponsor honoured"]}
         overlayGradient="linear-gradient(90deg, rgba(15,23,42,0.8) 0%, rgba(15,23,42,0.55) 45%, rgba(15,23,42,0.3) 100%)"
       />
 
@@ -252,7 +252,7 @@ export default function GraduationInvitations() {
                 Create My Graduation Invite <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <p className="text-gray-500 text-sm mt-4">Free consultation · Draft in 24 hours · Money-back guarantee</p>
+            <p className="text-gray-500 text-sm mt-4">Free consultation · Standard 5–7 days · 48h Rush +GHS 300 · Full deposit refund before design begins</p>
           </motion.div>
         </div>
       </section>

@@ -154,7 +154,7 @@ export default function NamingCeremony() {
         subheading="From the outdooring to the dedication — countdown, prayers, blessings, and memories for baby's first big moment. One link, every family member."
         primaryCta={{ label: "Start Baby's Invitation", href: "/get-started?eventType=Naming" }}
         secondaryCta={{ label: "See Ceremony Examples", href: "/portfolio?type=naming" }}
-        trustRow={["150+ Ghanaian babies welcomed", "24-hour rush available", "Every prayer, kept forever"]}
+        trustRow={["8-day countdown from birth", "Din To tradition explainer", "Every prayer, kept forever"]}
       />
 
       {/* 2. Special features carousel */}
@@ -251,7 +251,7 @@ export default function NamingCeremony() {
                 Create Baby's Invitation <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <p className="text-gray-500 text-sm mt-4">Free consultation · Draft in 24 hours · Money-back guarantee</p>
+            <p className="text-gray-500 text-sm mt-4">Free consultation · Standard 5–7 days · 48h Rush +GHS 300 · Full deposit refund before design begins</p>
           </motion.div>
         </div>
       </section>

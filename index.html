@@ -38,14 +38,37 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZY31KPC0V"></script>
+    <!-- Google Analytics with Consent Mode v2.
+         Analytics is initialised with `analytics_storage: denied` by default,
+         meaning no cookies are set and no personal data is collected until
+         the visitor accepts the cookie banner (see src/components/CookieBanner.tsx).
+         When the visitor accepts, the banner calls:
+           gtag('consent', 'update', {analytics_storage: 'granted'});
+         If they've already accepted in a previous session, the banner
+         restores that granted state as soon as it mounts. Compliant with
+         GDPR / ePrivacy directive requirements. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      // Set defaults BEFORE loading gtag.js so denied is the initial state.
+      gtag('consent', 'default', {
+        'analytics_storage': 'denied',
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'wait_for_update': 500
+      });
+      // If the visitor already accepted in a previous session, honour it
+      // immediately so we don't lose the first page-view of the visit.
+      try {
+        if (localStorage.getItem('vl-cookie-consent') === 'accepted') {
+          gtag('consent', 'update', { 'analytics_storage': 'granted' });
+        }
+      } catch (e) { /* localStorage may be unavailable in incognito */ }
       gtag('js', new Date());
       gtag('config', 'G-6ZY31KPC0V');
     </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZY31KPC0V"></script>
 
     <!-- Structured Data — owned by src/components/SEO.tsx per route,
          which combines organizationSchema + websiteSchema + any page-specific

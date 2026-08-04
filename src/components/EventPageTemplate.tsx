@@ -297,7 +297,7 @@ export function EventPageTemplate({ config }: Props) {
                 Create My Invitation <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <p className="text-gray-400 text-sm mt-4">Free consultation · Draft in 24 hours · Money-back guarantee</p>
+            <p className="text-gray-400 text-sm mt-4">Free consultation · Standard 5–7 days · 48h Rush +GHS 300 · Full deposit refund before design begins</p>
           </motion.div>
         </div>
       </section>

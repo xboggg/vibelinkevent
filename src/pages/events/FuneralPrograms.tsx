@@ -155,7 +155,7 @@ export default function FuneralPrograms() {
         subheading="A quiet, respectful memorial page for the ones we love — obituary, condolences, tributes, and remembrance, all held together in one gentle link."
         primaryCta={{ label: "Create a Memorial Page", href: "/get-started?eventType=Funeral" }}
         secondaryCta={{ label: "See Memorial Examples", href: "/portfolio?type=funeral" }}
-        trustRow={["100+ Ghanaian families", "24-hour delivery", "Preserved forever"]}
+        trustRow={["Nsawa MoMo tracker", "Livestream for diaspora", "One-week · 40-day · 1-year"]}
         overlayGradient="linear-gradient(90deg, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.65) 45%, rgba(15,23,42,0.5) 100%)"
       />
 

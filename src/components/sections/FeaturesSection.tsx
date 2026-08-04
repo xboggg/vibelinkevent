@@ -28,7 +28,7 @@ const features = [
     tag: "DIASPORA",
     title: "Everyone Included. Everywhere.",
     description: "Your cousin in London opens the same beautiful link as your neighbour in Accra. Livestream, timezone info, WhatsApp — the whole diaspora feels part of the day.",
-    pill: "🌍 10+ countries reached",
+    pill: "🌍 3 countries reached",
   },
 ];
 
@@ -72,7 +72,7 @@ export function FeaturesSection() {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.08 }}
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
-              className="group relative bg-white border border-border rounded-2xl p-7 overflow-hidden hover:shadow-xl hover:shadow-primary/8 hover:border-primary/25 transition-all duration-300"
+              className="group relative bg-card border border-border rounded-2xl p-7 overflow-hidden hover:shadow-xl hover:shadow-primary/8 hover:border-primary/25 transition-all duration-300"
             >
               {/* Ghost number */}
               <span

@@ -101,7 +101,7 @@ const GetStarted = () => {
               {[
                 { icon: Clock, text: "Takes about 2 minutes" },
                 { icon: MessageCircle, text: "WhatsApp confirmation within 24 hours" },
-                { icon: Shield, text: "Money-back guarantee" },
+                { icon: Shield, text: "Full deposit refund before design begins" },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-1.5 text-primary-foreground/70">
                   <item.icon className="h-4 w-4 text-secondary" />

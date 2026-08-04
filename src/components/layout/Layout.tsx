@@ -1,17 +1,27 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { ChatWidget } from "@/components/ChatWidget";
+import { CookieBanner } from "@/components/CookieBanner";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
+// Routes where the fixed FAB stack (ChatWidget + FloatingWhatsApp) overlays
+// right-aligned numeric content the customer needs to read — the pricing
+// calculator estimate panel and the get-started wizard order summary.
+// Audit finding H3: FABs were literally truncating the total price mid-word.
+const HIDE_FAB_ROUTES = ["/pricing", "/get-started"];
+
 export function Layout({ children }: LayoutProps) {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const { pathname } = useLocation();
+  const hideFab = HIDE_FAB_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/"));
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -30,11 +40,12 @@ export function Layout({ children }: LayoutProps) {
         {children}
       </main>
       <Footer />
-      <ChatWidget onOpenChange={setIsChatOpen} />
+      {!hideFab && <ChatWidget onOpenChange={setIsChatOpen} />}
       <AnimatePresence>
-        {!isChatOpen && <FloatingWhatsApp />}
+        {!isChatOpen && !hideFab && <FloatingWhatsApp />}
       </AnimatePresence>
       <ScrollToTop />
+      <CookieBanner />
     </div>
   );
 }

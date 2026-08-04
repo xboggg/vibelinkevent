@@ -155,7 +155,7 @@ export default function EngagementInvitations() {
         subheading="From the knocking to the customary — kente-honoured, family-first, and elder-approved. One link, every uncle and aunty can open."
         primaryCta={{ label: "Start Your Engagement Invitation", href: "/get-started?eventType=Engagement" }}
         secondaryCta={{ label: "See Engagement Examples", href: "/portfolio?type=engagement" }}
-        trustRow={["150+ Ghanaian couples", "Kente-honoured designs", "Every family, every uncle"]}
+        trustRow={["Dual-language options", "Kente-honoured designs", "Every family, every uncle"]}
       />
 
       {/* 2. Special features carousel */}
@@ -251,7 +251,7 @@ export default function EngagementInvitations() {
                 Create My Invitation <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <p className="text-gray-500 text-sm mt-4">Free consultation · Draft in 24 hours · Money-back guarantee</p>
+            <p className="text-gray-500 text-sm mt-4">Free consultation · Standard 5–7 days · 48h Rush +GHS 300 · Full deposit refund before design begins</p>
           </motion.div>
         </div>
       </section>

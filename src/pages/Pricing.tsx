@@ -336,12 +336,12 @@ const Pricing = () => {
             <p className="text-primary-foreground/80 text-base lg:text-lg">
               Every event is different — so is every package. Pick the event you're planning and get exactly the features it needs. No stripped-down tiers, no confusing upgrades.
             </p>
-            {/* Single money-back reassurance — replaces the guarantee line that
+            {/* Single deposit-refund reassurance — replaces the guarantee line that
                 used to repeat under every package card. Kept once here and once
                 in the payments section below. */}
             <p className="mt-4 inline-flex items-center gap-1.5 text-primary-foreground/70 text-sm">
               <Shield className="h-4 w-4 text-green-400" />
-              Every package is backed by our money-back guarantee.
+              Full deposit refund if you cancel before design work begins.
             </p>
           </motion.div>
         </div>
@@ -572,7 +572,7 @@ const Pricing = () => {
                 <div className="w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center">
                   <Check className="h-4 w-4 text-purple-500" />
                 </div>
-                <span>Money-Back Guarantee</span>
+                <span>Deposit Refund Before Design</span>
               </div>
             </motion.div>
           </div>

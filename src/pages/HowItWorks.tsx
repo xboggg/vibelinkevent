@@ -147,7 +147,7 @@ const faqs = [
   },
   {
     question: "Do you offer refunds?",
-    answer: "We offer a 50% refund if you cancel before design work begins. Once we start creating your invitation, the deposit is non-refundable, but we'll work with you to get it right.",
+    answer: "Yes — you're entitled to a full refund of your deposit if you cancel before we begin design work. Once we start creating your invitation the deposit is non-refundable, but we'll work with you within your included revision rounds to get it right. Full details on our Refund Policy page.",
   },
   {
     question: "Can I see examples of your work?",

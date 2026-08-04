@@ -162,7 +162,7 @@ export default function WeddingInvitations() {
         subheading="Traditional. White. Both. Every guest, every moment, every detail — held together by a single, beautiful invitation."
         primaryCta={{ label: "Start Your Wedding Invitation", href: "/get-started?eventType=Wedding" }}
         secondaryCta={{ label: "See Wedding Examples", href: "/portfolio?type=wedding" }}
-        trustRow={["200+ Ghanaian couples", "10+ countries reached", "One link · every guest"]}
+        trustRow={["Multi-day timeline", "Diaspora-ready livestream", "One link · every guest"]}
       />
 
       {/* 2. Special features carousel */}
@@ -258,7 +258,7 @@ export default function WeddingInvitations() {
                 Create My Invitation <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <p className="text-gray-500 text-sm mt-4">Free consultation · Draft in 24 hours · Money-back guarantee</p>
+            <p className="text-gray-500 text-sm mt-4">Free consultation · Standard 5–7 days · 48h Rush +GHS 300 · Full deposit refund before design begins</p>
           </motion.div>
         </div>
       </section>

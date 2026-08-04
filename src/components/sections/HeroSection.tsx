@@ -520,8 +520,8 @@ export function HeroSection() {
               ))}
             </div>
             <div className="text-primary-foreground/80 text-sm">
-              <span className="text-secondary font-semibold">100+</span>{" "}
-              Ghanaian families trust us
+              <span className="text-secondary font-semibold">50+</span>{" "}
+              Ghanaian families served
             </div>
           </motion.div>
         </div>

@@ -205,7 +205,7 @@ export default function ChurchEvents() {
         subheading="Harvest. Thanksgiving. Convention. Anniversary. A dignified digital programme with sermon, offering, livestream, and follow-up — held together in one respectful link."
         primaryCta={{ label: "Start Your Church Invite", href: "/get-started?eventType=Church" }}
         secondaryCta={{ label: "See Church Examples", href: "/portfolio?type=church" }}
-        trustRow={["50+ Ghanaian churches served", "Harvest · Convention · Anniversary", "Every member, one link"]}
+        trustRow={["Multi-day agenda support", "Harvest · Convention · Anniversary", "Every member, one link"]}
         overlayGradient="linear-gradient(90deg, rgba(31,17,63,0.85) 0%, rgba(31,17,63,0.6) 45%, rgba(31,17,63,0.3) 100%)"
       />
 
@@ -303,7 +303,7 @@ export default function ChurchEvents() {
                 Create My Church Invite <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <p className="text-gray-500 text-sm mt-4">Free consultation · Draft in 24 hours · Money-back guarantee</p>
+            <p className="text-gray-500 text-sm mt-4">Free consultation · Standard 5–7 days · 48h Rush +GHS 300 · Full deposit refund before design begins</p>
           </motion.div>
         </div>
       </section>

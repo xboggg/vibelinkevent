@@ -10,6 +10,7 @@ export interface PhoneCarouselItem {
   image: string;             // fallback if server screenshot missing
   thumbnail?: string;        // second fallback
   demoUrl?: string;          // live URL for the iframe upgrade
+  demoLabel?: string;        // present = real client work; absent = sample design
 }
 
 interface PhoneCarouselProps {
@@ -30,6 +31,7 @@ function PhoneFrame({
   fallbackImage,
   onTryLive,
   className = "",
+  isSample = false,
 }: {
   image: string;
   liveUrl?: string;
@@ -40,6 +42,7 @@ function PhoneFrame({
   fallbackImage?: string;
   onTryLive?: () => void;
   className?: string;
+  isSample?: boolean;
 }) {
   const [src, setSrc] = useState(image);
   useEffect(() => setSrc(image), [image]);
@@ -105,7 +108,14 @@ function PhoneFrame({
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent px-3 pb-4 pt-16 text-white pointer-events-none">
-                <p className="text-[10px] font-medium opacity-80 mb-0.5">{type}</p>
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <p className="text-[10px] font-medium opacity-80">{type}</p>
+                  {isSample && (
+                    <span className="text-[8px] font-bold uppercase tracking-widest px-1.5 py-[1px] rounded-sm bg-white/25 backdrop-blur">
+                      Sample
+                    </span>
+                  )}
+                </div>
                 <p className="text-sm font-bold leading-tight line-clamp-2">{title}</p>
               </div>
             </>
@@ -279,6 +289,7 @@ export function PhoneCarousel({
               type={item.type}
               onTryLive={showLiveButton ? () => setLiveIdx(i) : undefined}
               className="w-[200px] md:w-[240px]"
+              isSample={!item.demoLabel}
             />
           </motion.div>
         );
