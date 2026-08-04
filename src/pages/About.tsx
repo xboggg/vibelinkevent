@@ -363,7 +363,6 @@ const About = () => {
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 via-green-500 to-teal-600 flex items-center justify-center shadow-md shadow-emerald-500/30">
                   <Smartphone className="w-7 h-7 text-white" strokeWidth={2} />
-                  <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center border-2 border-white">99+</span>
                 </div>
                 <div>
                   <span className="inline-block text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-gradient-to-r from-emerald-200 to-teal-200 text-emerald-900">Better</span>

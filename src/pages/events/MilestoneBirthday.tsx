@@ -80,7 +80,7 @@ const milestoneSpecialFeatures: SpecialFeature[] = [
     shortLabel: "MoMo Gift",
     title: "MoMo Gift Link with Live Tracker",
     short: "Cash gifts sent directly, tracked live.",
-    description: "A dedicated MoMo gift link (MTN / Vodafone / AirtelTigo) so friends and family can send cash gifts directly. A live tracker shows contributions coming in — no chasing, no bank runs, just a beautiful running total.",
+    description: "A dedicated MoMo gift link (MTN / Telecel / AirtelTigo) so friends and family can send cash gifts directly. A live tracker shows contributions coming in — no chasing, no bank runs, just a beautiful running total.",
     tint: "from-emerald-500 to-teal-600", soft: "bg-emerald-50", accent: "text-emerald-700", emoji: "💰",
   },
   {
@@ -132,7 +132,7 @@ const faqs = [
   { question: "How is this different from the Regular Birthday package?", answer: "The Milestone package (GHS 2,000) includes the life timeline, video guestbook add-on, wishes wall, MoMo gift tracker, and era-appropriate playlist — features tuned for the biggest birthday celebrations. The Regular Birthday package (GHS 1,200) is a lighter option for kids' parties, casual 21sts, and less formal celebrations." },
   { question: "Can we hide certain sections from certain guests?", answer: "Yes. The private roast corner is code-gated — only guests you share the code with can see it. Perfect for keeping the funny stories away from parents or work colleagues." },
   { question: "How long does a milestone birthday invitation take?", answer: "Standard delivery is 5–7 business days. Rush delivery in 48 hours is available for a small additional fee — perfect if the party is next week." },
-  { question: "Can we accept MoMo gifts?", answer: "Yes. Guests can send cash gifts directly via MTN, Vodafone, or AirtelTigo. Contributions are tracked in real-time on your host dashboard — you see the running total and every contributor by name." },
+  { question: "Can we accept MoMo gifts?", answer: "Yes. Guests can send cash gifts directly via MTN, Telecel, or AirtelTigo. Contributions are tracked in real-time on your host dashboard — you see the running total and every contributor by name." },
   { question: "Can I update details after it goes live?", answer: "Yes. Any change to venue, time, dress code, or guest list is updated once — and every guest sees the latest instantly. No more sending WhatsApp updates one by one." },
 ];
 

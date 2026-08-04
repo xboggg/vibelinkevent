@@ -168,7 +168,7 @@ const services = [
   {
     icon: Cake,
     title: "Birthday Celebrations",
-    description: "Make every birthday unforgettable with vibrant, personalised digital invitations.",
+    description: "Interactive birthday invitations that go beyond a flyer — RSVP tracking, a live wishes wall, gift wishlist and countdown, all on a link you can share on WhatsApp in seconds.",
     // Optional per-card cross-link. Rendered as a subtle text link below the
     // description. Currently only Birthday uses this — points to the Milestone
     // Birthday page so we don't need a separate 'Milestone' card cluttering
@@ -432,7 +432,7 @@ const featureCategories = [
     accent: "text-yellow-700",
     demoKey: "rsvp",
     features: [
-      { name: "MoMo Registry", description: "Guests contribute directly via Mobile Money — MTN, Vodafone, AirtelTigo — with real-time tracking" },
+      { name: "MoMo Registry", description: "Guests contribute directly via Mobile Money — MTN, Telecel, AirtelTigo — with real-time tracking" },
       { name: "Wishlist Link", description: "Direct link to your online registry — Amazon, Zola, or your favourite store" },
       { name: "Dowry Contribution", description: "A private, family-only page for traditional dowry — kept off the public invitation" },
       { name: "Physical Gift Registry", description: "A curated list of physical gifts guests can bring or send" },
@@ -684,7 +684,7 @@ const featureCategories = [
       { name: "Wedding & Bridal Shower Registry", description: "Guests can choose from a curated gift list — kitchen appliances, honeymoon fund contributions, house-warming items" },
       { name: "Group Contributions", description: "'13 friends contributed GH₵50 each to Aunty Ama's 60th' — see who chipped in without exposing individual amounts to strangers" },
       { name: "Nsawa Funeral Contributions", description: "Extended family shares funeral costs transparently — set a target, see progress, get instant Mobile Money receipts" },
-      { name: "Mobile Money Split Payments", description: "MTN MoMo, Vodafone Cash, AirtelTigo Money — all supported. Guests pay in their preferred network without friction" },
+      { name: "Mobile Money Split Payments", description: "MTN MoMo, Telecel Cash, AirtelTigo Money — all supported. Guests pay in their preferred network without friction" },
       { name: "Foreign Exchange Calculator", description: "'You gave $50 = GH₵625' — diaspora guests see instant conversion so their generosity is clear on both sides" },
       { name: "Contribution Goal Tracker", description: "'GH₵15,000 of GH₵20,000 raised for the funeral' — visible progress bar motivates late contributors" },
       { name: "Anonymous vs Named Options", description: "Guests choose whether their contribution is publicly acknowledged or private — respecting cultural preferences" },
@@ -1115,7 +1115,7 @@ const Services = () => {
               {
                 icon: Wallet,
                 title: "MoMo Registry",
-                desc: "Guests contribute via MTN, Vodafone or AirtelTigo. Real-time. Zero setup. Zero fees.",
+                desc: "Guests contribute via MTN, Telecel or AirtelTigo. Real-time tracking. Zero setup for the host — standard network charges still apply as normal.",
                 tint: "from-yellow-500 to-amber-600",
               },
               {

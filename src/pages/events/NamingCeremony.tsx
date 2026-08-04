@@ -67,8 +67,8 @@ const namingSpecialFeatures: SpecialFeature[] = [
     category: "Gifts",
     shortLabel: "MoMo",
     title: "Cash Gift via MoMo",
-    short: "MTN, Vodafone, AirtelTigo — for baby's future.",
-    description: "Guests contribute cash gifts directly via Mobile Money — MTN, Vodafone or AirtelTigo — with real-time tracking. Perfect for family who couldn't attend but want to support.",
+    short: "MTN, Telecel, AirtelTigo — for baby's future.",
+    description: "Guests contribute cash gifts directly via Mobile Money — MTN, Telecel or AirtelTigo — with real-time tracking. Perfect for family who couldn't attend but want to support.",
     tint: "from-yellow-400 to-amber-500", soft: "bg-yellow-50", accent: "text-yellow-700", emoji: "💰",
   },
   {
@@ -127,7 +127,7 @@ const testimonials = [
 const faqs = [
   { question: "How long does a naming ceremony invitation take?", answer: "Standard delivery is 3–5 business days. Rush delivery in 24 hours is available for a small additional fee." },
   { question: "Can we keep the baby's name hidden until the day?", answer: "Yes. The name reveal countdown ticks down to the exact moment — and the name only unlocks on the invitation on the ceremony day itself." },
-  { question: "Can we accept MoMo cash gifts?", answer: "Yes. Guests contribute directly via MTN, Vodafone or AirtelTigo — tracked in real-time on your host dashboard." },
+  { question: "Can we accept MoMo cash gifts?", answer: "Yes. Guests contribute directly via MTN, Telecel or AirtelTigo — tracked in real-time on your host dashboard." },
   { question: "Can family abroad watch the dedication?", answer: "Yes. We embed a livestream for grandparents and family abroad. The link works on any phone, anywhere." },
   { question: "Can I update details after it goes live?", answer: "Yes. Any change to venue, time, or dress code is updated once and every guest sees the latest instantly." },
 ];

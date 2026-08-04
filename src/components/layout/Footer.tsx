@@ -248,8 +248,8 @@ export function Footer() {
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3 text-sm">
                 <Mail className="h-4 w-4 text-secondary flex-shrink-0" />
-                <a href="mailto:info@vibelinkevent.com" className="text-primary-foreground/70 hover:text-secondary transition-colors">
-                  info@vibelinkevent.com
+                <a href="mailto:hello@vibelinkevent.com" className="text-primary-foreground/70 hover:text-secondary transition-colors">
+                  hello@vibelinkevent.com
                 </a>
               </li>
               {/* Honest "where we're based" line — replaces the previous
@@ -300,6 +300,11 @@ export function Footer() {
                   {index < policyLinks.length - 1 && <span>|</span>}
                 </span>)}
             </div>
+          </div>
+
+          {/* Third-party brand disclaimer — audit finding M3 */}
+          <div className="mt-4 pt-4 border-t border-primary-foreground/10 text-primary-foreground/40 text-[11px] leading-relaxed text-center">
+            MTN, Telecel, AirtelTigo, WhatsApp, Instagram, Facebook, TikTok, Google, Apple, Paystack and all other third-party names and logos referenced on this site are trademarks of their respective owners. VibeLink Event is not affiliated with, endorsed by, or sponsored by any of these companies.
           </div>
         </div>
       </div>

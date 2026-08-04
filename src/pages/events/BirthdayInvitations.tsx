@@ -131,7 +131,7 @@ const faqs = [
   { question: "Can you match my party theme?", answer: "Yes. Whatever the theme — Y2K, all-black, Barbie, kente, Great Gatsby — we design the invitation around it. Colours, fonts, and vibe all matched." },
   { question: "How long does a birthday invitation take?", answer: "Standard delivery is 3–5 business days. Rush delivery in 48 hours is available for a small additional fee." },
   { question: "Can I keep the roast page hidden from parents?", answer: "Yes. The roast section can be unlisted — only guests you share the private link with can see it. Keep it away from mum's WhatsApp." },
-  { question: "Can I accept MoMo gifts?", answer: "Yes. Guests can send cash gifts directly via MTN, Vodafone or AirtelTigo. Tracked in real-time on your host dashboard." },
+  { question: "Can I accept MoMo gifts?", answer: "Yes. Guests can send cash gifts directly via MTN, Telecel or AirtelTigo. Tracked in real-time on your host dashboard." },
   { question: "Can I update details after it goes live?", answer: "Yes. Any change to venue, time, or dress code is updated once and every guest sees the latest instantly." },
 ];
 

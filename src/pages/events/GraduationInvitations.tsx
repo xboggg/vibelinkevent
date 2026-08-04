@@ -127,7 +127,7 @@ const testimonials = [
 const faqs = [
   { question: "Can you match my university's colours?", answer: "Yes. We colour-match to Legon's blue-and-gold, KNUST's red, UCC's teal, or any institution's palette. Or design something entirely custom around your degree." },
   { question: "How long does a graduation invitation take?", answer: "Standard delivery is 4–6 business days. Rush delivery in 48 hours is available for a small additional fee." },
-  { question: "Can we accept MoMo gifts for the next chapter?", answer: "Yes. Guests contribute directly via MTN, Vodafone or AirtelTigo — for a master's fund, a career kit, or an airfare fund. Tracked in real-time." },
+  { question: "Can we accept MoMo gifts for the next chapter?", answer: "Yes. Guests contribute directly via MTN, Telecel or AirtelTigo — for a master's fund, a career kit, or an airfare fund. Tracked in real-time." },
   { question: "Can family abroad watch the ceremony?", answer: "Yes. We embed a livestream for parents and family who couldn't travel. The link works on any phone, anywhere." },
   { question: "Can we update details after it goes live?", answer: "Yes. Any change to venue, time, or after-party info is updated once and every guest sees the latest instantly." },
 ];

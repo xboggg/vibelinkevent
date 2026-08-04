@@ -89,7 +89,7 @@ const faqCategories: WhatsAppFAQCategory[] = [
       },
       {
         question: "Can guests RSVP through the invitation?",
-        answer: "Yes — RSVP tracking is included with virtually every package. Guests tap the RSVP button, fill a short form, and you see all responses in your dashboard.",
+        answer: "Yes — RSVP tracking is included with every package. Guests tap the RSVP button, fill a short form, and you see all responses in your dashboard.",
       },
     ],
   },

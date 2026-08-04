@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import SEO from "@/components/SEO";
+import SEO, { createFAQSchema } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { WhatsAppFAQ } from "@/components/WhatsAppFAQ";
 
@@ -148,11 +148,12 @@ const Contact = () => {
 
   return (
     <Layout>
-      <SEO 
+      <SEO
         title="Contact Us"
         description="Get in touch with VibeLink Event. Reach us via WhatsApp for quick responses or send us an email. We're here to help with your digital invitation needs."
         keywords="contact VibeLink Event, digital invitations help, WhatsApp support Ghana"
         canonical="/contact"
+        jsonLd={createFAQSchema(faqs)}
       />
       {/* Hero — animated orbs, gradient headline, pulsing trust badge */}
       <section className="relative pt-24 lg:pt-32 pb-20 lg:pb-28 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A] overflow-hidden">
@@ -236,13 +237,14 @@ const Contact = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {[
               {
-                type: "static" as const,
-                icon: Globe, title: "Serving", detail: "Ghana & the diaspora",
-                subdetail: "Accra to London, Toronto, New York, Berlin",
-                grad: "from-red-500 via-yellow-400 to-emerald-500",   // Ghanaian flag palette
-                text: "text-emerald-700 dark:text-emerald-400",
-                border: "border-emerald-200/70 dark:border-emerald-900/50",
-                glow: "shadow-emerald-500/25",
+                type: "email" as const,
+                emailHref: "mailto:hello@vibelinkevent.com",
+                icon: Mail, title: "Email", detail: "hello@vibelinkevent.com",
+                subdetail: "Best for detailed briefs · reply within 24 hours",
+                grad: "from-blue-500 via-indigo-500 to-purple-600",
+                text: "text-indigo-700 dark:text-indigo-400",
+                border: "border-indigo-200/70 dark:border-indigo-900/50",
+                glow: "shadow-indigo-500/25",
               },
               {
                 type: "whatsapp" as const,
@@ -267,6 +269,7 @@ const Contact = () => {
               },
             ].map((card, i) => {
               const isWhatsApp = card.type === "whatsapp";
+              const isEmail = card.type === "email";
               const commonClasses = `group relative text-center p-7 lg:p-8 rounded-2xl bg-card border ${card.border} shadow-sm hover:shadow-2xl ${card.glow} transition-all duration-300 ${card.featured ? 'md:-translate-y-2 ring-1 ring-green-500/20' : ''}`;
 
               return (
@@ -318,6 +321,18 @@ const Contact = () => {
                       >
                         <MessageCircleIcon className="h-4 w-4" strokeWidth={2.25} />
                         Chat on WhatsApp
+                      </a>
+                    </div>
+                  )}
+
+                  {isEmail && card.emailHref && (
+                    <div className="mt-5 pt-4 border-t border-border/60">
+                      <a
+                        href={card.emailHref}
+                        className={`w-full flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg bg-gradient-to-br ${card.grad} text-white text-sm font-semibold shadow-sm hover:shadow-md hover:brightness-110 transition-all`}
+                      >
+                        <Mail className="h-4 w-4" strokeWidth={2.25} />
+                        Send an Email
                       </a>
                     </div>
                   )}
@@ -397,9 +412,10 @@ const Contact = () => {
                     id="name"
                     placeholder="Kwame Asante"
                     value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setFormData({ ...formData, name: e.target.value });
+                      if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
+                    }}
                     className={errors.name ? "border-destructive" : ""}
                     maxLength={100}
                   />
@@ -417,9 +433,10 @@ const Contact = () => {
                     type="email"
                     placeholder="kwame@example.com"
                     value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                      if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                    }}
                     className={errors.email ? "border-destructive" : ""}
                     maxLength={255}
                   />
@@ -461,9 +478,10 @@ const Contact = () => {
                   id="message"
                   placeholder="Tell us about your event or ask any questions..."
                   value={formData.message}
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormData({ ...formData, message: e.target.value });
+                    if (errors.message) setErrors((prev) => ({ ...prev, message: "" }));
+                  }}
                   className={`min-h-[120px] ${errors.message ? "border-destructive" : ""}`}
                   maxLength={1000}
                 />

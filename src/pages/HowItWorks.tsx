@@ -1,7 +1,7 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { CTASection } from "@/components/sections/CTASection";
-import SEO from "@/components/SEO";
+import SEO, { createFAQSchema } from "@/components/SEO";
 import { WhatsAppFAQ } from "@/components/WhatsAppFAQ";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -53,7 +53,7 @@ const steps = [
     title: "Pay & Confirm Your Order",
     description: "50% deposit — or pay in full.",
     details: "Pay via Mobile Money, bank transfer, or card (secured by Paystack). Choose full payment for priority processing and a FREE 'Save the Date' teaser delivered in 24 hours!",
-    duration: "Same day",
+    duration: "Immediate",
     color: "from-primary to-secondary",
     bgColor: "bg-primary",
     lightBg: "bg-primary/5 dark:bg-primary/10",
@@ -86,7 +86,7 @@ const steps = [
     title: "Go Live & Celebrate!",
     description: "Share your invitation with the world.",
     details: "Pay the remaining balance (if split payment), receive your unique link, and share instantly on WhatsApp! Watch RSVPs roll in and manage everything from your dashboard.",
-    duration: "Same day",
+    duration: "Immediate",
     color: "from-primary to-secondary",
     bgColor: "bg-primary",
     lightBg: "bg-secondary/5 dark:bg-secondary/10",
@@ -135,11 +135,11 @@ const faqs = [
   },
   {
     question: "What payment methods do you accept?",
-    answer: "We accept Mobile Money (MTN, Vodafone, AirtelTigo), bank transfers, and card payments (secured by Paystack — great for diaspora clients). You can pay a 50% deposit to start or full payment for priority processing and a FREE 'Save the Date' teaser.",
+    answer: "We accept Mobile Money (MTN, Telecel, AirtelTigo), bank transfers, and card payments (secured by Paystack — great for diaspora clients). You can pay a 50% deposit to start or full payment for priority processing and a FREE 'Save the Date' teaser.",
   },
   {
     question: "How does MoMo collection work for contributions?",
-    answer: "For packages with MoMo collection, guests can contribute directly through your invitation. Funds go straight to your own MoMo number—no fees, no middleman. You can track all contributions in real-time from your dashboard.",
+    answer: "For packages with MoMo collection, guests contribute directly to your own MoMo number — VibeLink takes no cut and never touches the funds. Standard MTN / Telecel / AirtelTigo network charges still apply as normal. You can track every contribution in real-time from your dashboard.",
   },
   {
     question: "What if I need my invitation urgently?",
@@ -242,6 +242,7 @@ const HowItWorks = () => {
         description="Simple 6-step process to get your digital invitation. Fill our form, get a quote, pay to confirm, we design, you review, then share with guests!"
         keywords="digital invitation process, how to order invitation Ghana, event invitation steps"
         canonical="/how-it-works"
+        jsonLd={createFAQSchema(faqs.map((f) => ({ question: f.question, answer: f.answer })))}
       />
 
       {/* Hero Section */}

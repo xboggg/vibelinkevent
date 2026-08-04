@@ -13,7 +13,7 @@ const TermsOfService = () => {
       <div className="container mx-auto px-4 lg:px-8 py-16 lg:py-24">
         <div className="max-w-3xl mx-auto prose prose-lg dark:prose-invert">
           <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-8">Terms of Service</h1>
-          <p className="text-muted-foreground mb-8">Last updated: {new Date().toLocaleDateString()}</p>
+          <p className="text-muted-foreground mb-8">Last updated: 4 August 2026</p>
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">1. Service Description</h2>
@@ -57,12 +57,15 @@ const TermsOfService = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">5. Intellectual Property</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">5. Intellectual Property &amp; Data Processing</h2>
             <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
               <li>Final designs are owned by the client after full payment</li>
               <li>VibeLink Event retains the right to use designs in our portfolio (unless white-label package is purchased)</li>
               <li>Pre-designed templates remain the property of VibeLink Event</li>
               <li>Client-provided images, logos, and content remain the property of the client</li>
+              <li>
+                <strong>Guest data collected through your invitation</strong> (RSVP responses, wishes, contribution records, contact details submitted by your guests) is stored on our infrastructure solely to power the invitation and provide you, the host, with the host dashboard, contribution tracker and export tools. VibeLink acts as data processor on your behalf; you remain the data controller of your guest list. We do not sell, share or use guest data for marketing, and we retain it only for as long as the invitation is live plus 12 months, or until you request deletion — whichever comes first. See our <a href="/privacy-policy" className="text-primary hover:underline">Privacy Policy</a> for full details.
+              </li>
             </ul>
           </section>
 

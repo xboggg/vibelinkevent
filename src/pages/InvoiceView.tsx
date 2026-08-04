@@ -295,7 +295,7 @@ const InvoiceView = () => {
                     <div>
                       <p className="font-medium text-gray-700">Mobile Money (MoMo)</p>
                       <p className="text-muted-foreground">MTN: 024 XXX XXXX</p>
-                      <p className="text-muted-foreground">Vodafone: 020 XXX XXXX</p>
+                      <p className="text-muted-foreground">Telecel: 020 XXX XXXX</p>
                       <p className="text-muted-foreground">Name: VibeLink Event</p>
                     </div>
                     <div>

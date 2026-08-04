@@ -105,7 +105,7 @@ const funeralSpecialFeatures: SpecialFeature[] = [
     shortLabel: "Donations",
     title: "Donation Link (MoMo)",
     short: "Support the family through Mobile Money.",
-    description: "Guests contribute directly via MTN, Vodafone or AirtelTigo to help the family with funeral expenses — kept private, tracked in real-time. Because grief shouldn't come with financial pressure.",
+    description: "Guests contribute directly via MTN, Telecel or AirtelTigo to help the family with funeral expenses — kept private, tracked in real-time. Because grief shouldn't come with financial pressure.",
     tint: "from-teal-700 to-cyan-800", soft: "bg-teal-50", accent: "text-teal-800", emoji: "🤝",
   },
   {
@@ -130,7 +130,7 @@ const faqs = [
   { question: "Can we keep it dignified and simple?", answer: "Yes. The design uses muted tones (no bright colours, no confetti). Every element is chosen to honour rather than distract." },
   { question: "Can family abroad watch the burial?", answer: "Yes. We embed a livestream of the service and burial for family who cannot travel. The link works on any phone, anywhere." },
   { question: "Will the page stay online after the funeral?", answer: "Yes. Memorial pages remain online with an optional annual renewal, so the family can revisit and remember on the 1-year anniversary and beyond." },
-  { question: "Can we accept donations to help with expenses?", answer: "Yes. A MoMo donation link (MTN, Vodafone, AirtelTigo) can be added privately — tracked in real-time." },
+  { question: "Can we accept donations to help with expenses?", answer: "Yes. A MoMo donation link (MTN, Telecel, AirtelTigo) can be added privately — tracked in real-time." },
 ];
 
 export default function FuneralPrograms() {

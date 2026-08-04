@@ -92,8 +92,8 @@ export const OrderSummary = ({ formData, total }: OrderSummaryProps) => {
           </li>
           <li className="flex items-center gap-3 text-sm">
             <Mail className="h-4 w-4 text-primary flex-shrink-0" />
-            <a href="mailto:info@vibelinkevent.com" className="text-foreground hover:text-primary transition-colors">
-              info@vibelinkevent.com
+            <a href="mailto:hello@vibelinkevent.com" className="text-foreground hover:text-primary transition-colors">
+              hello@vibelinkevent.com
             </a>
           </li>
           <li className="flex items-start gap-3 text-sm">

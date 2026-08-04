@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Check, ArrowRight, Star } from "lucide-react";
-import SEO from "@/components/SEO";
+import SEO, { createFAQSchema } from "@/components/SEO";
 import { WhatsAppFAQ } from "@/components/WhatsAppFAQ";
 
 export interface EventFeature {
@@ -81,6 +81,11 @@ export function EventPageTemplate({ config }: Props) {
         keywords={config.seoKeywords}
         canonical={config.canonical}
         ogImage="https://vibelinkevent.com/og-image.jpg"
+        jsonLd={
+          config.faqs.length > 0
+            ? createFAQSchema(config.faqs.map((f) => ({ question: f.q, answer: f.a })))
+            : undefined
+        }
       />
 
       {/* ── HERO ── */}

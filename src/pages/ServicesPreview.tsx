@@ -169,7 +169,7 @@ const categories = [
     soft: "bg-yellow-50",
     accent: "text-yellow-700",
     features: [
-      { name: "MoMo Registry", description: "Guests contribute directly via Mobile Money — MTN, Vodafone, AirtelTigo — with real-time tracking" },
+      { name: "MoMo Registry", description: "Guests contribute directly via Mobile Money — MTN, Telecel, AirtelTigo — with real-time tracking" },
       { name: "Wishlist Link", description: "Direct link to your online registry — Amazon, Zola, or your favourite store" },
       { name: "Dowry Contribution", description: "A private, family-only page for traditional dowry — kept off the public invitation" },
       { name: "Physical Gift Registry", description: "A curated list of physical gifts guests can bring or send" },

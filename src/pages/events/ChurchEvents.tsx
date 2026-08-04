@@ -127,8 +127,8 @@ const churchSpecialFeatures: SpecialFeature[] = [
     category: "Giving",
     shortLabel: "Seed",
     title: "Offering / Seed Link (MoMo)",
-    short: "MTN, Vodafone, AirtelTigo — sow live.",
-    description: "A direct Mobile Money giving link right on the invitation — MTN, Vodafone, AirtelTigo — so members can sow their seed during the service or from wherever they are. Tracked in real-time.",
+    short: "MTN, Telecel, AirtelTigo — sow live.",
+    description: "A direct Mobile Money giving link right on the invitation — MTN, Telecel, AirtelTigo — so members can sow their seed during the service or from wherever they are. Tracked in real-time.",
     tint: "from-yellow-500 to-orange-600", soft: "bg-yellow-50", accent: "text-yellow-800", emoji: "🌱",
   },
   {
@@ -178,7 +178,7 @@ const testimonials = [
 const faqs = [
   { question: "Can you match our church colours and theme?", answer: "Yes. We colour-match to your church's palette — royal purple, deep blue, kente-gold, or any theme you're running for the season." },
   { question: "How long does a church event invitation take?", answer: "Standard delivery is 4–6 business days. Rush delivery in 48 hours is available at an additional fee." },
-  { question: "Can we accept MoMo offerings and seed?", answer: "Yes. A dedicated Mobile Money giving link — MTN, Vodafone, AirtelTigo — is embedded right on the invitation. Every seed is tracked and reported to the finance team." },
+  { question: "Can we accept MoMo offerings and seed?", answer: "Yes. A dedicated Mobile Money giving link — MTN, Telecel, AirtelTigo — is embedded right on the invitation. Every seed is tracked and reported to the finance team." },
   { question: "Can members abroad join the service?", answer: "Yes. YouTube Live, Facebook Live, or Zoom — we embed whatever platform your church uses so diaspora members join with one tap." },
   { question: "Can we update details after it goes live?", answer: "Yes. Any change to venue, time, guest minister, or programme is updated once and every member sees the latest instantly." },
 ];

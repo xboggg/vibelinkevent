@@ -403,6 +403,9 @@ export default function TrackOrder() {
                       placeholder="Enter your order ID (e.g., a1b2c3d4-...)"
                       value={orderId}
                       onChange={(e) => setOrderId(e.target.value)}
+                      required
+                      aria-required="true"
+                      minLength={8}
                       className="pl-12 h-14 text-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 focus:border-purple-500 rounded-xl"
                     />
                   </div>
@@ -413,13 +416,15 @@ export default function TrackOrder() {
                       placeholder="Enter your email address"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      required
+                      aria-required="true"
                       className="pl-12 h-14 text-lg bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 focus:border-purple-500 rounded-xl"
                     />
                   </div>
                   <Button
                     type="submit"
-                    disabled={isLoading}
-                    className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 hover:from-blue-700 hover:via-purple-700 hover:to-pink-600 rounded-xl shadow-lg shadow-purple-500/30 transition-all hover:shadow-xl hover:shadow-purple-500/40 hover:scale-[1.02]"
+                    disabled={isLoading || !orderId.trim() || !email.trim()}
+                    className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 hover:from-blue-700 hover:via-purple-700 hover:to-pink-600 rounded-xl shadow-lg shadow-purple-500/30 transition-all hover:shadow-xl hover:shadow-purple-500/40 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
                     {isLoading ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -449,9 +454,9 @@ export default function TrackOrder() {
               transition={{ delay: 0.7 }}
             >
               {[
-                { icon: Package, label: "Real-time Status", color: "text-blue-500" },
-                { icon: Clock, label: "Progress Updates", color: "text-purple-500" },
-                { icon: CreditCard, label: "Pay Balance", color: "text-pink-500" },
+                { icon: Package, label: "Real-time Status", body: "See exactly where your invitation is in the design queue.", color: "text-blue-500" },
+                { icon: Clock, label: "Progress Updates", body: "Draft, revision, final — every stage is visible.", color: "text-purple-500" },
+                { icon: CreditCard, label: "Pay Balance", body: "Settle the remaining 50% here when your draft is approved.", color: "text-pink-500" },
               ].map((feature) => (
                 <motion.div
                   key={feature.label}
@@ -460,7 +465,8 @@ export default function TrackOrder() {
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <feature.icon className={`h-6 w-6 mx-auto mb-2 ${feature.color}`} />
-                  <p className="text-xs font-medium text-muted-foreground">{feature.label}</p>
+                  <p className="text-xs font-semibold text-foreground mb-1">{feature.label}</p>
+                  <p className="text-[11px] text-muted-foreground leading-snug">{feature.body}</p>
                 </motion.div>
               ))}
             </motion.div>
