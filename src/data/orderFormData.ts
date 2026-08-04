@@ -43,6 +43,11 @@ export interface AddOn {
   // the "extras" grid and shows it under "Already in your package" instead.
   // Package IDs come from EventPackageId in eventPackages.ts.
   includedInPackages?: string[];
+  // Optional. If present, the add-on is ONLY offered when the customer's
+  // package ID is in this list. Used to hide event-specific add-ons that
+  // make no sense elsewhere (e.g. Memory Tribute Wall on a Wedding order).
+  // Absent = available on all packages.
+  applicableToPackages?: string[];
 }
 
 export interface ColorPalette {
@@ -118,12 +123,12 @@ export const addOns: AddOn[] = [
   { id: "photo-booth", name: "Photo Booth Frame", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
   // Event Timeline is a richer visual display — distinct from a package's
   // simple "Program timeline" text. Paid extra for everyone except Bespoke.
-  { id: "timeline", name: "Event Timeline/Program Display", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
-  { id: "tribute-wall", name: "Memory Tribute Wall (funerals)", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["funeral", "bespoke"] },
+  { id: "timeline", name: "Event Timeline/Program Display", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["wedding", "engagement", "funeral", "corporate", "naming", "milestone-birthday", "anniversary", "graduation", "church", "bespoke"] },
+  { id: "tribute-wall", name: "Memory Tribute Wall (funerals)", price: 200, priceLabel: "GHS 200", category: "features", includedInPackages: ["funeral", "bespoke"], applicableToPackages: ["funeral", "bespoke"] },
   // Background Music upgrade lets the customer pick their OWN track —
   // distinct from a package's default curated playlist. Paid extra for
   // everyone except Bespoke.
-  { id: "bg-music", name: "Background Music", price: 50, priceLabel: "GHS 50", category: "features", includedInPackages: ["bespoke"] },
+  { id: "bg-music", name: "Background Music", price: 50, priceLabel: "GHS 50", category: "features", includedInPackages: ["wedding", "engagement", "funeral", "naming", "milestone-birthday", "birthday", "anniversary", "church", "bespoke"] },
   { id: "lost-found", name: "Lost & Found", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
   { id: "nearby-accommodation", name: "Nearby Accommodation", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
   { id: "book-a-ride", name: "Book a Ride", price: 100, priceLabel: "GHS 100", category: "features", includedInPackages: ["bespoke"] },
@@ -190,6 +195,10 @@ export interface OrderFormData {
   eventVenue: string;
   eventAddress: string;
   celebrantNames: string;
+  // Whose side is placing this order? Applies to wedding / engagement /
+  // naming events where family-side matters for seating and MoMo tracking.
+  // Values: "bride" | "groom" | "both" | "family" (for naming) | "".
+  hostSide: string;
   additionalInfo: string;
 
   // Step 3: Style & Colors
@@ -231,6 +240,7 @@ export const initialFormData: OrderFormData = {
   eventVenue: "",
   eventAddress: "",
   celebrantNames: "",
+  hostSide: "",
   additionalInfo: "",
   colorPalette: "",
   customColors: [],

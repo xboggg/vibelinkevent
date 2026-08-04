@@ -358,6 +358,24 @@ export const ContactStep = ({
               {formData.eventDate ? format(formData.eventDate, "PPP") : "TBD"}
             </span>
           </div>
+          {formData.eventVenue && (
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground shrink-0">Venue</span>
+              <span className="text-foreground font-medium text-right break-words">{formData.eventVenue}</span>
+            </div>
+          )}
+          {formData.celebrantNames && (
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground shrink-0">Celebrants</span>
+              <span className="text-foreground font-medium text-right break-words">{formData.celebrantNames}</span>
+            </div>
+          )}
+          {formData.hostSide && (
+            <div className="flex justify-between gap-4">
+              <span className="text-muted-foreground shrink-0">Host side</span>
+              <span className="text-foreground font-medium text-right capitalize">{formData.hostSide}{formData.hostSide === "both" ? " sides" : "'s side"}</span>
+            </div>
+          )}
           <div className="flex justify-between">
             <span className="text-muted-foreground">Style</span>
             <span className="text-foreground font-medium">{selectedStyle?.name}</span>
@@ -380,6 +398,16 @@ export const ContactStep = ({
             <span className="text-muted-foreground">Package</span>
             <span className="text-foreground font-medium">
               {selectedPackage?.name} - GHS {selectedPackage?.price.toLocaleString()}
+            </span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Delivery</span>
+            <span className="text-foreground font-medium text-right">
+              {formData.deliveryUrgency === "rush"
+                ? "Rush — 48 hours"
+                : formData.selectedPackage === "bespoke"
+                ? "Standard — 7–10 business days"
+                : "Standard — 5–7 business days"}
             </span>
           </div>
           {selectedAddOnsList.length > 0 && (

@@ -18,6 +18,16 @@ interface EventDetailsStepProps {
   onPrev: () => void;
 }
 
+// Events where the family-side split matters for seating, MoMo tracking,
+// and downstream RSVP splitting. Wedding + engagement need bride/groom/both;
+// naming has a different frame ("baby's family" as the host unit).
+const SIDE_REQUIRED_EVENTS = new Set(["wedding", "engagement", "naming"]);
+const SIDE_OPTIONS: Record<string, { value: string; label: string }[]> = {
+  wedding:    [{ value: "bride", label: "Bride's side" }, { value: "groom", label: "Groom's side" }, { value: "both", label: "Both sides together" }],
+  engagement: [{ value: "bride", label: "Bride's side" }, { value: "groom", label: "Groom's side" }, { value: "both", label: "Both sides together" }],
+  naming:     [{ value: "mother", label: "Mother's side" }, { value: "father", label: "Father's side" }, { value: "both", label: "Both sides together" }],
+};
+
 export const EventDetailsStep = ({
   formData,
   updateFormData,
@@ -26,8 +36,14 @@ export const EventDetailsStep = ({
 }: EventDetailsStepProps) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const selectedEvent = eventTypes.find((e) => e.id === formData.eventType);
-  
-  const isValid = formData.eventTitle && formData.eventDate && formData.eventVenue;
+  const sideRequired = SIDE_REQUIRED_EVENTS.has(formData.eventType);
+  const sideOptions = SIDE_OPTIONS[formData.eventType] || [];
+
+  const isValid =
+    formData.eventTitle &&
+    formData.eventDate &&
+    formData.eventVenue &&
+    (!sideRequired || !!formData.hostSide);
 
   const validateAndProceed = () => {
     const result = eventDetailsSchema.safeParse({
@@ -105,6 +121,41 @@ export const EventDetailsStep = ({
             maxLength={200}
           />
         </div>
+
+        {/* Whose side? Only shown for wedding / engagement / naming events
+            where the family split matters for downstream seating and MoMo
+            tracking. Required when shown (audit finding H10). */}
+        {sideRequired && (
+          <div className="space-y-2">
+            <Label htmlFor="hostSide" className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-primary" />
+              Whose side is placing this order? *
+            </Label>
+            <select
+              id="hostSide"
+              value={formData.hostSide}
+              onChange={(e) => {
+                updateFormData({ hostSide: e.target.value });
+                clearError("hostSide");
+              }}
+              className={cn(
+                "flex h-12 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                errors.hostSide ? "border-destructive" : "border-input"
+              )}
+            >
+              <option value="" disabled>Choose one…</option>
+              {sideOptions.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            {errors.hostSide && (
+              <p className="text-sm text-destructive">{errors.hostSide}</p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              We use this for guest-side splitting on your RSVP dashboard and to route MoMo contributions correctly.
+            </p>
+          </div>
+        )}
 
         {/* Date and Time */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

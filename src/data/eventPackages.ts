@@ -51,8 +51,8 @@ export interface PackageAddon {
 // UNIVERSAL ADD-ONS — available on any non-Bespoke package
 // ─────────────────────────────────────────────────────────────────────────────
 export const UNIVERSAL_ADDONS: PackageAddon[] = [
-  { id: "custom-domain",     name: "Custom Domain",              price: 500,  description: "Use your own domain (e.g. kwameandama.com) instead of a subdomain" },
-  { id: "rush-48h",          name: "Rush Delivery (48 hours)",   price: 300,  description: "Skip the queue — your invitation ready in 48 hours" },
+  { id: "custom-domain",     name: "Custom Domain (per year)",   price: 500,  description: "Use your own domain (e.g. kwameandama.com) instead of a subdomain. Billed annually — GHS 500 / year renewal." },
+  { id: "rush-48h",          name: "Rush Delivery (48 hours)",   price: 300,  description: "Skip the queue — your invitation ready in 48 hours. Rush orders require full payment upfront." },
   { id: "white-label",       name: "White-Label",                price: 300,  description: "Remove the small 'Powered by VibeLink' badge" },
   { id: "hosting-6mo",       name: "Extra Hosting (+6 months)",  price: 300,  description: "Extend your invitation's live period by 6 months" },
   { id: "hosting-1yr",       name: "Extra Hosting (+1 year)",    price: 500,  description: "Extend your invitation's live period by a full year", badge: "best value" },

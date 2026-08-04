@@ -29,17 +29,24 @@ export const AddOnsStep = ({
   const selectedPackage = packages.find((p) => p.id === formData.selectedPackage);
   const [showIncluded, setShowIncluded] = useState(false);
 
-  // Split add-ons into "already in your package" (hidden from the extras grid,
-  // shown collapsed so customers can reassure themselves it's there) and
-  // "real extras" (the paid checkboxes). When no package is selected yet,
-  // fall back to showing everything as extras.
+  // Split add-ons into three groups relative to the selected package:
+  //   1. `applicable` — offered for this event (or all events if no
+  //      applicableToPackages restriction is set)
+  //   2. `includedAddOns` — already covered by the package (shown as a
+  //      collapsible "Already in your package" reassurance)
+  //   3. `extraAddOns` — real paid extras (the interactive grid)
+  // Add-ons NOT in `applicable` (e.g. Memory Tribute Wall on a wedding)
+  // don't render at all. Audit finding M7.
   const pkgId = formData.selectedPackage;
+  const applicable = pkgId
+    ? addOns.filter((a) => !a.applicableToPackages || a.applicableToPackages.includes(pkgId))
+    : addOns;
   const includedAddOns = pkgId
-    ? addOns.filter((a) => a.includedInPackages?.includes(pkgId))
+    ? applicable.filter((a) => a.includedInPackages?.includes(pkgId))
     : [];
   const extraAddOns = pkgId
-    ? addOns.filter((a) => !a.includedInPackages?.includes(pkgId))
-    : addOns;
+    ? applicable.filter((a) => !a.includedInPackages?.includes(pkgId))
+    : applicable;
 
   // If a stale addon was pre-selected but is now "included" in the customer's
   // package (e.g. arrived from /pricing calculator with an addon that's baked

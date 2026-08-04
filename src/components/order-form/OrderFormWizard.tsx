@@ -153,6 +153,15 @@ export const OrderFormWizard = ({
   const isStepComplete = (step: number): boolean => {
     // Package step (previously #4) removed — selectedPackage is now auto-set
     // when the event type is picked at step 1.
+    //
+    // AUDIT FIX H8: an earlier version returned true unconditionally for
+    // steps 4 (Add-ons) and 5 (Timeline) because their fields are optional
+    // or have defaults. That painted green checkmarks on steps the visitor
+    // had never visited on first load, which reads as broken software.
+    // Rule now: a step is only "complete" if the visitor has actually
+    // moved past it (step < currentStep) AND its required inputs are
+    // valid where applicable.
+    if (step >= currentStep) return false;
     switch (step) {
       case 1:
         return !!formData.eventType && !!formData.selectedPackage;
@@ -161,9 +170,9 @@ export const OrderFormWizard = ({
       case 3:
         return !!formData.colorPalette && !!formData.stylePreference;
       case 4:
-        return true; // Add-ons are optional
+        return true; // Add-ons optional — reaching a later step counts as complete
       case 5:
-        return true; // Timeline has defaults
+        return true; // Timeline has defaults — reaching a later step counts as complete
       case 6:
         return !!formData.fullName && !!formData.phone;
       default:
@@ -247,7 +256,8 @@ Date: ${formData.eventDate ? formData.eventDate.toLocaleDateString("en-GB", { da
 Time: ${formData.eventTime || "TBD"}
 Venue: ${formData.eventVenue}${formData.eventAddress ? `
 Address: ${formData.eventAddress}` : ""}${formData.celebrantNames ? `
-Celebrant(s): ${formData.celebrantNames}` : ""}
+Celebrant(s): ${formData.celebrantNames}` : ""}${formData.hostSide ? `
+Host side: ${formData.hostSide}` : ""}
 
 --- DESIGN PREFERENCES ---
 Package: ${selectedPkg?.name || ""} (GHS ${selectedPkg?.price?.toLocaleString() || 0})
