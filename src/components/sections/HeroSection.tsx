@@ -458,7 +458,7 @@ export function HeroSection() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
               </span>
-              Ghana's #1 Digital Event Experience
+              Digital invitations for Ghanaian celebrations
             </span>
           </motion.div>
 

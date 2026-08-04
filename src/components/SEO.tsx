@@ -20,10 +20,13 @@ interface SEOProps {
   rssTitle?: string;
 }
 
-// Organization schema - used site-wide
+// Organization schema — used site-wide. We deliberately do NOT use
+// LocalBusiness here: VibeLink is online-first with no physical office,
+// so a PostalAddress + geo would be fabricated. Organization is the
+// correct type; areaServed still communicates the Ghana + diaspora scope.
 const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": "Organization",
   "@id": "https://vibelinkevent.com/#organization",
   name: "VibeLink Event",
   alternateName: "VibeLink",
@@ -31,36 +34,19 @@ const organizationSchema = {
   url: "https://vibelinkevent.com",
   logo: "https://vibelinkevent.com/og-image.jpg",
   image: "https://vibelinkevent.com/og-image.jpg",
-  telephone: "+4915757178561",
   email: "hello@vibelinkevent.com",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Accra",
-    addressCountry: "GH",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 5.6037,
-    longitude: -0.187,
-  },
-  areaServed: {
-    "@type": "Country",
-    name: "Ghana",
-  },
-  priceRange: "₵₵",
-  openingHoursSpecification: [
+  contactPoint: [
     {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "17:00",
+      "@type": "ContactPoint",
+      telephone: "+4915757178561",
+      contactType: "customer support",
+      availableLanguage: ["English"],
+      areaServed: ["GH", "Worldwide"],
     },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Saturday",
-      opens: "10:00",
-      closes: "14:00",
-    },
+  ],
+  areaServed: [
+    { "@type": "Country", name: "Ghana" },
+    { "@type": "Place", name: "Global (Ghanaian diaspora)" },
   ],
   sameAs: [
     "https://www.instagram.com/vibelinkevent",

@@ -84,16 +84,13 @@ const TermsOfService = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">8. Special Terms</h2>
-            <div className="bg-muted/30 rounded-lg p-6 space-y-4">
-              <h3 className="font-semibold text-foreground">Discount Guidelines</h3>
-              <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                <li><strong>10% discount:</strong> Churches and funeral homes (partnership building)</li>
-                <li><strong>15% discount:</strong> Bulk bookings (3+ events from same client/organization)</li>
-                <li><strong>20% discount:</strong> Event planners (5+ referrals/year)</li>
-                <li><strong>50% or complimentary:</strong> High-profile clients for testimonial/case study value (at our discretion)</li>
-              </ul>
-            </div>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">8. Partnership &amp; Bulk Enquiries</h2>
+            <p className="text-muted-foreground">
+              We work with churches, funeral homes, event planners and organisations
+              on partnership and bulk-booking arrangements. Please contact us on
+              WhatsApp or by email to discuss terms tailored to your event or
+              organisation.
+            </p>
           </section>
 
           <section className="mb-8">

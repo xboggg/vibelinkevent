@@ -180,7 +180,7 @@ export const portfolioItems: PortfolioItem[] = [
     id: 15,
     title: "NovaStream CyberSecure Conference",
     type: "Corporate",
-    description: "Ghana's premier cybersecurity conference bringing together industry leaders and professionals.",
+    description: "Ghana's cybersecurity conference bringing together industry leaders and professionals.",
     image: "/novastream-portfolio.jpg",
     demoUrl: "https://novastream.vibelinkevent.com/",
     slug: "novastream-conference",
