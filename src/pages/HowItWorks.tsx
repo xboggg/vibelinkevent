@@ -74,7 +74,7 @@ const steps = [
     icon: CheckCircle,
     title: "Review & Perfect",
     description: "Preview and request any changes.",
-    details: "We share a preview link for you to review. Request changes and we'll perfect every detail. Revision rounds are included in your package—we don't stop until you love it!",
+    details: "We share a preview link for you to review. Request changes within your included revision rounds (typically 1–3 depending on your event, unlimited on Bespoke) and we'll perfect every detail.",
     duration: "1-2 days",
     color: "from-primary to-secondary",
     bgColor: "bg-primary",
@@ -116,7 +116,7 @@ const deliverables = [
 const benefits = [
   { icon: Zap, title: "Fast Delivery", description: "Standard 5-7 days, Rush 48 hours" },
   { icon: Shield, title: "Secure Payments", description: "MoMo & Card accepted" },
-  { icon: Heart, title: "Satisfaction Guaranteed", description: "Revisions until you love it" },
+  { icon: Heart, title: "Revisions Included", description: "1–3 rounds by event · unlimited on Bespoke" },
   { icon: Star, title: "Premium Quality", description: "Stunning designs that impress" },
 ];
 
@@ -334,7 +334,7 @@ const HowItWorks = () => {
             >
               {[
                 { value: "2 min", label: "To fill form" },
-                { value: "2 hrs", label: "Quote response" },
+                { value: "24 hrs", label: "Quote response" },
                 { value: "5-7 days", label: "Standard delivery" },
                 { value: "48 hrs", label: "Rush available" },
               ].map((stat, index) => (

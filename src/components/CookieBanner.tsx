@@ -74,7 +74,7 @@ export function CookieBanner() {
                 We use cookies to understand how our site is used and to make it better.
                 {" "}
                 <Link
-                  to="/cookies"
+                  to="/cookie-policy"
                   className="underline underline-offset-2 hover:text-primary transition-colors"
                 >
                   Cookie policy

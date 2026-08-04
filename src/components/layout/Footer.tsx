@@ -50,6 +50,9 @@ const eventTypes = [{
   name: "Weddings",
   href: "/wedding-invitations"
 }, {
+  name: "Engagements",
+  href: "/engagement-invitations"
+}, {
   name: "Funerals",
   href: "/funeral-programs"
 }, {
@@ -63,7 +66,7 @@ const eventTypes = [{
   href: "/graduation"
 }, {
   name: "Birthday Parties",
-  href: "/birthday"
+  href: "/birthday-invitations"
 }, {
   name: "Church Events",
   href: "/church-events"

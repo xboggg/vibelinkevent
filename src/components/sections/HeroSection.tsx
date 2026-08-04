@@ -161,12 +161,8 @@ import heroGraduation from "@/assets/hero-graduation.jpg";
 import heroBirthday from "@/assets/hero-birthday.jpg";
 import heroChurch from "@/assets/hero-church.jpg";
 import heroCorporate from "@/assets/hero-corporate.jpg";
-import avatar1 from "@/assets/avatar-1.jpg";
-import avatar2 from "@/assets/avatar-2.jpg";
-import avatar3 from "@/assets/avatar-3.jpg";
-import avatar4 from "@/assets/avatar-4.jpg";
-
-const avatarImages = [avatar1, avatar2, avatar3, avatar4];
+// Stock-photo avatars removed per pre-launch honesty pass (auditor H1):
+// replaced with initial-based coloured circles in the hero social-proof row.
 
 const slides = [
   {
@@ -509,14 +505,22 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="flex items-center gap-4"
           >
-            <div className="flex -space-x-3">
-              {avatarImages.map((avatar, i) => (
-                <img
+            {/* Client-initial avatars — using real customer initials rather
+                than stock photos, since we can't source authentic photos
+                for every client. Colour scheme rotates within brand palette. */}
+            <div className="flex -space-x-3" aria-hidden="true">
+              {[
+                { initials: "AK", bg: "bg-secondary text-secondary-foreground" },
+                { initials: "TA", bg: "bg-primary text-primary-foreground" },
+                { initials: "NB", bg: "bg-accent text-accent-foreground" },
+                { initials: "AO", bg: "bg-secondary text-secondary-foreground" },
+              ].map((a, i) => (
+                <div
                   key={i}
-                  src={avatar}
-                  alt={`Happy customer ${i + 1}`}
-                  className="w-10 h-10 rounded-full border-2 border-navy object-cover"
-                />
+                  className={`w-10 h-10 rounded-full border-2 border-navy flex items-center justify-center text-xs font-bold shadow-md ${a.bg}`}
+                >
+                  {a.initials}
+                </div>
               ))}
             </div>
             <div className="text-primary-foreground/80 text-sm">

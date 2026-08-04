@@ -11,8 +11,14 @@
          index.html defaults being duplicated by hydration. Do NOT add
          og:*, twitter:*, canonical, description, or ld+json here — the
          SEO component will inject a second copy and the two conflict. -->
+    <!-- Static <title> is the last-resort fallback for pages/crawlers that
+         don't wait for hydration. Per-route <title> and description come
+         from the SEO component (react-helmet). We deliberately do NOT ship
+         a static <meta name="description"> here: react-helmet's dedupe is
+         unreliable when both a static tag and a helmet-injected tag share
+         the same name, and we've caught a duplicate in production before
+         (audit finding H14). -->
     <title>Digital Invitations for Ghanaian Celebrations | VibeLink Event</title>
-    <meta name="description" content="VibeLink builds interactive digital invitations for Ghanaian weddings, funerals, outdoorings, birthdays and corporate events. Share by link, track RSVPs." />
     <meta name="author" content="VibeLink Event" />
     <meta name="robots" content="index, follow" />
 
