@@ -223,12 +223,12 @@ const portfolioData: Record<string, {
     package: "Naming / Outdooring",
     highlights: ["15+ CSS animations", "Interactive name reveal", "Live wishes & RSVP backend"],
   },
-  "atta-panyin-memorial": { demoLabel: "Open Invitation",
+  "atta-panyin-memorial": { demoLabel: "Open Demo",
     title: "Atta Panin Memorial",
     type: "Funeral",
     description: "A dignified digital tribute celebrating the life and legacy of Atta Panin with rich Ghanaian cultural heritage.",
     image: "/attapanyin-detail.webp",
-    demoUrl: "https://attapanin.vibelinkevent.com/",
+    demoUrl: "https://demo-atta.vibelinkevent.com/",
     features: ["Memorial biography", "Photo gallery", "Tribute messages wall", "Funeral program schedule", "MoMo donation tracking", "Venue directions", "Family tribute section", "WhatsApp sharing", "Background music"],
     story: "The family of Atta Panin needed a fitting digital tribute to honor their beloved patriarch. We created a dignified memorial page rich with Ghanaian cultural elements, featuring kente-inspired design accents and warm earth tones. The tribute wall became a heartfelt collection of memories from family, friends, and community members. The MoMo donation feature helped the family manage contributions transparently, while the detailed funeral program kept attendees informed of all ceremonies and events.",
     package: "Funeral & Memorial",
@@ -308,7 +308,7 @@ const portfolioData: Record<string, {
 // "not found" state so bookmarked links stop working publicly, while
 // data stays in `portfolioData` for one-line restoration if consent
 // is later obtained. Keep in sync with `hidden: true` in portfolioItems.ts.
-const HIDDEN_SLUGS = new Set(["atta-panyin-memorial"]);
+const HIDDEN_SLUGS = new Set<string>([]);
 
 const PortfolioDetail = () => {
   const { slug } = useParams<{ slug: string }>();

@@ -38,12 +38,11 @@ export const portfolioItems: PortfolioItem[] = [
     description: "A dignified digital tribute celebrating the life and legacy of Atta Panin with rich cultural heritage and family memories.",
     image: "/attapanyin-portfolio.webp",
     thumbnail: "/attapanyin-portfolio-thumb.webp",
-    demoUrl: "https://attapanin.vibelinkevent.com/",
+    demoUrl: "https://demo-atta.vibelinkevent.com/",
     slug: "atta-panyin-memorial",
     features: ["Memorial biography", "Photo gallery", "Tribute wall", "Funeral program", "MoMo donations"],
     imagePosition: "top",
-    demoLabel: "Open Invitation",
-    hidden: true, // no documented client consent — hidden pending H20 consent audit
+    demoLabel: "Open Demo",
   },
   {
     id: 3,
