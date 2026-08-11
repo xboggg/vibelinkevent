@@ -43,7 +43,6 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Memorial biography", "Photo gallery", "Tribute wall", "Funeral program", "MoMo donations"],
     imagePosition: "top",
     demoLabel: "Open Demo",
-    hidden: true, // TEMPORARILY re-hidden — demo has PII leaks being fixed
   },
   {
     id: 3,
