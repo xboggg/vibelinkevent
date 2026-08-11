@@ -260,6 +260,86 @@ GitHub Actions auto-deploys in ~90s.
 
 If you catch yourself editing anything at a `<real-slug>` path, stop and restart.
 
+## ⚠ Hard-won lessons (first demo — attapanin — sanitisation was superficial and had to be redone)
+
+**Sed alone is not sanitisation.** The first attapanin pass only touched
+UNSPACED phone numbers (`0244372290`). The real invitation had them formatted
+with spaces (`0244 372 290`) in the RSVP contact panel, which sed's regex
+missed entirely. Grep verification also passed because I was grepping the
+wrong pattern. Numbers must be checked in EVERY format: unspaced,
+space-formatted (`024 400 0000` / `024 4000000`), international (`+233 …`),
+URL-encoded (`%20` between groups), and inside JSON blobs.
+
+**More than one gallery.** Memorial invitations (Atta Panin type) can have
+2+ separate gallery sections in `index.html` PLUS additional gallery-adjacent
+pages (`laying-to-rest.html`, `burial/` folder with 100+ photos, downloadable
+PDF programme). The first surgery pass only handled the main `<div class="gallery-item">`
+blocks. Do a full audit of every gallery-adjacent surface before declaring done.
+
+**Memorial invitations often have supporting pages that must be nuked wholesale.**
+Attapanin had `tributes.html` (92 named individuals from extended family in tribute
+cards — impossible to credibly anonymise), `laying-to-rest.html` (burial photos),
+`order-of-service.html`, `funeral-order-of-service.html`, `funeral-programme.pdf`
+(5MB PDF with the whole real programme). None of these were on the original
+sanitisation checklist. **For memorials, plan to `rm -rf` these entirely** as part
+of the demo build — don't try to sanitise them piecewise. Also `rm` the
+`burial/` and `tributes/` image folders whose FILENAMES themselves are PII
+(`tribute-brenda-krofah.jpeg`, `KROFAH(100).jpg` etc.).
+
+**Deceased's / celebrant's real formal name has many variants.** For attapanin:
+`Wilson Atta Krofah`, `WILSON ATTA KROFAH`, `Mr. Wilson Atta Krofah`,
+`Mr. Krofah`, `Mr Krofah`, `Atta Krofah`, `Krofah` alone (surname), plus
+`Atta Kakra` (twin sibling reference). Every family name variant needs a
+listed replacement — a single `Krofah` → `""` catch-all works but can create
+weird artefacts (empty parens, double spaces).
+
+**Bank + payment identifiers.** `Absa Bank`, `Powered by <bank>`, USSD short codes
+like `*447*4251#`, MoMo QR PNG images — all are PII and financial-identity leaks.
+Not covered by phone-number sanitisation. Add these to the checklist.
+
+**Meta/OG/Twitter/keywords tags leak too.** The invitation shell has multiple
+`<meta name="description">`, `<meta property="og:*">`, `<meta name="twitter:*">`
+tags containing the deceased's formal name, geographic identifiers, family
+lineage terms. All must be checked separately from the visible page content.
+
+**WhatsApp share links contain URL-encoded PII.** The "Share on WhatsApp" button
+typically has an `href="https://wa.me/?text=…"` where the text is URL-encoded.
+Sed on plain text leaves the URL-encoded copy intact. Must run replacements on
+BOTH plain and %20-encoded forms.
+
+**OG image itself is a leak.** The default `og-image.jpg` was often built from
+a photo of the funeral invitation card with the deceased's face + real name
+printed on it. WhatsApp/Twitter previews would show the real name even though
+nothing on the sanitised page mentions it. Regenerate the OG image as a
+generic branded card (`convert -size 1200x630 gradient:...` with generic text).
+
+**"Gallery counter" text.** The "View Full Gallery (85 Photos)" button text
+is hard-coded, not derived from actual count. If you delete 72 photos, the
+counter still says 85 unless you edit that specific string too.
+
+**Geographic + church + kinship identifiers.** Beyond names/phones/banks, memorial
+pages contain:
+- Home village / town / traditional district (Akyem Begoro, Fanteakwa North District, Bosuso)
+- Specific church name of the funeral service (The Ghana Police Church, Trinity Congregation Dansor)
+- Parents' names in the biography ("son of Lawrence Sakyiama and Lydia Korowaa")
+- Traditional titles (Abusuapanin, Begorohene, Fanteakwahene, Regent, Widow)
+- Educational history ("Adisadel College", "CEM@N.Legon")
+- Event dates ("Friday 1st May 2026 at ...")
+
+All are identifying. Add to the sanitisation checklist as separate categories.
+
+**The proper verification is grep the LIVE curl'd HTML, not the local file.**
+The first-pass verification greped the source file for numbers without spaces
+and reported "clean" — but the LIVE page had 4 spaced numbers rendered exactly
+as the client saw them. Always `curl -A "Mozilla/... UA" <demo-url>` and run
+the audit against that response body. Also use a comprehensive flag list
+(30+ terms) not a targeted grep.
+
+**Take a screenshot at the end.** Even after grep passes, open the demo in a
+real browser and eyeball it section-by-section. Grep can miss things layout
+puts side-by-side (like `Sister Brenda` next to `024 400 0000` reading fine
+in a static grep but looking wrong in the actual card layout). Look with eyes.
+
 ## Files stashed outside web root per demo
 
 For each demo you build, these files end up at `/root/`:
