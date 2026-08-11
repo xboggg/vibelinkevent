@@ -304,9 +304,15 @@ const portfolioData: Record<string, {
   },
 };
 
+// Slugs hidden pending H20 consent audit — direct URLs render the
+// "not found" state so bookmarked links stop working publicly, while
+// data stays in `portfolioData` for one-line restoration if consent
+// is later obtained. Keep in sync with `hidden: true` in portfolioItems.ts.
+const HIDDEN_SLUGS = new Set(["atta-panyin-memorial"]);
+
 const PortfolioDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const item = slug ? portfolioData[slug] : null;
+  const item = slug && !HIDDEN_SLUGS.has(slug) ? portfolioData[slug] : null;
 
   if (!item) {
     return (

@@ -55,9 +55,10 @@ const Portfolio = () => {
   // Portfolio shows REAL client work only. An item is a real client if it has
   // a demoLabel set (e.g. "Open Invitation", "Open Memorial"). Items without a
   // demoLabel are demos/samples and live on the Templates page.
+  // `hidden` drops entries pending consent audit (H20).
   // Sorted newest-first (highest id first) so the latest work leads the page.
   const realClientItems = portfolioItems
-    .filter((item) => !!item.demoLabel)
+    .filter((item) => !!item.demoLabel && !item.hidden)
     .slice()
     .sort((a, b) => b.id - a.id);
   const filteredItems =

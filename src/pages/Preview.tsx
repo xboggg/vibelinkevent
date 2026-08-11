@@ -9,7 +9,6 @@ import { PhoneCarousel } from "@/components/PhoneCarousel";
 // 10 real portfolio items with server-side phone screenshots in /phone-shots/
 const items = [
   portfolioItems.find((p) => p.slug === "baby-boy-coleman-christening"),
-  portfolioItems.find((p) => p.slug === "atta-panyin-memorial"),
   portfolioItems.find((p) => p.slug === "pastor-mensah-retirement"),
   portfolioItems.find((p) => p.slug === "sarah-john-wedding"),
   portfolioItems.find((p) => p.slug === "baby-adjoa-naming"),

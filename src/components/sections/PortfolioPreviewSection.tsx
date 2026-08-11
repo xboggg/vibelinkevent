@@ -44,7 +44,6 @@ const itemVariants = {
 // has a demoLabel set (that's the same rule /portfolio + /designs use).
 const previewItems = [
   portfolioItems.find(p => p.slug === "baby-boy-coleman-christening"),
-  portfolioItems.find(p => p.slug === "atta-panyin-memorial"),
   portfolioItems.find(p => p.slug === "pastor-mensah-retirement"),
   portfolioItems.find(p => p.slug === "sarah-john-wedding"),
   portfolioItems.find(p => p.slug === "baby-adjoa-naming"),

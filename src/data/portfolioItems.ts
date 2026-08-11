@@ -10,6 +10,11 @@ export interface PortfolioItem {
   features: string[];
   imagePosition?: string;
   demoLabel?: string;
+  // Hide from public /portfolio, /portfolio/:slug, /portfolio-preview and
+  // homepage carousel. Data stays in this file so we can restore in one
+  // line if consent is later obtained. Used for entries where we don't
+  // have documented client consent to display personal data (H20).
+  hidden?: boolean;
 }
 
 export const portfolioItems: PortfolioItem[] = [
@@ -38,6 +43,7 @@ export const portfolioItems: PortfolioItem[] = [
     features: ["Memorial biography", "Photo gallery", "Tribute wall", "Funeral program", "MoMo donations"],
     imagePosition: "top",
     demoLabel: "Open Invitation",
+    hidden: true, // no documented client consent — hidden pending H20 consent audit
   },
   {
     id: 3,
