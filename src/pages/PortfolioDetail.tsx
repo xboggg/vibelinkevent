@@ -308,7 +308,7 @@ const portfolioData: Record<string, {
 // "not found" state so bookmarked links stop working publicly, while
 // data stays in `portfolioData` for one-line restoration if consent
 // is later obtained. Keep in sync with `hidden: true` in portfolioItems.ts.
-const HIDDEN_SLUGS = new Set<string>([]);
+const HIDDEN_SLUGS = new Set<string>(["atta-panyin-memorial"]);
 
 const PortfolioDetail = () => {
   const { slug } = useParams<{ slug: string }>();
