@@ -25,11 +25,11 @@ export const portfolioItems: PortfolioItem[] = [
     description: "A beautiful christening and dedication invitation for the Coleman family, featuring animated splash screen, baby photo, wishes wall, and RSVP — all in a soft sky-blue theme.",
     image: "/coleman-portfolio.webp",
     thumbnail: "/coleman-portfolio-thumb.webp",
-    demoUrl: "https://coleman.vibelinkevent.com/",
+    demoUrl: "https://demo-coleman.vibelinkevent.com/",
     slug: "baby-boy-coleman-christening",
     features: ["Animated splash screen", "Wishes wall", "Countdown timer", "RSVP", "Music player", "Parents showcase"],
     imagePosition: "top",
-    demoLabel: "Open Invitation",
+    demoLabel: "Open Demo",
   },
   {
     id: 2,

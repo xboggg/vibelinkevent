@@ -36,12 +36,12 @@ const portfolioData: Record<string, {
   highlights: string[];
   demoLabel?: string;
 }> = {
-  "baby-boy-coleman-christening": { demoLabel: "Open Invitation",
+  "baby-boy-coleman-christening": { demoLabel: "Open Demo",
     title: "Baby Boy Coleman — Christening & Dedication",
     type: "Naming",
     description: "A beautiful, animated christening and dedication invitation for the Coleman family, designed in soft sky-blue tones with a warm, celebratory feel.",
     image: "/coleman-detail.webp",
-    demoUrl: "https://coleman.vibelinkevent.com/",
+    demoUrl: "https://demo-coleman.vibelinkevent.com/",
     features: ["Animated splash screen with orbiting emojis", "Sonar heartbeat rings animation", "Baby photo with 3D pulse effect", "Live wishes wall", "Countdown timer", "RSVP with WhatsApp confirmation", "Parents showcase with real photos", "Scripture carousel", "Background music player", "Mobile responsive"],
     story: "The Coleman family wanted a digital invitation that felt as joyful and precious as the occasion itself — the christening and dedication of their baby boy. We designed an immersive experience starting with an animated splash screen featuring a glowing baby bottle, orbiting emojis, shooting stars, and a sonar heartbeat effect. The hero section showcases the baby's photo with a soft pulsing animation, framed with a spinning gradient ring. Guests can leave wishes through a live wall, so every message is visible to everyone in real time. The parents section features actual photos of Mr. and Mrs. Coleman, and the RSVP connects directly to WhatsApp for easy confirmation.",
     package: "Naming / Outdooring",
