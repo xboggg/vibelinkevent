@@ -204,12 +204,12 @@ export const portfolioItems: PortfolioItem[] = [
   },
   {
     id: 17,
-    title: "In Loving Memory — Charles Nii Aryertey Taylor",
+    title: "In Loving Memory — Server-Backed Memorial",
     type: "Funerals",
-    description: "A solemn, server-backed memorial honouring Charles Nii Aryertey Taylor (1971–2026), grandson of Nii Kwabena Bonnie III, with a candle-lit splash, virtual altar, voice tributes, and live condolences wall.",
+    description: "A solemn, server-backed digital memorial with a candle-lit splash, virtual altar, voice tributes, and live condolences wall — one of the most interactive funeral portfolios we have built.",
     image: "/charlestaylor-portfolio.jpg",
     thumbnail: "/charlestaylor-portfolio-thumb.jpg",
-    demoUrl: "https://charlestaylor.vibelinkevent.com/",
+    demoUrl: "https://demo-taylor.vibelinkevent.com/",
     slug: "charles-taylor-memorial",
     features: [
       "Candle splash entry",
@@ -222,7 +222,7 @@ export const portfolioItems: PortfolioItem[] = [
       "Royal Ga-Adangbe palette: crimson & brushed gold",
     ],
     imagePosition: "top",
-    demoLabel: "Open Memorial",
+    demoLabel: "Open Demo",
   },
   {
     id: 18,
