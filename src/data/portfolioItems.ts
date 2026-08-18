@@ -63,10 +63,10 @@ export const portfolioItems: PortfolioItem[] = [
     type: "Naming",
     description: "A dreamy, animation-rich naming ceremony invitation with floating petals, butterflies, and watercolor elegance for the Nortey family.",
     image: "/nortey-portfolio.webp",
-    demoUrl: "https://nortey.vibelinkevent.com/",
+    demoUrl: "https://demo-nortey.vibelinkevent.com/",
     slug: "baby-nortey-naming",
     features: ["Animated hero", "Countdown timer", "Interactive name reveal", "Wishes wall", "RSVP tracking", "Gift registry"],
-    demoLabel: "Open Invitation",
+    demoLabel: "Open Demo",
   },
   {
     id: 5,
