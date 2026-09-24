@@ -15,6 +15,13 @@ import { AnimatedCounter } from "@/components/AnimatedCounter";
 import SEO, { createBreadcrumbSchema } from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 
+/**
+ * "Meet The Vibers" is hidden for now (2026-09-24) but intentionally kept in
+ * the codebase, along with its Supabase fetch and the profile modal.
+ * Flip this to true to bring the whole section back — nothing else to change.
+ */
+const SHOW_TEAM_SECTION = false;
+
 interface TeamMember {
   id: string;
   name: string;
@@ -193,6 +200,11 @@ const About = () => {
   };
 
   useEffect(() => {
+    if (!SHOW_TEAM_SECTION) {
+      setLoadingTeam(false);
+      return;
+    }
+
     const fetchTeamMembers = async () => {
       const { data, error } = await supabase
         .from("team_members")
@@ -630,6 +642,7 @@ const About = () => {
       </section>
 
       {/* Meet The Vibers */}
+      {SHOW_TEAM_SECTION && (
       <section className="py-20 bg-background relative overflow-hidden">
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-10 right-10 w-96 h-96 bg-secondary/5 rounded-full blur-3xl pointer-events-none" />
@@ -715,9 +728,10 @@ const About = () => {
           )}
         </div>
       </section>
+      )}
 
       {/* Team Member Modal */}
-      {selectedMember && (
+      {SHOW_TEAM_SECTION && selectedMember && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
