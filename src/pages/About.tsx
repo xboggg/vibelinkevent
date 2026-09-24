@@ -612,9 +612,15 @@ const About = () => {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 bg-[#7C3AED]">
-        <div className="container mx-auto px-4 lg:px-8">
+      {/* Stats — deep band, deliberately NOT the CTA's purple so the two
+          don't merge into one slab now that the team section sits hidden
+          between them. Gold numerals echo the primary CTA button. */}
+      <section className="py-16 bg-[#0a0414] relative overflow-hidden">
+        {/* Ambient purple glow so the band still reads as part of the brand */}
+        <div className="absolute -top-24 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="container mx-auto px-4 lg:px-8 relative">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             {stats.map((stat, index) => (
               <motion.div
@@ -625,14 +631,14 @@ const About = () => {
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="text-4xl md:text-5xl font-bold text-white mb-1">
+                <div className="text-4xl md:text-5xl font-bold text-secondary mb-1">
                   <AnimatedCounter
                     end={stat.value}
                     suffix={stat.suffix}
                     duration={2000}
                   />
                 </div>
-                <div className="text-white/80 text-sm">
+                <div className="text-white/60 text-sm">
                   {stat.label}
                 </div>
               </motion.div>
