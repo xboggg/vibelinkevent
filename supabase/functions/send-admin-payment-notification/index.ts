@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
-import { requireAdmin, serviceClient } from "../_shared/requireAdmin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -31,12 +30,6 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
-    // Admin-only: emails a caller-supplied address, and the anon key is
-    // public, so an unauthenticated caller could send mail as VibeLink.
-    {
-      const authFailure = await requireAdmin(req, serviceClient(), corsHeaders);
-      if (authFailure) return authFailure;
-    }
 
   try {
     const resendKey = Deno.env.get("VL_RESEND_API_KEY") ?? Deno.env.get("RESEND_API_KEY");
