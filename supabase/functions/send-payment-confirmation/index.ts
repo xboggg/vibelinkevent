@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { requireAdmin, serviceClient } from "../_shared/requireAdmin.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -24,6 +25,13 @@ const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+    // Admin-only: emails a caller-supplied address, and the anon key is
+    // public, so an unauthenticated caller could send mail as VibeLink.
+    {
+      const authFailure = await requireAdmin(req, serviceClient(), corsHeaders);
+      if (authFailure) return authFailure;
+    }
 
   try {
     const data: PaymentConfirmationRequest = await req.json();

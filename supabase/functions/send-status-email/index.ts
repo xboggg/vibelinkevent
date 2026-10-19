@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { Resend } from "https://esm.sh/resend@2.0.0";
+import { requireAdmin } from "../_shared/requireAdmin.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -164,6 +165,12 @@ const handler = async (req: Request): Promise<Response> => {
         }
       );
     }
+
+    // Admin-only: this function emails a caller-supplied address, so a rate
+    // limit alone is not enough — the anon key is public. Verified admin
+    // session required.
+    const authFailure = await requireAdmin(req, supabase, corsHeaders);
+    if (authFailure) return authFailure;
 
     const { 
       clientName, 

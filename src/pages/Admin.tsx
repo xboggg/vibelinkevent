@@ -164,6 +164,39 @@ interface RevisionRequest {
 
 type AdminSection = "dashboard" | "orders" | "messages" | "analytics" | "chatbot" | "blog" | "blog-comments" | "blog-analytics" | "blog-series" | "testimonials" | "newsletter" | "follow-ups" | "email-settings" | "users" | "team" | "abandoned-carts" | "coupons" | "referrals" | "invoices" | "expenses" | "reports" | "surveys" | "templates" | "backup" | "ai-emails" | "ai-summary" | "escalations" | "segmentation" | "seo-calendar" | "funnel" | "currency" | "languages";
 
+/**
+ * Call an admin-gated Edge Function.
+ *
+ * Uses raw fetch rather than supabase.functions.invoke(): invoke() merges
+ * headers in a way that can drop the session JWT, which surfaces as an
+ * intermittent 401 invalid_session. Both the Authorization bearer and the
+ * apikey header are required.
+ */
+async function callAdminFunction(name: string, body?: Record<string, unknown>) {
+  const { data: sess } = await supabase.auth.getSession();
+  const token = sess.session?.access_token;
+  if (!token) throw new Error("Not authenticated");
+
+  const res = await fetch(
+    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/${name}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+      },
+      body: JSON.stringify(body ?? {}),
+    },
+  );
+
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(payload?.error || `${name} failed (${res.status})`);
+  }
+  return payload;
+}
+
 const orderStatusColors: Record<OrderStatus, string> = {
   pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
   in_progress: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
@@ -829,16 +862,19 @@ const Admin = () => {
 
   const sendStatusEmail = async (order: Order, newStatus: string, newPaymentStatus?: string) => {
     try {
-      const { error } = await supabase.functions.invoke('send-status-email', {
-        body: {
+      let error: unknown = null;
+      try {
+        await callAdminFunction('send-status-email', {
           clientName: order.client_name,
           clientEmail: order.client_email,
           eventTitle: order.event_title,
           orderId: order.id,
           orderStatus: newStatus,
           paymentStatus: newPaymentStatus || order.payment_status,
-        },
-      });
+        });
+      } catch (e) {
+        error = e;
+      }
 
       if (error) {
         console.error("Error sending status email:", error);
@@ -852,8 +888,9 @@ const Admin = () => {
 
   const sendPaymentReminder = async (order: Order) => {
     try {
-      const { error } = await supabase.functions.invoke('send-payment-reminder', {
-        body: {
+      let error: unknown = null;
+      try {
+        await callAdminFunction('send-payment-reminder', {
           clientName: order.client_name,
           clientEmail: order.client_email,
           orderId: order.id,
@@ -863,8 +900,10 @@ const Admin = () => {
           packageName: order.package_name,
           totalPrice: order.total_price,
           paymentStatus: order.payment_status,
-        },
-      });
+        });
+      } catch (e) {
+        error = e;
+      }
 
       if (error) {
         console.error("Error sending payment reminder:", error);
@@ -922,7 +961,13 @@ const Admin = () => {
   const runFollowUpEmails = async () => {
     setRunningFollowUps(true);
     try {
-      const { data, error } = await supabase.functions.invoke('send-follow-up-emails');
+      let data: any = null;
+      let error: unknown = null;
+      try {
+        data = await callAdminFunction('send-follow-up-emails');
+      } catch (e) {
+        error = e;
+      }
 
       if (error) {
         console.error("Error running follow-up emails:", error);
