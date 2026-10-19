@@ -19,5 +19,13 @@ Disallow: /admin-auth
 Disallow: /track-order
 Disallow: /thank-you
 
+# Internal preview/staging routes — not for indexing
+Disallow: /portfolio-preview
+Disallow: /story-preview
+Disallow: /services-preview
+Disallow: /wedding-preview
+Disallow: /designs-preview
+Disallow: /blog-preview/
+
 # Sitemap
 Sitemap: https://vibelinkevent.com/sitemap.xml
