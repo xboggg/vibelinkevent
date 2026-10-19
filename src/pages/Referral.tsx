@@ -43,7 +43,7 @@ export default function Referral() {
         title="You've Been Invited — VibeLink Event"
         description="Someone who loves VibeLink thinks you need a stunning digital invitation for your next event. Get started today."
         canonical={refCode ? `/ref/${refCode}` : "/referral"}
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/home.png"
       />
 
       {/* Hero */}

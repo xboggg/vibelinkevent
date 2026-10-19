@@ -8,6 +8,7 @@ const RefundPolicy = () => {
         title="Refund Policy"
         description="Understand VibeLink Event's refund policy for digital invitation orders, including full and partial refund conditions."
         canonical="/refund-policy"
+        ogImage="https://vibelinkevent.com/og/legal.png"
         noindex={true}
       />
       <div className="container mx-auto px-4 lg:px-8 py-16 lg:py-24">

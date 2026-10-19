@@ -314,7 +314,7 @@ const Pricing = () => {
         description="Digital invitation packages for every Ghanaian event — weddings from GHS 2,500, funerals from GHS 2,000, birthdays from GHS 1,200. Every package built specifically for its event type."
         keywords="digital invitation prices Ghana, wedding invitation cost, event invitation packages Accra"
         canonical="/pricing"
-        ogImage="https://vibelinkevent.com/og-pricing.jpg"
+        ogImage="https://vibelinkevent.com/og/pricing.png"
         jsonLd={[pricingSchema, pricingBreadcrumb]}
       />
 

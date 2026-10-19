@@ -140,7 +140,7 @@ export default function GraduationInvitations() {
         description="Beautiful digital graduation invitations for Ghanaian graduates. Achievement showcase, thank-you walls for sponsors, video guestbook, livestream — one link, every family and course-mate."
         keywords="graduation invitations Ghana, digital graduation card, university graduation invite Legon, KNUST graduation invitation, master's graduation card Ghana"
         canonical="/graduation"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/hero-graduation.jpg"
       />
 
       {/* 1. Cinematic hero */}

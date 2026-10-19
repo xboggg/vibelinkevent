@@ -23,6 +23,7 @@ const Index = () => {
         title="Digital Event Invitations in Ghana | VibeLink Event"
         description="VibeLink builds interactive digital invitations for Ghanaian weddings, funerals, outdoorings, birthdays and corporate events. Share by link, track RSVPs."
         canonical="/"
+        ogImage="https://vibelinkevent.com/og/home.png"
         jsonLd={createServiceSchema(homePageServices)}
       />
       <HeroSection />

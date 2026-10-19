@@ -140,7 +140,7 @@ export default function AnniversaryInvitations() {
         description="Digital anniversary invitations for Ghanaian couples celebrating 25, 50, or 60 years. Then-vs-now galleries, vow renewal, message from the children, video guestbook — one link, every guest."
         keywords="anniversary invitations Ghana, silver wedding invitation Ghana, golden wedding invite, vow renewal invitation Accra, 25th anniversary card, 50th anniversary invite"
         canonical="/anniversary-invitations"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/service-anniversary.jpg"
       />
 
       {/* 1. Cinematic hero */}

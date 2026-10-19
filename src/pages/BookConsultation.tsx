@@ -88,6 +88,7 @@ export default function BookConsultation() {
         title="Book a Free Consultation"
         description="Book a free 30-minute consultation with the VibeLink Event team. We'll help you plan the perfect digital invitation for your event."
         canonical="/book-consultation"
+        ogImage="https://vibelinkevent.com/og/consultation.png"
       />
 
       {/* Hero */}

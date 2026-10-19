@@ -30,6 +30,7 @@ const Templates = () => {
         title="Templates — Pick · Customise · Pay | VibeLink Event"
         description="Browse 15 funeral memorial templates. Pick one, choose addons, see your total. Designed by VibeLink Event."
         canonical="https://vibelinkevent.com/templates"
+        ogImage="https://vibelinkevent.com/og/templates.png"
       />
 
       {/* ── HERO ─────────────────────────────────────────────────── */}

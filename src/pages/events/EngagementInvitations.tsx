@@ -141,7 +141,7 @@ export default function EngagementInvitations() {
         description="Beautiful digital engagement invitations for Ghanaian customary marriages and knocking ceremonies. Family spokesperson cards, dowry lists, kente-inspired designs, RSVP tracking — one link, every relative."
         keywords="engagement invitations Ghana, customary marriage invitation, knocking ceremony invite, traditional wedding invitation Ghana, digital engagement invitation Accra, abusuapanin, okyeame"
         canonical="/engagement-invitations"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/hero-engagement.jpg"
       />
 
       {/* 1. Cinematic hero */}

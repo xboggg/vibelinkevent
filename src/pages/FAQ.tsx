@@ -115,6 +115,7 @@ const FAQ = () => {
         description="Everything you need to know about VibeLink Event's digital invitation service — delivery times, revisions, payment, features, and more."
         keywords="VibeLink FAQ, digital invitation questions, how long invitation takes Ghana, digital invite payment"
         canonical="/faq"
+        ogImage="https://vibelinkevent.com/og/faq.png"
         jsonLd={faqSchema}
       />
 

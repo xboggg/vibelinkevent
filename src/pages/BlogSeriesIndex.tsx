@@ -59,6 +59,7 @@ export default function BlogSeriesIndex() {
         title="Series — VibeLink Event Blog"
         description="Deep-dives on Ghanaian weddings, funerals, naming ceremonies, graduations and more — organised as multi-part series for readers who want the full picture."
         canonical="/blog/series"
+        ogImage="https://vibelinkevent.com/og/blog-series.png"
         rssUrl="https://vibelinkevent.com/blog/rss.xml"
       />
 

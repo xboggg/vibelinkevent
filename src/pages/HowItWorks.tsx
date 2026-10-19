@@ -242,6 +242,7 @@ const HowItWorks = () => {
         description="Simple 6-step process to get your digital invitation. Fill our form, get a quote, pay to confirm, we design, you review, then share with guests!"
         keywords="digital invitation process, how to order invitation Ghana, event invitation steps"
         canonical="/how-it-works"
+        ogImage="https://vibelinkevent.com/og/how-it-works.png"
         jsonLd={createFAQSchema(faqs.map((f) => ({ question: f.question, answer: f.answer })))}
       />
 

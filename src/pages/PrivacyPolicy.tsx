@@ -8,6 +8,7 @@ const PrivacyPolicy = () => {
         title="Privacy Policy"
         description="Learn how VibeLink Event collects, uses, and protects your personal information when you use our digital invitation services."
         canonical="/privacy-policy"
+        ogImage="https://vibelinkevent.com/og/legal.png"
         noindex={true}
       />
       <div className="container mx-auto px-4 lg:px-8 py-16 lg:py-24">

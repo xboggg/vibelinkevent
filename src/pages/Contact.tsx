@@ -153,6 +153,7 @@ const Contact = () => {
         description="Get in touch with VibeLink Event. Reach us via WhatsApp for quick responses or send us an email. We're here to help with your digital invitation needs."
         keywords="contact VibeLink Event, digital invitations help, WhatsApp support Ghana"
         canonical="/contact"
+        ogImage="https://vibelinkevent.com/og/contact.png"
         jsonLd={createFAQSchema(faqs)}
       />
       {/* Hero — animated orbs, gradient headline, pulsing trust badge */}

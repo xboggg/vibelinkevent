@@ -148,7 +148,7 @@ export default function WeddingInvitations() {
         description="Stop sending JPEGs. VibeLink creates live, interactive wedding invitations for Ghanaian couples — dual-ceremony support, video guestbook, bridal shower & bachelor pages, live countdown, RSVP tracking. One link. Every guest."
         keywords="digital wedding invitations Ghana, wedding invitation link WhatsApp, RSVP wedding Ghana, interactive wedding invite Accra, traditional white wedding invitation"
         canonical="/wedding-invitations"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/hero-wedding.jpg"
       />
 
       {/* 1. Cinematic hero */}

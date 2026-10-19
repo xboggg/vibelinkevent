@@ -77,6 +77,7 @@ const GetStarted = () => {
         description="Create your digital invitation today. Fill out our simple 6-step form and receive your WhatsApp confirmation within 24 hours."
         keywords="order digital invitation Ghana, create wedding invitation, event invitation order"
         canonical="/get-started"
+        ogImage="https://vibelinkevent.com/og/get-started.png"
       />
       {/* Hero */}
       <section className="pt-24 lg:pt-32 pb-12 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A]">

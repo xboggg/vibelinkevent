@@ -291,6 +291,7 @@ export default function Designs() {
         description="Browse VibeLink Event invitation designs by event type — weddings, funerals, naming ceremonies, birthdays, corporate and more. Preview any design live, then order it — priced separately at /pricing."
         keywords="invitation designs Ghana, digital invitation templates, wedding invitation designs, funeral memorial designs, VibeLink designs catalogue"
         canonical="/designs"
+        ogImage="https://vibelinkevent.com/og/designs.png"
       />
 
       {/* Admin-mode indicator bar — only visible when ?admin=1 flag active.

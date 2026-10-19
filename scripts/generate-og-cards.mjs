@@ -53,6 +53,13 @@ const CARDS = [
   { slug: "template-detail", eyebrow: "Template",           title: "A Design Built for Your Celebration" },
   { slug: "consultation",    eyebrow: "Book a Call",        title: "Let's Plan Your Invitation Together" },
   { slug: "legal",           eyebrow: "VibeLink Event",     title: "Policies & Terms" },
+
+  // These three pages referenced /og-services.jpg, /og-pricing.jpg and
+  // /og-portfolio.jpg, none of which were ever added to public/ — so their
+  // link previews 404'd instead of falling back to the site-wide image.
+  { slug: "services",        eyebrow: "What We Do",         title: "Invitations, RSVPs & Everything After" },
+  { slug: "pricing",         eyebrow: "Pricing",            title: "Simple Packages, No Surprises" },
+  { slug: "portfolio",       eyebrow: "Our Work",           title: "Celebrations We've Helped Create" },
 ];
 
 /** Escape text for safe inclusion in SVG markup. */

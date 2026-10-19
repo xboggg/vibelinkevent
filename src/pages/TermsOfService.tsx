@@ -8,6 +8,7 @@ const TermsOfService = () => {
         title="Terms of Service"
         description="Read the terms and conditions for using VibeLink Event's digital invitation services, including pricing, payments, and delivery policies."
         canonical="/terms-of-service"
+        ogImage="https://vibelinkevent.com/og/legal.png"
         noindex={true}
       />
       <div className="container mx-auto px-4 lg:px-8 py-16 lg:py-24">

@@ -241,7 +241,7 @@ export default function CorporateEvents() {
         description="Premium digital invitations for Ghanaian corporate events. Speaker profiles, sponsor showcase, QR check-in, delegate networking, live Q&A, livestream — one link, every attendee."
         keywords="corporate event invitations Ghana, conference invite Accra, AGM digital invitation, product launch invite, business event Ghana, corporate summit invitation"
         canonical="/corporate-events"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/hero-corporate.jpg"
       />
 
       {/* 1. Cinematic hero */}

@@ -810,7 +810,7 @@ const Services = () => {
         description="Digital invitations for weddings, funerals, naming ceremonies, anniversaries, graduations and corporate events in Ghana. Beautiful designs, easy sharing via WhatsApp."
         keywords="wedding invitations Ghana, funeral programs Accra, naming ceremony invitations, digital event invitations"
         canonical="/services"
-        ogImage="https://vibelinkevent.com/og-services.jpg"
+        ogImage="https://vibelinkevent.com/og/services.png"
         jsonLd={[servicesSchema, breadcrumbSchema]}
       />
 

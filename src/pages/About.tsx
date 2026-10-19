@@ -254,6 +254,7 @@ const About = () => {
         description="Learn about VibeLink Event — digital invitations for Ghanaian celebrations, at home and across the diaspora. Our journey from paper to the future of event invitations."
         keywords="VibeLink Event, digital invitations, Ghana event services, about VibeLink"
         canonical="/about"
+        ogImage="https://vibelinkevent.com/og/about.png"
         jsonLd={aboutBreadcrumb}
       />
 

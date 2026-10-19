@@ -140,7 +140,7 @@ export default function NamingCeremony() {
         description="Beautiful digital naming and outdooring invitations for Ghanaian families. Baby name reveal countdown, prayers wall, MoMo gifts, video guestbook, church service order — one link, every guest."
         keywords="naming ceremony invitations Ghana, outdooring invite Ghana, baby dedication invitation, christening invitation Accra, digital naming ceremony card"
         canonical="/naming-ceremony"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/hero-naming.jpg"
       />
 
       {/* 1. Cinematic hero */}

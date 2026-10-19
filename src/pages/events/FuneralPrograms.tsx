@@ -141,7 +141,7 @@ export default function FuneralPrograms() {
         description="Dignified digital funeral programs and memorial pages for Ghanaian families. Obituary, condolence wall, tributes, MoMo donations, livestream, 1-year memorial — all in one respectful link."
         keywords="digital funeral programs Ghana, memorial page Ghana, funeral invitation Accra, online tribute page, obituary Ghana, condolence wall"
         canonical="/funeral-programs"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/hero-funeral.jpg"
       />
 
       {/* 1. Cinematic hero — muted overlay */}

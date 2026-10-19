@@ -73,7 +73,7 @@ const Portfolio = () => {
         description="Browse our portfolio of stunning digital invitations for weddings, funerals, naming ceremonies & more. See real examples of our work for Ghanaian events."
         keywords="digital invitation examples Ghana, wedding invitation samples, funeral program examples"
         canonical="/portfolio"
-        ogImage="https://vibelinkevent.com/og-portfolio.jpg"
+        ogImage="https://vibelinkevent.com/og/portfolio.png"
       />
       {/* Hero */}
       <section className="pt-24 lg:pt-32 pb-16 bg-gradient-to-b from-[#6B46C1] via-[#553C9A] to-[#44337A]">

@@ -143,7 +143,7 @@ export default function BirthdayInvitations() {
         description="Beautiful digital birthday invitations for Ghanaian celebrations. Party-theme spotlights, wishes wall, roast section, live photo wall, photo booth frame — one link, every friend. From GHS 1,200."
         keywords="birthday invitations Ghana, 21st birthday invite, kids birthday party invitation Ghana, digital birthday card, teen birthday invite Accra, birthday party invitation"
         canonical="/birthday"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/hero-birthday.jpg"
       />
 
       {/* 1. Cinematic hero */}

@@ -191,7 +191,7 @@ export default function ChurchEvents() {
         description="Digital invitations for Ghanaian church events — harvests, thanksgivings, conventions, anniversaries. Sermon topic, guest minister bios, MoMo offering, livestream, first-timer follow-up. One link, every member."
         keywords="church event invitations Ghana, harvest service invite, convention invitation Ghana, church anniversary programme, digital church invite Accra, MoMo offering link"
         canonical="/church-events"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/hero-church.jpg"
       />
 
       {/* 1. Cinematic hero */}

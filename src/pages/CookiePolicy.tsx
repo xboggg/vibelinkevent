@@ -8,6 +8,7 @@ const CookiePolicy = () => {
         title="Cookie Policy"
         description="Learn about the cookies VibeLink Event uses on our website and how to manage your cookie preferences."
         canonical="/cookie-policy"
+        ogImage="https://vibelinkevent.com/og/legal.png"
         noindex={true}
       />
       <div className="container mx-auto px-4 lg:px-8 py-16 lg:py-24">

@@ -144,7 +144,7 @@ export default function MilestoneBirthday() {
         description="Digital milestone birthday invitations for Ghanaian celebrations. Life timeline, video guestbook, wishes wall, MoMo gift tracker, era playlist — the whole family, one link."
         keywords="milestone birthday invitation Ghana, 40th birthday invite, 50th birthday Ghana, 60th birthday invitation Accra, 70th birthday celebration, digital birthday card Ghana, life timeline invitation"
         canonical="/milestone-birthday"
-        ogImage="https://vibelinkevent.com/og-image.jpg"
+        ogImage="https://vibelinkevent.com/og/hero-birthday.jpg"
       />
 
       {/* 1. Cinematic hero */}

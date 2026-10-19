@@ -250,6 +250,7 @@ const Blog = () => {
         description="Tips, guides and inspiration for planning your Ghanaian wedding, funeral, naming ceremony and more. Learn about traditions and modern event planning."
         keywords="Ghana event planning blog, wedding traditions Ghana, funeral planning tips, naming ceremony guide"
         canonical="/blog"
+        ogImage="https://vibelinkevent.com/og/blog.png"
         rssUrl="https://vibelinkevent.com/blog/rss.xml"
         rssTitle="VibeLink Event Blog"
       />
