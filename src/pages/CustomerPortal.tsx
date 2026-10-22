@@ -53,13 +53,15 @@ export default function CustomerPortal() {
   const [referralEmail, setReferralEmail] = useState("");
 
   useEffect(() => {
+    // Restore a signed-in session only if we still hold a login token; the orders are
+    // re-fetched from the server, which rejects an expired or invalid token.
     const savedEmail = sessionStorage.getItem("customer_email");
     const savedName = sessionStorage.getItem("customer_name");
-    if (savedEmail) {
+    const savedToken = sessionStorage.getItem("customer_token");
+    if (savedEmail && savedToken) {
       setEmail(savedEmail);
       setCustomerName(savedName || "");
-      setIsAuthenticated(true);
-      fetchCustomerOrders(savedEmail);
+      fetchCustomerOrders(savedEmail, savedToken);
     }
   }, []);
 
@@ -71,30 +73,23 @@ export default function CustomerPortal() {
 
     setIsLoading(true);
     try {
-      const { data: orderCheck } = await supabase
-        .from("orders")
-        .select("client_name")
-        .eq("client_email", email.toLowerCase())
-        .limit(1);
-
-      if (!orderCheck || orderCheck.length === 0) {
-        toast.error("No orders found with this email");
-        setIsLoading(false);
-        return;
-      }
-
+      // The server decides if this email has orders; it answers the same way either way,
+      // so the page never reveals which emails are customers.
       const { error } = await supabase.functions.invoke("send-customer-otp", {
-        body: { email: email.toLowerCase() }
+        body: { email: email.trim().toLowerCase() }
       });
 
       if (error) throw error;
 
       setShowOtpInput(true);
-      setCustomerName(orderCheck[0].client_name);
-      toast.success("Verification code sent to your email!");
-    } catch (err) {
+      toast.success("If this email has orders with us, a 6-digit code is on its way.");
+    } catch (err: any) {
       console.error("OTP error:", err);
-      toast.error("Failed to send verification code");
+      if (err?.context?.status === 429) {
+        toast.error("Too many codes requested. Please wait a while, or WhatsApp us.");
+      } else {
+        toast.error("Failed to send verification code");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -108,21 +103,24 @@ export default function CustomerPortal() {
 
     setIsLoading(true);
     try {
+      const cleanEmail = email.trim().toLowerCase();
       const { data, error } = await supabase.functions.invoke("verify-customer-otp", {
-        body: { email: email.toLowerCase(), otp }
+        body: { email: cleanEmail, otp }
       });
 
-      if (error || !data?.verified) {
+      if (error || !data?.verified || !data?.token) {
         toast.error("Invalid or expired code");
         setIsLoading(false);
         return;
       }
 
-      sessionStorage.setItem("customer_email", email.toLowerCase());
-      sessionStorage.setItem("customer_name", customerName);
-      setIsAuthenticated(true);
-      fetchCustomerOrders(email);
-      toast.success("Welcome back!");
+      const name = data.name || "";
+      sessionStorage.setItem("customer_email", cleanEmail);
+      sessionStorage.setItem("customer_name", name);
+      sessionStorage.setItem("customer_token", data.token);
+      setCustomerName(name);
+      const ok = await fetchCustomerOrders(cleanEmail, data.token);
+      if (ok) toast.success("Welcome back!");
     } catch (err) {
       console.error("Verify error:", err);
       toast.error("Verification failed");
@@ -131,29 +129,41 @@ export default function CustomerPortal() {
     }
   };
 
-  const fetchCustomerOrders = async (customerEmail: string) => {
+  // Orders come from the customer-orders function, which only answers when the login
+  // token from verify-customer-otp matches this email. Returns true when signed in.
+  const fetchCustomerOrders = async (customerEmail: string, token: string): Promise<boolean> => {
     try {
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*")
-        .eq("client_email", customerEmail.toLowerCase())
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.functions.invoke("customer-orders", {
+        body: { email: customerEmail.toLowerCase(), token }
+      });
 
       if (error) throw error;
-      setOrders(data || []);
-      if (data && data.length > 0) {
-        setSelectedOrder(data[0]);
-        setCustomerName(data[0].client_name);
+      const list: CustomerOrder[] = data?.orders || [];
+      setOrders(list);
+      setIsAuthenticated(true);
+      if (list.length > 0) {
+        setSelectedOrder(list[0]);
+        setCustomerName(list[0].client_name);
       }
-    } catch (err) {
+      return true;
+    } catch (err: any) {
       console.error("Fetch orders error:", err);
-      toast.error("Failed to load orders");
+      // Expired or invalid login: clear it and show the login screen again.
+      sessionStorage.removeItem("customer_email");
+      sessionStorage.removeItem("customer_name");
+      sessionStorage.removeItem("customer_token");
+      setIsAuthenticated(false);
+      setShowOtpInput(false);
+      setOtp("");
+      toast.error(err?.context?.status === 401 ? "Your login expired. Please sign in again." : "Failed to load orders");
+      return false;
     }
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem("customer_email");
     sessionStorage.removeItem("customer_name");
+    sessionStorage.removeItem("customer_token");
     setIsAuthenticated(false);
     setOrders([]);
     setSelectedOrder(null);
@@ -177,15 +187,23 @@ export default function CustomerPortal() {
         .eq("owner_email", referralEmail.toLowerCase())
         .single();
 
+      // Sign-in always goes through the emailed 6-digit code (an email alone proves nothing).
+      const sendLoginCode = async (message: string) => {
+        const cleanEmail = referralEmail.trim().toLowerCase();
+        const { error: otpError } = await supabase.functions.invoke("send-customer-otp", {
+          body: { email: cleanEmail }
+        });
+        if (otpError) throw otpError;
+        setEmail(cleanEmail);
+        setOtp("");
+        setIsReferralSignup(false);
+        setShowOtpInput(true);
+        toast.success(message);
+      };
+
       if (existingCode) {
-        // User already has a code, log them in directly
-        sessionStorage.setItem("customer_email", referralEmail.toLowerCase());
-        sessionStorage.setItem("customer_name", referralName);
-        setEmail(referralEmail.toLowerCase());
-        setCustomerName(referralName);
-        setIsAuthenticated(true);
-        fetchCustomerOrders(referralEmail);
-        toast.success("Welcome back! Your referral code is ready.");
+        // User already has a code: ask them to confirm their email with a code
+        await sendLoginCode("Welcome back! We emailed you a 6-digit code to open your dashboard.");
         return;
       }
 
@@ -205,14 +223,8 @@ export default function CustomerPortal() {
 
       if (insertError) throw insertError;
 
-      // Log them in
-      sessionStorage.setItem("customer_email", referralEmail.toLowerCase());
-      sessionStorage.setItem("customer_name", referralName);
-      setEmail(referralEmail.toLowerCase());
-      setCustomerName(referralName);
-      setIsAuthenticated(true);
-      fetchCustomerOrders(referralEmail);
-      toast.success("Welcome! Your referral code has been created.");
+      // Code created: confirm their email with a code before opening the dashboard
+      await sendLoginCode("Your referral code is created! We emailed you a 6-digit code to open your dashboard.");
     } catch (err) {
       console.error("Referral signup error:", err);
       toast.error("Failed to create referral code. Please try again.");

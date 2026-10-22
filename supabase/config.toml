@@ -77,3 +77,12 @@ verify_jwt = true
 
 [functions.send-scheduled-newsletters]
 verify_jwt = true
+
+[functions.send-customer-otp]
+verify_jwt = false
+
+[functions.verify-customer-otp]
+verify_jwt = false
+
+[functions.customer-orders]
+verify_jwt = false

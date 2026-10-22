@@ -591,12 +591,15 @@ Project `luuztlneysofymmuoxie` (`vibelink`, created 2026-01-20, eu-west-1). Trig
 ### Only one account exists
 `vibelinkevent@gmail.com` (admin). Customers never need an account: order form, `/track-order` and the chatbot all work without sign-in.
 
-### ⚠️ KNOWN BROKEN — Customer Portal (`/my-orders`, linked from the footer)
+### Customer Portal (`/my-orders`, linked from the footer) — was broken, REBUILT 2026-10-22
+- **How it works now:** (1) `send-customer-otp` emails a 6-digit code (Resend, `hello@vibelinkevent.com`, valid 10 min, max 3 per email per hour) only if the email has an order or a referral code, and answers identically either way. (2) `verify-customer-otp` checks the code (5 attempts) and returns a random 2-hour session token. (3) `customer-orders` returns only that customer's orders (a fixed column list, no internal fields) when the token matches the email. The page (`src/pages/CustomerPortal.tsx`) calls these three functions and never reads `orders` directly. Referral sign-up no longer logs in on an email alone; it also goes through the code. Tables `customer_otps` and `customer_sessions` (migration `20261022170000_customer_portal_otp_tables.sql`) are service-role only: RLS on, no policies, grants revoked. Codes and tokens are stored hashed. All three functions are `verify_jwt = false` (listed in `supabase/config.toml`) because visitors are not signed in.
+- **Tested:** refused cases (no/fake token → 401, wrong or unrequested code → not verified, bad email → 400, unknown email → same reply and nothing stored, `orders` and the new tables unreadable by visitors). The full path with a real emailed code is listed as pending below if not marked done.
+- **Original problem (kept for history):**
 - **Symptom:** a customer enters their email and gets "No orders found with this email" (or "Failed to send verification code").
 - **Cause (two parts, verified):** (1) the page reads `orders` directly as a visitor, but `orders` is admin-read-only, so the lookup is always empty. (When logged in as admin the read succeeds, which confuses testing.) (2) the edge functions `send-customer-otp` and `verify-customer-otp` do not exist on the project (404); their source was never committed to this repo.
 - **Why:** the repo migrations define tables the live database lacks: `customer_otps`, `saved_designs`, `rate_limit_logs` (+ `check_rate_limit()`), `user_totp_secrets`, `order_installments`, `payment_history`, `payment_reminder_logs`, `security_audit_log`. The live schema was therefore not built from these migrations (the migration history table has only the 2026-10-22 entries). Functions that depend on them (portal OTP, `totp-manage` 2FA, `rate-limiter`, payment reminders, `check_rate_limit` callers) cannot work as written. Whether they worked before the 2026-01-20 move to this project could not be determined.
-- **Plan (not built):** `customer_otps`-style table + `send-customer-otp` / `verify-customer-otp` / `customer-orders` edge functions (service role), page rewritten to use them, then site rebuild + deploy. Do NOT open `orders` to the public. Until then consider hiding the footer link.
-- Other findings on the same page: referral sign-up logs in with only an email (no code check); the Saved Designs tab reads the missing `saved_designs` table; `referral_codes`, `referrals`, `order_revisions` allow public read/update.
+- Never open `orders` to the public to "fix" the portal.
+- **Still open on the same page:** the Saved Designs tab reads the missing `saved_designs` table (it shows an empty list, error only in the console); `referral_codes`, `referrals`, `order_revisions` allow public read/update (not changed).
 
 ## 12. Roadmap Ideas (from Feature Enhancement doc)
 
