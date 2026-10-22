@@ -571,26 +571,34 @@ Need help? Chat with us on WhatsApp: https://wa.me/4915757178561`;
       })),
     ];
 
-    // Stream chat response using Groq API
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${GROQ_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        // Switched from llama-3.1-8b-instant to llama-3.3-70b-versatile 2026-07-22.
-        // The 8b was hitting Groq's token-per-minute rate limit on this project's
-        // 2,700-token system prompt after just a few messages. The 70b model has
-        // much higher TPM limits AND gives noticeably better answers on Ghanaian
-        // cultural context.
-        model: "llama-3.3-70b-versatile",
+    // Stream chat response using Groq API.
+    // llama-3.3-70b-versatile was retired by Groq on 2026-08-16 (404 model_not_found).
+    // Groq's recommended replacements are tried in order; the next one is used only
+    // when the previous returns 404 (model unavailable to this key).
+    const GROQ_MODELS = ["openai/gpt-oss-120b", "qwen/qwen3.6-27b"];
+    let response!: Response;
+    for (const model of GROQ_MODELS) {
+      const body: Record<string, unknown> = {
+        model,
         messages: groqMessages,
         temperature: 0.7,
-        max_tokens: 2048,
+        max_tokens: 4096,
         stream: true,
-      }),
-    });
+      };
+      if (model.startsWith("openai/gpt-oss")) {
+        body.reasoning_effort = "low";
+      }
+      response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      if (response.status !== 404) break;
+      console.error(`Groq model ${model} unavailable (404), trying next`);
+    }
 
     if (!response.ok) {
       if (response.status === 429) {

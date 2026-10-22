@@ -148,9 +148,10 @@ serve(async (req) => {
     if (action === "send_password_reset") {
       if (!target_email) return json({ error: "missing_target_email" }, 400);
 
-      // Uses Supabase's built-in password-recovery flow — sends email via the project's SMTP settings
+      // Uses Supabase's built-in password-recovery flow — sends email via the project's SMTP settings.
+      // The app's reset page lives at /reset-password (App.tsx), not /admin/reset-password.
       const { error: resetErr } = await admin.auth.resetPasswordForEmail(target_email, {
-        redirectTo: "https://vibelinkevent.com/admin/reset-password",
+        redirectTo: "https://vibelinkevent.com/reset-password",
       });
       if (resetErr) return json({ error: "reset_failed", detail: resetErr.message }, 500);
 

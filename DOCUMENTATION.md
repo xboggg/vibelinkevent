@@ -497,7 +497,7 @@ Lives in `src/pages/Admin.tsx` inside a single big useEffect keyed on `activeSec
 
 | Table | Key columns | Notes |
 |---|---|---|
-| `chat_conversations` | `id`, `session_id`, `started_at`, `message_count` | Anon INSERT/UPDATE (customer chatbot writes as anon), admin SELECT |
+| `chat_conversations` | `id`, `session_id`, `started_at`, `message_count` | **Updated 2026-10-22 (see §11C):** admin-only (RLS on, one `admin all` policy). The chatbot writes with the service-role key, so it needs no visitor access. The original "Anon INSERT/UPDATE" design was never live. |
 | `chat_messages` | `id`, `conversation_id` (FK cascade), `role` (user/assistant/system), `content`, `suggestions` (jsonb), `created_at` | Anon INSERT + SELECT (unguessable UUID conversation_id acts as capability); admin ALL |
 | `chat_analytics` | `topic` (PK), `count`, `last_asked_at` | Anon INSERT/UPDATE (chatbot increments on topic detection); admin SELECT |
 | `follow_up_logs` | `id`, `order_id` (FK to `orders` cascade), `follow_up_type`, `sent_at`, `success`, `error_message`, `metadata` | Admin SELECT only. Writes come from the follow-up Edge Function via service_role, which bypasses RLS |
@@ -563,6 +563,40 @@ Both deleted 2026-07-26 via Supabase REST with the service key. **Gotcha for fut
 Homepage timings (TTFB 79ms, DOM interactive 158ms, full load 552ms, FCP 600ms). All 26 pages loaded with no console errors or failed network requests. Both forms (Contact + Get Started wizard) work end-to-end — Contact fires the Edge Function and returns success; Get Started generates a real order ID and reaches Thank You. Routing 404 works correctly (unlike the admin's silent fallback the reviewer initially thought was there but wasn't). Responsive foundations solid (viewport meta, 74 breakpoint classes, mobile hamburger menu, zero horizontal overflow). Pricing math verified: Wedding 2,500 + QR Check-in add-on 150 = 2,650, 50% deposit = 1,325.
 
 ---
+
+## 11C. Supabase Security, Chatbot & Auth — Cause & Solution Log (2026-10-22)
+
+Project `luuztlneysofymmuoxie` (`vibelink`, created 2026-01-20, eu-west-1). Triggered by the Supabase security advisor email. Every change below was tested on the live site afterwards, and migrations are saved in `supabase/migrations/20261022*.sql`.
+
+### RLS disabled on `chat_conversations` (advisor ERROR)
+- **Cause:** the table was the only public table without RLS, so anyone with the public key could read or edit it (it stores visitor emails and browser info; 0 rows at the time).
+- **Fix:** RLS on; one policy, `chat_conversations admin all` (authenticated only). A visitor-insert policy was added and then dropped the same day, since `customer-chat` writes with the service-role key (bypasses RLS) and no browser code touches the table. Logging re-tested after each step.
+
+### Chatbot returned 500 for every visitor
+- **Cause:** Groq retired `llama-3.3-70b-versatile` on 2026-08-16. The function logged `404 model_not_found`.
+- **Fix:** `customer-chat` v33 tries `openai/gpt-oss-120b` first (`reasoning_effort: low`, `max_tokens` 4096) and falls back to `qwen/qwen3.6-27b` only on a 404. Same Groq key. Check the Groq console for charges (free-tier coverage of the new model was not verified).
+- **Related bug fixed:** `chat_messages` had no `response_time_ms` column, so every assistant reply silently failed to save (only the visitor message was logged). Column added (nullable integer). Verified: both rows are now stored and `message_count` matches.
+
+### Function warnings
+- `search_path = public` set on 7 functions (`validate_coupon_type`, `validate_referral_status`, `increment_post_view`, `update_updated_at_column`, `calculate_order_priority`, `handle_new_user`, `handle_updated_at`). Behaviour unchanged; verified order priority, blog view counts and sign-up.
+- **NOT changed, on purpose:** `has_role`, `insert_order`, `track_abandoned_cart`, `get_order_by_id`, `get_order_details_by_id`, `increment_post_view`, `submit_revision_request` are called by visitors (or by access policies) and must stay executable by `anon`.
+- **Still open (low risk, untested):** revoke EXECUTE from `anon`/`authenticated` on the trigger-only functions `blog_post_views_bump`, `blog_posts_view_count_sync`, `handle_new_user` (Postgres only checks that privilege when a trigger is created).
+
+### Confirmation / reset emails went to the old domain
+- **Cause:** Supabase Auth Site URL was `https://vibelinkgh.com` (old VibeLink Ghana domain) and the redirect list lacked `https://vibelinkevent.com/**`, so Supabase ignored the requested redirect and used the Site URL (browser showed "not private").
+- **Fix (dashboard):** Site URL = `https://vibelinkevent.com`; redirect `https://vibelinkevent.com/**` added; old domain removed. **Public sign-ups turned OFF.** Verified: reset link lands on `vibelinkevent.com/reset-password`, the new-password form works and the new password logs in.
+- **Consequence:** the User Management "Add User" button (`UserManagement.tsx`, uses `auth.signUp`) no longer works. Add staff in Supabase → Authentication → Users → Invite, then insert the `user_roles` admin row.
+- `admin-manage-users` v7: reset redirect changed from the non-existent `/admin/reset-password` to `/reset-password`. Not yet retested: Supabase's built-in email limit (429 `over_email_send_rate_limit`) blocked the retest. Lasting fix is custom SMTP via Resend (dashboard → Auth → SMTP Settings).
+
+### Only one account exists
+`vibelinkevent@gmail.com` (admin). Customers never need an account: order form, `/track-order` and the chatbot all work without sign-in.
+
+### ⚠️ KNOWN BROKEN — Customer Portal (`/my-orders`, linked from the footer)
+- **Symptom:** a customer enters their email and gets "No orders found with this email" (or "Failed to send verification code").
+- **Cause (two parts, verified):** (1) the page reads `orders` directly as a visitor, but `orders` is admin-read-only, so the lookup is always empty. (When logged in as admin the read succeeds, which confuses testing.) (2) the edge functions `send-customer-otp` and `verify-customer-otp` do not exist on the project (404); their source was never committed to this repo.
+- **Why:** the repo migrations define tables the live database lacks: `customer_otps`, `saved_designs`, `rate_limit_logs` (+ `check_rate_limit()`), `user_totp_secrets`, `order_installments`, `payment_history`, `payment_reminder_logs`, `security_audit_log`. The live schema was therefore not built from these migrations (the migration history table has only the 2026-10-22 entries). Functions that depend on them (portal OTP, `totp-manage` 2FA, `rate-limiter`, payment reminders, `check_rate_limit` callers) cannot work as written. Whether they worked before the 2026-01-20 move to this project could not be determined.
+- **Plan (not built):** `customer_otps`-style table + `send-customer-otp` / `verify-customer-otp` / `customer-orders` edge functions (service role), page rewritten to use them, then site rebuild + deploy. Do NOT open `orders` to the public. Until then consider hiding the footer link.
+- Other findings on the same page: referral sign-up logs in with only an email (no code check); the Saved Designs tab reads the missing `saved_designs` table; `referral_codes`, `referrals`, `order_revisions` allow public read/update.
 
 ## 12. Roadmap Ideas (from Feature Enhancement doc)
 
@@ -677,6 +711,10 @@ The big change: **complete pricing model rebuild** from 4 tiers to 11 event-base
 **Documentation refresh** — DOCUMENTATION.md brought current with the July 2026 rebuilds. Also cleaned up 3 stale drift points in the admin (`OrderTemplates.tsx` had "Baby Shower" + generic "Basic/Standard/Premium Package" names → now derives from `EVENT_PACKAGES`; `AIEmailTemplates.tsx` and `FollowUpSettings.tsx` had "Premium Package" as hardcoded example → real names).
 
 **Misc surface polish** (from earlier in the same exchange but part of this session's arc): stats-honesty pass (500+ → 100+ Invitations, removed 9 fake per-category stat overlays on /services), copy alignment (steps 2/3 on HowItWorks rewritten, Saturday hours 10am-2pm, "Enhance Your Invitation" duplicate section removed from /pricing, Milestone Birthday split off from /birthday with dedicated `/milestone-birthday` page).
+
+### October 22 2026 session — Supabase security advisor, chatbot, auth URLs
+
+Full cause & solution log in §11C. Summary: `chat_conversations` RLS fixed; chatbot restored after Groq retired its model (v33) and its missing `response_time_ms` column added; 7 function search paths fixed; Supabase Auth Site URL moved off the old `vibelinkgh.com` domain and public sign-ups disabled; `admin-manage-users` v7 reset redirect corrected. Customer Portal found broken (missing OTP functions + orders RLS) and documented, not rebuilt. QA test order #1EF31341 was deleted; test order #737AB749 ("TEST 2 - Search Path Check") was still in `orders` when this was written and must be deleted manually. Local, Supabase and GitHub were brought in line the same day (migrations + both edge function sources committed).
 
 ### Prior sessions (up to 2026-07-17)
 
