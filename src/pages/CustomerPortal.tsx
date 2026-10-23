@@ -180,13 +180,6 @@ export default function CustomerPortal() {
 
     setIsLoading(true);
     try {
-      // Check if referral code already exists for this email
-      const { data: existingCode } = await supabase
-        .from("referral_codes")
-        .select("code")
-        .eq("owner_email", referralEmail.toLowerCase())
-        .single();
-
       // Sign-in always goes through the emailed 6-digit code (an email alone proves nothing).
       const sendLoginCode = async (message: string) => {
         const cleanEmail = referralEmail.trim().toLowerCase();
@@ -201,33 +194,28 @@ export default function CustomerPortal() {
         toast.success(message);
       };
 
-      if (existingCode) {
+      // The server creates the code if this email has none (and says which happened).
+      // The code itself is only shown after the email login below.
+      const { data: created, error: createError } = await supabase.functions.invoke("referral-api", {
+        body: { action: "create_code", name: referralName.trim(), email: referralEmail.trim().toLowerCase() }
+      });
+      if (createError) throw createError;
+
+      if (created?.created === false) {
         // User already has a code: ask them to confirm their email with a code
         await sendLoginCode("Welcome back! We emailed you a 6-digit code to open your dashboard.");
         return;
       }
 
-      // Generate new referral code
-      const prefix = referralName.split(" ")[0].toUpperCase().slice(0, 4);
-      const suffix = Math.random().toString(36).substring(2, 6).toUpperCase();
-      const code = `${prefix}-${suffix}`;
-
-      const { error: insertError } = await supabase
-        .from("referral_codes")
-        .insert({
-          code,
-          owner_email: referralEmail.toLowerCase(),
-          owner_name: referralName,
-          reward_percentage: 10
-        });
-
-      if (insertError) throw insertError;
-
       // Code created: confirm their email with a code before opening the dashboard
       await sendLoginCode("Your referral code is created! We emailed you a 6-digit code to open your dashboard.");
-    } catch (err) {
+    } catch (err: any) {
       console.error("Referral signup error:", err);
-      toast.error("Failed to create referral code. Please try again.");
+      if (err?.context?.status === 429) {
+        toast.error("Too many requests. Please wait a while, or WhatsApp us.");
+      } else {
+        toast.error("Failed to create referral code. Please try again.");
+      }
     } finally {
       setIsLoading(false);
     }

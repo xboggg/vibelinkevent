@@ -359,80 +359,27 @@ ${formData.designNotes}` : ""}`;
     packageName: string
   ) => {
     try {
-      // First, find the referrer by code
-      const { data: referralCodeData, error: codeError } = await supabase
-        .from("referral_codes")
-        .select("owner_email")
-        .eq("code", referralCode.toUpperCase())
-        .eq("is_active", true)
-        .single();
-
-      if (codeError || !referralCodeData) {
-        console.error("Invalid or inactive referral code:", referralCode);
-        return;
-      }
-
-      // Calculate reward based on package — must match REFERRAL_REWARDS in ReferralsAdmin.tsx
-      const rewardAmounts: Record<string, number> = {
-        "Regular Birthday": 100,
-        "Graduation": 100,
-        "Naming / Outdooring": 100,
-        "Anniversary / Vow Renewal": 200,
-        "Milestone Birthday": 200,
-        "Church Event": 200,
-        "Engagement / Customary": 200,
-        "Funeral & Memorial": 200,
-        "Wedding": 300,
-        "Corporate Event": 300,
-        "Bespoke": 500,
-      };
-      const rewardAmount = rewardAmounts[packageName] || 0;
-
-      // Create the referral record
-      const { error: referralError } = await supabase.from("referrals").insert({
-        referrer_email: referralCodeData.owner_email,
-        referred_email: referredEmail,
-        referral_code: referralCode.toUpperCase(),
-        order_id: orderId,
-        status: "pending",
-        reward_amount: rewardAmount,
-        package_name: packageName,
+      // The server re-checks the order (it exists, was just placed with this code and email),
+      // works out the reward from the package, saves the referral and bumps the counters.
+      // packageName is no longer sent: the server reads it from the saved order.
+      const { data, error } = await supabase.functions.invoke("referral-api", {
+        body: {
+          action: "record_referral",
+          code: referralCode.toUpperCase(),
+          order_id: orderId,
+          referred_email: referredEmail,
+        },
       });
 
-      if (referralError) {
-        console.error("Error creating referral record:", referralError);
+      if (error) {
+        console.error("Error creating referral record:", error);
         return;
       }
-
-      // Update the referral code stats
-      const { error: updateError } = await supabase
-        .from("referral_codes")
-        .update({
-          total_referrals: supabase.rpc("increment_field", { x: 1 }),
-          pending_referrals: supabase.rpc("increment_field", { x: 1 }),
-        })
-        .eq("code", referralCode.toUpperCase());
-
-      if (updateError) {
-        // Try alternative update method
-        const { data: currentStats } = await supabase
-          .from("referral_codes")
-          .select("total_referrals, pending_referrals")
-          .eq("code", referralCode.toUpperCase())
-          .single();
-
-        if (currentStats) {
-          await supabase
-            .from("referral_codes")
-            .update({
-              total_referrals: (currentStats.total_referrals || 0) + 1,
-              pending_referrals: (currentStats.pending_referrals || 0) + 1,
-            })
-            .eq("code", referralCode.toUpperCase());
-        }
+      if (data?.recorded) {
+        console.log("Referral record created successfully");
+      } else {
+        console.error("Referral not recorded:", data?.reason);
       }
-
-      console.log("Referral record created successfully");
     } catch (error) {
       console.error("Failed to create referral record:", error);
     }

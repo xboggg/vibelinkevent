@@ -79,51 +79,31 @@ export function ReferralProgram({ customerEmail, customerName }: ReferralProgram
   const initializeReferral = async () => {
     setIsLoading(true);
     try {
-      // Get or create referral code
-      const { data: existingCode, error: codeError } = await supabase
-        .from("referral_codes")
-        .select("*")
-        .eq("owner_email", customerEmail.toLowerCase())
-        .single();
+      // The referral-api function returns this customer's code (creating one if they have none),
+      // their stats and history. It needs the portal login; nobody else can read these rows.
+      const { data, error } = await supabase.functions.invoke("referral-api", {
+        body: {
+          action: "dashboard",
+          email: customerEmail.toLowerCase(),
+          token: sessionStorage.getItem("customer_token") || "",
+          name: customerName
+        }
+      });
 
-      if (codeError && codeError.code !== "PGRST116") {
-        throw codeError;
-      }
+      if (error) throw error;
+      const existingCode = data?.code;
+      if (!existingCode) throw new Error("No referral code returned");
 
-      if (existingCode) {
-        setReferralCode(existingCode.code);
-        setMomoNumber((existingCode as any).owner_momo_number || "");
-        setStats({
-          total_referrals: existingCode.total_referrals || 0,
-          successful_referrals: existingCode.successful_referrals || 0,
-          pending_referrals: existingCode.pending_referrals || 0,
-          total_earnings: existingCode.total_earnings || 0,
-          available_balance: existingCode.available_balance || 0
-        });
-      } else {
-        // Generate new referral code
-        const code = generateReferralCode(customerName);
-        const { error: insertError } = await supabase
-          .from("referral_codes")
-          .insert({
-            code,
-            owner_email: customerEmail.toLowerCase(),
-            owner_name: customerName,
-            reward_percentage: 10 // 10% reward
-          });
-
-        if (insertError) throw insertError;
-        setReferralCode(code);
-      }
-
-      // Fetch referral history
-      const { data: referralData } = await supabase
-        .from("referrals")
-        .select("*")
-        .eq("referrer_email", customerEmail.toLowerCase())
-        .order("created_at", { ascending: false });
-
-      setReferrals(referralData || []);
+      setReferralCode(existingCode.code);
+      setMomoNumber(existingCode.owner_momo_number || "");
+      setStats({
+        total_referrals: existingCode.total_referrals || 0,
+        successful_referrals: existingCode.successful_referrals || 0,
+        pending_referrals: existingCode.pending_referrals || 0,
+        total_earnings: existingCode.total_earnings || 0,
+        available_balance: existingCode.available_balance || 0
+      });
+      setReferrals(data?.referrals || []);
     } catch (err) {
       console.error("Error initializing referral:", err);
       toast.error("Failed to load referral data");
@@ -184,10 +164,14 @@ export function ReferralProgram({ customerEmail, customerName }: ReferralProgram
     }
     setIsSavingMomo(true);
     try {
-      const { error } = await supabase
-        .from("referral_codes")
-        .update({ owner_momo_number: momoNumber.trim() } as any)
-        .eq("owner_email", customerEmail.toLowerCase());
+      const { error } = await supabase.functions.invoke("referral-api", {
+        body: {
+          action: "save_momo",
+          email: customerEmail.toLowerCase(),
+          token: sessionStorage.getItem("customer_token") || "",
+          momo: momoNumber.trim()
+        }
+      });
 
       if (error) throw error;
       toast.success("MoMo number saved! You'll receive payouts to this number.");

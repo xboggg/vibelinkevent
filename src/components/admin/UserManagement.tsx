@@ -248,46 +248,32 @@ export function UserManagement() {
 
     setInviting(true);
     try {
-      // Sign up new user (they'll need to confirm via email)
-      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      // Public sign-up is switched off, so the account is created by the admin function
+      // (service role). The person gets an email to set their own password.
+      const result = await callAdminApi({
+        action: 'create_user',
         email: inviteForm.email,
-        password: Math.random().toString(36).slice(-12) + 'A1!', // Temporary password
-        options: {
-          emailRedirectTo: `${window.location.origin}/admin/auth`,
-          data: {
-            full_name: inviteForm.fullName,
-          }
-        }
+        full_name: inviteForm.fullName,
+        role: inviteForm.role,
       });
 
-      if (signUpError) throw signUpError;
-
-      if (signUpData.user) {
-        // Add role if admin
-        if (inviteForm.role === 'admin') {
-          const { error: roleError } = await supabase
-            .from('user_roles')
-            .insert({
-              user_id: signUpData.user.id,
-              role: 'admin',
-            });
-
-          if (roleError) {
-            console.error('Error adding role:', roleError);
-          }
-        }
-
+      if (result?.email_sent === false) {
+        toast.warning(
+          `${inviteForm.email} was added, but the setup email could not be sent (email limit). Use the send-reset button next to their name in an hour.`
+        );
+      } else {
         toast.success(`Invitation sent to ${inviteForm.email}`);
-        setInviteDialogOpen(false);
-        setInviteForm({ email: '', fullName: '', role: 'user' });
-        fetchUsers();
       }
+      setInviteDialogOpen(false);
+      setInviteForm({ email: '', fullName: '', role: 'user' });
+      fetchUsers();
     } catch (error: any) {
       console.error('Error inviting user:', error);
-      if (error.message.includes('already registered')) {
+      const msg = String(error?.message || '');
+      if (msg.includes('already_registered') || msg.includes('already registered')) {
         toast.error('This email is already registered');
       } else {
-        toast.error(error.message || 'Failed to invite user');
+        toast.error(msg || 'Failed to invite user');
       }
     } finally {
       setInviting(false);

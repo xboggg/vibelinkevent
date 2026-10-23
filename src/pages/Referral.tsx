@@ -23,13 +23,12 @@ export default function Referral() {
 
   useEffect(() => {
     if (!refCode) return;
-    supabase
-      .from("referral_codes")
-      .select("referrer_name, code")
-      .eq("code", refCode.toUpperCase())
-      .single()
+    // The server returns only the referrer's first name (the old query asked for a column that
+    // does not exist, so the name never showed).
+    supabase.functions
+      .invoke("referral-api", { body: { action: "validate_code", code: refCode.toUpperCase() } })
       .then(({ data }) => {
-        if (data?.referrer_name) setReferrerName(data.referrer_name);
+        if (data?.valid && data?.referrer_name) setReferrerName(data.referrer_name);
       });
   }, [refCode]);
 

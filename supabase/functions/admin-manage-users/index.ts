@@ -5,6 +5,8 @@
 //   - delete_user       { target_user_id }
 //   - update_metadata   { target_user_id, full_name }
 //   - send_password_reset { target_email }
+//   - create_user       { email, full_name, role }   (replaces the old browser sign-up, which stopped working
+//                                                     when public sign-ups were turned off)
 //
 // Guardrails:
 //   - Caller must have user_roles.role='admin'
@@ -22,10 +24,12 @@ const corsHeaders = {
 };
 
 interface Payload {
-  action: "delete_user" | "update_metadata" | "send_password_reset";
+  action: "delete_user" | "update_metadata" | "send_password_reset" | "create_user";
   target_user_id?: string;
   target_email?: string;
   full_name?: string;
+  email?: string;
+  role?: string;
 }
 
 function json(body: unknown, status = 200) {
@@ -156,6 +160,56 @@ serve(async (req) => {
       if (resetErr) return json({ error: "reset_failed", detail: resetErr.message }, 500);
 
       return json({ ok: true, action: "password_reset_sent", target_email });
+    }
+
+    if (action === "create_user") {
+      const newEmail = String(payload.email ?? "").trim().toLowerCase();
+      const newName = String(payload.full_name ?? "").trim();
+      const newRole = payload.role === "admin" ? "admin" : "user";
+      if (!newEmail || newEmail.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
+        return json({ error: "invalid_email" }, 400);
+      }
+      if (newName.length < 2 || newName.length > 120) return json({ error: "invalid_name" }, 400);
+
+      // Create the account already confirmed, with no usable password: the person sets one
+      // through the password-reset email below (the same flow that is proven on /reset-password).
+      const { data: created, error: createErr } = await admin.auth.admin.createUser({
+        email: newEmail,
+        email_confirm: true,
+        user_metadata: { full_name: newName },
+      });
+      if (createErr || !created?.user) {
+        const msg = createErr?.message ?? "create_failed";
+        if (/already|registered|exists/i.test(msg)) return json({ error: "already_registered" }, 409);
+        return json({ error: "create_failed", detail: msg.slice(0, 200) }, 500);
+      }
+      const newId = created.user.id;
+
+      // The handle_new_user trigger normally creates the profile; make sure the name is there either way.
+      const { error: profErr } = await admin
+        .from("profiles")
+        .upsert({ id: newId, email: newEmail, full_name: newName }, { onConflict: "id" });
+      if (profErr) console.error("Profile upsert failed:", profErr.message);
+
+      if (newRole === "admin") {
+        const { error: roleErr } = await admin.from("user_roles").insert({ user_id: newId, role: "admin" });
+        if (roleErr) {
+          console.error("Admin role insert failed:", roleErr.message);
+          return json({ error: "role_failed", user_id: newId, detail: roleErr.message.slice(0, 200) }, 500);
+        }
+      }
+
+      const { error: mailErr } = await admin.auth.resetPasswordForEmail(newEmail, {
+        redirectTo: "https://vibelinkevent.com/reset-password",
+      });
+      return json({
+        ok: true,
+        action: "user_created",
+        user_id: newId,
+        role: newRole,
+        email_sent: !mailErr,
+        email_error: mailErr ? mailErr.message.slice(0, 200) : null,
+      });
     }
 
     return json({ error: "unknown_action" }, 400);

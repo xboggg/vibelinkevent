@@ -39,17 +39,22 @@ export function RevisionRequest({ order }: RevisionRequestProps) {
     fetchRevisions();
   }, [order.id]);
 
+  // Revisions are read and submitted through the customer-orders function, which checks the
+  // portal login and that this order belongs to the signed-in customer.
+  const portalLogin = () => ({
+    email: (sessionStorage.getItem("customer_email") || order.client_email || "").toLowerCase(),
+    token: sessionStorage.getItem("customer_token") || "",
+  });
+
   const fetchRevisions = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("order_revisions")
-        .select("*")
-        .eq("order_id", order.id)
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.functions.invoke("customer-orders", {
+        body: { ...portalLogin(), action: "revisions", order_id: order.id }
+      });
 
       if (error) throw error;
-      setRevisions(data || []);
+      setRevisions(data?.revisions || []);
     } catch (err) {
       console.error("Error fetching revisions:", err);
     } finally {
@@ -70,10 +75,10 @@ export function RevisionRequest({ order }: RevisionRequestProps) {
 
     setIsSubmitting(true);
     try {
-      // Use secure RPC function that handles both insert and order status update
-      const { error } = await supabase.rpc('submit_revision_request', {
-        p_order_id: order.id,
-        p_request_text: newRequest.trim()
+      // The server adds the request and moves the order to "revision" (after checking the
+      // order is yours and is ready for review).
+      const { error } = await supabase.functions.invoke("customer-orders", {
+        body: { ...portalLogin(), action: "submit_revision", order_id: order.id, text: newRequest.trim() }
       });
 
       if (error) throw error;
@@ -81,9 +86,16 @@ export function RevisionRequest({ order }: RevisionRequestProps) {
       toast.success("Revision request submitted!");
       setNewRequest("");
       fetchRevisions();
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error submitting revision:", err);
-      toast.error("Failed to submit revision request");
+      const status = err?.context?.status;
+      if (status === 401) {
+        toast.error("Your login expired. Please sign in again.");
+      } else if (status === 409) {
+        toast.error("Revisions can only be requested once your draft is ready.");
+      } else {
+        toast.error("Failed to submit revision request");
+      }
     } finally {
       setIsSubmitting(false);
     }

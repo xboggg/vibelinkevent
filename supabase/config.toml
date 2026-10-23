@@ -86,3 +86,9 @@ verify_jwt = false
 
 [functions.customer-orders]
 verify_jwt = false
+
+[functions.referral-api]
+verify_jwt = false
+
+[functions.admin-manage-users]
+verify_jwt = false
