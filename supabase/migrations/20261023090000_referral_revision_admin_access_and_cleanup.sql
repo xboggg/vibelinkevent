@@ -1,4 +1,4 @@
--- STEP 1 of 2 (additive only; nothing is removed here, so nothing can break).
+-- STEP 1 of 2: APPLIED live 2026-10-23 (pasted into the SQL Editor; verified afterwards). Additive only; nothing is removed here, so nothing can break.
 -- 1. Admin-only access rules, so the admin panel keeps working after step 2 removes the public rules.
 -- 2. Atomic referral counter used by the new referral-api edge function (server only).
 -- 3. Nightly cleanup of the rate-limit log (pg_cron).

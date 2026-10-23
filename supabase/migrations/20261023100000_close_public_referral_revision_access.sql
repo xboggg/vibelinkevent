@@ -1,4 +1,4 @@
--- STEP 2 of 2: close public access to referral and revision data.
+-- STEP 2 of 2: APPLIED live 2026-10-24 (pasted into the SQL Editor; verified afterwards). Close public access to referral and revision data.
 -- RUN ONLY AFTER: (1) step 1 (20261023090000_...) is applied, (2) the new site (pages calling
 -- referral-api / customer-orders) is deployed and tested. Before that the old pages would break.
 --
