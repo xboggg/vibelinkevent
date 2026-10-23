@@ -81,6 +81,10 @@ export const OrderFormWizard = ({
     ...(initialAddOns.length ? { selectedAddOns: initialAddOns } : {}),
     ...(initialRush ? { deliveryUrgency: "rush" as const } : {}),
     ...(savedDraft?.data || {}),
+    // A referral code in the link must win over a saved draft: the draft used to overwrite it with
+    // an old (often empty) value, so the order was saved without the code and no referral was recorded
+    // even though the page said "Referral code applied".
+    ...(initialReferralCode ? { referralCode: initialReferralCode } : {}),
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDraftNotice, setShowDraftNotice] = useState(!!savedDraft);
