@@ -1,4 +1,4 @@
--- Make payment_plans editable by admins only (it was editable by ANY signed-in user).
+-- APPLIED live 2026-10-24 (pasted into the SQL Editor; verified: only "Admins can manage plans" + "Public can read active plans" remain). Make payment_plans editable by admins only.
 -- Visitors keep read access to active plans ("Public can read active plans" is untouched).
 -- Checked: the only code that reads this table is components/payment/InstallmentPayments.tsx,
 -- which no page uses, so nothing can break.

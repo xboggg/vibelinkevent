@@ -89,6 +89,16 @@ export const OrderFormWizard = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showDraftNotice, setShowDraftNotice] = useState(!!savedDraft);
 
+  // If the page stays open while the ?ref= code in the address changes (for example a referral link
+  // followed from inside the app), the form is not rebuilt, so useState above never sees the new code
+  // while the banner (which reads the live address) says "applied". Keep the form in step with it.
+  useEffect(() => {
+    if (!initialReferralCode) return;
+    setFormData((prev) =>
+      prev.referralCode === initialReferralCode ? prev : { ...prev, referralCode: initialReferralCode }
+    );
+  }, [initialReferralCode]);
+
   useEffect(() => {
     if (currentStep > 1 || Object.values(formData).some(v => v && v !== initialFormData[v as keyof OrderFormData])) {
       localStorage.setItem(DRAFT_KEY, JSON.stringify({ step: currentStep, data: formData }));
