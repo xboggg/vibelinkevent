@@ -623,6 +623,16 @@ Project `luuztlneysofymmuoxie` (`vibelink`, created 2026-01-20, eu-west-1). Trig
 - Never open `orders` to the public to "fix" the portal.
 - **Still open on the same page:** the Saved Designs tab reads the missing `saved_designs` table (it shows an empty list, error only in the console); `referral_codes`, `referrals`, `order_revisions` allow public read/update (not changed).
 
+### Small follow-ups (2026-10-24)
+- **`payment_plans` was editable by any signed-in user** ("Authenticated can manage plans"). Fix saved as `supabase/migrations/20261024090000_payment_plans_admin_only.sql` (admins only; public read of active plans untouched; undo inside). Status: PENDING until pasted into the SQL Editor. The only code reading the table is `InstallmentPayments.tsx`, which no page uses.
+- **`order_installments` / `saved_designs` tables deliberately not created:** `InstallmentPayments.tsx` is not imported anywhere, and nothing writes `saved_designs`.
+- **Dashboard-only setup (cannot be done from code), to do by hand in Supabase:**
+  1. *Reset Password email wording* (Authentication → Emails → "Reset Password" template; the same template is used when an admin adds a staff member). Subject: `Set your VibeLink password`. Body: a short HTML message with a button linking to `{{ .ConfirmationURL }}` (keep that placeholder exactly) saying the link works once, expires soon, and can be ignored if not requested.
+  2. *Custom SMTP through Resend* (Authentication → Emails → SMTP Settings → enable): host `smtp.resend.com`, port `465`, username `resend`, password = the Resend API key (never paste it into chat or code), sender email `hello@vibelinkevent.com` (this domain already sends the site's emails), sender name `VibeLink Event`. Afterwards raise the email send limit under Authentication → Rate Limits if needed. This removes the built-in limit of a few auth emails per hour that blocked the earlier reset test.
+  3. *Leaked-password protection* (Authentication → Sign In / Providers → Password security): availability depends on the Supabase plan; not confirmed for this project.
+  4. *Groq usage:* check the Groq console for charges from `openai/gpt-oss-120b` (the chatbot model). Free-tier coverage was not verified.
+- **Never enable 2-step login on the only admin account without saving the backup codes first** (lockout risk). The table `user_totp_secrets` exists, but setup has not been exercised end to end.
+
 ## 12. Roadmap Ideas (from Feature Enhancement doc)
 
 Selected high-value items from the master feature-ideas doc:
