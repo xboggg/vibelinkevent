@@ -36,3 +36,6 @@ dist.zip
 
 # Vite build cache scratch files
 vite.config.ts.timestamp-*.mjs
+
+# Supabase CLI machine-local cache (per-computer, not project source)
+supabase/.temp/
