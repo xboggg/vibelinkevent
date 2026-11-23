@@ -1,0 +1,18 @@
+# Eric & Sherita — 28 November 2026
+#
+# The invitation itself stays crawlable on purpose: WhatsApp and Facebook
+# fetch the page to build the link preview guests see when they forward it,
+# and blocking them here would leave a bare grey card.
+#
+# Everything listed below is either a superseded copy of the site or not
+# meant for guests at all. _v1-archive in particular is a complete older
+# invitation that answers 200 to anyone with the link, so without this it
+# could be indexed and show people the wrong details.
+
+User-agent: *
+Disallow: /_v1-archive/
+Disallow: /v2/
+Disallow: /preview/
+Disallow: /api/
+Disallow: /data/
+Disallow: /admin.php
