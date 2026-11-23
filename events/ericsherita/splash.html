@@ -1190,7 +1190,7 @@
       <div class="card-overline">Save the Date</div>
       <div class="card-italic">for the wedding of</div>
       <h1 class="card-names">Eric <span class="amp">&amp;</span> Sherita</h1>
-      <div class="card-date">SAT &middot; 28 NOV 2026 &middot; 12PM</div>
+      <div class="card-date">SAT &middot; 28 NOV 2026 &middot; 1PM</div>
       <div class="card-venue">North Brunswick, New Jersey</div>
 
       <div class="countdown" aria-label="Countdown">
@@ -1374,7 +1374,7 @@ for (let i = 0; i < 10; i++){
 }
 
 /* ============ COUNTDOWN ============ */
-const targetDate = new Date('2026-11-28T17:00:00+00:00').getTime();
+const targetDate = new Date('2026-11-28T18:00:00+00:00').getTime();
 function tick(){
   const now = Date.now();
   let diff = Math.max(0, targetDate - now);
@@ -1431,7 +1431,7 @@ function finishSplash(){
   if (_parentReady){ _doFinish(); return; }
   const start = Date.now();
   const t = setInterval(() => {
-    if (_parentReady || Date.now() - start > 1400){
+    if (_parentReady || Date.now() - start > 400){
       clearInterval(t);
       _doFinish();
     }
@@ -1465,7 +1465,7 @@ if (hasSaved()){
   setTimeout(() => tryStartMusic(), 400);
 
   /* Populate days-to-go countdown */
-  const WEDDING_TARGET = new Date('2026-11-28T17:00:00+00:00').getTime();
+  const WEDDING_TARGET = new Date('2026-11-28T18:00:00+00:00').getTime();
   const daysLeft = Math.max(0, Math.ceil((WEDDING_TARGET - Date.now()) / 86400000));
   const daysEl = document.getElementById('welcomeDays');
   if (daysEl) daysEl.textContent = daysLeft;
@@ -1486,7 +1486,7 @@ if (hasSaved()){
        gesture is fresh — best-effort, ignore failures. */
     try{ tryStartMusic(); }catch(e){}
     welcomeBack.classList.add('gone');
-    setTimeout(finishSplash, 900);
+    setTimeout(finishSplash, 200);
   };
   if (enterBtn) enterBtn.addEventListener('click', dismiss);
   /* Tapping anywhere on the welcome-back also works as a graceful escape */
@@ -1595,10 +1595,10 @@ wax.addEventListener('touchend', e => { e.stopPropagation(); e.preventDefault();
 
 /* ============ CALENDAR GATE ============ */
 const CAL_TITLE = 'Eric & Sherita — Wedding';
-const CAL_START_UTC = '20261128T170000Z';
+const CAL_START_UTC = '20261128T180000Z';
 const CAL_END_UTC   = '20261128T230000Z';
-const CAL_DESC = "The wedding of Eric & Sherita. Ceremony: Potter's Love Assemble of God, North Brunswick NJ (12PM). Reception: The Sapphire Grand, Woodbridge NJ (5PM).";
-const CAL_LOC  = "Potter's Love Assemble of God, 1210 Cozzens Ln, North Brunswick Township, NJ 08902";
+const CAL_DESC = "The wedding of Eric & Sherita. Ceremony: Potter's Love Assembly of God, North Brunswick NJ (1PM). Reception: The Sapphire Grand, Woodbridge NJ (5PM).";
+const CAL_LOC  = "Potter's Love Assembly of God, 1210 Cozzens Ln, North Brunswick Township, NJ 08902";
 
 function googleCalUrl(){
   return 'https://calendar.google.com/calendar/render?action=TEMPLATE'
@@ -1653,7 +1653,7 @@ enterBtn.addEventListener('click', finishSplash);
 
 /* ============ SHARE ============ */
 document.getElementById('shareBtn').addEventListener('click', () => {
-  const text = 'Save the Date — Eric & Sherita are getting married on Saturday, 28 November 2026 at 12PM in New Jersey. ' + window.location.origin + '/';
+  const text = 'Save the Date — Eric & Sherita are getting married on Saturday, 28 November 2026 at 1PM in New Jersey. ' + window.location.origin + '/';
   window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
 });
 </script>
