@@ -1596,7 +1596,7 @@ wax.addEventListener('touchend', e => { e.stopPropagation(); e.preventDefault();
 /* ============ CALENDAR GATE ============ */
 const CAL_TITLE = 'Eric & Sherita — Wedding';
 const CAL_START_UTC = '20261128T180000Z';
-const CAL_END_UTC   = '20261128T230000Z';
+const CAL_END_UTC   = '20261129T030000Z';
 const CAL_DESC = "The wedding of Eric & Sherita. Ceremony: Potter's Love Assembly of God, North Brunswick NJ (1PM). Reception: The Sapphire Grand, Woodbridge NJ (5PM).";
 const CAL_LOC  = "Potter's Love Assembly of God, 1210 Cozzens Ln, North Brunswick Township, NJ 08902";
 
@@ -1650,6 +1650,11 @@ document.querySelectorAll('.cal-btn').forEach(btn => {
 });
 
 enterBtn.addEventListener('click', finishSplash);
+
+/* Tell the parent the splash initialised and its exit paths are wired. The
+   parent force-unlocks the page if this never arrives, so a script error in
+   here can no longer strand a guest on a frozen splash. */
+try{ window.parent && window.parent.postMessage({ type: 'splash-alive' }, '*'); }catch(e){}
 
 /* ============ SHARE ============ */
 document.getElementById('shareBtn').addEventListener('click', () => {

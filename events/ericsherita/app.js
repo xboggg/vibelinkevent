@@ -1467,7 +1467,7 @@ const I18N = {
   'Scroll': 'Twe ase',
   'Order of the Day': 'Da No Nhyehyɛe',
   'The Day in Motion': 'Da No Nkɔso',
-  'From the first prayer to the last dance under starlight — the flow of the day, in one glance.': 'Ɛfiri anɔpahyia mpaebɔ a ɛdi kan kɔsi asa a ɛtwa toɔ wɔ anadwo mu — da mu nsɛm nyinaa wɔ baabi.',
+  'From the first prayer to the last dance under starlight — the flow of the day, in one glance.': 'Ɛfiri mpaebɔ a ɛdi kan kɔsi asa a ɛtwa toɔ wɔ anadwo mu — da mu nsɛm nyinaa wɔ baabi.',
   'Guest Arrival': 'Ahɔhoɔ Bra',
   'Ceremony Begins': 'Dwumadi No Fi Ase',
   'Ceremony Ends · Photographs': 'Dwumadi Wie · Mfoni',

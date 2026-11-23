@@ -101,6 +101,28 @@
     const dove = document.querySelector('.hero-dove');
     if (dove) setTimeout(() => dove.classList.add('fly'), 700);
   });
+
+  /* ---- Splash watchdog ----
+     If the iframe fails to load, or splash.html throws before its tap
+     handlers attach, nothing ever posts 'splash-done'. The body then stays
+     .splash-locked (overflow:hidden) underneath a full-screen iframe: the
+     page looks frozen and only a reload clears it.
+     A plain timeout would be wrong — a guest may sit on the envelope for a
+     minute before tapping, and yanking the splash away mid-experience is
+     worse than the bug. So splash.html posts 'splash-alive' once its exit
+     paths are wired, and we force the handoff ONLY when that never arrived,
+     which means the splash is genuinely broken. */
+  let splashAlive = false;
+  window.addEventListener('message', e => {
+    if (e.data && e.data.type === 'splash-alive') splashAlive = true;
+  });
+  setTimeout(() => {
+    if (splashAlive) return;   // healthy splash, just waiting for a tap
+    if (!document.body.classList.contains('splash-locked')) return;
+    const s = document.getElementById('splashFrame');
+    document.body.classList.remove('splash-locked');
+    if (s){ s.classList.add('gone'); setTimeout(() => s.remove(), 350); }
+  }, 8000);
 </script>
 
 <!-- SVG defs -->
@@ -261,8 +283,10 @@
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">1:00 PM</div><div class="tl-title" data-i18n>Ceremony Begins</div><div class="tl-body">Wedding procession, exchange of vows, ring exchange, prayers, and blessings led by Rev. Williams Obeng.</div></div>
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">2:30 PM</div><div class="tl-title" data-i18n>Ceremony Ends · Photographs</div><div class="tl-body">Newlyweds' family photos on the church grounds. Guests depart for the reception venue.</div></div>
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">5:00 PM</div><div class="tl-title" data-i18n>Reception at The Sapphire Grand</div><div class="tl-body">Cocktail hour, welcome by the MC, seating of guests.</div></div>
+    <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">6:00 PM</div><div class="tl-title" data-i18n>Grand Entrance</div><div class="tl-body">The newlyweds and the wedding party are introduced.</div></div>
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">7:00 PM</div><div class="tl-title" data-i18n>Dinner · Speeches · Cake</div><div class="tl-body">A three-course meal, family speeches, cutting of the wedding cake, and the couple's first dance.</div></div>
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">9:00 PM</div><div class="tl-title" data-i18n>Open Floor · Dancing</div><div class="tl-body">DJ set. Celebration continues into the night.</div></div>
+    <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">9:30 PM</div><div class="tl-title" data-i18n>Bouquet &amp; Garter Toss</div><div class="tl-body">A moment for the single ladies and gentlemen.</div></div>
     <div class="tl-item reveal"><span class="tl-dot"></span><div class="tl-time">10:00 PM</div><div class="tl-title" data-i18n>Send-Off</div><div class="tl-body">A joyful farewell to the newlyweds. May the journey be blessed.</div></div>
   </div>
 </section>
